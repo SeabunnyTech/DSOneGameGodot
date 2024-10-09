@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bf5jiwpyreln7"]
+
+[ext_resource type="Script" path="res://scripts/levels/login.gd" id="1_ck7wf"]
+[ext_resource type="Script" path="res://scripts/managers/player_manager.gd" id="2_3ffjs"]
+[ext_resource type="Script" path="res://addons/gd_client_node/socketio/socketio_node.gd" id="3_o3kk0"]
+
+[node name="Login" type="Node2D"]
+script = ExtResource("1_ck7wf")
+
+[node name="PlayerManagerNode" type="Node" parent="."]
+script = ExtResource("2_3ffjs")
+
+[node name="SocketIOClientNode" type="Node" parent="."]
+script = ExtResource("3_o3kk0")

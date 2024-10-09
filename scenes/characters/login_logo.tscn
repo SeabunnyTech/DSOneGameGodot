@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bgo8hj7s1re8e"]
+
+[ext_resource type="Texture2D" uid="uid://c0lub1qvb5i44" path="res://assets/images/sprites/login_logo.svg" id="1_jb1wg"]
+
+[node name="LoginLogo" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1920, 1080)
+texture = ExtResource("1_jb1wg")
