@@ -15,14 +15,9 @@ var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5
 
 # signal players_updated(players: Array[Node])
 
-@export var dev_mode: bool = false  # Add this line near the top of the class
+@export var dev_mode: bool = true  # Add this line near the top of the class
 
-@export var max_players: int = 2
 @export var smoothing_speed: float = 30.0
-@export var player_sprites: Array[Texture2D] = [
-	preload("res://assets/images/sprites/player1.svg"),
-	preload("res://assets/images/sprites/player2.svg")
-]
 
 func handle_center_mass(payload: Variant):
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
@@ -68,6 +63,7 @@ func update_player_positions():
 
 			# Show the player
 			player.visible = true
+
 	else:
 		# Hide all players when payload is empty
 		for player in current_players:

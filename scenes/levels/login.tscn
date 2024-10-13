@@ -9,12 +9,13 @@
 [node name="Login" type="Node2D"]
 script = ExtResource("1_ck7wf")
 
+[node name="UI" parent="." instance=ExtResource("4_j0vcr")]
+
 [node name="PlayerManagerNode" type="Node" parent="."]
 script = ExtResource("2_3ffjs")
 
 [node name="SocketIOClientNode" type="Node" parent="."]
 script = ExtResource("3_o3kk0")
 
-[node name="UI" parent="." instance=ExtResource("4_j0vcr")]
-
 [node name="LoginLogo" parent="." instance=ExtResource("5_wiuf5")]
+y_sort_enabled = true
