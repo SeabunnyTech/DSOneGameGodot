@@ -1,0 +1,53 @@
+{
+    "popup": {
+        "login": {
+            "ready": "準備就緒後\n\n把球舉至圈圈中"
+        },
+        "level1": {
+            "tutorial_1": "小小的水滴\n\n可以推動渦輪旋轉",
+            "tutorial_2": "小水滴就是你～\n\n換你推推看！",
+            "tutorial_3": "渦輪推動越快\n\n產生越多電仔！",
+            "tutorial_4": "電仔在電力充足時\n\n會幫忙把水推回水庫",
+            "tutorial_5": "速度越快\n\n產生越多電仔～",
+            "tutorial_6": "太棒了！\n\n小水滴立大功",
+            "tutorial_end": "遊戲即將\n\n正式開始！",
+            "countdown_3": "3",
+            "countdown_2": "2",
+            "countdown_1": "1"
+        },
+        "level2": {
+            "tutorial_1": "小小的水滴\n\n可以發多次電！",
+            "tutorial_2": "發電時\n\n記得躲避障礙物",
+            "tutorial_3": "試著避開障礙物",
+            "tutorial_4": "試著通過發電機組",
+            "tutorial_5": "速度越快\n\n產生越多電仔～",
+            "tutorial_6": "電仔進入電網！",
+            "tutorial_7": "太棒了！\n\n小水滴立大功",
+            "tutorial_8": "試著避開障礙物",
+            "tutorial_end": "遊戲即將\n\n正式開始！",
+            "countdown_3": "3",
+            "countdown_2": "2",
+            "countdown_1": "1"
+        }
+    },
+    "dialog": {
+        "login": {
+            "start": "捧起水滴",
+            "signup": "將水滴舉到上方登入點，開始遊戲！",
+            "tutorial": "試著左右移動，保持安全距離",
+            "select_level": "選擇關卡\n\n把球懸浮 5 秒，進入挑戰！"
+        },
+        "level1": {
+            "tutorial": "關卡說明",
+            "tutorial_ready": "關卡說明\n\n即將結束",
+            "tutorial_end": "關卡說明結束",
+            "game_over": "遊戲結束～\n\n（此處返回主選單）"
+        },
+        "level2": {
+            "tutorial": "關卡說明",
+            "tutorial_ready": "關卡說明\n\n即將結束",
+            "tutorial_end": "關卡說明結束",
+            "game_over": "遊戲結束～\n\n（此處返回主選單）"
+        }
+    }
+}

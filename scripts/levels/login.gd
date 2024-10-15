@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var player_manager = $PlayerManagerNode
+#@onready var player_manager = $PlayerManagerNode
 
 func _ready():
 	pass

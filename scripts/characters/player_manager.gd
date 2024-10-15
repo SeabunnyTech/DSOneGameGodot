@@ -9,12 +9,11 @@ var player2: Node = player2_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
 
-var viewport_size: Vector2 = UI.viewport_size
+var viewport_size: Vector2 = Globals.viewport_size
 var player_position: Array[Vector2] = []
 var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5000)]
 
 # signal players_updated(players: Array[Node])
-
 @export var dev_mode: bool = false  # Add this line near the top of the class
 
 @export var smoothing_speed: float = 30.0
