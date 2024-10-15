@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://bf5jiwpyreln7"]
+[gd_scene load_steps=5 format=3 uid="uid://bf5jiwpyreln7"]
 
 [ext_resource type="Script" path="res://scripts/levels/login.gd" id="1_ck7wf"]
 [ext_resource type="Script" path="res://scripts/managers/player_manager.gd" id="2_3ffjs"]
-[ext_resource type="Script" path="res://addons/gd_client_node/socketio/socketio_node.gd" id="3_o3kk0"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="4_j0vcr"]
 [ext_resource type="PackedScene" uid="uid://bgo8hj7s1re8e" path="res://scenes/characters/login_logo.tscn" id="5_wiuf5"]
 
@@ -18,9 +17,6 @@ layer = 5
 
 [node name="PlayerManagerNode" type="Node" parent="."]
 script = ExtResource("2_3ffjs")
-
-[node name="SocketIOClientNode" type="Node" parent="."]
-script = ExtResource("3_o3kk0")
 
 [node name="LoginLogo" parent="." instance=ExtResource("5_wiuf5")]
 y_sort_enabled = true
