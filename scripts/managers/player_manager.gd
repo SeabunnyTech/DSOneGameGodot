@@ -15,7 +15,7 @@ var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5
 
 # signal players_updated(players: Array[Node])
 
-@export var dev_mode: bool = true  # Add this line near the top of the class
+@export var dev_mode: bool = false  # Add this line near the top of the class
 
 @export var smoothing_speed: float = 30.0
 
@@ -98,8 +98,8 @@ func _ready():
 	player1.visible = false
 	player2.visible = false
 
-	add_child(player1)
-	add_child(player2)
+	add_child(player1, true)
+	add_child(player2, true)
 
 func _process(_delta):
 	if dev_mode:

@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bg17cubkf3lxk"]
+
+[ext_resource type="FontFile" uid="uid://de8mxpa7l15n2" path="res://assets/fonts/GenSenRounded2TW-B.otf" id="1_q5mcl"]
+
+[resource]
+font = ExtResource("1_q5mcl")
+font_size = 100
+font_color = Color(0.219608, 0.219608, 0.219608, 1)

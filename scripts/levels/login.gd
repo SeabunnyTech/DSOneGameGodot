@@ -9,5 +9,4 @@ func _ready():
 func _process(_delta):
 	# Level-specific update logic
 	pass
-
 # Other level-specific methods
