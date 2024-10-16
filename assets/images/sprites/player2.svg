@@ -1,17 +1,91 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="183" height="183" fill="none" viewBox="0 0 183 183">
-  <g filter="url(#a)">
-    <path fill="#006888" fill-opacity=".5" d="M91.449 174.898c48.296 0 87.448-39.152 87.448-87.449S139.745 0 91.449 0C43.152 0 4 39.152 4 87.45c0 48.296 39.152 87.448 87.449 87.448Z" shape-rendering="crispEdges"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="175"
+   height="175"
+   fill="none"
+   viewBox="0 0 175 175"
+   version="1.1"
+   id="svg155"
+   sodipodi:docname="player2.svg"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview157"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="2.9950608"
+     inkscape:cx="22.704047"
+     inkscape:cy="97.660789"
+     inkscape:window-width="1390"
+     inkscape:window-height="1027"
+     inkscape:window-x="381"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g134" />
+  <g
+     filter="url(#a)"
+     id="g134">
+    <path
+       fill="#006888"
+       fill-opacity="0.5"
+       d="M 87.500502,175 C 135.82494,175 175,135.82516 175,87.500001 175,39.174834 135.82494,1.605e-6 87.500502,1.605e-6 39.175059,1.605e-6 2.5e-6,39.174834 2.5e-6,87.501002 2.5e-6,135.82516 39.175059,175 87.500502,175 Z"
+       shape-rendering="crispEdges"
+       id="path132"
+       sodipodi:nodetypes="sssss"
+       style="stroke-width:1.00059" />
   </g>
-  <defs>
-    <filter id="a" width="182.897" height="182.898" x="0" y="0" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-      <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-      <feOffset dy="4"/>
-      <feGaussianBlur stdDeviation="2"/>
-      <feComposite in2="hardAlpha" operator="out"/>
-      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_150_25"/>
-      <feBlend in="SourceGraphic" in2="effect1_dropShadow_150_25" result="shape"/>
+  <defs
+     id="defs153">
+    <filter
+       id="a"
+       width="182.897"
+       height="182.89799"
+       x="0"
+       y="0"
+       color-interpolation-filters="sRGB"
+       filterUnits="userSpaceOnUse">
+      <feFlood
+         flood-opacity="0"
+         result="BackgroundImageFix"
+         id="feFlood136" />
+      <feColorMatrix
+         in="SourceAlpha"
+         result="hardAlpha"
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+         id="feColorMatrix138" />
+      <feOffset
+         dy="4"
+         id="feOffset140" />
+      <feGaussianBlur
+         stdDeviation="2"
+         id="feGaussianBlur142" />
+      <feComposite
+         in2="hardAlpha"
+         operator="out"
+         id="feComposite144" />
+      <feColorMatrix
+         values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+         id="feColorMatrix146" />
+      <feBlend
+         in2="BackgroundImageFix"
+         result="effect1_dropShadow_150_25"
+         id="feBlend148"
+         mode="normal" />
+      <feBlend
+         in="SourceGraphic"
+         in2="effect1_dropShadow_150_25"
+         result="shape"
+         id="feBlend150"
+         mode="normal" />
     </filter>
   </defs>
 </svg>

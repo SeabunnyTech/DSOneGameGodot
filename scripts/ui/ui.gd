@@ -12,7 +12,7 @@ var messages: Dictionary
 func _ready():
 	load_messages()
 	set_default_messages()
-	hide_all()
+	# hide_all()
 
 func load_messages():
 	var file = FileAccess.open("res://assets/text/ui_messages.json", FileAccess.READ)
@@ -24,20 +24,20 @@ func load_messages():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file.get_path(), " at line ", json.get_error_line())
 
 func set_default_messages():
-	set_popup_message("two_players", "default")
-	set_popup_message("one_player", "default")
-	set_dialog_message("level_select")
+	set_popup_message("one_player", "login", "ready")
+	set_popup_message("two_players", "login", "ready")
+	set_dialog_message("login", "start")
 
-func set_popup_message(player_type: String, key: String):
+func set_popup_message(player_type: String, level_type: String, key: String):
 	var label = popup_two_players_label if player_type == "two_players" else popup_one_player_label
-	if messages.popup.has(player_type) and messages.popup[player_type].has(key):
-		label.text = messages.popup[player_type][key]
+	if messages.popup.has(level_type) and messages.popup[level_type].has(key):
+		label.text = messages.popup[level_type][key]
 	else:
 		print("Popup message not found for ", player_type, " and key ", key)
 
-func set_dialog_message(key: String):
-	if messages.dialog.has(key):
-		dialog_box_label.text = messages.dialog[key]
+func set_dialog_message(level_type: String, key: String):
+	if messages.dialog.has(level_type) and messages.dialog[level_type].has(key):
+		dialog_box_label.text = messages.dialog[level_type][key]
 	else:
 		print("Dialog message not found for key ", key)
 

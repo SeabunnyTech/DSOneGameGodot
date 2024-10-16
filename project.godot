@@ -26,6 +26,10 @@ window/size/viewport_width=3840
 window/size/viewport_height=2160
 window/stretch/mode="canvas_items"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gd_client_node/radial_progress/plugin.cfg", "res://addons/radial_progress/plugin.cfg")
+
 [input]
 
 trigger={

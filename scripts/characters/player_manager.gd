@@ -14,7 +14,6 @@ var player_position: Array[Vector2] = []
 var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5000)]
 
 # signal players_updated(players: Array[Node])
-@export var dev_mode: bool = false  # Add this line near the top of the class
 
 @export var smoothing_speed: float = 30.0
 
@@ -102,7 +101,7 @@ func _ready():
 	add_child(player2, true)
 
 func _process(_delta):
-	if dev_mode:
+	if Globals.dev_mode:
 		# Dev mode: Control player1 with mouse
 		var mouse_pos = get_viewport().get_mouse_position()
 		var dev_player = current_players[0]
