@@ -86,6 +86,7 @@ func _on_payload_received(event_name: String, payload: Variant):
 
 func _ready():
 	socket_client = SocketIOClientNode.new()
+	socket_client.name = "SocketIOClientNode" # Just for runtime debugging
 	add_child(socket_client)
 	socket_client.init(ENV.socketio_url)
 	socket_client.connection_established.connect(_on_connection_established)

@@ -10,6 +10,8 @@ var is_socketio_connected: bool = false  # Add this line to track connection sta
 func init(url: String):
 	# initialize client
 	client = SocketIOClient.new(url)
+	
+	client.name = "SocketIOClient" # Just for runtime debugging
 
 	# this signal is emitted when the socket is ready to connect
 	client.on_engine_connected.connect(on_socket_ready)
