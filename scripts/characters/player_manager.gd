@@ -70,7 +70,8 @@ func update_player_positions():
 # Add this new method to your class
 func _physics_process(delta: float):
 	for player in current_players:
-		player.position = player.position.lerp(player.target_position, smoothing_speed * delta)
+		if player.visible:
+			player.position = player.position.lerp(player.target_position, smoothing_speed * delta)
 
 func _on_connection_established():
 	print("Connected to SocketIO server")
@@ -84,9 +85,11 @@ func _on_payload_received(event_name: String, payload: Variant):
 			handle_center_mass(payload)
 
 func _ready():
+	# Initialize SocketIO client
 	socket_client = SocketIOClientNode.new()
 	socket_client.name = "SocketIOClientNode" # Just for runtime debugging
 	add_child(socket_client)
+
 	socket_client.init(ENV.socketio_url)
 	socket_client.connection_established.connect(_on_connection_established)
 	socket_client.connection_error.connect(_on_connection_error)
@@ -94,19 +97,32 @@ func _ready():
 
 	viewport_size = get_viewport().size
 
+	# Create a new layer for players
+	var player_layer = CanvasLayer.new()
+	player_layer.name = "PlayerLayer"
+	player_layer.layer = 1  # Set this higher than the UI layer
+
+	add_child(player_layer)
+
+	# Hide players initially
 	player1.visible = false
 	player2.visible = false
 
-	add_child(player1, true)
-	add_child(player2, true)
+	# Add players to the player layer
+	player_layer.add_child(player1, true)
+	player_layer.add_child(player2, true)
+
+	# Add players to the "players" group
+	player1.add_to_group("Players")
+	player2.add_to_group("Players")
 
 func _process(_delta):
 	if Globals.dev_mode:
 		# Dev mode: Control player1 with mouse
 		var mouse_pos = get_viewport().get_mouse_position()
 		var dev_player = current_players[0]
-		dev_player.position = mouse_pos
-		player1.visible = true
+		dev_player.set_target_position(mouse_pos)
+		dev_player.visible = true
 		player2.visible = false
 	else:
 		# Normal mode: Use SocketIO
