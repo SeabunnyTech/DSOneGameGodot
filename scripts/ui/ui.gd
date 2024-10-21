@@ -1,6 +1,7 @@
 extends Node
 
 var messages: Dictionary
+var messages_path: String = "res://assets/text/ui_messages.json"
 
 @onready var popup_one_player_panel: Panel = %PopupMessageOnePlayer
 @onready var popup_one_player_label: Label = %PopupMessageOnePlayerLabel
@@ -9,13 +10,18 @@ var messages: Dictionary
 @onready var dialog_box_panel: PanelContainer = %DialogBox
 @onready var dialog_box_label: Label = %DialogBoxLabel
 
+signal return_area_entered(body: Node2D)
+signal return_area_exited(body: Node2D)
+signal skip_area_entered(body: Node2D)
+signal skip_area_exited(body: Node2D)
+
 func _ready():
 	load_messages()
 	set_default_messages()
 	# hide_all()
 
 func load_messages():
-	var file = FileAccess.open("res://assets/text/ui_messages.json", FileAccess.READ)
+	var file = FileAccess.open(messages_path, FileAccess.READ)
 	var json = JSON.new()
 	var parse_result = json.parse(file.get_as_text())
 	if parse_result == OK:
@@ -26,7 +32,7 @@ func load_messages():
 func set_default_messages():
 	set_popup_message("one_player", "login", "ready")
 	set_popup_message("two_players", "login", "ready")
-	set_dialog_message("login", "start")
+	set_dialog_message("login", "logout")
 
 func set_popup_message(player_type: String, level_type: String, key: String):
 	var label = popup_two_players_label if player_type == "two_players" else popup_one_player_label
@@ -62,3 +68,15 @@ func hide_dialog():
 func hide_all():
 	hide_popups()
 	hide_dialog()
+
+func _on_return_area_body_entered(body: Node2D) -> void:
+	return_area_entered.emit(body)
+
+func _on_return_area_body_exited(body: Node2D) -> void:
+	return_area_exited.emit(body)
+
+func _on_skip_area_body_entered(body: Node2D) -> void:
+	skip_area_entered.emit(body)
+
+func _on_skip_area_body_exited(body: Node2D) -> void:
+	skip_area_exited.emit(body)

@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://lbeuv6kyj4lf"]
+[gd_scene load_steps=5 format=3 uid="uid://lbeuv6kyj4lf"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_5t3va"]
 [ext_resource type="Texture2D" uid="uid://cl57hgbvdiui8" path="res://assets/images/sprites/player1.svg" id="1_7qyyt"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_hfdw8"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
+radius = 88.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_5t3va")
@@ -21,3 +24,6 @@ ring = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_7qyyt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_4ujkc")
