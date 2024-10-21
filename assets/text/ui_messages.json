@@ -14,6 +14,7 @@
             "countdown_3": "3",
             "countdown_2": "2",
             "countdown_1": "1"
+
         },
         "level2": {
             "tutorial_1": "小小的水滴\n\n可以發多次電！",
@@ -34,20 +35,22 @@
         "login": {
             "start": "捧起水滴",
             "signup": "將水滴舉到上方登入點，開始遊戲！",
+            "wait_for_second_player": "等待第 2 滴水加入",
             "tutorial": "試著左右移動，保持安全距離",
-            "select_level": "選擇關卡\n\n把球懸浮 5 秒，進入挑戰！"
+            "select_level": "選擇關卡\n把球懸浮 5 秒，進入挑戰！",
+            "logout": "退出遊戲？"
         },
         "level1": {
             "tutorial": "關卡說明",
-            "tutorial_ready": "關卡說明\n\n即將結束",
+            "tutorial_ready": "關卡說明\n即將結束",
             "tutorial_end": "關卡說明結束",
-            "game_over": "遊戲結束～\n\n（此處返回主選單）"
+            "game_over": "遊戲結束～\n（此處返回主選單）"
         },
         "level2": {
             "tutorial": "關卡說明",
-            "tutorial_ready": "關卡說明\n\n即將結束",
+            "tutorial_ready": "關卡說明\n即將結束",
             "tutorial_end": "關卡說明結束",
-            "game_over": "遊戲結束～\n\n（此處返回主選單）"
+            "game_over": "遊戲結束～\n（此處返回主選單）"
         }
     }
 }
