@@ -57,6 +57,68 @@ func set_logo_color(node, new_color: Color, duration: float = 0.5):
 		var current_color = node.modulate
 		tween.tween_property(node, "modulate", new_color, duration)
 		tween.tween_property(node, "modulate:a", current_color.a * new_color.a, duration)
+		
+func create_breathing_effect(node):
+	var tween = create_tween().set_loops() # 設置循環播放
+	
+	# 放大和縮小的動畫序列
+	tween.tween_property(node, "scale", Vector2(1.2, 1.2), 1.0)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(node, "scale", Vector2(1.0, 1.0), 1.0)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_IN_OUT)
+
+func create_droplet_effect(node):
+	var tween = create_tween().set_loops()
+	
+	# 初始狀態略微壓縮
+	tween.tween_property(node, "scale", Vector2(1.1, 0.9), 0.3)\
+		.set_trans(Tween.TRANS_SINE)
+	# 落下並壓扁
+	tween.tween_property(node, "scale", Vector2(1.1, 0.9), 0.2)\
+		.set_trans(Tween.TRANS_CUBIC)
+	# 小彈跳
+	tween.tween_property(node, "scale", Vector2(0.9, 1.1), 0.15)\
+		.set_trans(Tween.TRANS_SINE)
+	# 恢復原狀
+	tween.tween_property(node, "scale", Vector2(1.0, 1.0), 0.15)\
+		.set_trans(Tween.TRANS_SINE)
+	tween.tween_interval(0.5)
+
+func create_ripple_effect(node):
+	var tween = create_tween().set_loops()
+	
+	# 創建波紋擴散效果
+	tween.tween_property(node, "scale", Vector2(1.2, 1.2), 2.0)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(node, "modulate:a", 0.8, 1.0)\
+		.set_trans(Tween.TRANS_SINE)\
+		.set_ease(Tween.EASE_OUT)
+	# 重置到初始狀態
+	tween.tween_property(node, "scale", Vector2(1.0, 1.0), 0.2)
+	tween.parallel().tween_property(node, "modulate:a", 1.0, 0.0)
+	
+func create_droplet_merge(node):
+	var tween = create_tween().set_loops()
+	
+	# 先向兩側分開
+	tween.tween_property(node, "scale", Vector2(1.1, 0.9), 0.4)\
+		.set_trans(Tween.TRANS_SINE)
+	# 快速合併並向上突起
+	tween.tween_property(node, "scale", Vector2(0.9, 1.1), 0.2)\
+		.set_trans(Tween.TRANS_CUBIC)
+	# 壓扁效果
+	tween.tween_property(node, "scale", Vector2(1.1, 0.9), 0.2)\
+		.set_trans(Tween.TRANS_BOUNCE)
+	# 輕微震盪
+	tween.tween_property(node, "scale", Vector2(0.95, 1.05), 0.15)\
+		.set_trans(Tween.TRANS_SINE)
+	# 恢復正常
+	tween.tween_property(node, "scale", Vector2(1.0, 1.0), 0.25)\
+		.set_trans(Tween.TRANS_SINE)
+	tween.tween_interval(0.6)
 
 func show_player2_logo():
 	login_logo2.visible = true
@@ -137,6 +199,8 @@ func _on_player_visibility_changed(player: Node):
 			visible_players += 1
 			set_logo_color(login_logo, Color.hex(0x00B6EEFF))
 			set_logo_color(portal, Color.hex(0x00B6EE3F))
+			create_droplet_merge(login_logo)
+			create_ripple_effect(portal)
 		else:
 			visible_players -= 1
 			set_logo_color(login_logo, Color.hex(0x8F8F8FFF))
@@ -147,6 +211,8 @@ func _on_player_visibility_changed(player: Node):
 			show_player2_logo()
 			set_logo_color(login_logo2, Color.hex(0x006888FF))
 			set_logo_color(portal2, Color.hex(0x0068883F))
+			create_droplet_merge(login_logo2)
+			create_ripple_effect(portal2)
 		else:
 			visible_players -= 1
 			hide_player2_logo()

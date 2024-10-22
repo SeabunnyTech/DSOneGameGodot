@@ -40,9 +40,6 @@ func constrain_players() -> void:
 	var portal2_center = $Portal2/PortalArea2/CollisionShape2D.global_position
 	var portal_radius = $Portal/PortalArea/CollisionShape2D.shape.radius  # Assuming both portals have the same radius
 
-	if not $Portal2.visible:
-		portal2_center = Vector2(5000, 5000)
-
 	for i in range(players_in_portal.size()):
 		var player = players_in_portal[i]
 		var portal_center = portal1_center if player == PlayerManager.player1 else portal2_center
