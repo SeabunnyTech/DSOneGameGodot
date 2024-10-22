@@ -1,12 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://uudjketa5htn"]
+[gd_scene load_steps=8 format=3 uid="uid://uudjketa5htn"]
 
 [ext_resource type="Script" path="res://scripts/ui/ui.gd" id="1_krr3q"]
-[ext_resource type="Theme" uid="uid://cn6wmbmq6ng83" path="res://assets/theme.tres" id="1_wm3ll"]
-[ext_resource type="LabelSettings" uid="uid://bg17cubkf3lxk" path="res://assets/popup_label.tres" id="2_2wtx6"]
-[ext_resource type="LabelSettings" uid="uid://bw76ponla2c77" path="res://assets/dialog_label.tres" id="3_yeqed"]
+[ext_resource type="Theme" uid="uid://cn6wmbmq6ng83" path="res://assets/themes/theme.tres" id="1_wm3ll"]
+[ext_resource type="LabelSettings" uid="uid://bg17cubkf3lxk" path="res://assets/themes/popup_label.tres" id="2_2wtx6"]
+[ext_resource type="LabelSettings" uid="uid://bw76ponla2c77" path="res://assets/themes/dialog_label.tres" id="3_yeqed"]
+[ext_resource type="LabelSettings" uid="uid://bqls40qt0lmj3" path="res://assets/themes/skip_button_label.tres" id="5_f5jcf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ij63c"]
+bg_color = Color(0.533333, 0.533333, 0.533333, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m448a"]
+size = Vector2(3838, 328)
 
 [node name="UI" type="CanvasLayer"]
-layer = -5
 script = ExtResource("1_krr3q")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -101,9 +111,14 @@ theme = ExtResource("1_wm3ll")
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DialogBox"]
 layout_mode = 2
 
+[node name="Spacer" type="Control" parent="VBoxContainer/DialogBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/DialogBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
 theme = ExtResource("1_wm3ll")
 
 [node name="DialogBoxLabel" type="Label" parent="VBoxContainer/DialogBox/HBoxContainer/CenterContainer"]
@@ -115,3 +130,50 @@ text = "選擇關卡
 label_settings = ExtResource("3_yeqed")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DialogBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
+
+[node name="SkipButton" type="Panel" parent="VBoxContainer/DialogBox/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ij63c")
+
+[node name="Label" type="Label" parent="VBoxContainer/DialogBox/HBoxContainer/MarginContainer/SkipButton"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "跳過教學"
+label_settings = ExtResource("5_f5jcf")
+
+[node name="ReturnArea" type="Area2D" parent="VBoxContainer/DialogBox/HBoxContainer"]
+disable_mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VBoxContainer/DialogBox/HBoxContainer/ReturnArea"]
+position = Vector2(1919, 164)
+shape = SubResource("RectangleShape2D_m448a")
+
+[node name="SkipArea" type="Area2D" parent="VBoxContainer/DialogBox/HBoxContainer"]
+disable_mode = 1
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VBoxContainer/DialogBox/HBoxContainer/SkipArea"]
+visible = false
+polygon = PackedVector2Array(3310, 21, 3288, 24, 3272, 36, 3256, 55, 3251, 78, 3251, 254, 3257, 277, 3270, 292, 3290, 307, 3310, 310, 3741, 309, 3759, 302, 3773, 292, 3780, 282, 3788, 266, 3790, 249, 3789, 69, 3782, 51, 3774, 40, 3759, 28, 3743, 21, 3731, 20)
+
+[connection signal="body_entered" from="VBoxContainer/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_entered"]
+[connection signal="body_exited" from="VBoxContainer/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_exited"]
+[connection signal="body_entered" from="VBoxContainer/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_entered"]
+[connection signal="body_exited" from="VBoxContainer/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_exited"]

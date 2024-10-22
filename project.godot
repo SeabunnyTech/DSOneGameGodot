@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 ENV="*res://globals/env.gd"
 Globals="*res://globals/globals.gd"
+PlayerManager="*res://scripts/characters/player_manager.gd"
 
 [display]
 
@@ -28,7 +29,11 @@ window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gd_client_node/radial_progress/plugin.cfg", "res://addons/radial_progress/plugin.cfg")
+enabled=PackedStringArray("res://addons/radial_progress/plugin.cfg")
+
+[global_group]
+
+Players=""
 
 [input]
 

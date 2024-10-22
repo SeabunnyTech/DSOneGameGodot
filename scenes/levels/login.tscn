@@ -1,22 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf5jiwpyreln7"]
+[gd_scene load_steps=4 format=3 uid="uid://bf5jiwpyreln7"]
 
 [ext_resource type="Script" path="res://scripts/levels/login.gd" id="1_ck7wf"]
-[ext_resource type="Script" path="res://scripts/characters/player_manager.gd" id="2_3ffjs"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="4_j0vcr"]
 [ext_resource type="PackedScene" uid="uid://bgo8hj7s1re8e" path="res://scenes/characters/login_logo.tscn" id="5_wiuf5"]
 
 [node name="Login" type="Node2D"]
 script = ExtResource("1_ck7wf")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundColor" type="ColorRect" parent="."]
+z_index = -10
 offset_right = 3840.0
 offset_bottom = 2160.0
-
-[node name="UI" parent="." instance=ExtResource("4_j0vcr")]
-layer = 5
-
-[node name="PlayerManagerNode" type="Node" parent="."]
-script = ExtResource("2_3ffjs")
+color = Color(0.980392, 0.980392, 0.980392, 1)
 
 [node name="LoginLogo" parent="." instance=ExtResource("5_wiuf5")]
 y_sort_enabled = true
+
+[node name="UI" parent="." instance=ExtResource("4_j0vcr")]
+layer = 0
+
+[connection signal="return_area_entered" from="UI" to="." method="_on_ui_return_area_entered"]
+[connection signal="return_area_exited" from="UI" to="." method="_on_ui_return_area_exited"]
+[connection signal="skip_area_entered" from="UI" to="." method="_on_ui_skip_area_entered"]
+[connection signal="skip_area_exited" from="UI" to="." method="_on_ui_skip_area_exited"]
