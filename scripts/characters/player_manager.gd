@@ -13,9 +13,11 @@ var viewport_size: Vector2 = Globals.viewport_size
 var player_position: Array[Vector2] = []
 var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5000)]
 
-# signal players_updated(players: Array[Node])
-
 @export var smoothing_speed: float = 30.0
+@export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
+
+var player_last_position: Array[Vector2] = [Vector2.ZERO, Vector2.ZERO]
+var player_buffer_counters: Array[int] = [0, 0]
 
 func handle_center_mass(payload: Variant):
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
@@ -28,20 +30,28 @@ func handle_center_mass(payload: Variant):
 		player_position = []
 		for cm in center_masses:
 			player_position.append(Vector2(cm[0], cm[1]))
+			# Limit the number of players to 2
+			if player_position.size() == 2:
+				break
+
+		# Reset buffer counters and update last seen time for visible players
+		for i in range(player_position.size()):
+			player_buffer_counters[i] = 0
 	else:
 		player_position = []
+
+	# Increment buffer counters for missing players
+	for i in range(current_players.size()):
+		if i >= player_position.size():
+			player_buffer_counters[i] += 1
 
 func update_player_positions():
 	var num_players = player_position.size()
 
-	if num_players > 0:
-		# TODO: Handle single player case
-		if num_players == 1:
-			player2.visible = false
+	for i in range(current_players.size()):
+		var player = current_players[i]
 
-		# Update player positions
-		for i in range(min(num_players, current_players.size())):
-			var player = current_players[i]
+		if i < num_players:
 			var center_mass = Vector2(player_position[i][0], player_position[i][1])
 
 			var scaled_position = Vector2(
@@ -61,11 +71,11 @@ func update_player_positions():
 
 			# Show the player
 			player.visible = true
-
-	else:
-		# Hide all players when payload is empty
-		for player in current_players:
-			player.visible = false
+			player_buffer_counters[i] = 0
+		else:
+			# Check if the player should be hidden due to buffer or timeout
+			if player_buffer_counters[i] >= disappearance_buffer_frames:
+				player.visible = false
 
 # Add this new method to your class
 func _physics_process(delta: float):
@@ -108,6 +118,9 @@ func _ready():
 	player1.visible = false
 	player2.visible = false
 
+	player1.z_index = 5
+	player2.z_index = 5
+	
 	# Add players to the player layer
 	player_layer.add_child(player1, true)
 	player_layer.add_child(player2, true)
@@ -116,14 +129,23 @@ func _ready():
 	player1.add_to_group("Players")
 	player2.add_to_group("Players")
 
+	if Globals.dev_mode:
+		# Dev mode: Control player1 with mouse
+		var dev_player = current_players[0]
+		var dev_player2 = current_players[1]
+		dev_player.visible = true
+		if Globals.dev_mode_player2:
+			dev_player2.visible = true
+		else:
+			dev_player2.visible = false
+
 func _process(_delta):
 	if Globals.dev_mode:
 		# Dev mode: Control player1 with mouse
 		var mouse_pos = get_viewport().get_mouse_position()
 		var dev_player = current_players[0]
 		dev_player.set_target_position(mouse_pos)
-		dev_player.visible = true
-		player2.visible = false
+
 	else:
 		# Normal mode: Use SocketIO
 		socket_client.emit_event(ENV.event_datahub_contours, "", handle_center_mass)

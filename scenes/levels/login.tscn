@@ -13,7 +13,7 @@ offset_right = 3840.0
 offset_bottom = 2160.0
 color = Color(0.980392, 0.980392, 0.980392, 1)
 
-[node name="LoginLogo" parent="." instance=ExtResource("5_wiuf5")]
+[node name="LoginLogoContainer" parent="." instance=ExtResource("5_wiuf5")]
 y_sort_enabled = true
 
 [node name="UI" parent="." instance=ExtResource("4_j0vcr")]

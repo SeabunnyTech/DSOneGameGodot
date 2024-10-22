@@ -23,6 +23,7 @@ bg_color = Color(0.705882, 0.705882, 0.705882, 0.196078)
 ring = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 5
 texture = ExtResource("1_7qyyt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

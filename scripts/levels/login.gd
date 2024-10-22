@@ -1,11 +1,17 @@
 extends Node2D
 
-@onready var login_logo = $LoginLogo/LoginLogo
-@onready var portal = $LoginLogo/Portal
-@onready var login_logo_container = $LoginLogo
 
-var login_logo2: Sprite2D
-var portal2: Sprite2D
+@onready var login_logo_container = $LoginLogoContainer
+
+@onready var login_logo = $LoginLogoContainer/LoginLogo
+@onready var portal = $LoginLogoContainer/Portal
+@onready var login_logo2 = $LoginLogoContainer/LoginLogo2
+@onready var portal2 = $LoginLogoContainer/Portal2
+
+var visible_players: int = 0
+
+signal ready_to_start(players: int)
+signal wait_for_players
 
 func _ready():
 	var tween = create_tween()
@@ -16,9 +22,16 @@ func _ready():
 	tween.tween_property(login_logo, "scale", Vector2(1, 1), 2.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 	tween.tween_property(portal, "scale", Vector2(1, 1), 2.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 
-	set_logo_color(login_logo, Color.hex(0x8F8F8FFF))  # Color from player1.svg
+	login_logo_container.z_index = -1 # TODO: Fix login logo is on top of playerss
+	
+	login_logo_container.portal_signup.connect(_on_portal_signup)
+	login_logo_container.portal_signup_exited.connect(_on_portal_signup_exited)
+
+	# Set initial colors
+	set_logo_color(login_logo, Color.hex(0x8F8F8FFF))
 	set_logo_color(portal, Color.hex(0x8F8F8F7F))
 
+	# Connect visibility changed signals
 	for player in [PlayerManager.player1, PlayerManager.player2]:
 		if player:
 			player.connect("visibility_changed", _on_player_visibility_changed.bind(player))
@@ -28,22 +41,26 @@ func _process(_delta):
 	pass
 	# Other level-specific methods
 
-func set_logo_color(node, new_color: Color):
-	# Assuming the logo is using a ShaderMaterial
+func set_logo_color(node, new_color: Color, duration: float = 0.5):
+	var tween = create_tween()
 	if node.material is ShaderMaterial:
-		node.material.set_shader_parameter("tint_color", new_color)
+		if not node.material.resource_local_to_scene:
+			node.material = node.material.duplicate()
+		var current_color = node.material.get_shader_parameter("tint_color")
+		tween.tween_method(
+			func(c): node.material.set_shader_parameter("tint_color", c),
+			current_color,
+			new_color,
+			duration
+		)
 	else:
-		# If not using a shader, we can modulate the sprite directly
-		var original_alpha = node.modulate.a
-		node.modulate = new_color
-		node.modulate.a = original_alpha * new_color.a
+		var current_color = node.modulate
+		tween.tween_property(node, "modulate", new_color, duration)
+		tween.tween_property(node, "modulate:a", current_color.a * new_color.a, duration)
 
-func create_player2_logo():
-	login_logo2 = login_logo.duplicate()
-	portal2 = portal.duplicate()
-	
-	login_logo_container.add_child(login_logo2)
-	login_logo_container.add_child(portal2)
+func show_player2_logo():
+	login_logo2.visible = true
+	portal2.visible = true
 	
 	# Animate the new logo
 	var tween = create_tween()
@@ -51,45 +68,95 @@ func create_player2_logo():
 	tween.tween_property(login_logo2, "scale", Vector2(1, 1), 2.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 	tween.tween_property(portal2, "scale", Vector2(1, 1), 2.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 
-func remove_player2_logo():
-	if login_logo2:
-		login_logo2.queue_free()
-		login_logo2 = null
-	if portal2:
-		portal2.queue_free()
-		portal2 = null
-
-func position_logos():
+func hide_player2_logo():
+	if login_logo2.visible:
+		# Animate back to player1's position before hiding
+		var tween = create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(login_logo, "position", login_logo.position, 1.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
+		tween.tween_property(portal, "position", login_logo.position, 1.0).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_ELASTIC)
+		tween.tween_callback(func():
+			login_logo2.visible = false
+			portal2.visible = false
+			position_logos(false)  # Animate player1 logo back to center
+		)
+		
+func position_logos(animated: bool = false):
 	var screen_width = get_viewport_rect().size.x
-	var logo_width = login_logo.texture.get_width()
+	var target_pos_1 = Vector2(screen_width / 2, login_logo.position.y)
+	var target_pos_2 = Vector2(2 * screen_width / 3, login_logo.position.y)
+
+	var tween = create_tween()
+	tween.set_parallel(true)
+
+	if login_logo2.visible:
+		target_pos_1.x = screen_width / 3
 	
-	if login_logo2:
-		# Position both logos
-		login_logo.position.x = screen_width / 3 - logo_width / 2
-		login_logo2.position.x = 2 * screen_width / 3 - logo_width / 2
-		portal2.position = login_logo2.position
+	if animated:
+		tween.tween_property(login_logo, "position", target_pos_1, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+		tween.tween_property(portal, "position", target_pos_1, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+		
+		if login_logo2.visible:
+			tween.tween_property(login_logo2, "position", target_pos_2, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+			tween.tween_property(portal2, "position", target_pos_2, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
 	else:
-		# Center the single logo
-		login_logo.position.x = screen_width / 2 - logo_width / 2
-	
-	# Update portal position
-	portal.position = login_logo.position
+		tween.tween_property(login_logo, "position", target_pos_1, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+		tween.tween_property(portal, "position", target_pos_1, 1.0).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+		
+		if login_logo2.visible:
+			login_logo2.position = target_pos_2
+			portal2.position = target_pos_2
+
+func transition_to_next_level():
+	# Add a short delay before transitioning
+	await get_tree().create_timer(1.0).timeout
+	# Replace this with your actual code to load the next level
+	print("Transitioning to the next level")
+	# get_tree().change_scene_to_file("res://scenes/levels/level1.tscn")
+
+func _on_portal_signup(player: Node2D):
+	if player == PlayerManager.player1:
+		set_logo_color(portal, Color.hex(0x0164827F))
+	elif player == PlayerManager.player2:
+		set_logo_color(portal2, Color.hex(0x0164827F))
+
+	if visible_players == PlayerManager.current_players.size():
+		transition_to_next_level()
+
+func _on_portal_signup_exited(player: Node2D):
+	if player == PlayerManager.player1:
+		set_logo_color(login_logo, Color.hex(0x00B6EEFF))
+		set_logo_color(portal, Color.hex(0x00B6EE3F))
+	elif player == PlayerManager.player2:
+		set_logo_color(login_logo2, Color.hex(0x006888FF))
+		set_logo_color(portal2, Color.hex(0x0068883F))
 
 func _on_player_visibility_changed(player: Node):
 	if player == PlayerManager.player1:
 		if player.visible:
+			visible_players += 1
 			set_logo_color(login_logo, Color.hex(0x00B6EEFF))
-			set_logo_color(portal, Color.hex(0x00B6EE5F))
+			set_logo_color(portal, Color.hex(0x00B6EE3F))
+		else:
+			visible_players -= 1
+			set_logo_color(login_logo, Color.hex(0x8F8F8FFF))
+			set_logo_color(portal, Color.hex(0x8F8F8F7F))
 	elif player == PlayerManager.player2:
 		if player.visible:
-			if not login_logo2:
-				create_player2_logo()
+			visible_players += 1
+			show_player2_logo()
 			set_logo_color(login_logo2, Color.hex(0x006888FF))
-			set_logo_color(portal2, Color.hex(0x0068887F))
+			set_logo_color(portal2, Color.hex(0x0068883F))
 		else:
-			remove_player2_logo()
-	
-	# position_logos()
+			visible_players -= 1
+			hide_player2_logo()
+
+	if visible_players > 0:
+		ready_to_start.emit(visible_players)
+	else:
+		wait_for_players.emit()
+
+	position_logos(true)
 	
 func _on_ui_skip_area_exited(player: Node2D) -> void:
 	player.stop_progress_countdown()
