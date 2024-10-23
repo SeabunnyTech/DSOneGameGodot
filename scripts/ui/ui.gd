@@ -21,10 +21,11 @@ var tween: Tween
 func _ready():
 	load_messages()
 	set_default_messages()
-	
+
 	if get_parent().get_parent().has_node("Login"):
-		get_parent().get_parent().get_node("Login").connect("ready_to_start", _on_ready_to_start)
-		get_parent().get_parent().get_node("Login").connect("wait_for_players", _on_wait_for_players)
+		get_parent().get_parent().get_node("Login").connect("login_signup", _on_login_signup)
+		get_parent().get_parent().get_node("Login").connect("login_start", _on_login_start)
+		get_parent().get_parent().get_node("Login").connect("login_wait_for_players", _on_login_wait_for_players)
 	# hide_all()
 
 func load_messages():
@@ -112,8 +113,11 @@ func _on_skip_area_body_entered(body: Node2D) -> void:
 func _on_skip_area_body_exited(body: Node2D) -> void:
 	skip_area_exited.emit(body)
 
-func _on_ready_to_start(_players: int):
+func _on_login_signup(_players: int):
 	set_dialog_message("login", "signup")
 
-func _on_wait_for_players():
+func _on_login_start():
 	set_dialog_message("login", "start")
+
+func _on_login_wait_for_players():
+	set_dialog_message("login", "wait_for_second_player")

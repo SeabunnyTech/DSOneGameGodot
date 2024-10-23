@@ -1,3 +1,24 @@
-[gd_scene format=3 uid="uid://bxm3jm2i86m6v"]
+[gd_scene load_steps=5 format=3 uid="uid://bxm3jm2i86m6v"]
+
+[ext_resource type="Texture2D" uid="uid://ce5teglqy5jas" path="res://assets/images/backgrounds/蓄電大作戰_一人畫面.jpg" id="1_d6hpk"]
+[ext_resource type="Texture2D" uid="uid://cy8h3juf3bgdo" path="res://assets/images/backgrounds/蓄電大作戰_兩人畫面.jpg" id="2_okwnw"]
+[ext_resource type="Texture2D" uid="uid://c085kcktck54m" path="res://assets/images/backgrounds/蓄電大作戰_一人畫面_開.png" id="3_6pswe"]
+[ext_resource type="Texture2D" uid="uid://d3fwthmw8l2yb" path="res://assets/images/backgrounds/蓄電大作戰_兩人畫面_開.png" id="4_gr6kn"]
 
 [node name="Level1" type="Node2D"]
+
+[node name="蓄電大作戰一人畫面" type="Sprite2D" parent="."]
+position = Vector2(1919, 1084)
+texture = ExtResource("1_d6hpk")
+
+[node name="蓄電大作戰兩人畫面" type="Sprite2D" parent="."]
+position = Vector2(1915, 1073)
+texture = ExtResource("2_okwnw")
+
+[node name="蓄電大作戰一人畫面開" type="Sprite2D" parent="."]
+position = Vector2(1880, 1347)
+texture = ExtResource("3_6pswe")
+
+[node name="蓄電大作戰兩人畫面開" type="Sprite2D" parent="."]
+position = Vector2(1770, 1083)
+texture = ExtResource("4_gr6kn")

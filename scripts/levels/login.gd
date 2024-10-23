@@ -9,9 +9,11 @@ extends Node2D
 @onready var portal2 = $LoginLogoContainer/Portal2
 
 var visible_players: int = 0
+var signup_players: int = 0
 
-signal ready_to_start(players: int)
-signal wait_for_players
+signal login_signup(players: int)
+signal login_start
+signal login_wait_for_players
 
 func _ready():
 	var tween = create_tween()
@@ -174,24 +176,37 @@ func transition_to_next_level():
 	await get_tree().create_timer(1.0).timeout
 	# Replace this with your actual code to load the next level
 	print("Transitioning to the next level")
-	# get_tree().change_scene_to_file("res://scenes/levels/level1.tscn")
+	get_tree().change_scene_to_file("res://scenes/levels/level1.tscn")
 
 func _on_portal_signup(player: Node2D):
 	if player == PlayerManager.player1:
+		signup_players += 1
 		set_logo_color(portal, Color.hex(0x0164827F))
 	elif player == PlayerManager.player2:
+		signup_players += 1
 		set_logo_color(portal2, Color.hex(0x0164827F))
 
-	if visible_players == PlayerManager.current_players.size():
+	print("signup_players: ", signup_players, " visible_players: ", visible_players)
+	if signup_players == visible_players:
 		transition_to_next_level()
+	elif signup_players != 0 and visible_players != 0:
+		login_wait_for_players.emit()
+	else:
+		login_signup.emit(visible_players)
 
 func _on_portal_signup_exited(player: Node2D):
 	if player == PlayerManager.player1:
+		signup_players -= 1
 		set_logo_color(login_logo, Color.hex(0x00B6EEFF))
 		set_logo_color(portal, Color.hex(0x00B6EE3F))
 	elif player == PlayerManager.player2:
+		signup_players -= 1
 		set_logo_color(login_logo2, Color.hex(0x006888FF))
 		set_logo_color(portal2, Color.hex(0x0068883F))
+
+	print("signup_players: ", signup_players, " visible_players: ", visible_players)
+	if signup_players == 0:
+		login_signup.emit(visible_players)
 
 func _on_player_visibility_changed(player: Node):
 	if player == PlayerManager.player1:
@@ -218,9 +233,9 @@ func _on_player_visibility_changed(player: Node):
 			hide_player2_logo()
 
 	if visible_players > 0:
-		ready_to_start.emit(visible_players)
+		login_signup.emit(visible_players)
 	else:
-		wait_for_players.emit()
+		login_start.emit()
 
 	position_logos(true)
 	
