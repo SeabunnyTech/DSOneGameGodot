@@ -1,7 +1,7 @@
 {
     "popup": {
         "login": {
-            "ready": "準備就緒後\n\n把球舉至圈圈中"
+            "tutorial": "準備就緒後\n\n把球舉至圈圈中"
         },
         "level1": {
             "tutorial_1": "小小的水滴\n\n可以推動渦輪旋轉",

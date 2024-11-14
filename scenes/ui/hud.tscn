@@ -1,0 +1,218 @@
+[gd_scene load_steps=9 format=3 uid="uid://cthtatigjtayw"]
+
+[ext_resource type="Texture2D" uid="uid://cnkrxgbl46d57" path="res://assets/images/backgrounds/static/level2/mini_map_river_1.png" id="1_bwacd"]
+[ext_resource type="StyleBox" uid="uid://dk8u2e2rcxdy" path="res://assets/themes/hud_frame.tres" id="2_e71wh"]
+[ext_resource type="Texture2D" uid="uid://bc77xc0lfg8mh" path="res://assets/images/ui/score_icon.png" id="2_ogpko"]
+[ext_resource type="Texture2D" uid="uid://bkcmj6b0jpx7x" path="res://assets/images/backgrounds/static/level2/mini_map_zone_one_player.png" id="2_qyxgy"]
+[ext_resource type="LabelSettings" uid="uid://c3773vqn4scw5" path="res://assets/themes/hud_label.tres" id="3_lvry2"]
+[ext_resource type="Texture2D" uid="uid://dvak267pk8td8" path="res://assets/images/backgrounds/static/level2/mini_map_zone_two_players.png" id="3_up1yc"]
+[ext_resource type="Texture2D" uid="uid://b77w074frqon5" path="res://assets/images/ui/timer_icon.png" id="4_87w1t"]
+[ext_resource type="Theme" uid="uid://cn6wmbmq6ng83" path="res://assets/themes/theme.tres" id="5_hqgcc"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 2160.0
+grow_horizontal = 2
+scale = Vector2(1.00056, 1.00963)
+size_flags_vertical = 3
+
+[node name="LeftMiniMap" type="MarginContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+
+[node name="MiniMap" type="TextureRect" parent="HBoxContainer/LeftMiniMap"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture = ExtResource("1_bwacd")
+
+[node name="OnePlayerClipZone" type="TextureRect" parent="HBoxContainer/LeftMiniMap/MiniMap"]
+layout_mode = 0
+offset_right = 384.0
+offset_bottom = 305.0
+scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(0, -200)
+texture = ExtResource("2_qyxgy")
+
+[node name="TwoPlayersClipZone" type="TextureRect" parent="HBoxContainer/LeftMiniMap/MiniMap"]
+visible = false
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 365.0
+scale = Vector2(1.09, 1.09)
+pivot_offset = Vector2(0, 460)
+texture = ExtResource("3_up1yc")
+
+[node name="LeftContainer" type="VBoxContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScoreContainer" type="MarginContainer" parent="HBoxContainer/LeftContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 30
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LeftContainer/ScoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_e71wh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LeftContainer/ScoreContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LeftContainer/ScoreContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_ogpko")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Score" type="Label" parent="HBoxContainer/LeftContainer/ScoreContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+text = "9999"
+label_settings = ExtResource("3_lvry2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerContainer" type="MarginContainer" parent="HBoxContainer/LeftContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 100
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/LeftContainer/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_e71wh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LeftContainer/TimerContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/LeftContainer/TimerContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_87w1t")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Timer" type="Label" parent="HBoxContainer/LeftContainer/TimerContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+text = "9999"
+label_settings = ExtResource("3_lvry2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+theme = ExtResource("5_hqgcc")
+
+[node name="RightMiniMap" type="MarginContainer" parent="HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 100
+
+[node name="MiniMap" type="TextureRect" parent="HBoxContainer/RightMiniMap"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+texture = ExtResource("1_bwacd")
+
+[node name="OnePlayerClipZone" type="TextureRect" parent="HBoxContainer/RightMiniMap/MiniMap"]
+layout_mode = 0
+offset_right = 384.0
+offset_bottom = 305.0
+scale = Vector2(0.8, 0.8)
+pivot_offset = Vector2(0, -200)
+texture = ExtResource("2_qyxgy")
+
+[node name="TwoPlayersClipZone" type="TextureRect" parent="HBoxContainer/RightMiniMap/MiniMap"]
+visible = false
+layout_mode = 0
+offset_right = 282.0
+offset_bottom = 365.0
+scale = Vector2(1.09, 1.09)
+pivot_offset = Vector2(0, 460)
+texture = ExtResource("3_up1yc")
+
+[node name="RightContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScoreContainer" type="MarginContainer" parent="HBoxContainer/RightContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 30
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/RightContainer/ScoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_e71wh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/RightContainer/ScoreContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/RightContainer/ScoreContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_ogpko")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Score" type="Label" parent="HBoxContainer/RightContainer/ScoreContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+text = "9999"
+label_settings = ExtResource("3_lvry2")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerContainer" type="MarginContainer" parent="HBoxContainer/RightContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 100
+
+[node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/RightContainer/TimerContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("2_e71wh")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/RightContainer/TimerContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer/RightContainer/TimerContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("4_87w1t")
+expand_mode = 2
+stretch_mode = 3
+
+[node name="Timer" type="Label" parent="HBoxContainer/RightContainer/TimerContainer/PanelContainer/HBoxContainer"]
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+text = "9999"
+label_settings = ExtResource("3_lvry2")
+horizontal_alignment = 1
+vertical_alignment = 1

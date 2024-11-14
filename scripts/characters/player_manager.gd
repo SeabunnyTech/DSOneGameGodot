@@ -9,15 +9,27 @@ var player2: Node = player2_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
 
+var player_colors = {
+	"player1": {
+		"active": Color.hex(0x00B6EEFF),
+		"inactive": Color.hex(0x8F8F8FFF)
+	},
+	"player2": {
+		"active": Color.hex(0x006888FF),
+		"inactive": Color.hex(0x8F8F8FFF)
+	}
+}
+
 var viewport_size: Vector2 = Globals.viewport_size
 var player_position: Array[Vector2] = []
-var player_last_spawn_position: Array[Vector2] = [Vector2(0, 5000), Vector2(0, 5000)]
+var player_buffer_counters: Array[int] = [0, 0]
 
 @export var smoothing_speed: float = 30.0
 @export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
 
-var player_last_position: Array[Vector2] = [Vector2.ZERO, Vector2.ZERO]
-var player_buffer_counters: Array[int] = [0, 0]
+# Dev mode variables
+var active_dev_player: Node = null
+var dev_mode_active: bool = false
 
 func handle_center_mass(payload: Variant):
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
@@ -77,11 +89,38 @@ func update_player_positions():
 			if player_buffer_counters[i] >= disappearance_buffer_frames:
 				player.visible = false
 
+func toggle_player(player_index: int) -> void:
+	var player = current_players[player_index]
+	
+	# Player 1 specific logic
+	if player_index == 0:
+		if active_dev_player != player:
+			active_dev_player = player
+			player.visible = true
+		elif current_players[1].visible == false:
+			active_dev_player = null
+			player.visible = false
+	
+	# Player 2 specific logic
+	else:  # player_index == 1
+		if active_dev_player != player and current_players[0].visible:
+			active_dev_player = player
+			player.visible = true
+		elif active_dev_player == player:
+			active_dev_player = null
+			player.visible = false
+
 # Add this new method to your class
 func _physics_process(delta: float):
 	for player in current_players:
 		if player.visible:
 			player.position = player.position.lerp(player.target_position, smoothing_speed * delta)
+
+func _on_player_countdown_complete(player: Node2D):
+	print("Player countdown complete: ", player.name)
+
+func _on_player_countdown_cancelled(player: Node2D):
+	print("Player countdown cancelled: ", player.name)
 
 func _on_connection_established():
 	print("Connected to SocketIO server")
@@ -94,7 +133,7 @@ func _on_payload_received(event_name: String, payload: Variant):
 		"update":
 			handle_center_mass(payload)
 
-func _ready():
+func _init_socket_client():
 	# Initialize SocketIO client
 	socket_client = SocketIOClientNode.new()
 	socket_client.name = "SocketIOClientNode" # Just for runtime debugging
@@ -105,47 +144,46 @@ func _ready():
 	socket_client.connection_error.connect(_on_connection_error)
 	socket_client.payload_received.connect(_on_payload_received)
 
-	viewport_size = get_viewport().size
-
-	# Create a new layer for players
+func _init_player_layer():
 	var player_layer = CanvasLayer.new()
 	player_layer.name = "PlayerLayer"
-	player_layer.layer = 1  # Set this higher than the UI layer
-
+	player_layer.layer = 1
 	add_child(player_layer)
 
-	# Hide players initially
-	player1.visible = false
-	player2.visible = false
+	for player in current_players:
+		player.visible = false
+		player.z_index = 5
+		player_layer.add_child(player, true)
+		player.add_to_group("Players")
+		player.countdown_complete.connect(_on_player_countdown_complete)
+		player.countdown_cancelled.connect(_on_player_countdown_cancelled)
 
-	player1.z_index = 5
-	player2.z_index = 5
-	
-	# Add players to the player layer
-	player_layer.add_child(player1, true)
-	player_layer.add_child(player2, true)
-
-	# Add players to the "players" group
-	player1.add_to_group("Players")
-	player2.add_to_group("Players")
-
+func _setup_dev_mode():
 	if Globals.dev_mode:
-		# Dev mode: Control player1 with mouse
-		var dev_player = current_players[0]
-		var dev_player2 = current_players[1]
-		dev_player.visible = true
-		if Globals.dev_mode_player2:
-			dev_player2.visible = true
-		else:
-			dev_player2.visible = false
+		dev_mode_active = true
+		active_dev_player = current_players[0]
+
+func _ready():
+	_init_socket_client()
+	_init_player_layer()
+	_setup_dev_mode()
 
 func _process(_delta):
-	if Globals.dev_mode:
-		# Dev mode: Control player1 with mouse
-		var mouse_pos = get_viewport().get_mouse_position()
-		var dev_player = current_players[0]
-		dev_player.set_target_position(mouse_pos)
+	viewport_size = get_viewport().size # TODO: Properly manage viewport size in higher level 
+	
+	if dev_mode_active:
+		# Handle player switching
+		if Input.is_action_just_pressed("toggle_player1"):
+			toggle_player(0)
+		if Input.is_action_just_pressed("toggle_player2"):
+			toggle_player(1)
 
+		# Move active player with mouse
+		if active_dev_player:
+			var mouse_pos = get_viewport().get_mouse_position()
+			active_dev_player.set_target_position(mouse_pos)
+
+	
 	else:
 		# Normal mode: Use SocketIO
 		socket_client.emit_event(ENV.event_datahub_contours, "", handle_center_mass)

@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://c3773vqn4scw5"]
+
+[ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_g72in"]
+
+[resource]
+font = ExtResource("1_g72in")
+font_size = 70

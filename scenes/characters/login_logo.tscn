@@ -42,6 +42,7 @@ position = Vector2(1904.3, 1081.7)
 shape = SubResource("CircleShape2D_fi5hg")
 
 [node name="LoginLogo2" type="Sprite2D" parent="."]
+visible = false
 z_index = -5
 material = SubResource("ShaderMaterial_60vdx")
 position = Vector2(1920, 1080)
@@ -49,21 +50,17 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("1_mwef8")
 
 [node name="Portal2" type="Sprite2D" parent="."]
+visible = false
 z_index = -5
 material = SubResource("ShaderMaterial_84vtp")
 position = Vector2(1920, 1080)
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_kf582")
 
-[node name="PortalArea2" type="Area2D" parent="Portal2"]
+[node name="PortalArea" type="Area2D" parent="Portal2"]
 position = Vector2(-19200, -10800)
 scale = Vector2(10, 10)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Portal2/PortalArea2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Portal2/PortalArea"]
 position = Vector2(1904.3, 1081.7)
 shape = SubResource("CircleShape2D_fi5hg")
-
-[connection signal="body_entered" from="Portal/PortalArea" to="." method="_on_portal_area_body_entered"]
-[connection signal="body_exited" from="Portal/PortalArea" to="." method="_on_portal_area_body_exited"]
-[connection signal="body_entered" from="Portal2/PortalArea2" to="." method="_on_portal_area_2_body_entered"]
-[connection signal="body_exited" from="Portal2/PortalArea2" to="." method="_on_portal_area_2_body_exited"]

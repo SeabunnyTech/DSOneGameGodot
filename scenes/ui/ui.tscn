@@ -19,63 +19,34 @@ size = Vector2(3838, 328)
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_krr3q")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Message" type="VBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Message"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 915.0
 
-[node name="Spacer" type="Control" parent="VBoxContainer/HBoxContainer"]
+[node name="Spacer" type="Control" parent="Message/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer1" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("1_wm3ll")
-
-[node name="PopupMessageOnePlayer" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer1"]
-unique_name_in_owner = true
-layout_mode = 2
-theme = ExtResource("1_wm3ll")
-
-[node name="PopupMessageOnePlayerLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer1/PopupMessageOnePlayer"]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -0.5
-offset_top = -60.5
-offset_right = 0.5
-offset_bottom = 60.5
-grow_horizontal = 2
-grow_vertical = 2
-text = "test"
-label_settings = ExtResource("2_2wtx6")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="MarginContainer2" type="MarginContainer" parent="VBoxContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="Message/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_wm3ll")
 
-[node name="PopupMessageTwoPlayers" type="Panel" parent="VBoxContainer/HBoxContainer/MarginContainer2"]
+[node name="PopupMessageTwoPlayers" type="Panel" parent="Message/HBoxContainer/MarginContainer2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 theme = ExtResource("1_wm3ll")
 
-[node name="PopupMessageTwoPlayersLabel" type="Label" parent="VBoxContainer/HBoxContainer/MarginContainer2/PopupMessageTwoPlayers"]
+[node name="PopupMessageTwoPlayersLabel" type="Label" parent="Message/HBoxContainer/MarginContainer2/PopupMessageTwoPlayers"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
@@ -96,32 +67,61 @@ label_settings = ExtResource("2_2wtx6")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Spacer" type="Control" parent="VBoxContainer"]
+[node name="MarginContainer1" type="MarginContainer" parent="Message/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_wm3ll")
+
+[node name="PopupMessageOnePlayer" type="Panel" parent="Message/HBoxContainer/MarginContainer1"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("1_wm3ll")
+
+[node name="PopupMessageOnePlayerLabel" type="Label" parent="Message/HBoxContainer/MarginContainer1/PopupMessageOnePlayer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -60.5
+offset_right = 0.5
+offset_bottom = 60.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "test"
+label_settings = ExtResource("2_2wtx6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="Message"]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 915.0
 
-[node name="DialogBox" type="PanelContainer" parent="VBoxContainer"]
+[node name="DialogBox" type="PanelContainer" parent="Message"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 330.0
 theme = ExtResource("1_wm3ll")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DialogBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Message/DialogBox"]
 layout_mode = 2
 
-[node name="Spacer" type="Control" parent="VBoxContainer/DialogBox/HBoxContainer"]
+[node name="Spacer" type="Control" parent="Message/DialogBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/DialogBox/HBoxContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="Message/DialogBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 theme = ExtResource("1_wm3ll")
 
-[node name="DialogBoxLabel" type="Label" parent="VBoxContainer/DialogBox/HBoxContainer/CenterContainer"]
+[node name="DialogBoxLabel" type="Label" parent="Message/DialogBox/HBoxContainer/CenterContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_wm3ll")
@@ -131,7 +131,7 @@ label_settings = ExtResource("3_yeqed")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DialogBox/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Message/DialogBox/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 50
@@ -139,12 +139,12 @@ theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 20
 
-[node name="SkipButton" type="Panel" parent="VBoxContainer/DialogBox/HBoxContainer/MarginContainer"]
+[node name="SkipButton" type="Panel" parent="Message/DialogBox/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ij63c")
 
-[node name="Label" type="Label" parent="VBoxContainer/DialogBox/HBoxContainer/MarginContainer/SkipButton"]
+[node name="Label" type="Label" parent="Message/DialogBox/HBoxContainer/MarginContainer/SkipButton"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -160,21 +160,21 @@ grow_vertical = 2
 text = "跳過教學"
 label_settings = ExtResource("5_f5jcf")
 
-[node name="ReturnArea" type="Area2D" parent="VBoxContainer/DialogBox/HBoxContainer"]
+[node name="ReturnArea" type="Area2D" parent="Message/DialogBox/HBoxContainer"]
 disable_mode = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="VBoxContainer/DialogBox/HBoxContainer/ReturnArea"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Message/DialogBox/HBoxContainer/ReturnArea"]
 position = Vector2(1919, 164)
 shape = SubResource("RectangleShape2D_m448a")
 
-[node name="SkipArea" type="Area2D" parent="VBoxContainer/DialogBox/HBoxContainer"]
+[node name="SkipArea" type="Area2D" parent="Message/DialogBox/HBoxContainer"]
 disable_mode = 1
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VBoxContainer/DialogBox/HBoxContainer/SkipArea"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Message/DialogBox/HBoxContainer/SkipArea"]
 visible = false
 polygon = PackedVector2Array(3310, 21, 3288, 24, 3272, 36, 3256, 55, 3251, 78, 3251, 254, 3257, 277, 3270, 292, 3290, 307, 3310, 310, 3741, 309, 3759, 302, 3773, 292, 3780, 282, 3788, 266, 3790, 249, 3789, 69, 3782, 51, 3774, 40, 3759, 28, 3743, 21, 3731, 20)
 
-[connection signal="body_entered" from="VBoxContainer/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_entered"]
-[connection signal="body_exited" from="VBoxContainer/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_exited"]
-[connection signal="body_entered" from="VBoxContainer/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_entered"]
-[connection signal="body_exited" from="VBoxContainer/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_exited"]
+[connection signal="body_entered" from="Message/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_entered"]
+[connection signal="body_exited" from="Message/DialogBox/HBoxContainer/ReturnArea" to="." method="_on_return_area_body_exited"]
+[connection signal="body_entered" from="Message/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_entered"]
+[connection signal="body_exited" from="Message/DialogBox/HBoxContainer/SkipArea" to="." method="_on_skip_area_body_exited"]

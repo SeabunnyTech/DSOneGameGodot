@@ -31,7 +31,7 @@ func _ready():
 	# Only show in dev mode
 	canvas_layer.visible = Globals.debug
 
-func add_message(message: String):
+func info(message: String):
 	if not Globals.debug:
 		return
 		

@@ -21,12 +21,37 @@ var tween: Tween
 func _ready():
 	load_messages()
 	set_default_messages()
+	# Get the root parent node (scene)
+	var root_parent = get_parent()
+	
+	var scene_name = root_parent.name
+	print("UI loaded under scene: ", scene_name)
+	
+	# Connect signals based on scene
+	match scene_name:
+		"Login":
+			connect_login_signals(root_parent)
+		"Level1_1p", "Level1_2p":
+			connect_level1_signals(root_parent)
+		"Level2_1p", "Level2_2p":
+			connect_level2_signals(root_parent)
 
-	if get_parent().get_parent().has_node("Login"):
-		get_parent().get_parent().get_node("Login").connect("login_signup", _on_login_signup)
-		get_parent().get_parent().get_node("Login").connect("login_start", _on_login_start)
-		get_parent().get_parent().get_node("Login").connect("login_wait_for_players", _on_login_wait_for_players)
-	# hide_all()
+func connect_login_signals(root_parent: Node):
+	root_parent.connect("login_signup", _on_login_signup)
+	root_parent.connect("login_start", _on_login_start)
+	root_parent.connect("login_wait_for_players", _on_login_wait_for_players)
+	root_parent.connect("login_tutorial", _on_login_tutorial)
+	root_parent.connect("login_select_level", _on_login_select_level)
+
+func connect_level1_signals(root_parent: Node):
+	hide_all()
+	# root_parent.connect("level1_tutorial_1", _on_level1_tutorial_1)
+	pass
+
+func connect_level2_signals(root_parent: Node):
+	# root_parent.connect("level2_tutorial_1", _on_level2_tutorial_1)
+	hide_all()
+	pass
 
 func load_messages():
 	var file = FileAccess.open(messages_path, FileAccess.READ)
@@ -38,18 +63,17 @@ func load_messages():
 		print("JSON Parse Error: ", json.get_error_message(), " in ", file.get_path(), " at line ", json.get_error_line())
 
 func set_default_messages():
-	set_popup_message("one_player", "login", "ready")
-	set_popup_message("two_players", "login", "ready")
+	set_popup_message(1, "login", "tutorial")
 	set_dialog_message("login", "start")
 	hide_popups()
 	hide_skip_button()
 
-func set_popup_message(player_type: String, level_type: String, key: String):
-	var label = popup_two_players_label if player_type == "two_players" else popup_one_player_label
+func set_popup_message(num_visible_players: int, level_type: String, key: String):
+	var label = popup_one_player_label if num_visible_players == 1 else popup_two_players_label
 	if messages.popup.has(level_type) and messages.popup[level_type].has(key):
 		label.text = messages.popup[level_type][key]
 	else:
-		print("Popup message not found for ", player_type, " and key ", key)
+		print("Popup message not found for ", num_visible_players, " players and key ", key)
 
 func set_dialog_message(level_type: String, key: String):
 	if messages.dialog.has(level_type) and messages.dialog[level_type].has(key):
@@ -73,13 +97,13 @@ func remove_breath_effect():
 		tween.kill()
 	dialog_box_label.modulate.a = 1.0
 
-func show_popup(player_type: String):
-	if player_type == "two_players":
-		popup_two_players_panel.show()
-		popup_one_player_panel.hide()
-	else:
+func show_popup(num_visible_players: int):
+	if num_visible_players == 1:
 		popup_one_player_panel.show()
 		popup_two_players_panel.hide()
+	else:
+		popup_one_player_panel.hide()
+		popup_two_players_panel.show()
 
 func hide_popups():
 	popup_two_players_panel.hide()
@@ -113,11 +137,27 @@ func _on_skip_area_body_entered(body: Node2D) -> void:
 func _on_skip_area_body_exited(body: Node2D) -> void:
 	skip_area_exited.emit(body)
 
-func _on_login_signup(_players: int):
+func _on_login_signup(_num_visible_players: int):
 	set_dialog_message("login", "signup")
+	hide_popups()
 
 func _on_login_start():
 	set_dialog_message("login", "start")
+	hide_popups()
 
 func _on_login_wait_for_players():
 	set_dialog_message("login", "wait_for_second_player")
+	hide_popups()
+
+func _on_login_tutorial(num_visible_players: int):
+	set_dialog_message("login", "tutorial")
+	show_popup(num_visible_players)
+	set_popup_message(num_visible_players, "login", "tutorial")
+
+func _on_login_select_level():
+	set_dialog_message("login", "select_level")
+	hide_popups()
+
+func _on_login_transition():
+	set_dialog_message("login", "transition")
+	hide_popups()

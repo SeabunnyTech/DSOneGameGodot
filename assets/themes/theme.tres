@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://cn6wmbmq6ng83"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cn6wmbmq6ng83"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vfktd"]
 bg_color = Color(0.807843, 0.827451, 0.764706, 0.8)
@@ -11,6 +11,13 @@ corner_detail = 10
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_culoy"]
 bg_color = Color(0.854902, 0.854902, 0.854902, 0.701961)
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_27yjy"]
+color = Color(0.243137, 0.580392, 0.317647, 1)
+grow_begin = 10.0
+grow_end = 10.0
+thickness = 30
+vertical = true
+
 [resource]
 MarginContainer/constants/margin_bottom = 150
 MarginContainer/constants/margin_left = 150
@@ -18,3 +25,4 @@ MarginContainer/constants/margin_right = 150
 MarginContainer/constants/margin_top = 150
 Panel/styles/panel = SubResource("StyleBoxFlat_vfktd")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_culoy")
+VSeparator/styles/separator = SubResource("StyleBoxLine_27yjy")
