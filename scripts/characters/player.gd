@@ -34,6 +34,9 @@ func _process(_delta: float) -> void:
 			is_counting_down = false
 			countdown_complete.emit(self)
 
+func set_color(new_color):
+	$HintCircle2D.circle_color = new_color
+
 func _physics_process(_delta):
 	if previous_position != position:
 		detect_rotation_with_speed()

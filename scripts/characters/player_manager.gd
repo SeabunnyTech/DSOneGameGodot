@@ -2,10 +2,10 @@ class_name PlayerManagerNode extends Node
 
 var socket_client: SocketIOClientNode
 
-var player1_scene: PackedScene = preload("res://scenes/characters/player1.tscn")
-var player2_scene: PackedScene = preload("res://scenes/characters/player2.tscn")
-var player1: Node = player1_scene.instantiate()
-var player2: Node = player2_scene.instantiate()
+var player_scene: PackedScene = preload("res://scenes/characters/player.tscn")
+
+var player1: Node = player_scene.instantiate()
+var player2: Node = player_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
 
@@ -158,15 +158,21 @@ func _init_player_layer():
 		player.countdown_complete.connect(_on_player_countdown_complete)
 		player.countdown_cancelled.connect(_on_player_countdown_cancelled)
 
+
 func _setup_dev_mode():
 	if Globals.dev_mode:
 		dev_mode_active = true
 		active_dev_player = current_players[0]
 
+func _init_player_color():
+	player1.set_color(0x00b6eecc)
+	player2.set_color(0x006888cc)
+
 func _ready():
 	_init_socket_client()
 	_init_player_layer()
 	_setup_dev_mode()
+	_init_player_color()
 
 func _process(_delta):
 	viewport_size = get_viewport().size # TODO: Properly manage viewport size in higher level 
