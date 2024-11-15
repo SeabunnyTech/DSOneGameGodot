@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://lbeuv6kyj4lf"]
+[gd_scene load_steps=5 format=3 uid="uid://lbeuv6kyj4lf"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
-[ext_resource type="Texture2D" uid="uid://cl57hgbvdiui8" path="res://assets/images/sprites/player1.svg" id="3_vda85"]
 [ext_resource type="Script" path="res://assets/cloud_made/color_circle.gd" id="4_3nf6y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
@@ -22,11 +21,6 @@ progress = 80.0
 thickness = 25.0
 bg_color = Color(0.705882, 0.705882, 0.705882, 0.196078)
 ring = true
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-z_index = 5
-texture = ExtResource("3_vda85")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_4ujkc")
