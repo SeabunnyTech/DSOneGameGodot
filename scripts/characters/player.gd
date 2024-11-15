@@ -4,6 +4,7 @@ signal countdown_complete(player: Node2D)
 signal countdown_cancelled(player: Node2D)
 
 signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
+signal full_rotation_completed(player: Node2D, clockwise: bool)
 
 @onready var radial_progress: Control = $RadialProgress
 
@@ -19,6 +20,10 @@ var previous_positions: Array[Vector2] = []
 var position_buffer_size: int = 10  # Adjust for speed sensitivity
 var min_speed_threshold: float = 0.0  # Minimum speed to trigger rotation
 var max_speed_threshold: float = 100.0  # Maximum speed to normalize
+var accumulated_rotation: float = 0.0
+var rotation_threshold: float = TAU  # 2π, one full rotation
+var min_vector_length: float = 35.0
+var min_angle_threshold: float = 5.0
 
 # You can add a method to update the target position if needed
 func set_target_position(new_position: Vector2):
@@ -38,7 +43,7 @@ func set_color(new_color):
 	$HintCircle2D.circle_color = new_color
 
 func _physics_process(_delta):
-	if previous_position != position:
+	if previous_position.length() - position.length() > min_vector_length:
 		detect_rotation_with_speed()
 	
 	# Update position history
@@ -65,10 +70,30 @@ func detect_rotation_with_speed():
 			# Get two consecutive movement vectors
 			var vector1 = pos2 - pos1
 			var vector2 = pos3 - pos2
-			
+
+			if vector1.length() < min_vector_length or vector2.length() < min_vector_length:
+				continue
+
 			# Cross product of consecutive movement vectors determines rotation direction
-			rotation_sum += vector1.cross(vector2)
+			var cross_product = vector1.cross(vector2)
+			var dot_product = vector1.dot(vector2)
+			var angle = atan2(cross_product, dot_product)
+
+			if abs(rad_to_deg(angle)) < min_angle_threshold:
+				continue
+				
+			rotation_sum += cross_product
 			total_movement += vector2
+			
+			# Accumulate rotation based on cross product
+			accumulated_rotation += angle
+
+			# Check if we've completed a full rotation
+			if abs(accumulated_rotation) >= rotation_threshold:
+				var is_clockwise = accumulated_rotation > 0
+				full_rotation_completed.emit(self, is_clockwise)
+				# Reset accumulated rotation but keep the remainder
+				accumulated_rotation = fmod(accumulated_rotation, rotation_threshold)
 	
 	# Calculate average speed
 	var speed = total_movement.length() / position_buffer_size

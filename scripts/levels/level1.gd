@@ -37,30 +37,29 @@ var level_state: String:
 			return "tutorial_6"
 			
 		if previous_level_state == "tutorial_6" and state_timer >= 3.0:
+			tutorial_rotation_count = 0
 			return "tutorial_end"
 			
 		if previous_level_state == "tutorial_end" and state_timer >= 3.0:
 			return "countdown"
 			
-		if previous_level_state == "countdown":
-			if state_timer >= 3.0:
-				return "game"
-			else:
-				return "countdown"
+		# if previous_level_state == "countdown":
+		# 	return "countdown"
 				
 		return previous_level_state
 
 var tutorial_rotation_count: int = 0
 var state_timer: float = 0.0
 
-func set_tutorial_player_visible(visible: bool) -> void:
+func set_tutorial_player_visible(toggle_visible: bool) -> void:
 	var tutorial_player = $LoginTutorialPlayer if num_visible_players == 1 else $LoginTutorialPlayer2
-	tutorial_player.visible = visible
+	tutorial_player.visible = toggle_visible
 
 func _ready():
 	for player in [PlayerManager.player1, PlayerManager.player2]:
 		if player.visible:
 			player.connect("rotation_detected", _on_player_rotation_detected)
+			player.connect("full_rotation_completed", _on_player_full_rotation_completed)
 			num_visible_players += 1
 
 	DebugMessage.info("num_visible_players: " + str(num_visible_players))
@@ -123,3 +122,7 @@ func _process(delta):
 func _on_player_rotation_detected(_player: Node2D, clockwise: bool, speed: float):
 	$Player1UI/TurbineBackRotate.speed_scale = speed * (1 if clockwise else -1) * 3
 	$Player1UI/TurbineFrontRotate.speed_scale = speed * (1 if clockwise else -1) * 3
+
+func _on_player_full_rotation_completed(_player: Node2D, clockwise: bool):
+	tutorial_rotation_count += 1
+	pass
