@@ -32,14 +32,13 @@ var visible_players = Vector2i(0, 0) # (player1, player2) where 1=visible, 0=inv
 var signup_players = Vector2i(0, 0) # (player1, player2) where 1=signed up, 0=not signed up
 var ready_players = Vector2i(0, 0) # (player1, player2) where 1=ready, 0=not ready
 
-var previous_login_state: String = "start"
 var previous_num_visible_players: int = 0
-
+var previous_login_state: String = "start"
 var login_state: String:
 	get:
 		var num_visible_players = visible_players.length_squared()
 		var num_signup_players = signup_players.length_squared()
-		var num_ready_players = ready_players.length_squared()
+		# var num_ready_players = ready_players.length_squared()
 		
 		if num_visible_players == 0:
 			return "start"
@@ -394,14 +393,15 @@ func _on_player_visibility_changed(player: Node2D):
 	position_portals(login_state)
 
 func _on_player_countdown_complete(player: Node2D):
-	var num_players = visible_players.length_squared()
-	
+	var num_ready_players = visible_players.length_squared()
+
 	# Check if we're in select_level state
 	if login_state == "select_level":
+		PlayerManager.freeze_player_detection = true
 		# Add a short delay before transitioning
 		await get_tree().create_timer(1.0).timeout
 		# Change scene based on number of players
-		var scene_path = "res://scenes/levels/%s_%dp.tscn" % [player.selected_level, num_players]
+		var scene_path = "res://scenes/levels/%s_%dp.tscn" % [player.selected_level, num_ready_players]
 		get_tree().change_scene_to_file(scene_path)
 
 func _on_select_level_area_entered(player: Node2D, level: String) -> void:

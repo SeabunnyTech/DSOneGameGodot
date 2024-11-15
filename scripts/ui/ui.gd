@@ -44,7 +44,15 @@ func connect_login_signals(root_parent: Node):
 	root_parent.connect("login_select_level", _on_login_select_level)
 
 func connect_level1_signals(root_parent: Node):
-	hide_all()
+	DebugMessage.info("connect_level1_signals")
+	root_parent.connect("level1_tutorial_1", _on_level1_tutorial_1)
+	root_parent.connect("level1_tutorial_2", _on_level1_tutorial_2)
+	root_parent.connect("level1_tutorial_3", _on_level1_tutorial_3)
+	root_parent.connect("level1_tutorial_4", _on_level1_tutorial_4)
+	root_parent.connect("level1_tutorial_5", _on_level1_tutorial_5)
+	root_parent.connect("level1_tutorial_6", _on_level1_tutorial_6)
+	root_parent.connect("level1_tutorial_end", _on_level1_tutorial_end)
+	root_parent.connect("level1_game_over", _on_level1_game_over)
 	# root_parent.connect("level1_tutorial_1", _on_level1_tutorial_1)
 	pass
 
@@ -65,10 +73,15 @@ func load_messages():
 func set_default_messages():
 	set_popup_message(1, "login", "tutorial")
 	set_dialog_message("login", "start")
-	hide_popups()
+	hide_popups()	
 	hide_skip_button()
 
 func set_popup_message(num_visible_players: int, level_type: String, key: String):
+	if num_visible_players <= 0 or num_visible_players > 2:
+		hide_popups()
+		return
+	
+	show_popup(num_visible_players)
 	var label = popup_one_player_label if num_visible_players == 1 else popup_two_players_label
 	if messages.popup.has(level_type) and messages.popup[level_type].has(key):
 		label.text = messages.popup[level_type][key]
@@ -161,3 +174,48 @@ func _on_login_select_level():
 func _on_login_transition():
 	set_dialog_message("login", "transition")
 	hide_popups()
+
+func _on_level1_tutorial_1(num_visible_players: int):
+	show_skip_button()
+	set_dialog_message("level1", "tutorial")
+	set_popup_message(num_visible_players, "level1", "tutorial_1")
+
+func _on_level1_tutorial_2(num_visible_players: int):
+	set_dialog_message("level1", "tutorial")
+	set_popup_message(num_visible_players, "level1", "tutorial_2")
+
+func _on_level1_tutorial_3(num_visible_players: int):
+	set_dialog_message("level1", "tutorial")
+	set_popup_message(num_visible_players, "level1", "tutorial_3")
+
+func _on_level1_tutorial_4(num_visible_players: int):
+	set_dialog_message("level1", "tutorial_ready")
+	set_popup_message(num_visible_players, "level1", "tutorial_4")
+
+func _on_level1_tutorial_5(_num_visible_players: int):
+	set_dialog_message("level1", "tutorial_ready")
+	hide_popups()
+
+func _on_level1_tutorial_6(num_visible_players: int):
+	set_dialog_message("level1", "tutorial_ready")
+	set_popup_message(num_visible_players, "level1", "tutorial_6")
+
+func _on_level1_tutorial_end(num_visible_players: int):
+	hide_dialog()
+	set_popup_message(num_visible_players, "level1", "tutorial_end")
+
+func _on_level1_countdown_3(num_visible_players: int):
+	hide_dialog()
+	set_popup_message(num_visible_players, "level1", "countdown_3")
+
+func _on_level1_countdown_2(num_visible_players: int):
+	hide_dialog()
+	set_popup_message(num_visible_players, "level1", "countdown_2")
+
+func _on_level1_countdown_1(num_visible_players: int):
+	hide_dialog()
+	set_popup_message(num_visible_players, "level1", "countdown_1")
+
+func _on_level1_game_over(num_visible_players: int):
+	set_dialog_message("level1", "game_over")
+	set_popup_message(num_visible_players, "level1", "tutorial_end")

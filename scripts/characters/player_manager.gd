@@ -1,6 +1,7 @@
 class_name PlayerManagerNode extends Node
 
 var socket_client: SocketIOClientNode
+var viewport_size: Vector2 = Globals.viewport_size
 
 var player_scene: PackedScene = preload("res://scenes/characters/player.tscn")
 
@@ -9,6 +10,13 @@ var player2: Node = player_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
 
+@export var freeze_player_detection: bool = false
+
+@export var smoothing_speed: float = 30.0
+@export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
+
+var player_position: Array[Vector2] = []
+var player_buffer_counters: Array[int] = [0, 0]
 var player_colors = {
 	"player1": {
 		"active": Color.hex(0x00B6EEFF),
@@ -19,13 +27,6 @@ var player_colors = {
 		"inactive": Color.hex(0x8F8F8FFF)
 	}
 }
-
-var viewport_size: Vector2 = Globals.viewport_size
-var player_position: Array[Vector2] = []
-var player_buffer_counters: Array[int] = [0, 0]
-
-@export var smoothing_speed: float = 30.0
-@export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
 
 # Dev mode variables
 var active_dev_player: Node = null
@@ -85,6 +86,8 @@ func update_player_positions():
 			player.visible = true
 			player_buffer_counters[i] = 0
 		else:
+			if freeze_player_detection:
+				return
 			# Check if the player should be hidden due to buffer or timeout
 			if player_buffer_counters[i] >= disappearance_buffer_frames:
 				player.visible = false
@@ -188,7 +191,6 @@ func _process(_delta):
 		if active_dev_player:
 			var mouse_pos = get_viewport().get_mouse_position()
 			active_dev_player.set_target_position(mouse_pos)
-
 	
 	else:
 		# Normal mode: Use SocketIO
