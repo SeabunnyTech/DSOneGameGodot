@@ -43,7 +43,7 @@ func set_color(new_color):
 	$HintCircle2D.circle_color = new_color
 
 func _physics_process(_delta):
-	if previous_position.length() - position.length() > min_vector_length:
+	if (previous_position - position).length() > min_vector_length:
 		detect_rotation_with_speed()
 	
 	# Update position history
