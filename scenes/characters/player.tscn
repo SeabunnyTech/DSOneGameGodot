@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=6 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
+[ext_resource type="Script" path="res://scripts/characters/angular_motion.gd" id="4_2ktp1"]
 [ext_resource type="Script" path="res://assets/cloud_made/color_circle.gd" id="4_3nf6y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
@@ -27,3 +28,8 @@ shape = SubResource("CircleShape2D_4ujkc")
 
 [node name="HintCircle2D" type="Node2D" parent="."]
 script = ExtResource("4_3nf6y")
+
+[node name="Motion" type="Node" parent="."]
+
+[node name="Angular" type="Node" parent="Motion"]
+script = ExtResource("4_2ktp1")

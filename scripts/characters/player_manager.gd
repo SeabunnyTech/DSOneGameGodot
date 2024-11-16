@@ -12,7 +12,6 @@ var current_players: Array[Node] = [player1, player2]
 
 @export var freeze_player_detection: bool = false
 
-@export var smoothing_speed: float = 30.0
 @export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
 
 var player_position: Array[Vector2] = []
@@ -112,12 +111,6 @@ func toggle_player(player_index: int) -> void:
 		elif active_dev_player == player:
 			active_dev_player = null
 			player.visible = false
-
-# Add this new method to your class
-func _physics_process(delta: float):
-	for player in current_players:
-		if player.visible:
-			player.position = player.position.lerp(player.target_position, smoothing_speed * delta)
 
 func _on_player_countdown_complete(player: Node2D):
 	print("Player countdown complete: ", player.name)
