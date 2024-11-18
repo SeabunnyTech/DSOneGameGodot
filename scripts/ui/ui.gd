@@ -16,6 +16,61 @@ signal return_area_exited(body: Node2D)
 signal skip_area_entered(body: Node2D)
 signal skip_area_exited(body: Node2D)
 
+enum GameScene {
+	LOGIN,
+	LEVEL1,
+	LEVEL2
+}
+
+enum LoginState {
+	START,
+	SIGNUP,
+	WAIT_FOR_SECOND_PLAYER,
+	TUTORIAL,
+	SELECT_LEVEL
+}
+
+enum GameState {
+	TUTORIAL_1,   # 關卡教學階段
+	TUTORIAL_2,
+	TUTORIAL_3,
+	TUTORIAL_4,
+	TUTORIAL_5,
+	TUTORIAL_6,
+	TUTORIAL_7,
+	TUTORIAL_8,
+	TUTORIAL_END,
+	COUNTDOWN_1, # 倒數計時
+	COUNTDOWN_2,
+	COUNTDOWN_3,
+	GAME_OVER     # 結算階段
+}
+
+const LOGIN_SIGNALS = {
+	# Login signals
+	"login_signup": LoginState.SIGNUP,
+	"login_start": LoginState.START,
+	"login_wait_for_players": LoginState.WAIT_FOR_SECOND_PLAYER,
+	"login_tutorial": LoginState.TUTORIAL,
+	"login_select_level": LoginState.SELECT_LEVEL
+}
+
+const LEVEL1_SIGNALS = {
+	# Level1 signals
+	"level1_tutorial_1": GameState.TUTORIAL_1,
+	"level1_tutorial_2": GameState.TUTORIAL_2,
+	"level1_tutorial_3": GameState.TUTORIAL_3,
+	"level1_tutorial_4": GameState.TUTORIAL_4,
+	"level1_tutorial_5": GameState.TUTORIAL_5,
+	"level1_tutorial_6": GameState.TUTORIAL_6,
+	"level1_tutorial_end": GameState.TUTORIAL_END,
+	"level1_countdown_3": GameState.COUNTDOWN_3,
+	"level1_countdown_2": GameState.COUNTDOWN_2,
+	"level1_countdown_1": GameState.COUNTDOWN_1,
+	"level1_game_over": GameState.GAME_OVER
+}
+
+# 動畫用變數
 var tween: Tween
 
 func _ready():
@@ -23,43 +78,96 @@ func _ready():
 	set_default_messages()
 	# Get the root parent node (scene)
 	var root_parent = get_parent()
+	connect_signals(root_parent)
 	
 	var scene_name = root_parent.name
-	print("UI loaded under scene: ", scene_name)
-	
-	# Connect signals based on scene
+	DebugMessage.info("UI loaded under scene: " + str(scene_name))
+
+func connect_signals(root_parent: Node) -> void:
+	var scene_name = root_parent.name
+	var signals_to_connect = {}
+
 	match scene_name:
 		"Login":
-			connect_login_signals(root_parent)
+			signals_to_connect = LOGIN_SIGNALS
 		"Level1_1p", "Level1_2p":
-			connect_level1_signals(root_parent)
-		"Level2_1p", "Level2_2p":
-			connect_level2_signals(root_parent)
+			signals_to_connect = LEVEL1_SIGNALS
+	
+	for signal_name in signals_to_connect:
+		if root_parent.has_signal(signal_name):
+			root_parent.connect(signal_name, 
+				func(num_visible_players): _handle_state_signal(signal_name, num_visible_players))
+		else:
+			push_warning("Signal not found in %s: %s" % [scene_name, signal_name])
 
-func connect_login_signals(root_parent: Node):
-	root_parent.connect("login_signup", _on_login_signup)
-	root_parent.connect("login_start", _on_login_start)
-	root_parent.connect("login_wait_for_players", _on_login_wait_for_players)
-	root_parent.connect("login_tutorial", _on_login_tutorial)
-	root_parent.connect("login_select_level", _on_login_select_level)
+func _handle_state_signal(signal_name: String, num_visible_players: int = 0) -> void:
+	# 根據信號名稱前綴決定使用哪個映射和處理函數
+	if signal_name.begins_with("login_"):
+		if not LOGIN_SIGNALS.has(signal_name):
+			push_error("Unknown login signal: " + signal_name)
+			return
+		handle_login_state(LOGIN_SIGNALS[signal_name], num_visible_players)
+	elif signal_name.begins_with("level1_"):
+		if not LEVEL1_SIGNALS.has(signal_name):
+			push_error("Unknown level1 signal: " + signal_name)
+			return
+		handle_level1_state(LEVEL1_SIGNALS[signal_name], num_visible_players)
 
-func connect_level1_signals(root_parent: Node):
-	DebugMessage.info("connect_level1_signals")
-	root_parent.connect("level1_tutorial_1", _on_level1_tutorial_1)
-	root_parent.connect("level1_tutorial_2", _on_level1_tutorial_2)
-	root_parent.connect("level1_tutorial_3", _on_level1_tutorial_3)
-	root_parent.connect("level1_tutorial_4", _on_level1_tutorial_4)
-	root_parent.connect("level1_tutorial_5", _on_level1_tutorial_5)
-	root_parent.connect("level1_tutorial_6", _on_level1_tutorial_6)
-	root_parent.connect("level1_tutorial_end", _on_level1_tutorial_end)
-	root_parent.connect("level1_game_over", _on_level1_game_over)
-	# root_parent.connect("level1_tutorial_1", _on_level1_tutorial_1)
-	pass
+func handle_login_state(state: LoginState, num_visible_players: int = 0):
+	match state:
+		LoginState.START:
+			set_dialog_message("login", "start")
+			hide_popups()
+		LoginState.SIGNUP:
+			set_dialog_message("login", "signup")
+			hide_popups()
+		LoginState.WAIT_FOR_SECOND_PLAYER:
+			set_dialog_message("login", "wait_for_second_player")
+			hide_popups()
+		LoginState.TUTORIAL:
+			set_dialog_message("login", "tutorial")
+			set_popup_message(num_visible_players, "login", "tutorial")
+		LoginState.SELECT_LEVEL:
+			set_dialog_message("login", "select_level")
+			hide_popups()
 
-func connect_level2_signals(root_parent: Node):
-	# root_parent.connect("level2_tutorial_1", _on_level2_tutorial_1)
-	hide_all()
-	pass
+# Level1 相關處理方法
+func handle_level1_state(state: GameState, num_visible_players: int = 0):
+	match state:
+		GameState.TUTORIAL_1:
+			show_skip_button()
+			set_dialog_message("level1", "tutorial")
+			set_popup_message(num_visible_players, "level1", "tutorial_1")
+		GameState.TUTORIAL_2:
+			set_dialog_message("level1", "tutorial")
+			set_popup_message(num_visible_players, "level1", "tutorial_2")
+		GameState.TUTORIAL_3:
+			set_dialog_message("level1", "tutorial")
+			set_popup_message(num_visible_players, "level1", "tutorial_3")
+		GameState.TUTORIAL_4:
+			set_dialog_message("level1", "tutorial")
+			set_popup_message(num_visible_players, "level1", "tutorial_4")
+		GameState.TUTORIAL_5:
+			set_dialog_message("level1", "tutorial_ready")
+			hide_popups()
+		GameState.TUTORIAL_6:
+			set_dialog_message("level1", "tutorial_ready")
+			set_popup_message(num_visible_players, "level1", "tutorial_6")
+		GameState.TUTORIAL_END:
+			hide_dialog()
+			set_popup_message(num_visible_players, "level1", "tutorial_end")
+		GameState.COUNTDOWN_3:
+			hide_dialog()
+			set_popup_message(num_visible_players, "level1", "countdown_3")
+		GameState.COUNTDOWN_2:
+			hide_dialog()
+			set_popup_message(num_visible_players, "level1", "countdown_2")
+		GameState.COUNTDOWN_1:
+			hide_dialog()
+			set_popup_message(num_visible_players, "level1", "countdown_1")
+		GameState.GAME_OVER:
+			set_dialog_message("level1", "game_over")
+			set_popup_message(num_visible_players, "level1", "game_over")
 
 func load_messages():
 	var file = FileAccess.open(messages_path, FileAccess.READ)
@@ -73,20 +181,17 @@ func load_messages():
 func set_default_messages():
 	set_popup_message(1, "login", "tutorial")
 	set_dialog_message("login", "start")
-	hide_popups()	
+	hide_popups()
 	hide_skip_button()
 
 func set_popup_message(num_visible_players: int, level_type: String, key: String):
-	if num_visible_players <= 0 or num_visible_players > 2:
-		hide_popups()
-		return
-	
-	show_popup(num_visible_players)
 	var label = popup_one_player_label if num_visible_players == 1 else popup_two_players_label
 	if messages.popup.has(level_type) and messages.popup[level_type].has(key):
 		label.text = messages.popup[level_type][key]
 	else:
 		print("Popup message not found for ", num_visible_players, " players and key ", key)
+
+	show_popup(num_visible_players)
 
 func set_dialog_message(level_type: String, key: String):
 	if messages.dialog.has(level_type) and messages.dialog[level_type].has(key):
@@ -97,6 +202,8 @@ func set_dialog_message(level_type: String, key: String):
 			remove_breath_effect()
 	else:
 		print("Dialog message not found for key ", key)
+
+	show_dialog()
 
 func apply_breath_effect():
 	if tween:
@@ -149,73 +256,3 @@ func _on_skip_area_body_entered(body: Node2D) -> void:
 
 func _on_skip_area_body_exited(body: Node2D) -> void:
 	skip_area_exited.emit(body)
-
-func _on_login_signup(_num_visible_players: int):
-	set_dialog_message("login", "signup")
-	hide_popups()
-
-func _on_login_start():
-	set_dialog_message("login", "start")
-	hide_popups()
-
-func _on_login_wait_for_players():
-	set_dialog_message("login", "wait_for_second_player")
-	hide_popups()
-
-func _on_login_tutorial(num_visible_players: int):
-	set_dialog_message("login", "tutorial")
-	show_popup(num_visible_players)
-	set_popup_message(num_visible_players, "login", "tutorial")
-
-func _on_login_select_level():
-	set_dialog_message("login", "select_level")
-	hide_popups()
-
-func _on_login_transition():
-	set_dialog_message("login", "transition")
-	hide_popups()
-
-func _on_level1_tutorial_1(num_visible_players: int):
-	show_skip_button()
-	set_dialog_message("level1", "tutorial")
-	set_popup_message(num_visible_players, "level1", "tutorial_1")
-
-func _on_level1_tutorial_2(num_visible_players: int):
-	set_dialog_message("level1", "tutorial")
-	set_popup_message(num_visible_players, "level1", "tutorial_2")
-
-func _on_level1_tutorial_3(num_visible_players: int):
-	set_dialog_message("level1", "tutorial")
-	set_popup_message(num_visible_players, "level1", "tutorial_3")
-
-func _on_level1_tutorial_4(num_visible_players: int):
-	set_dialog_message("level1", "tutorial_ready")
-	set_popup_message(num_visible_players, "level1", "tutorial_4")
-
-func _on_level1_tutorial_5(_num_visible_players: int):
-	set_dialog_message("level1", "tutorial_ready")
-	hide_popups()
-
-func _on_level1_tutorial_6(num_visible_players: int):
-	set_dialog_message("level1", "tutorial_ready")
-	set_popup_message(num_visible_players, "level1", "tutorial_6")
-
-func _on_level1_tutorial_end(num_visible_players: int):
-	hide_dialog()
-	set_popup_message(num_visible_players, "level1", "tutorial_end")
-
-func _on_level1_countdown_3(num_visible_players: int):
-	hide_dialog()
-	set_popup_message(num_visible_players, "level1", "countdown_3")
-
-func _on_level1_countdown_2(num_visible_players: int):
-	hide_dialog()
-	set_popup_message(num_visible_players, "level1", "countdown_2")
-
-func _on_level1_countdown_1(num_visible_players: int):
-	hide_dialog()
-	set_popup_message(num_visible_players, "level1", "countdown_1")
-
-func _on_level1_game_over(num_visible_players: int):
-	set_dialog_message("level1", "game_over")
-	set_popup_message(num_visible_players, "level1", "tutorial_end")

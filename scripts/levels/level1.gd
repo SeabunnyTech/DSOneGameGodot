@@ -7,9 +7,10 @@ signal level1_tutorial_4(num_visible_players: int)
 signal level1_tutorial_5(num_visible_players: int)
 signal level1_tutorial_6(num_visible_players: int)
 signal level1_tutorial_end(num_visible_players: int)
-signal countdown_3(num_visible_players: int)
-signal countdown_2(num_visible_players: int)
-signal countdown_1(num_visible_players: int)
+signal level1_countdown_3(num_visible_players: int)
+signal level1_countdown_2(num_visible_players: int)
+signal level1_countdown_1(num_visible_players: int)
+signal level1_game_mode(num_visible_players: int)
 signal level1_game_over(num_visible_players: int)
 
 var num_visible_players = 0
@@ -24,31 +25,31 @@ var level_state: String:
 		if previous_level_state == "tutorial_1" and state_timer >= 3.0:
 			return "tutorial_2"
 			
-		if previous_level_state == "tutorial_2" and tutorial_rotation_count >= 1:
+		if previous_level_state == "tutorial_2" and rotation_count >= 1:
 			return "tutorial_3"
 			
-		if previous_level_state == "tutorial_3" and (tutorial_rotation_count >= 5 or state_timer >= 20.0):
+		if previous_level_state == "tutorial_3" and (rotation_count >= 5 or state_timer >= 20.0):
 			return "tutorial_4"
 			
-		if previous_level_state == "tutorial_4" and state_timer >= 3.0:
+		if previous_level_state == "tutorial_4" and state_timer >= 5.0:
 			return "tutorial_5"
 			
-		if previous_level_state == "tutorial_5" and state_timer >= 3.0:
+		if previous_level_state == "tutorial_5" and state_timer >= 5.0:
 			return "tutorial_6"
 			
-		if previous_level_state == "tutorial_6" and state_timer >= 3.0:
-			tutorial_rotation_count = 0
+		if previous_level_state == "tutorial_6" and state_timer >= 5.0:
+			rotation_count = 0
 			return "tutorial_end"
 			
 		if previous_level_state == "tutorial_end" and state_timer >= 3.0:
 			return "countdown"
 			
-		# if previous_level_state == "countdown":
-		# 	return "countdown"
+		if previous_level_state == "countdown" and state_timer >= 3.0:
+			return "game_mode"
 				
 		return previous_level_state
 
-var tutorial_rotation_count: int = 0
+var rotation_count: int = 0
 var state_timer: float = 0.0
 
 func set_tutorial_player_visible(toggle_visible: bool) -> void:
@@ -62,7 +63,6 @@ func _ready():
 			player.connect("full_rotation_completed", _on_player_full_rotation_completed)
 			num_visible_players += 1
 
-	DebugMessage.info("num_visible_players: " + str(num_visible_players))
 	# Start the turbine animations
 	$Player1UI/TurbineBackRotate.play("rotate")
 	$Player1UI/TurbineFrontRotate.play("rotate")
@@ -103,7 +103,10 @@ func _process(delta):
 			"tutorial_6":
 				level1_tutorial_6.emit(num_visible_players)
 			"tutorial_end":
+				rotation_count = 0
 				level1_tutorial_end.emit(num_visible_players)
+			"game_mode":
+				level1_game_mode.emit(num_visible_players)
 			"game_over":
 				level1_game_over.emit(num_visible_players)
 		
@@ -112,17 +115,20 @@ func _process(delta):
 	# Handle countdown state separately since it needs continuous updates
 	if current_state == "countdown":
 		if state_timer < 1.0:
-			countdown_3.emit(num_visible_players)
+			level1_countdown_3.emit(num_visible_players)
 		elif state_timer < 2.0:
-			countdown_2.emit(num_visible_players)
+			level1_countdown_2.emit(num_visible_players)
 		elif state_timer < 3.0:
-			countdown_1.emit(num_visible_players)
-
+			level1_countdown_1.emit(num_visible_players)
+	
+	if current_state == "game_mode":
+		DebugMessage.info("rotation_count: " + str(rotation_count))
+		pass
 
 func _on_player_rotation_detected(_player: Node2D, clockwise: bool, speed: float):
 	$Player1UI/TurbineBackRotate.speed_scale = speed * (1 if clockwise else -1) * 3
 	$Player1UI/TurbineFrontRotate.speed_scale = speed * (1 if clockwise else -1) * 3
 
 func _on_player_full_rotation_completed(_player: Node2D, clockwise: bool):
-	tutorial_rotation_count += 1
+	rotation_count += 1
 	pass

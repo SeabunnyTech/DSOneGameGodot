@@ -111,7 +111,7 @@ func _process(_delta):
 		match current_state:
 			"start":
 				transition_to_scene("signup")
-				login_start.emit()
+				login_start.emit(current_num_visible_players)
 			"signup":
 				transition_to_scene("signup")
 				login_signup.emit(current_num_visible_players)
@@ -123,7 +123,7 @@ func _process(_delta):
 				login_tutorial.emit(current_num_visible_players)
 			"select_level":
 				transition_to_scene("select_level")
-				login_select_level.emit()
+				login_select_level.emit(current_num_visible_players)
 			"transition":
 				transition_to_next_level()
 		
