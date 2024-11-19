@@ -101,7 +101,7 @@ func connect_signals(root_parent: Node) -> void:
 			push_warning("Signal not found in %s: %s" % [scene_name, signal_name])
 
 func _handle_state_signal(signal_name: String, num_visible_players: int = 0) -> void:
-	# 根據信號名稱前綴決定使用哪個映射和處理函數
+	# 根據訊號名稱前綴決定使用哪個映射和處理函數
 	if signal_name.begins_with("login_"):
 		if not LOGIN_SIGNALS.has(signal_name):
 			push_error("Unknown login signal: " + signal_name)
@@ -145,6 +145,7 @@ func handle_level1_state(state: GameState, num_visible_players: int = 0):
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_3")
 		GameState.TUTORIAL_4:
+			hide_skip_button()
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_4")
 		GameState.TUTORIAL_5:
@@ -230,10 +231,10 @@ func hide_popups():
 	popup_one_player_panel.hide()
 
 func show_dialog():
-	dialog_box_panel.show()
+	dialog_box_panel.modulate.a = 1.0
 
 func hide_dialog():
-	dialog_box_panel.hide()
+	dialog_box_panel.modulate.a = 0
 
 func hide_all():
 	hide_popups()

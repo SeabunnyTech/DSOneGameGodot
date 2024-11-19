@@ -76,13 +76,6 @@ func _process(delta):
 		DebugMessage.info("current_state: " + current_state)
 		DebugMessage.info("previous_level_state: " + previous_level_state)
 
-		# State transition handling
-		match previous_level_state:
-			"tutorial_4":
-				$HUD.hide()
-			"tutorial_5":
-				$HUD.show()
-		
 		# Reset timer on state change
 		state_timer = 0.0
 
