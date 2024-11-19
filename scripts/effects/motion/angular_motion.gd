@@ -3,12 +3,19 @@ extends Node
 signal full_rotation_completed(player: Node2D, clockwise: bool)
 signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
 
-
 var previous_position: Vector2
 var previous_positions: Array[Vector2] = []
 
 @export var position_buffer_size: int = 10  # Adjust for speed sensitivity
 @export var min_vector_length: float = 35.0
+
+@export var min_angle_threshold: float = 5.0
+@export var min_speed_threshold: float = 0.0  # Minimum speed to trigger rotation
+@export var max_speed_threshold: float = 100.0  # Maximum speed to normalize
+@export var rotation_threshold: float = TAU  # 2π, one full rotation
+
+var accumulated_rotation: float = 0.0
+
 
 var node2d_root
 
@@ -37,14 +44,6 @@ func _physics_process(_delta):
 			previous_positions.pop_front()
 		
 		previous_position = position
-
-
-@export var min_angle_threshold: float = 5.0
-@export var min_speed_threshold: float = 0.0  # Minimum speed to trigger rotation
-@export var max_speed_threshold: float = 100.0  # Maximum speed to normalize
-@export var rotation_threshold: float = TAU  # 2π, one full rotation
-
-var accumulated_rotation: float = 0.0
 
 
 func detect_rotation_with_speed():
