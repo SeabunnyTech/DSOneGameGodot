@@ -1,12 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=9 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="4_2ktp1"]
 [ext_resource type="Script" path="res://scripts/effects/visual/draw_circle.gd" id="4_3nf6y"]
+[ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_ogt6f"]
+[ext_resource type="Shader" path="res://scripts/effects/visual/metaball.gdshader" id="6_bs1fd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_usxmw"]
+shader = ExtResource("6_bs1fd")
+shader_parameter/hint_color = Vector4(0, 1, 1, 1)
+shader_parameter/ball1_position = Vector2(0.5, 0.5)
+shader_parameter/ball2_position = Vector2(0.3, 0.3)
+shader_parameter/ball1_radius = 0.1
+shader_parameter/ball2_radius = 0.1
+shader_parameter/smoothness = 0.01
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_wp0t3")
@@ -26,10 +37,26 @@ ring = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_4ujkc")
 
-[node name="HintCircle2D" type="Node2D" parent="."]
-script = ExtResource("4_3nf6y")
-
 [node name="Motion" type="Node" parent="."]
 
 [node name="Angular" type="Node" parent="Motion"]
 script = ExtResource("4_2ktp1")
+
+[node name="HintCircle2D" type="Node2D" parent="."]
+script = ExtResource("4_3nf6y")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_usxmw")
+offset_left = -1626.0
+offset_top = -1624.0
+offset_right = 1651.0
+offset_bottom = 1626.0
+color = Color(1, 0.211765, 1, 1)
+
+[node name="Inertia" type="Node2D" parent="."]
+script = ExtResource("5_ogt6f")
+
+[node name="TargetHintCircle2d" type="Node2D" parent="Inertia"]
+script = ExtResource("4_3nf6y")
+radius = 50.0
