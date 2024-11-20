@@ -52,11 +52,34 @@ var level_state: String:
 var rotation_count: int = 0
 var state_timer: float = 0.0
 
+const Electron = preload("res://scenes/characters/electron.tscn")
+var electrons = []
+var electron_container: Node2D
+var max_electrons = 20
+
+func spawn_electron(spawn_position: Vector2, target_position: Vector2):
+	if electrons.size() >= max_electrons:
+		return
+	
+	var electron = Electron.instantiate()
+	electron_container.add_child(electron, true)
+	electron.position = spawn_position
+	
+	# Random type based on rotation speed
+	var random_type = randi() % 3  # Returns 0, 1, or 2
+	electron.set_type(random_type)
+	
+	electrons.append(electron)
+
 func set_tutorial_player_visible(toggle_visible: bool) -> void:
-	var tutorial_player = $LoginTutorialPlayer if num_visible_players == 1 else $LoginTutorialPlayer2
+	var tutorial_player = $TutorialMimicPlayer if num_visible_players == 1 else $TutorialMimicPlayer2
 	tutorial_player.visible = toggle_visible
 
 func _ready():
+	electron_container = Node2D.new()
+	electron_container.name = "Electrons"
+	$".".add_child(electron_container)  # Add to Player1UI instead of root
+	
 	for player in [PlayerManager.player1, PlayerManager.player2]:
 		if player.visible:
 			player.connect("rotation_detected", _on_player_rotation_detected)
@@ -124,4 +147,7 @@ func _on_player_rotation_detected(_player: Node2D, clockwise: bool, speed: float
 
 func _on_player_full_rotation_completed(_player: Node2D, clockwise: bool):
 	rotation_count += 1
-	pass
+
+	var spawn_pos = _player.position
+	var target_pos = $Player1UI/TurbineFrontRotate.position
+	spawn_electron(spawn_pos, target_pos)

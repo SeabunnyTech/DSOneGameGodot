@@ -1,7 +1,7 @@
 class_name PlayerManagerNode extends Node
 
 var socket_client: SocketIOClientNode
-var viewport_size: Vector2 = Globals.viewport_size
+var viewport_size: Vector2 = Globals.get_viewport_size()
 
 var player_scene: PackedScene = preload("res://scenes/characters/player.tscn")
 
@@ -11,7 +11,6 @@ var player2: Node = player_scene.instantiate()
 var current_players: Array[Node] = [player1, player2]
 
 @export var freeze_player_detection: bool = false
-
 @export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
 
 var player_position: Array[Vector2] = []
@@ -31,6 +30,7 @@ var player_colors = {
 var active_dev_player: Node = null
 var dev_mode_active: bool = false
 
+# TODO: 同時考量偵測 camera 視角變化時，需要對應到 viewport 和 player 位置
 func handle_center_mass(payload: Variant):
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
 		var center_masses = payload["center_mass"]
@@ -164,15 +164,23 @@ func _init_player_color():
 	player1.set_color(0x00b6eecc)
 	player2.set_color(0x006888cc)
 
+func _on_viewport_size_changed():
+	viewport_size = get_viewport().size
+	Globals.set_viewport_size(viewport_size)
+
 func _ready():
+	# 初始化 viewport size
+	viewport_size = get_viewport().size
+	Globals.set_viewport_size(viewport_size)
+
+	get_tree().root.connect("size_changed", _on_viewport_size_changed)
+
 	_init_socket_client()
 	_init_player_layer()
 	_setup_dev_mode()
 	_init_player_color()
 
 func _process(_delta):
-	viewport_size = get_viewport().size # TODO: Properly manage viewport size in higher level 
-	
 	if dev_mode_active:
 		# Handle player switching
 		if Input.is_action_just_pressed("toggle_player1"):

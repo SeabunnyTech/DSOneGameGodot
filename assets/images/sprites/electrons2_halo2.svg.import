@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://btimfafhuv45v"
-path="res://.godot/imported/electrons1.svg-fd86c2e685d321d950084059b3b8ab19.ctex"
+uid="uid://c3qpvbj7ema76"
+path="res://.godot/imported/electrons2_halo2.svg-69a6e005144c100acefb5e2362bec486.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/sprites/electrons1.svg"
-dest_files=["res://.godot/imported/electrons1.svg-fd86c2e685d321d950084059b3b8ab19.ctex"]
+source_file="res://assets/images/sprites/electrons2_halo2.svg"
+dest_files=["res://.godot/imported/electrons2_halo2.svg-69a6e005144c100acefb5e2362bec486.ctex"]
 
 [params]
 
