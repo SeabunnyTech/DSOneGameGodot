@@ -45,10 +45,12 @@ func _process(_delta: float) -> void:
 			is_counting_down = false
 			countdown_complete.emit(self)
 
+	$MetaballDual.set_ball_parameters(Vector2(0, 0), 50, $Inertia.position , 40)
+
 
 func set_color(new_color):
 	$HintCircle2D.circle_color = new_color
-
+	$MetaballDual.set_color(new_color)
 
 func start_progress_countdown(time: float = 5.0) -> void:
 	radial_progress.show()

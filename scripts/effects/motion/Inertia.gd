@@ -43,11 +43,10 @@ func update(T: float, x: Vector2):
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	leader =  get_parent()
+	leader = get_parent()
 	init_second_order_dynamics(leader.global_position)
 
 
 func _physics_process(delta: float):
 	update(delta,leader.global_position)
 	self.global_position = y
-	#print(leader.position)
