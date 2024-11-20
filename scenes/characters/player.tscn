@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=7 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
+[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball.tscn" id="4_0hnlf"]
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="4_2ktp1"]
-[ext_resource type="Script" path="res://scripts/effects/visual/draw_circle.gd" id="4_3nf6y"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_ogt6f"]
-[ext_resource type="PackedScene" uid="uid://crclj1arl486k" path="res://scripts/effects/visual/metaball_dual.tscn" id="6_x6hcf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
@@ -33,18 +32,14 @@ shape = SubResource("CircleShape2D_4ujkc")
 [node name="Angular" type="Node" parent="Motion"]
 script = ExtResource("4_2ktp1")
 
-[node name="HintCircle2D" type="Node2D" parent="."]
-visible = false
-script = ExtResource("4_3nf6y")
+[node name="Metaball" parent="." instance=ExtResource("4_0hnlf")]
 
-[node name="Inertia" type="Node2D" parent="."]
+[node name="InertiaFollower" type="Node2D" parent="Metaball"]
 script = ExtResource("5_ogt6f")
 f = 3.0
+z = 0.4
 
-[node name="TargetHintCircle2d" type="Node2D" parent="Inertia"]
-visible = false
-script = ExtResource("4_3nf6y")
-radius = 50.0
-
-[node name="MetaballDual" parent="." instance=ExtResource("6_x6hcf")]
-canvas_size = 1600
+[node name="InertiaFollower" type="Node2D" parent="Metaball/InertiaFollower"]
+script = ExtResource("5_ogt6f")
+f = 3.0
+z = 0.4

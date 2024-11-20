@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://clq04q7cckivp"]
+
+[ext_resource type="Script" path="res://scripts/effects/visual/metaball.gd" id="1_5c2ii"]
+[ext_resource type="Shader" path="res://scripts/effects/visual/metaball.gdshader" id="2_xirs8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8gr5d"]
+shader = ExtResource("2_xirs8")
+shader_parameter/ball_positions = null
+shader_parameter/ball_radii = null
+shader_parameter/ball_colors = null
+shader_parameter/ball_count = 3
+shader_parameter/hint_color = Vector4(0, 1, 1, 1)
+
+[node name="Metaball" type="Node2D"]
+script = ExtResource("1_5c2ii")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_8gr5d")
+offset_right = 40.0
+offset_bottom = 40.0

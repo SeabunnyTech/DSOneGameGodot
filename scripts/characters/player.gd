@@ -54,12 +54,21 @@ func _process(_delta: float) -> void:
 			is_counting_down = false
 			countdown_complete.emit(self)
 
-	$MetaballDual.set_ball_parameters(Vector2(0, 0), 50, $Inertia.position , 40)
+	# 3 顆 metaball
+	var ball_positions: Array[Vector2] = [
+		Vector2(0, 0),
+		$Metaball/InertiaFollower.position,
+		$Metaball/InertiaFollower/InertiaFollower.position]
+
+	$Metaball.update_ball_positions(ball_positions)
 
 
 func set_color(new_color):
-	$HintCircle2D.circle_color = new_color
-	$MetaballDual.set_color(new_color)
+	var col = Color(new_color)
+	var vec3_col = Vector3(col.r, col.g, col.b)
+	var vec3_colors: Array[Vector3] = [vec3_col, vec3_col, vec3_col]
+	$Metaball.update_ball_colors(vec3_colors)
+
 
 func start_progress_countdown(time: float = 5.0) -> void:
 	radial_progress.show()
