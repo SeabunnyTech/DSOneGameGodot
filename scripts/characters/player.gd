@@ -27,9 +27,18 @@ var is_counting_down: bool = false
 # var countdown_duration: float = 3.0  # Adjust this value as needed
 
 var selected_level: String = ""
+var target_position: Vector2 = Vector2(0, 3000)
+
+
+# You can add a method to update the target position if needed
+func set_target_position(new_position: Vector2):
+	target_position = new_position
 
 
 @export var smoothing_speed: float = 30.0
+
+func _physics_process(delta: float):
+	position = position.lerp(target_position, smoothing_speed * delta)
 
 
 func _ready() -> void:

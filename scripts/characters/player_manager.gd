@@ -75,7 +75,7 @@ func update_player_positions():
 
 			var new_target_position = Vector2(scaled_position.x, reversed_position_y)
 
-			player.position = new_target_position
+			player.set_target_position(new_target_position)
 
 			# If the player has just reappeared, update its position immediately
 			if player.visible == false:
@@ -183,7 +183,7 @@ func _process(_delta):
 		# Move active player with mouse
 		if active_dev_player:
 			var mouse_pos = get_viewport().get_mouse_position()
-			active_dev_player.position = mouse_pos
+			active_dev_player.set_target_position(mouse_pos)
 	
 	else:
 		# Normal mode: Use SocketIO
