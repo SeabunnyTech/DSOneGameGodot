@@ -47,3 +47,4 @@ script = ExtResource("4_3nf6y")
 radius = 50.0
 
 [node name="MetaballDual" parent="." instance=ExtResource("6_x6hcf")]
+canvas_size = 1600

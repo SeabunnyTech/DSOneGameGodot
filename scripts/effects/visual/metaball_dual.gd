@@ -18,7 +18,7 @@ func setup_draw_region():
 
 
 func _ready():	
-
+	setup_draw_region()
 	$ColorRect.material = $ColorRect.material.duplicate()
 	
 	# 確保 ColorRect 使用 ShaderMaterial

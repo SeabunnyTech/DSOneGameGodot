@@ -24,7 +24,6 @@ void fragment() {
     
     // 使用 smoothstep 來創建平滑的邊緣
     float final = smoothstep(1.0 - smoothness, 1.0 + smoothness, combined);
-    
     // 輸出顏色
     COLOR = vec4(vec3(final), final) * hint_color;
 }
