@@ -26,7 +26,7 @@ DebugMessage="*res://scripts/ui/debug_message.gd"
 
 window/size/viewport_width=3840
 window/size/viewport_height=2160
-window/stretch/mode="canvas_items"
+window/stretch/mode="viewport"
 
 [editor_plugins]
 
