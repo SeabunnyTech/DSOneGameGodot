@@ -156,7 +156,7 @@ func _init_player_layer():
 
 
 func _setup_dev_mode():
-	if Globals.dev_mode:
+	if Globals.mouse_mode:
 		dev_mode_active = true
 		active_dev_player = current_players[0]
 

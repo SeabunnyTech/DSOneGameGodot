@@ -29,10 +29,10 @@ func _ready():
 	margin.add_child(label, true)
 	
 	# Only show in dev mode
-	canvas_layer.visible = Globals.debug
+	canvas_layer.visible = Globals.debug_message
 
 func info(message: String):
-	if not Globals.debug:
+	if not Globals.debug_message:
 		return
 		
 	messages.push_front(str(message))
