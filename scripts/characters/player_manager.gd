@@ -1,14 +1,17 @@
 class_name PlayerManagerNode extends Node
 
 var socket_client: SocketIOClientNode
+
 var viewport_size: Vector2 = Globals.get_viewport_size()
 
 var player_scene: PackedScene = preload("res://scenes/characters/player.tscn")
-
 var player1: Node = player_scene.instantiate()
 var player2: Node = player_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
+# 在類別開始處添加信號
+signal player_visibility_changed(player: Node, _is_visible: bool)
+signal player_countdown_completed(player: Node)
 
 @export var freeze_player_detection: bool = false
 @export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
@@ -112,6 +115,9 @@ func toggle_player(player_index: int) -> void:
 			active_dev_player = null
 			player.visible = false
 
+func _on_player_visibility_changed(player: Node) -> void:
+	player_visibility_changed.emit(player, player.visible)
+
 func _on_player_countdown_complete(player: Node2D):
 	print("Player countdown complete: ", player.name)
 
@@ -151,9 +157,9 @@ func _init_player_layer():
 		player.z_index = 5
 		player_layer.add_child(player, true)
 		player.add_to_group("Players")
+		player.visibility_changed.connect(_on_player_visibility_changed.bind(player))
 		player.countdown_complete.connect(_on_player_countdown_complete)
 		player.countdown_cancelled.connect(_on_player_countdown_cancelled)
-
 
 func _setup_dev_mode():
 	if Globals.mouse_mode:

@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 ENV="*res://globals/env.gd"
 Globals="*res://globals/globals.gd"
+SignalBus="*res://globals/signal_bus.gd"
+GameState="*res://globals/game_state.gd"
 PlayerManager="*res://scripts/characters/player_manager.gd"
 DebugMessage="*res://scripts/ui/debug_message.gd"
 

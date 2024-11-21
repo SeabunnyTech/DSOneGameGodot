@@ -26,15 +26,15 @@ func _on_player_visibility_changed(player: Node2D) -> void:
 	if player.visible and player in players_in_portal:
 		portal_ready.emit(player)
 		
-func _on_portal_area_body_entered(body: Node2D, expected_player: Node2D) -> void:
-	if body == expected_player:
-		players_in_portal.append(body)
-		portal_ready.emit(body)
+func _on_portal_area_body_entered(player: Node2D, expected_player: Node2D) -> void:
+	if player == expected_player:
+		players_in_portal.append(player)
+		SignalBus.player_ready_portal_changed.emit(player, true)
 
-func _on_portal_area_body_exited(body: Node2D, expected_player: Node2D) -> void:
-	if body == expected_player:
-		players_in_portal.erase(body)
-		portal_ready_exited.emit(body)
+func _on_portal_area_body_exited(player: Node2D, expected_player: Node2D) -> void:
+	if player == expected_player:
+		players_in_portal.erase(player)
+		SignalBus.player_ready_portal_changed.emit(player, false)
 
 func constrain_players() -> void:
 	var portal1_center = $Portal/PortalArea/CollisionShape2D.global_position

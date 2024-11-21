@@ -11,6 +11,8 @@ var messages_path: String = "res://assets/text/ui_messages.json"
 @onready var dialog_box_label: Label = %DialogBoxLabel
 @onready var skip_button: Panel = %SkipButton
 
+# TODO: 尚未完成，需要串接到 game_state 裡面
+
 signal return_area_entered(body: Node2D)
 signal return_area_exited(body: Node2D)
 signal skip_area_entered(body: Node2D)

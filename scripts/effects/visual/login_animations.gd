@@ -123,7 +123,6 @@ static func hide_logo(nodes: Dictionary) -> Tween:
 	return scale_tween
 
 static func tween_signup_positions(root: Node, nodes: Dictionary, pos1: float, pos2: float) -> void:
-	DebugMessage.info("_tween_signup_positions: pos1 %s" % pos1)
 	var tween = root.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(nodes.player1.logo, "position:x", pos1, DURATIONS.POSITION)\
@@ -140,7 +139,6 @@ static func tween_signup_positions(root: Node, nodes: Dictionary, pos1: float, p
 		.set_trans(Tween.TRANS_ELASTIC)
 
 static func tween_tutorial_positions(root: Node, nodes: Dictionary, pos1: float, pos2: float) -> void:
-	DebugMessage.info("_tween_signup_positions pos1: %s" % pos1)
 	var tween = root.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(nodes.player1.mimic_player, "position:x", pos1, DURATIONS.POSITION)\

@@ -1,8 +1,5 @@
 extends Node2D
 
-signal portal_signup(player: Node2D)
-signal portal_signup_exited(player: Node2D)
-
 var players_in_portal: Array[Node2D] = []
 
 func _ready() -> void:
@@ -11,40 +8,29 @@ func _ready() -> void:
 	$Portal2/PortalArea.connect("body_entered", _on_portal_area_2_body_entered)
 	$Portal2/PortalArea.connect("body_exited", _on_portal_area_2_body_exited)
 
-	# Connect visibility changed signals
-	for player in [PlayerManager.player1, PlayerManager.player2]:
-		if player:
-			player.connect("visibility_changed",
-							_on_player_visibility_changed.bind(player),
-							CONNECT_DEFERRED)
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	constrain_players()
 
-func _on_player_visibility_changed(player: Node2D) -> void:
-	if player.visible and player in players_in_portal:
-		portal_signup.emit(player)
-
 func _on_portal_area_body_entered(player: Node2D) -> void:
 	if player == PlayerManager.player1:
 		players_in_portal.append(player)
-		portal_signup.emit(player)
+		SignalBus.player_signup_portal_changed.emit(player, true)
 
 func _on_portal_area_body_exited(player: Node2D) -> void:
 	if player == PlayerManager.player1:
 		players_in_portal.erase(player)
-		portal_signup_exited.emit(player)
+		SignalBus.player_signup_portal_changed.emit(player, false)
 
 func _on_portal_area_2_body_entered(player: Node2D) -> void:
 	if player == PlayerManager.player2:
 		players_in_portal.append(player)
-		portal_signup.emit(player)
+		SignalBus.player_signup_portal_changed.emit(player, true)
 
 func _on_portal_area_2_body_exited(player: Node2D) -> void:
 	if player == PlayerManager.player2:
 		players_in_portal.erase(player)
-		portal_signup_exited.emit(player)
+		SignalBus.player_signup_portal_changed.emit(player, false)
 
 func constrain_players() -> void:
 	var portal1_center = $Portal/PortalArea/CollisionShape2D.global_position
