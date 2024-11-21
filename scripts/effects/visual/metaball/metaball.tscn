@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://clq04q7cckivp"]
 
-[ext_resource type="Script" path="res://scripts/effects/visual/metaball.gd" id="1_5c2ii"]
-[ext_resource type="Shader" path="res://scripts/effects/visual/metaball.gdshader" id="2_xirs8"]
+[ext_resource type="Script" path="res://scripts/effects/visual/metaball/metaball.gd" id="1_5c2ii"]
+[ext_resource type="Shader" path="res://scripts/effects/visual/metaball/metaball.gdshader" id="2_xirs8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8gr5d"]
 shader = ExtResource("2_xirs8")

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
-[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball.tscn" id="4_0hnlf"]
+[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_0hnlf"]
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="4_2ktp1"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_ogt6f"]
 
