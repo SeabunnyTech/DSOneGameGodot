@@ -281,6 +281,7 @@ func _on_player_visibility_changed(player: Node2D):
 			logo.visible = true
 			portal.visible = true
 			LoginAnimations.show_logo(logo, portal)
+			position_portals(login_state)
 			
 		LoginAnimations.set_logo_color(logo, player_colors.active)
 		LoginAnimations.set_logo_color(portal, player_colors.active.lightened(0.5))
@@ -298,7 +299,7 @@ func _on_player_visibility_changed(player: Node2D):
 			await LoginAnimations.hide_logo(logos)
 			logos["player2"]["logo"].visible = false
 			logos["player2"]["portal"].visible = false
-			position_portals("signup")
+			position_portals(login_state)
 			
 		if signup_players[1 if not is_player1 else 0] == 1:
 			_on_portal_signup_exited(player)
