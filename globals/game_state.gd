@@ -100,9 +100,8 @@ func determine_login_stage() -> GameStage:
 		# TODO: select_level 的判斷式尚未測試，還沒把 transition level 的邏輯串進來
 		GameStage.LOGIN_SELECT_LEVEL:
 			# 如果有人退出準備狀態，回到教學
-			if ready_players[0] != visible_players[0] or \
-			   ready_players[1] != visible_players[1]:
-				return GameStage.LOGIN_TUTORIAL
+			if num_visible_players == 0:
+				return GameStage.LOGIN_SIGNUP
 			return GameStage.LOGIN_SELECT_LEVEL
 	return GameStage.LOGIN_SIGNUP
 
