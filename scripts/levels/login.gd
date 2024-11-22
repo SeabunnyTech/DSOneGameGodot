@@ -64,8 +64,6 @@ var screen_width = Globals.get_viewport_size().x
 func _ready():
 	GameState.login_state_updated.connect(_on_login_state_updated)
 	
-	PlayerManager.player_countdown_completed.connect(_on_player_countdown_complete)
-	
 	containers["logo"].show()
 	containers["tutorial"].hide()
 	
@@ -85,11 +83,11 @@ func _ready():
 
 	# Connect level selection areas
 	# TODO: 放到 game_state 裡面
-	level_areas["level1"]["portal"].body_entered.connect(func(body): _on_select_level_area_entered(body, "level1"))
-	level_areas["level1"]["portal"].body_exited.connect(_on_select_level_area_exited)
+	level_areas["level1"]["portal"].body_entered.connect(func(body): _on_level_portal_entered(body, "level1"))
+	level_areas["level1"]["portal"].body_exited.connect(func(body): _on_level_portal_exited(body, "level1"))
 	
-	level_areas["level2"]["portal"].body_entered.connect(func(body): _on_select_level_area_entered(body, "level2"))
-	level_areas["level2"]["portal"].body_exited.connect(_on_select_level_area_exited)
+	level_areas["level2"]["portal"].body_entered.connect(func(body): _on_level_portal_entered(body, "level2"))
+	level_areas["level2"]["portal"].body_exited.connect(func(body): _on_level_portal_exited(body, "level2"))
 
 func _process(_delta):
 	pass
@@ -214,7 +212,7 @@ func _handle_tutorial(state_info: Dictionary) -> void:
 	_handle_player_visibility_animation("player1", state_info.get("player1_visible", false), state_info)
 	_handle_player_visibility_animation("player2", state_info.get("player2_visible", false), state_info)
 
-func _handle_level_select(state_info: Dictionary) -> void:
+func _handle_level_select(_state_info: Dictionary) -> void:
 	var tween = create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(containers["tutorial"], "modulate:a", 0.0, 1.0)
@@ -230,7 +228,6 @@ func _handle_level_select(state_info: Dictionary) -> void:
 		enable_portal_detection(level_areas["level1"]["area"])
 		enable_portal_detection(level_areas["level2"]["area"])
 	)
-
 
 func _handle_player_visibility_animation(player_id: String, _is_visible: bool, state_info: Dictionary) -> void:
 	var visuals = player_visuals[player_id]
@@ -293,27 +290,12 @@ func _hide_player2_elements(visuals: Dictionary) -> void:
 	if visuals.tutorial_elements:
 		_hide_tutorial_elements(visuals.tutorial_elements)
 
-func _on_player_countdown_complete(player: Node2D):
-	# var num_ready_players = visible_players.length_squared()
-
-	# TODO: 這裡的判斷式尚未完成，要改到 game_state 裡面
-	# Check if we're in select_level state
-	if GameState.current_stage == GameState.GameStage.LOGIN_SELECT_LEVEL:
-		PlayerManager.freeze_player_detection = true
-		# Add a short delay before transitioning
-		await get_tree().create_timer(1.0).timeout
-		# Change scene based on number of players
-		var scene_path = "res://scenes/levels/%s_%dp.tscn" % [player.selected_level, 2] 
-		get_tree().change_scene_to_file(scene_path)
-
-func _on_select_level_area_entered(player: Node2D, level: String) -> void:
+func _on_level_portal_entered(player: Node, level: String) -> void:
 	if player.visible:
-		# Store the selected level before starting countdown
-		player.selected_level = level
-		player.start_progress_countdown()
+		SignalBus.level_portal_entered.emit(player, level)
 
-func _on_select_level_area_exited(player: Node2D) -> void:
-	player.stop_progress_countdown()
+func _on_level_portal_exited(player: Node, level: String) -> void:
+	SignalBus.level_portal_exited.emit(player, level)
 
 func _on_ui_skip_area_exited(player: Node2D) -> void:
 	player.stop_progress_countdown()

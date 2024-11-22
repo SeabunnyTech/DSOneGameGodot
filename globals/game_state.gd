@@ -37,16 +37,18 @@ signal login_state_updated(state_info: Dictionary)
 var visible_players = Vector2i(0, 0) # (player1, player2) where 1=visible, 0=invisible
 var signup_players = Vector2i(0, 0) # (player1, player2) where 1=signed up, 0=not signed up
 var ready_players = Vector2i(0, 0) # (player1, player2) where 1=ready, 0=not ready
+var entered_level = [Vector2i(0, 0), Vector2i(0, 0)] # [level1(player1, player2), level2(player1, player2)]
 
 var game_data: Dictionary = {
 	"score": 0,
 	"time": 0,
-	"level": 1
+	"level": ""
 }
 
 var current_scene := GameScene.LOGIN:
 	set(value):
 		current_scene = value
+		update_scene(current_scene)
 		update_ui_stage()
 
 var current_stage := GameStage.LOGIN_START:
@@ -57,8 +59,25 @@ var current_stage := GameStage.LOGIN_START:
 func _ready() -> void:
 	# 連接玩家數量
 	PlayerManager.player_visibility_changed.connect(_on_player_visibility_changed)
+	PlayerManager.player_countdown_completed.connect(_on_player_countdown_complete)
 	SignalBus.player_signup_portal_changed.connect(_on_player_signup_portal_changed)
 	SignalBus.player_ready_portal_changed.connect(_on_player_ready_portal_changed)
+	SignalBus.level_portal_entered.connect(_on_level_portal_entered)
+	SignalBus.level_portal_exited.connect(_on_level_portal_exited)
+
+func determine_scene_path(new_scene: GameScene) -> String:
+	var num_visible_players = visible_players.length_squared()
+
+	match new_scene:
+		GameScene.LOGIN:
+			return "res://scenes/levels/login.tscn"
+		GameScene.LEVEL1:
+			game_data["level"] = "level1"
+		GameScene.LEVEL2:
+			game_data["level"] = "level2"
+
+	var scene_path = "res://scenes/levels/%s_%dp.tscn" % [game_data["level"], num_visible_players] 
+	return scene_path
 
 # 登入狀態邏輯
 func determine_login_stage() -> GameStage:
@@ -105,7 +124,11 @@ func determine_login_stage() -> GameStage:
 			return GameStage.LOGIN_SELECT_LEVEL
 	return GameStage.LOGIN_SIGNUP
 
-func update_state() -> void:
+func update_scene(new_scene: GameScene) -> void:
+	var scene_path = determine_scene_path(new_scene)
+	get_tree().change_scene_to_file(scene_path)
+
+func update_stage() -> void:
 	update_ui_stage()
 	update_login_stage()
 
@@ -140,15 +163,15 @@ func update_login_stage() -> void:
 
 func update_visible_players(players: Vector2i) -> void:
 	visible_players = players
-	update_state()
+	update_stage()
 
 func update_signup_players(players: Vector2i) -> void:
 	signup_players = players
-	update_state()
+	update_stage()
 
 func update_ready_players(players: Vector2i) -> void:
 	ready_players = players
-	update_state()
+	update_stage()
 
 func change_scene(new_scene: GameScene) -> void:
 	current_scene = new_scene
@@ -169,7 +192,8 @@ func _on_player_visibility_changed(player: Node, _is_visible: bool) -> void:
 	
 	# 更新遊戲狀態
 	update_visible_players(visible_players)
-	
+
+# TODO 以下所有 portal 都要增加轉場時的緩沖判斷時間
 func _on_player_signup_portal_changed(player: Node, is_entered: bool) -> void:
 	var player_index = 0 if player == PlayerManager.player1 else 1
 	signup_players[player_index] = 1 if is_entered else 0
@@ -179,3 +203,22 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 	var player_index = 0 if player == PlayerManager.player1 else 1
 	ready_players[player_index] = 1 if is_entered else 0
 	update_ready_players(ready_players)
+
+func _on_level_portal_entered(player: Node, level: String):
+	var level_index = 0 if level == "level1" else 1
+	var player_index = 0 if player == PlayerManager.player1 else 1
+	entered_level[level_index][player_index] = 1
+	player.start_progress_countdown()
+
+func _on_level_portal_exited(player: Node, level: String):
+	var level_index = 0 if level == "level1" else 1
+	var player_index = 0 if player == PlayerManager.player1 else 1
+	entered_level[level_index][player_index] = 0
+	player.stop_progress_countdown()
+
+func _on_player_countdown_complete(player: Node):
+	var player_index = 0 if player == PlayerManager.player1 else 1
+	if entered_level[0][player_index] == 1:
+		change_scene(GameScene.LEVEL1)
+	elif entered_level[1][player_index] == 1:
+		change_scene(GameScene.LEVEL2)

@@ -119,7 +119,7 @@ func _on_player_visibility_changed(player: Node) -> void:
 	player_visibility_changed.emit(player, player.visible)
 
 func _on_player_countdown_complete(player: Node2D):
-	print("Player countdown complete: ", player.name)
+	player_countdown_completed.emit(player)
 
 func _on_player_countdown_cancelled(player: Node2D):
 	print("Player countdown cancelled: ", player.name)
@@ -178,9 +178,8 @@ func _ready():
 	# 初始化 viewport size
 	viewport_size = get_viewport().size
 	Globals.set_viewport_size(viewport_size)
-
 	get_tree().root.connect("size_changed", _on_viewport_size_changed)
-
+	
 	_init_socket_client()
 	_init_player_layer()
 	_setup_dev_mode()
