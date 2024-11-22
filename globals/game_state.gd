@@ -31,8 +31,7 @@ enum GameStage {
 	GAME_OVER    # 結算階段
 }
 
-signal scene_changed(new_scene: GameScene, old_scene: GameScene)
-signal stage_changed(new_stage: GameStage, old_stage: GameStage)
+signal ui_state_updated(state_info: Dictionary)
 signal login_state_updated(state_info: Dictionary)
 
 var visible_players = Vector2i(0, 0) # (player1, player2) where 1=visible, 0=invisible
@@ -47,15 +46,13 @@ var game_data: Dictionary = {
 
 var current_scene := GameScene.LOGIN:
 	set(value):
-		var old_scene = current_scene
 		current_scene = value
-		scene_changed.emit(value, old_scene)
+		update_ui_stage()
 
 var current_stage := GameStage.LOGIN_START:
 	set(value):
-		var old_stage = current_stage
 		current_stage = value
-		stage_changed.emit(value, old_stage)
+		update_ui_stage()
 
 func _ready() -> void:
 	# 連接玩家數量
@@ -67,8 +64,7 @@ func _ready() -> void:
 func determine_login_stage() -> GameStage:
 	var num_visible_players = visible_players.length_squared()
 	var num_signup_players = signup_players.length_squared()
-	DebugMessage.info("determine_login_stage: %s, %s" % [num_visible_players, num_signup_players])
-	
+
 	if num_visible_players == 0:
 		return GameStage.LOGIN_SIGNUP
 	
@@ -110,6 +106,21 @@ func determine_login_stage() -> GameStage:
 			return GameStage.LOGIN_SELECT_LEVEL
 	return GameStage.LOGIN_SIGNUP
 
+func update_state() -> void:
+	update_ui_stage()
+	update_login_stage()
+
+func update_ui_stage() -> void:
+	var num_visible_players = visible_players.length_squared()
+	
+	var state_info = {
+		"scene": current_scene,
+		"stage": current_stage,
+		"num_visible_players": num_visible_players
+	}
+
+	ui_state_updated.emit(state_info)
+
 func update_login_stage() -> void:
 	var new_stage = determine_login_stage()
 	if new_stage != current_stage:
@@ -130,21 +141,21 @@ func update_login_stage() -> void:
 
 func update_visible_players(players: Vector2i) -> void:
 	visible_players = players
-	update_login_stage()
+	update_state()
 
 func update_signup_players(players: Vector2i) -> void:
 	signup_players = players
-	update_login_stage()
+	update_state()
 
 func update_ready_players(players: Vector2i) -> void:
 	ready_players = players
-	update_login_stage()
-
-func change_stage(new_stage: GameStage) -> void:
-	current_stage = new_stage
+	update_state()
 
 func change_scene(new_scene: GameScene) -> void:
 	current_scene = new_scene
+
+func change_stage(new_stage: GameStage) -> void:
+	current_stage = new_stage
 
 func _on_player_visibility_changed(player: Node, _is_visible: bool) -> void:
 	var is_player1 = player == PlayerManager.player1

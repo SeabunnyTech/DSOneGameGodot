@@ -9,7 +9,7 @@ var player1: Node = player_scene.instantiate()
 var player2: Node = player_scene.instantiate()
 
 var current_players: Array[Node] = [player1, player2]
-# 在類別開始處添加信號
+
 signal player_visibility_changed(player: Node, _is_visible: bool)
 signal player_countdown_completed(player: Node)
 

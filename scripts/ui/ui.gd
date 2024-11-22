@@ -18,157 +18,82 @@ signal return_area_exited(body: Node2D)
 signal skip_area_entered(body: Node2D)
 signal skip_area_exited(body: Node2D)
 
-enum GameScene {
-	LOGIN,
-	LEVEL1,
-	LEVEL2
-}
-
-enum LoginState {
-	START,
-	SIGNUP,
-	WAIT_FOR_SECOND_PLAYER,
-	TUTORIAL,
-	SELECT_LEVEL
-}
-
-enum GameState {
-	TUTORIAL_1,   # 關卡教學階段
-	TUTORIAL_2,
-	TUTORIAL_3,
-	TUTORIAL_4,
-	TUTORIAL_5,
-	TUTORIAL_6,
-	TUTORIAL_7,
-	TUTORIAL_8,
-	TUTORIAL_END,
-	COUNTDOWN_1, # 倒數計時
-	COUNTDOWN_2,
-	COUNTDOWN_3,
-	GAME_OVER     # 結算階段
-}
-
-const LOGIN_SIGNALS = {
-	# Login signals
-	"login_signup": LoginState.SIGNUP,
-	"login_start": LoginState.START,
-	"login_wait_for_players": LoginState.WAIT_FOR_SECOND_PLAYER,
-	"login_tutorial": LoginState.TUTORIAL,
-	"login_select_level": LoginState.SELECT_LEVEL
-}
-
-const LEVEL1_SIGNALS = {
-	# Level1 signals
-	"level1_tutorial_1": GameState.TUTORIAL_1,
-	"level1_tutorial_2": GameState.TUTORIAL_2,
-	"level1_tutorial_3": GameState.TUTORIAL_3,
-	"level1_tutorial_4": GameState.TUTORIAL_4,
-	"level1_tutorial_5": GameState.TUTORIAL_5,
-	"level1_tutorial_6": GameState.TUTORIAL_6,
-	"level1_tutorial_end": GameState.TUTORIAL_END,
-	"level1_countdown_3": GameState.COUNTDOWN_3,
-	"level1_countdown_2": GameState.COUNTDOWN_2,
-	"level1_countdown_1": GameState.COUNTDOWN_1,
-	"level1_game_over": GameState.GAME_OVER
-}
-
 # 動畫用變數
 var tween: Tween
 
 func _ready():
 	load_messages()
 	set_default_messages()
-	# Get the root parent node (scene)
-	var root_parent = get_parent()
-	connect_signals(root_parent)
-	
-	var scene_name = root_parent.name
-	DebugMessage.info("UI loaded under scene: " + str(scene_name))
+	GameState.ui_state_updated.connect(_on_ui_state_updated)
 
-func connect_signals(root_parent: Node) -> void:
-	var scene_name = root_parent.name
-	var signals_to_connect = {}
+func _on_ui_state_updated(state_info: Dictionary):
+	var scene = state_info.scene
+	var stage = state_info.stage
+	var num_visible_players = state_info.num_visible_players
 
-	match scene_name:
-		"Login":
-			signals_to_connect = LOGIN_SIGNALS
-		"Level1_1p", "Level1_2p":
-			signals_to_connect = LEVEL1_SIGNALS
-	
-	for signal_name in signals_to_connect:
-		if root_parent.has_signal(signal_name):
-			root_parent.connect(signal_name, 
-				func(num_visible_players): _handle_state_signal(signal_name, num_visible_players))
-		else:
-			push_warning("Signal not found in %s: %s" % [scene_name, signal_name])
+	match scene:
+		GameState.GameScene.LOGIN:
+			_handle_login_state(stage, num_visible_players)
+		GameState.GameScene.LEVEL1:
+			_handle_level1_state(stage, num_visible_players)
 
-func _handle_state_signal(signal_name: String, num_visible_players: int = 0) -> void:
-	# 根據訊號名稱前綴決定使用哪個映射和處理函數
-	if signal_name.begins_with("login_"):
-		if not LOGIN_SIGNALS.has(signal_name):
-			push_error("Unknown login signal: " + signal_name)
-			return
-		handle_login_state(LOGIN_SIGNALS[signal_name], num_visible_players)
-	elif signal_name.begins_with("level1_"):
-		if not LEVEL1_SIGNALS.has(signal_name):
-			push_error("Unknown level1 signal: " + signal_name)
-			return
-		handle_level1_state(LEVEL1_SIGNALS[signal_name], num_visible_players)
+	# DebugMessage.info("UI state updated: " + str(state_info))
 
-func handle_login_state(state: LoginState, num_visible_players: int = 0):
-	match state:
-		LoginState.START:
+# Login 相關處理
+func _handle_login_state(stage: GameState.GameStage, num_visible_players: int = 0):
+	match stage:
+		GameState.GameStage.LOGIN_START:
 			set_dialog_message("login", "start")
 			hide_popups()
-		LoginState.SIGNUP:
+		GameState.GameStage.LOGIN_SIGNUP:
 			set_dialog_message("login", "signup")
 			hide_popups()
-		LoginState.WAIT_FOR_SECOND_PLAYER:
+		GameState.GameStage.LOGIN_WAIT_FOR_SECOND_PLAYER:
 			set_dialog_message("login", "wait_for_second_player")
 			hide_popups()
-		LoginState.TUTORIAL:
+		GameState.GameStage.LOGIN_TUTORIAL:
 			set_dialog_message("login", "tutorial")
 			set_popup_message(num_visible_players, "login", "tutorial")
-		LoginState.SELECT_LEVEL:
+		GameState.GameStage.LOGIN_SELECT_LEVEL:
 			set_dialog_message("login", "select_level")
 			hide_popups()
 
-# Level1 相關處理方法
-func handle_level1_state(state: GameState, num_visible_players: int = 0):
-	match state:
-		GameState.TUTORIAL_1:
+# Level1 相關處理
+func _handle_level1_state(stage: GameState.GameStage, num_visible_players: int = 0):
+	match stage:
+		GameState.GameStage.TUTORIAL_1:
 			show_skip_button()
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_1")
-		GameState.TUTORIAL_2:
+		GameState.GameStage.TUTORIAL_2:
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_2")
-		GameState.TUTORIAL_3:
+		GameState.GameStage.TUTORIAL_3:
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_3")
-		GameState.TUTORIAL_4:
+		GameState.GameStage.TUTORIAL_4:
 			hide_skip_button()
 			set_dialog_message("level1", "tutorial")
 			set_popup_message(num_visible_players, "level1", "tutorial_4")
-		GameState.TUTORIAL_5:
+		GameState.GameStage.TUTORIAL_5:
 			set_dialog_message("level1", "tutorial_ready")
 			hide_popups()
-		GameState.TUTORIAL_6:
+		GameState.GameStage.TUTORIAL_6:
 			set_dialog_message("level1", "tutorial_ready")
 			set_popup_message(num_visible_players, "level1", "tutorial_6")
-		GameState.TUTORIAL_END:
+		GameState.GameStage.TUTORIAL_END:
 			hide_dialog()
 			set_popup_message(num_visible_players, "level1", "tutorial_end")
-		GameState.COUNTDOWN_3:
+		GameState.GameStage.COUNTDOWN_3:
 			hide_dialog()
 			set_popup_message(num_visible_players, "level1", "countdown_3")
-		GameState.COUNTDOWN_2:
+		GameState.GameStage.COUNTDOWN_2:
 			hide_dialog()
 			set_popup_message(num_visible_players, "level1", "countdown_2")
-		GameState.COUNTDOWN_1:
+		GameState.GameStage.COUNTDOWN_1:
 			hide_dialog()
 			set_popup_message(num_visible_players, "level1", "countdown_1")
-		GameState.GAME_OVER:
+		GameState.GameStage.GAME_OVER:
 			set_dialog_message("level1", "game_over")
 			set_popup_message(num_visible_players, "level1", "game_over")
 

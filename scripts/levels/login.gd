@@ -124,7 +124,7 @@ func transition_to_next_level():
 	# get_tree().change_scene_to_file("res://scenes/levels/level1.tscn")
 
 func _on_login_state_updated(state_info: Dictionary):
-	DebugMessage.info("login_state_updated: %s" % state_info)
+	# DebugMessage.info("login_state_updated: %s" % state_info)
 	match state_info.stage:
 		GameState.GameStage.LOGIN_START:
 			_handle_login_start(state_info)
