@@ -1,23 +1,23 @@
 [gd_scene load_steps=7 format=3 uid="uid://dhlvypir2o1c0"]
 
-[ext_resource type="Script" path="res://scripts/characters/player.gd" id="1_wp0t3"]
-[ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_iqx1j"]
-[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_0hnlf"]
-[ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="4_2ktp1"]
-[ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_ogt6f"]
+[ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_htxxl"]
+[ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_rj3o6"]
+[ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="3_qel1b"]
+[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_y6pit"]
+[ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_vafl7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
 
 [node name="Player" type="CharacterBody2D"]
-script = ExtResource("1_wp0t3")
+script = ExtResource("1_htxxl")
 
 [node name="RadialProgress" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("2_iqx1j")
+script = ExtResource("2_rj3o6")
 radius = 130.0
 progress = 80.0
 thickness = 25.0
@@ -30,16 +30,16 @@ shape = SubResource("CircleShape2D_4ujkc")
 [node name="Motion" type="Node" parent="."]
 
 [node name="Angular" type="Node" parent="Motion"]
-script = ExtResource("4_2ktp1")
+script = ExtResource("3_qel1b")
 
-[node name="Metaball" parent="." instance=ExtResource("4_0hnlf")]
+[node name="Metaball" parent="." instance=ExtResource("4_y6pit")]
 
 [node name="InertiaFollower" type="Node2D" parent="Metaball"]
-script = ExtResource("5_ogt6f")
+script = ExtResource("5_vafl7")
 f = 3.0
 z = 0.4
 
 [node name="InertiaFollower" type="Node2D" parent="Metaball/InertiaFollower"]
-script = ExtResource("5_ogt6f")
+script = ExtResource("5_vafl7")
 f = 3.0
 z = 0.4

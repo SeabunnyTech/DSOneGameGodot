@@ -4,7 +4,7 @@ var socket_client: SocketIOClientNode
 
 var viewport_size: Vector2 = Globals.get_viewport_size()
 
-var player_scene: PackedScene = preload("res://scenes/characters/player.tscn")
+var player_scene: PackedScene = preload("res://scenes/characters/player/player.tscn")
 var player1: Node = player_scene.instantiate()
 var player2: Node = player_scene.instantiate()
 
@@ -152,11 +152,12 @@ func _init_player_layer():
 	player_layer.layer = 1
 	add_child(player_layer)
 
-	for player in current_players:
+	for idx in range(len(current_players)):
+		var player = current_players[idx]
 		player.visible = false
 		player.z_index = 5
 		player_layer.add_child(player, true)
-		player.add_to_group("Players")
+		player.add_to_group("player" + str(idx))
 		player.visibility_changed.connect(_on_player_visibility_changed.bind(player))
 		player.countdown_complete.connect(_on_player_countdown_complete)
 		player.countdown_cancelled.connect(_on_player_countdown_cancelled)
@@ -179,7 +180,7 @@ func _ready():
 	viewport_size = get_viewport().size
 	Globals.set_viewport_size(viewport_size)
 	get_tree().root.connect("size_changed", _on_viewport_size_changed)
-	
+
 	_init_socket_client()
 	_init_player_layer()
 	_setup_dev_mode()
