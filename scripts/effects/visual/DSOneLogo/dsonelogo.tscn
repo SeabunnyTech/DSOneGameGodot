@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=3 uid="uid://1s1l6055daqh"]
+
+[ext_resource type="Script" path="res://scripts/effects/visual/DSOneLogo/dsonelogo.gd" id="1_72n38"]
+[ext_resource type="Texture2D" uid="uid://cfnfgoe83gr8u" path="res://scripts/effects/visual/DSOneLogo/logo_layout.png" id="2_tfn0r"]
+[ext_resource type="Texture2D" uid="uid://dccgpqi8n2c16" path="res://scripts/effects/visual/DSOneLogo/upper_capsule.png" id="3_l3ptx"]
+[ext_resource type="Texture2D" uid="uid://c8fmrekoc4h06" path="res://scripts/effects/visual/DSOneLogo/white_circle.png" id="3_n2s7w"]
+[ext_resource type="Texture2D" uid="uid://bkmsjahobb6l7" path="res://scripts/effects/visual/DSOneLogo/lower_capsule.png" id="4_5x4ng"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o5xwp"]
+
+[node name="DSOneLogo" type="Node2D"]
+position = Vector2(1920, 1080)
+script = ExtResource("1_72n38")
+disabled = null
+fall_back_on_released = null
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+offset_left = -500.0
+offset_top = -500.0
+offset_right = 500.0
+offset_bottom = 500.0
+
+[node name="ScalarNode" type="Node2D" parent="."]
+
+[node name="LogoLayout" type="Sprite2D" parent="ScalarNode"]
+visible = false
+texture = ExtResource("2_tfn0r")
+
+[node name="Area2D" type="Area2D" parent="ScalarNode"]
+visible = false
+position = Vector2(-175, 25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScalarNode/Area2D"]
+position = Vector2(19, -3)
+scale = Vector2(9, 9)
+shape = SubResource("CircleShape2D_o5xwp")
+
+[node name="Circle" type="Node2D" parent="ScalarNode"]
+modulate = Color(0.6, 1, 0.88, 1)
+position = Vector2(-156, 22)
+
+[node name="BigWhiteCircle" type="Sprite2D" parent="ScalarNode/Circle"]
+scale = Vector2(0.413, 0.413)
+texture = ExtResource("3_n2s7w")
+
+[node name="Capsules" type="Node2D" parent="ScalarNode"]
+modulate = Color(0.3, 1, 0.79, 1)
+
+[node name="UpperCapsule" type="Sprite2D" parent="ScalarNode/Capsules"]
+position = Vector2(31, -200)
+texture = ExtResource("3_l3ptx")
+
+[node name="LowerCapsule" type="Sprite2D" parent="ScalarNode/Capsules"]
+position = Vector2(36, 142)
+texture = ExtResource("4_5x4ng")
