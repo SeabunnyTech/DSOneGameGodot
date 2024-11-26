@@ -10,14 +10,10 @@ script = ExtResource("1_74fnv")
 offset_right = 3840.0
 offset_bottom = 2160.0
 
-[node name="DSOneLogo" parent="." instance=ExtResource("1_0aphf")]
-hue = 0.57
-trigger_groups = Array[StringName]([&"player0"])
-disabled = false
+[node name="DSOneLogo1" parent="." instance=ExtResource("1_0aphf")]
+scale = Vector2(1.2, 1.2)
 init_state = 0
 
 [node name="DSOneLogo2" parent="." instance=ExtResource("1_0aphf")]
-visible = false
-trigger_groups = Array[StringName]([&"player1"])
-disabled = false
+scale = Vector2(1.2, 1.2)
 init_state = 0
