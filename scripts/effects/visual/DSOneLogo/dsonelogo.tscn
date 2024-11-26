@@ -11,8 +11,6 @@
 [node name="DSOneLogo" type="Node2D"]
 position = Vector2(1920, 1080)
 script = ExtResource("1_72n38")
-disabled = null
-fall_back_on_released = null
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
@@ -22,6 +20,7 @@ offset_right = 500.0
 offset_bottom = 500.0
 
 [node name="ScalarNode" type="Node2D" parent="."]
+scale = Vector2(0.9, 0.9)
 
 [node name="LogoLayout" type="Sprite2D" parent="ScalarNode"]
 visible = false
@@ -37,7 +36,7 @@ scale = Vector2(9, 9)
 shape = SubResource("CircleShape2D_o5xwp")
 
 [node name="Circle" type="Node2D" parent="ScalarNode"]
-modulate = Color(0.6, 1, 0.88, 1)
+modulate = Color(0.78, 0.78, 0.78, 1)
 position = Vector2(-156, 22)
 
 [node name="BigWhiteCircle" type="Sprite2D" parent="ScalarNode/Circle"]
@@ -45,7 +44,7 @@ scale = Vector2(0.413, 0.413)
 texture = ExtResource("3_n2s7w")
 
 [node name="Capsules" type="Node2D" parent="ScalarNode"]
-modulate = Color(0.3, 1, 0.79, 1)
+modulate = Color(0.56, 0.56, 0.56, 1)
 
 [node name="UpperCapsule" type="Sprite2D" parent="ScalarNode/Capsules"]
 position = Vector2(31, -200)

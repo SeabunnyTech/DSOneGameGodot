@@ -1,5 +1,5 @@
 @tool
-extends Node2D
+class_name DSOneLogo extends Node2D
 
 # 提供外部使用的信號
 signal on_state_changed(new_state)
@@ -38,15 +38,15 @@ var	circle_sva = {
 }
 
 # 用來查找調用顏色的函數
-func lookup_color(state: State, sva_dict):
-	var sva = sva_dict[state]
+func lookup_color(logo_state: State, sva_dict):
+	var sva = sva_dict[logo_state]
 	return Color.from_hsv(hue, sva[0], sva[1], sva[2])
 
-func capsule_color(state):
-	return lookup_color(state, capsule_sva)
+func capsule_color(logo_state):
+	return lookup_color(logo_state, capsule_sva)
 
-func circle_color(state):
-	return lookup_color(state, circle_sva)
+func circle_color(logo_state):
+	return lookup_color(logo_state, circle_sva)
 
 
 # 各種尺寸
@@ -59,7 +59,7 @@ var scales = {
 
 var transition_times = {
 	State.HIDDEN		:	1,
-	State.IDLE		:	1,
+	State.IDLE		:	2,
 	State.INVITING	:	1,
 	State.TRIGGERED	:	1,
 }
@@ -67,21 +67,18 @@ var transition_times = {
 
 # 可以調整的一些參數
 @export var transition_time_multiplier = 0.8
-@export var trigger_groups: Array[StringName] = []
-@export var disabled = false
 @export var init_state = State.IDLE
-@export var fall_back_on_released = true		# 當游標離開時狀態會退回 INVITING
 
 
 # 主 tween 掌管全體的狀態
 # 小 tween 控制個別物件的反應
-@onready var main_tween = create_tween()
-@onready var capsule_tween = create_tween()
-@onready var circle_tween = create_tween()
+@onready var main_tween
+@onready var capsule_tween
+@onready var circle_tween
 
 
-var _current_state = null
-var _heading_state = null
+var state = null
+var heading_state = null
 
 
 # 方便呼叫避免打錯字
@@ -93,46 +90,22 @@ var _heading_state = null
 
 
 func _ready() -> void:
-	area_2d.body_entered.connect(_on_touched)
-	area_2d.body_exited.connect(_on_left_along)
-
 	heads_to_state(init_state, true)
-	position = Vector2(1920, 1080)
 
 
 # 觸發與離開的反應
-func _in_trigger_group(node: Node2D):
-	for group_name in trigger_groups:
-		if node.is_in_group(group_name):
-			return true
-	return false
-
-
-func _on_touched(toucher: Node2D):
-	if _in_trigger_group(toucher):
-		match _current_state:
-			State.INVITING, State.IDLE:
-				heads_to_state(State.TRIGGERED)
-
-
-func _on_left_along(toucher: Node2D):
-	if _in_trigger_group(toucher):
-		match _current_state:
-			State.INVITING:
-				heads_to_state(State.INVITING)
-			State.TRIGGERED:
-				if fall_back_on_released:
-					heads_to_state(State.INVITING)
+func overlaps_trigger_area(trigger: Node):
+	return area_2d.overlaps_body(trigger)
 
 
 # 狀態的轉換
 func heads_to_state(new_state: State, immediate=false):
-	_heading_state = new_state
-	on_heading_new_state.emit(_heading_state)
+	# 這個判斷讓這個函數可以同時被觸發多次也不會出錯
+	if heading_state == new_state:
+		return
 
-	# 決定要不要開啟感應區
-	var heading_hidden = _heading_state == State.HIDDEN
-	area_2d.monitoring = not (disabled or heading_hidden)
+	heading_state = new_state
+	on_heading_new_state.emit(heading_state)
 
 	# 不適立即要跳到新狀態的情況
 	if not immediate:
@@ -152,7 +125,7 @@ func heads_to_state(new_state: State, immediate=false):
 
 func _play_transition_tweens(new_state: State):
 	# HIDDEN 狀態與其它狀態相差較大，所以會有所不同
-	var trans_type = Tween.TRANS_ELASTIC if _current_state == State.HIDDEN and _heading_state != State.HIDDEN\
+	var trans_type = Tween.TRANS_ELASTIC if state == State.HIDDEN and heading_state != State.HIDDEN\
 					 else Tween.TRANS_CUBIC
 
 	_reset_all_tweens(trans_type)
@@ -173,18 +146,20 @@ func _play_transition_tweens(new_state: State):
 	# 暫態動畫結束後連接穩態的動畫
 	main_tween.finished.connect(_on_transotion_tween_finished)
 
+	# 三段都要播放
+	_play_tweens([main_tween, capsule_tween, circle_tween])
 
 
 # 到達狀態後的反應與呼叫
 func _on_transotion_tween_finished():	
 	# 完成狀態的切換
-	_current_state = _heading_state
-	on_state_changed.emit(_current_state)
+	state = heading_state
+	on_state_changed.emit(state)
 
 	_reset_all_tweens(Tween.TRANS_SINE)
 
 	# 播放接續的動畫, 事實上只有 inviting 比較動感有這個環節
-	match _current_state:
+	match state:
 		State.HIDDEN:
 			on_hidden.emit()
 		State.INVITING:
@@ -241,23 +216,33 @@ func _play_inviting_loop_tween():
 	circle_tween.set_loops()
 	capsule_tween.set_loops()
 
+	# 只有這兩段需要 play
+	_play_tweens([circle_tween, capsule_tween])
+
 
 
 # 中斷所有動畫並重創所有 tween 讓系統可以執行任何新動畫
 func _reset_all_tweens(trans_type=Tween.TRANS_CUBIC, ease_mode=Tween.EASE_OUT):
-		# 立即中斷任何運行中的動畫
+	# 立即中斷任何運行中的動畫
 	for tween in [main_tween, capsule_tween, circle_tween]:
-		tween.kill()
+		if tween:
+			tween.kill()
 
 	var _create_tween = func():
-		return create_tween()\
+		var tween = create_tween()\
 			.set_ease(ease_mode)\
 			.set_trans(trans_type)
+		tween.pause()
+		return tween
 
 	main_tween = _create_tween.call()
 	capsule_tween = _create_tween.call()
 	circle_tween = _create_tween.call()
 
+
+func _play_tweens(tweens):
+	for tween in tweens:
+		tween.play()
 
 
 func _input(event: InputEvent) -> void:
