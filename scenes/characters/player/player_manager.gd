@@ -4,6 +4,7 @@ var socket_client: SocketIOClientNode
 
 var viewport_size: Vector2 = Globals.get_viewport_size()
 
+var PState = Player.State
 var player_scene: PackedScene = preload("res://scenes/characters/player/player.tscn")
 var player1: Node = player_scene.instantiate()
 var player2: Node = player_scene.instantiate()
@@ -15,6 +16,16 @@ signal player_countdown_completed(player: Node)
 
 @export var freeze_player_detection: bool = false
 @export var disappearance_buffer_frames: int = 180  # Frames to wait before hiding a player
+
+
+# 用 hsv 中的色相 hue 區分玩家, 用飽和度 saturation 及透明度 alpha 來表達不同狀態
+var player_hue = {
+	0:0.57,
+	1:0.45
+}
+
+
+var player_visibility: Array[bool] = [false, false]
 
 var player_position: Array[Vector2] = []
 var player_buffer_counters: Array[int] = [0, 0]
@@ -81,18 +92,18 @@ func update_player_positions():
 			player.set_target_position(new_target_position)
 
 			# If the player has just reappeared, update its position immediately
-			if player.visible == false:
+			if player.state in [PState.FADED, PState.LOST]:
 				player.position = new_target_position
 
 			# Show the player
-			player.visible = true
+			player.heads_to_state(PState.ACTIVE)
 			player_buffer_counters[i] = 0
 		else:
 			if freeze_player_detection:
 				return
 			# Check if the player should be hidden due to buffer or timeout
 			if player_buffer_counters[i] >= disappearance_buffer_frames:
-				player.visible = false
+				player.heads_to_state(PState.LOST)
 
 func toggle_player(player_index: int) -> void:
 	var player = current_players[player_index]
@@ -101,19 +112,19 @@ func toggle_player(player_index: int) -> void:
 	if player_index == 0:
 		if active_dev_player != player:
 			active_dev_player = player
-			player.visible = true
-		elif current_players[1].visible == false:
+			player.heads_to_state(PState.ACTIVE)
+		elif current_players[1].state == PState.LOST:
 			active_dev_player = null
-			player.visible = false
+			player.heads_to_state(PState.LOST)
 	
 	# Player 2 specific logic
 	else:  # player_index == 1
-		if active_dev_player != player and current_players[0].visible:
+		if active_dev_player != player and current_players[0].state > PState.LOST:
 			active_dev_player = player
-			player.visible = true
+			player.heads_to_state(PState.ACTIVE)
 		elif active_dev_player == player:
 			active_dev_player = null
-			player.visible = false
+			player.heads_to_state(PState.LOST)
 
 func _on_player_visibility_changed(player: Node) -> void:
 	player_visibility_changed.emit(player, player.visible)
@@ -154,7 +165,8 @@ func _init_player_layer():
 
 	for idx in range(len(current_players)):
 		var player = current_players[idx]
-		player.visible = false
+		player.index = idx
+		#player.heads_to_state(PState.LOST)
 		player.z_index = 5
 		player_layer.add_child(player, true)
 		player.add_to_group("player" + str(idx))
@@ -167,9 +179,6 @@ func _setup_dev_mode():
 		dev_mode_active = true
 		active_dev_player = current_players[0]
 
-func _init_player_color():
-	player1.set_color(0x00b6eecc)
-	player2.set_color(0x006888cc)
 
 func _on_viewport_size_changed():
 	viewport_size = get_viewport().size
@@ -184,7 +193,12 @@ func _ready():
 	_init_socket_client()
 	_init_player_layer()
 	_setup_dev_mode()
-	_init_player_color()
+
+
+func update_player_trigger_state(player: Player, triggering: bool):
+	if player.heading_state not in [PState.FADED, PState.LOST]:
+		player.heads_to_state(PState.TRIGGERED if triggering else PState.ACTIVE)
+
 
 func _process(_delta):
 	if dev_mode_active:

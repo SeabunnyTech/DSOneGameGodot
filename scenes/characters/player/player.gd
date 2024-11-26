@@ -1,4 +1,6 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
+
+signal on_state_changed(new_state: State)
 
 signal countdown_complete(player: Node2D)
 signal countdown_cancelled(player: Node2D)
@@ -7,41 +9,81 @@ signal full_rotation_completed(player: Node2D, clockwise: bool)
 signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
 
 
-enum PlayerState {
-	ACTIVE,			# 球被手持, 等待動作中
-	FADING_OUT,		# 系統注意到球消失或放地上, 正在通往 FADED 狀態
-	FADED,			# 球放太低但是有感應到 (在地上)
+enum State {
 	LOST,			# 沒有感應到所以消失了
-	FADING_IN,		# 球被拿起來正在恢復 ACTIVE 的路上
-	TRIGGERING,		# 球正在觸發某種開關, 通往 TRIGGERED 的路上
-	UNTRIGGERING,	# 球剛離開某種觸發到一半的開關正在回到 ACTIVE 狀態的路上
+	FADED,			# 球放太低但是有感應到 (在地上)
+	ACTIVE,			# 球正常被偵測到, 隨時可以有動作
 	TRIGGERED,		# 剛剛成功觸發了某件事
-	RECOVERING		# 正在從 TRIGGERED 慶祝狀態回到 ACTIVE 的路上
 }
 
-var state: PlayerState = PlayerState.LOST
+# 用來呈現外觀的 [h]sva 表
+var sva_table = {
+	State.LOST		:	[0, 1, 0],
+	State.FADED		:	[0, 1, 0.2],
+	State.ACTIVE		:	[0.6, 1, 1],
+	State.TRIGGERED	:	[1, 1, 1]
+}
 
+var state: State = State.LOST
+var heading_state
+
+var hue
+@export var index = 0:
+	set(value):
+		index = value
+		hue = {0: 0.57, 1:0.45}[index]	# 預設的一些 hue
+
+
+var tween
+@onready var current_color = modulate
+func heads_to_state(new_state, immediate=false):
+	if heading_state == new_state:
+		return
+	heading_state = new_state
+
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	var sva = sva_table[heading_state]
+	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
+	if immediate:
+		set_color(target_color)
+		state = heading_state
+		on_state_changed.emit(state)
+		return
+	
+	tween.tween_method(set_color, current_color, target_color, 0.3)
+	tween.finished.connect(
+		func():
+			state=heading_state
+			on_state_changed.emit(state)
+	)
+
+
+
+
+############
 @onready var radial_progress: Control = $RadialProgress
 
 var is_counting_down: bool = false
 # var countdown_duration: float = 3.0  # Adjust this value as needed
 
 var selected_level: String = ""
-var target_position: Vector2 = Vector2(0, 3000)
-
-
-# You can add a method to update the target position if needed
-func set_target_position(new_position: Vector2):
-	target_position = new_position
+############
 
 
 @export var smoothing_speed: float = 30.0
+var target_position: Vector2 = Vector2(0, 3000)
+
+func set_target_position(new_position: Vector2):
+	target_position = new_position
 
 func _physics_process(delta: float):
 	position = position.lerp(target_position, smoothing_speed * delta)
 
 
 func _ready() -> void:
+	heads_to_state(state, true)
 	$Motion/Angular.connect("full_rotation_completed", full_rotation_completed.emit)
 	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
 	radial_progress.hide()
@@ -65,9 +107,10 @@ func _process(_delta: float) -> void:
 
 func set_color(new_color):
 	var col = Color(new_color)
-	var vec3_col = Vector3(col.r, col.g, col.b)
-	var vec3_colors: Array[Vector3] = [vec3_col, vec3_col, vec3_col]
-	$Metaball.update_ball_colors(vec3_colors)
+	current_color = col
+	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
+	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
+	$Metaball.update_ball_colors(vec4_colors)
 
 
 func start_progress_countdown(time: float = 5.0) -> void:
