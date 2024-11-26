@@ -167,6 +167,7 @@ func _init_player_layer():
 		var player = current_players[idx]
 		player.index = idx
 		#player.heads_to_state(PState.LOST)
+		player.visible = false
 		player.z_index = 5
 		player_layer.add_child(player, true)
 		player.add_to_group("player" + str(idx))

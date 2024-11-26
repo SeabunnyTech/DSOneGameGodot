@@ -42,6 +42,10 @@ func heads_to_state(new_state, immediate=false):
 		return
 	heading_state = new_state
 
+	# 為了向前相容 visible 的使用
+	if heading_state != State.LOST:
+		visible = true
+
 	if tween:
 		tween.kill()
 	tween = create_tween()
@@ -57,6 +61,7 @@ func heads_to_state(new_state, immediate=false):
 	tween.finished.connect(
 		func():
 			state=heading_state
+			visible = not (state==State.LOST)
 			on_state_changed.emit(state)
 	)
 
@@ -103,9 +108,6 @@ func _process(_delta: float) -> void:
 
 	metaball_node.update_ball_positions(ball_positions)
 
-# You can add a method to update the target position if needed
-func set_target_position(new_position: Vector2):
-	target_position = new_position
 
 func set_color(new_color):
 	var col = Color(new_color)
