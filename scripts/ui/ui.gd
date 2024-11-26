@@ -11,8 +11,6 @@ var messages_path: String = "res://assets/text/ui_messages.json"
 @onready var dialog_box_label: Label = %DialogBoxLabel
 @onready var skip_button: Panel = %SkipButton
 
-# TODO: 尚未完成，需要串接到 game_state 裡面
-
 signal return_area_entered(body: Node2D)
 signal return_area_exited(body: Node2D)
 signal skip_area_entered(body: Node2D)
@@ -25,6 +23,8 @@ func _ready():
 	load_messages()
 	set_default_messages()
 	GameState.ui_state_updated.connect(_on_ui_state_updated)
+	# 通知 GameState UI 已準備完成
+	SignalBus.ui_ready.emit()
 
 func _on_ui_state_updated(state_info: Dictionary):
 	var scene = state_info.scene
@@ -36,8 +36,6 @@ func _on_ui_state_updated(state_info: Dictionary):
 			_handle_login_state(stage, num_visible_players)
 		GameState.GameScene.LEVEL1:
 			_handle_level1_state(stage, num_visible_players)
-
-	# DebugMessage.info("UI state updated: " + str(state_info))
 
 # Login 相關處理
 func _handle_login_state(stage: GameState.GameStage, num_visible_players: int = 0):
@@ -61,6 +59,8 @@ func _handle_login_state(stage: GameState.GameStage, num_visible_players: int = 
 # Level1 相關處理
 func _handle_level1_state(stage: GameState.GameStage, num_visible_players: int = 0):
 	match stage:
+		GameState.GameStage.LEVEL_START:
+			set_dialog_message("level1", "tutorial")
 		GameState.GameStage.TUTORIAL_1:
 			show_skip_button()
 			set_dialog_message("level1", "tutorial")

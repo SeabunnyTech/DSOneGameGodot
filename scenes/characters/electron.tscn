@@ -1,56 +1,23 @@
-[gd_scene load_steps=11 format=3 uid="uid://cb17mxfdujnlp"]
+[gd_scene load_steps=3 format=3 uid="uid://cb17mxfdujnlp"]
 
-[ext_resource type="Texture2D" uid="uid://btimfafhuv45v" path="res://assets/images/sprites/electrons1.svg" id="1_54k61"]
 [ext_resource type="Script" path="res://scripts/characters/electron.gd" id="1_e88nk"]
-[ext_resource type="Texture2D" uid="uid://dowl1yoakqqdu" path="res://assets/images/sprites/electrons1_halo2.svg" id="1_hubu6"]
-[ext_resource type="Texture2D" uid="uid://oudq7y2no5ki" path="res://assets/images/sprites/electrons2.svg" id="2_g4qq2"]
-[ext_resource type="Texture2D" uid="uid://dogjae087eu2o" path="res://assets/images/sprites/electrons1_halo1.svg" id="2_t2b30"]
-[ext_resource type="Texture2D" uid="uid://cxrudaf2le26y" path="res://assets/images/sprites/electrons3.svg" id="3_la2su"]
-[ext_resource type="Texture2D" uid="uid://c3qpvbj7ema76" path="res://assets/images/sprites/electrons2_halo2.svg" id="5_0vn5c"]
-[ext_resource type="Texture2D" uid="uid://j7h1rqy3ovtk" path="res://assets/images/sprites/electrons2_halo1.svg" id="6_fmrn8"]
-[ext_resource type="Texture2D" uid="uid://dy3uqsx1eq6wx" path="res://assets/images/sprites/electrons3_halo2.svg" id="7_u1oft"]
-[ext_resource type="Texture2D" uid="uid://dugi8t0edvqep" path="res://assets/images/sprites/electrons3_halo1.svg" id="8_r0njf"]
 
-[node name="Electron" type="Node2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vx0bd"]
+radius = 49.0
+height = 104.686
+
+[node name="Electron" type="CharacterBody2D"]
 script = ExtResource("1_e88nk")
 
-[node name="Electron1" type="Node2D" parent="."]
-visible = false
-
-[node name="Halo2" type="Sprite2D" parent="Electron1"]
+[node name="Halo2" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.3)
-texture = ExtResource("1_hubu6")
 
-[node name="Halo1" type="Sprite2D" parent="Electron1"]
+[node name="Halo1" type="Sprite2D" parent="."]
 modulate = Color(1, 1, 1, 0.5)
-texture = ExtResource("2_t2b30")
 
-[node name="Base" type="Sprite2D" parent="Electron1"]
-texture = ExtResource("1_54k61")
+[node name="Base" type="Sprite2D" parent="."]
 
-[node name="Electron2" type="Node2D" parent="."]
-
-[node name="Halo2" type="Sprite2D" parent="Electron2"]
-modulate = Color(1, 1, 1, 0.3)
-texture = ExtResource("5_0vn5c")
-
-[node name="Halo1" type="Sprite2D" parent="Electron2"]
-modulate = Color(1, 1, 1, 0.5)
-texture = ExtResource("6_fmrn8")
-
-[node name="Base" type="Sprite2D" parent="Electron2"]
-texture = ExtResource("2_g4qq2")
-
-[node name="Electron3" type="Node2D" parent="."]
-visible = false
-
-[node name="Halo2" type="Sprite2D" parent="Electron3"]
-modulate = Color(1, 1, 1, 0.3)
-texture = ExtResource("7_u1oft")
-
-[node name="Halo1" type="Sprite2D" parent="Electron3"]
-modulate = Color(1, 1, 1, 0.5)
-texture = ExtResource("8_r0njf")
-
-[node name="Base" type="Sprite2D" parent="Electron3"]
-texture = ExtResource("3_la2su")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 3)
+rotation = -1.44688
+shape = SubResource("CapsuleShape2D_vx0bd")

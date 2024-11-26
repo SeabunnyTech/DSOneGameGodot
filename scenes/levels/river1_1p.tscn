@@ -1,0 +1,70 @@
+[gd_scene load_steps=13 format=3 uid="uid://cjmcjpva8u6va"]
+
+[ext_resource type="Texture2D" uid="uid://bfmjq2d7ylitm" path="res://assets/images/backgrounds/static/level2/river_1.png" id="1_f60bk"]
+[ext_resource type="Texture2D" uid="uid://bulxdldji8wbc" path="res://assets/images/backgrounds/static/level2/power_1.png" id="2_yob3o"]
+[ext_resource type="Texture2D" uid="uid://evifukryb70a" path="res://assets/images/backgrounds/static/level2/power_2.png" id="3_kcwla"]
+[ext_resource type="Texture2D" uid="uid://csx5raxw6uyj7" path="res://assets/images/backgrounds/static/level2/power_3.png" id="4_wg6qd"]
+[ext_resource type="Texture2D" uid="uid://6q7iglww273v" path="res://assets/images/backgrounds/static/level2/power_4.png" id="5_xpiay"]
+[ext_resource type="Texture2D" uid="uid://se3odcyid3bd" path="res://assets/images/backgrounds/static/level2/power_5.png" id="6_8h4i6"]
+[ext_resource type="Texture2D" uid="uid://cbelsc0iiwt7h" path="res://assets/images/backgrounds/static/level2/power_6.png" id="7_6tj8i"]
+[ext_resource type="Texture2D" uid="uid://c6snlk1ay280t" path="res://assets/images/backgrounds/static/level2/power_7.png" id="8_1nfpq"]
+[ext_resource type="Texture2D" uid="uid://54ctokgeuq2b" path="res://assets/images/backgrounds/static/level2/stone_1.png" id="9_fahmb"]
+[ext_resource type="Texture2D" uid="uid://bk3ubhn7oywp" path="res://assets/images/backgrounds/static/level2/driftwood_1.png" id="10_k1dfc"]
+[ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="11_sfy30"]
+[ext_resource type="Texture2D" uid="uid://c8ghm1ltpbaig" path="res://assets/images/backgrounds/static/level2/driftwood_3.png" id="12_o4lwe"]
+
+[node name="River1" type="Node2D"]
+
+[node name="RiverMap" type="Sprite2D" parent="."]
+position = Vector2(1920, 5192)
+texture = ExtResource("1_f60bk")
+
+[node name="PowerPlants" type="Node2D" parent="."]
+
+[node name="Power1" type="Sprite2D" parent="."]
+position = Vector2(1407, 1305)
+texture = ExtResource("2_yob3o")
+
+[node name="Power2" type="Sprite2D" parent="."]
+position = Vector2(2236, 2400)
+texture = ExtResource("3_kcwla")
+
+[node name="Power3" type="Sprite2D" parent="."]
+position = Vector2(1631, 3527)
+texture = ExtResource("4_wg6qd")
+
+[node name="Power4" type="Sprite2D" parent="."]
+position = Vector2(2406, 4706)
+texture = ExtResource("5_xpiay")
+
+[node name="Power5" type="Sprite2D" parent="."]
+position = Vector2(1520, 6203)
+texture = ExtResource("6_8h4i6")
+
+[node name="Power6" type="Sprite2D" parent="."]
+position = Vector2(2412, 7234)
+texture = ExtResource("7_6tj8i")
+
+[node name="Power7" type="Sprite2D" parent="."]
+position = Vector2(1559, 8099)
+texture = ExtResource("8_1nfpq")
+
+[node name="Stone1" type="Sprite2D" parent="."]
+position = Vector2(2529, 8016)
+texture = ExtResource("9_fahmb")
+
+[node name="Driftwood1" type="Sprite2D" parent="."]
+position = Vector2(1206, 4532)
+texture = ExtResource("10_k1dfc")
+
+[node name="Driftwood2" type="Sprite2D" parent="."]
+position = Vector2(2018, 3280)
+texture = ExtResource("11_sfy30")
+
+[node name="Driftwood3" type="Sprite2D" parent="."]
+position = Vector2(1590, 6860)
+texture = ExtResource("12_o4lwe")
+
+[node name="Driftwood4" type="Sprite2D" parent="."]
+position = Vector2(2335, 5479)
+texture = ExtResource("10_k1dfc")
