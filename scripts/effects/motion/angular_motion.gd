@@ -16,13 +16,10 @@ var previous_positions: Array[Vector2] = []
 
 var accumulated_rotation: float = 0.0
 
-
 var node2d_root
-
 
 func _ready() -> void:
 	node2d_root =  get_node2d_root()
-
 
 func get_node2d_root():
 	var node2d_parent = get_parent()
@@ -44,7 +41,6 @@ func _physics_process(_delta):
 			previous_positions.pop_front()
 		
 		previous_position = position
-
 
 func detect_rotation_with_speed():
 	# Calculate average movement over recent positions

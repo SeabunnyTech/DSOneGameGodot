@@ -3,10 +3,6 @@ extends CharacterBody2D
 signal countdown_complete(player: Node2D)
 signal countdown_cancelled(player: Node2D)
 
-signal full_rotation_completed(player: Node2D, clockwise: bool)
-signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
-
-
 enum PlayerState {
 	ACTIVE,			# 球被手持, 等待動作中
 	FADING_OUT,		# 系統注意到球消失或放地上, 正在通往 FADED 狀態
@@ -22,6 +18,9 @@ enum PlayerState {
 var state: PlayerState = PlayerState.LOST
 
 @onready var radial_progress: Control = $RadialProgress
+@onready var metaball_node: Node = $Metaball
+@onready var inertia_follower1: Node = $Metaball/InertiaFollower
+@onready var inertia_follower2: Node = $Metaball/InertiaFollower/InertiaFollower
 
 var is_counting_down: bool = false
 # var countdown_duration: float = 3.0  # Adjust this value as needed
@@ -29,23 +28,15 @@ var is_counting_down: bool = false
 var selected_level: String = ""
 var target_position: Vector2 = Vector2(0, 3000)
 
-
-# You can add a method to update the target position if needed
-func set_target_position(new_position: Vector2):
-	target_position = new_position
-
-
 @export var smoothing_speed: float = 30.0
 
 func _physics_process(delta: float):
 	position = position.lerp(target_position, smoothing_speed * delta)
 
-
 func _ready() -> void:
-	$Motion/Angular.connect("full_rotation_completed", full_rotation_completed.emit)
-	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
+	$Motion/Angular.connect("full_rotation_completed", SignalBus.player_full_rotation_completed.emit)
+	$Motion/Angular.connect("rotation_detected", SignalBus.player_rotation_detected.emit)	
 	radial_progress.hide()
-
 
 func _process(_delta: float) -> void:
 	if radial_progress.progress >= 100:
@@ -57,25 +48,26 @@ func _process(_delta: float) -> void:
 	# 3 顆 metaball
 	var ball_positions: Array[Vector2] = [
 		Vector2(0, 0),
-		$Metaball/InertiaFollower.position,
-		$Metaball/InertiaFollower/InertiaFollower.position]
+		inertia_follower1.position,
+		inertia_follower2.position]
 
-	$Metaball.update_ball_positions(ball_positions)
+	metaball_node.update_ball_positions(ball_positions)
 
+# You can add a method to update the target position if needed
+func set_target_position(new_position: Vector2):
+	target_position = new_position
 
 func set_color(new_color):
 	var col = Color(new_color)
 	var vec3_col = Vector3(col.r, col.g, col.b)
 	var vec3_colors: Array[Vector3] = [vec3_col, vec3_col, vec3_col]
-	$Metaball.update_ball_colors(vec3_colors)
-
+	metaball_node.update_ball_colors(vec3_colors)
 
 func start_progress_countdown(time: float = 5.0) -> void:
 	radial_progress.show()
 	is_counting_down = true
 	radial_progress.animate(time) # clockwise
 	radial_progress.progress = 0
-
 
 func stop_progress_countdown() -> void:
 	if is_counting_down:
