@@ -13,7 +13,7 @@ func _ready():
 	update_ball_radii(ball_radii)
 
 
-func update_ball_colors(	ball_colors: Array[Vector3]):
+func update_ball_colors(	ball_colors: Array[Vector4]):
 	$ColorRect.material.set_shader_parameter("ball_colors", ball_colors)
 
 

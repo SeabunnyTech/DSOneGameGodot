@@ -1,13 +1,11 @@
 shader_type canvas_item;
 
-
 // 分開定義球體屬性的陣列
 uniform vec2 ball_positions[5];
 uniform float ball_radii[5];
-uniform vec3 ball_colors[5];
+uniform vec4 ball_colors[5];
 uniform int ball_count : hint_range(1, 5) = 3;
 
-uniform vec4 hint_color = vec4(0, 1, 1, 1);
 
 float metaball(vec2 uv, vec2 center, float radius) {
     float dist = length(uv - center);
@@ -18,7 +16,7 @@ float metaball(vec2 uv, vec2 center, float radius) {
 void fragment() {
     vec2 uv = UV;
     float total_influence = 0.0;
-    vec3 final_color = vec3(0.0);
+    vec4 final_color = vec4(0.0);
     
     // 計算每個球體對當前像素的影響
     for (int i = 0; i < ball_count; i++) {
@@ -31,7 +29,7 @@ void fragment() {
     float threshold = 1.0;
     if (total_influence > threshold) {
         final_color /= total_influence;
-        COLOR = vec4(final_color, 1.0);
+        COLOR = final_color;
     } else {
         COLOR = vec4(0.0);
     }

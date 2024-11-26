@@ -9,7 +9,6 @@ shader_parameter/ball_positions = null
 shader_parameter/ball_radii = null
 shader_parameter/ball_colors = null
 shader_parameter/ball_count = 3
-shader_parameter/hint_color = Vector4(0, 1, 1, 1)
 
 [node name="Metaball" type="Node2D"]
 script = ExtResource("1_5c2ii")
