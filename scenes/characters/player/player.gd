@@ -25,6 +25,7 @@ var sva_table = {
 	State.TRIGGERED	:	[1, 1, 1]
 }
 
+@export var init_state: State = State.LOST
 var state: State = State.LOST
 var heading_state
 
@@ -46,9 +47,6 @@ func heads_to_state(new_state, immediate=false):
 	if heading_state != State.LOST:
 		visible = true
 
-	if tween:
-		tween.kill()
-	tween = create_tween()
 	var sva = sva_table[heading_state]
 	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
 	if immediate:
@@ -56,7 +54,10 @@ func heads_to_state(new_state, immediate=false):
 		state = heading_state
 		on_state_changed.emit(state)
 		return
-	
+
+	if tween:
+		tween.kill()
+	tween = create_tween()
 	tween.tween_method(set_color, current_color, target_color, 0.3)
 	tween.finished.connect(
 		func():
@@ -78,20 +79,28 @@ var is_counting_down: bool = false
 # var countdown_duration: float = 3.0  # Adjust this value as needed
 
 var selected_level: String = ""
+############
+
+
 
 @export var smoothing_speed: float = 30.0
 var target_position: Vector2 = Vector2(0, 3000)
 
+
 func set_target_position(new_position: Vector2):
 	target_position = new_position
 
+
 func _physics_process(delta: float):
 	position = position.lerp(target_position, smoothing_speed * delta)
+
 
 func _ready() -> void:
 	$Motion/Angular.connect("full_rotation_completed", SignalBus.player_full_rotation_completed.emit)
 	$Motion/Angular.connect("rotation_detected", SignalBus.player_rotation_detected.emit)	
 	radial_progress.hide()
+	heads_to_state(init_state, true)
+
 
 func _process(_delta: float) -> void:
 	if radial_progress.progress >= 100:
