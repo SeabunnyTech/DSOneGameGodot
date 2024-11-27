@@ -182,10 +182,10 @@ const DURATIONS = {
 const SCALES = {
 	NORMAL = Vector2(1.0, 1.0),
 	SMALL = Vector2(0.1, 0.1),
-	RIPPLE = Vector2(1.2, 1.2),
-	SQUASH = Vector2(1.1, 0.9),
-	STRETCH = Vector2(0.9, 1.1),
-	BOUNCE = Vector2(0.95, 1.05)
+	RIPPLE = Vector2(1.1, 1.1),
+	SQUASH = Vector2(1.07, 0.93),
+	STRETCH = Vector2(0.93, 1.01),
+	BOUNCE = Vector2(0.97, 1.03)
 }
 
 
@@ -245,15 +245,16 @@ func _play_tweens(tweens):
 		tween.play()
 
 
-func _input(event: InputEvent) -> void:
+# 測試用的區塊暫時功成身退
+#func _input(event: InputEvent) -> void:
 
-	var key_state_map = {
-		KEY_H : State.HIDDEN,
-		KEY_I : State.IDLE,
-		KEY_V : State.INVITING,
-		KEY_R : State.TRIGGERED
-	}
+#	var key_state_map = {
+#		KEY_H : State.HIDDEN,
+#		KEY_I : State.IDLE,
+#		KEY_V : State.INVITING,
+#		KEY_R : State.TRIGGERED
+#	}
 
-	if event is InputEventKey and event.pressed:
-		if event.keycode in key_state_map:
-			heads_to_state(key_state_map[event.keycode])
+#	if event is InputEventKey and event.pressed:
+#		if event.keycode in key_state_map:
+#			heads_to_state(key_state_map[event.keycode])
