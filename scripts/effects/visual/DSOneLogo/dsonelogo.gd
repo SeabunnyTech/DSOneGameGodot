@@ -27,7 +27,7 @@ var	capsule_sva = {
 	State.HIDDEN		:	[0, 0.56, 0],
 	State.IDLE		:	[0, 0.56, 1],
 	State.INVITING	:	[0.4, 1, 1],
-	State.TRIGGERED	:	[1, 1, 1],
+	State.TRIGGERED	:	[0.7, 1, 1],
 }
 
 var	circle_sva = {
@@ -87,6 +87,14 @@ var heading_state = null
 @onready var circle_node = $ScalarNode/Circle
 @onready var area_2d = $ScalarNode/Area2D
 
+
+var circle_center: 
+	get:
+		return circle_node.global_position
+
+var circle_radius:
+	get:
+		return 400 * $ScalarNode/Circle/BigWhiteCircle.global_scale[0]
 
 
 func _ready() -> void:

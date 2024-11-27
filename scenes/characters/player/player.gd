@@ -83,16 +83,32 @@ var selected_level: String = ""
 
 
 
+# 附加在 set_target_position 上的功能:用 attractor 吸住游標
+var attractor_position
+var attractor_radius: float
+func set_attractor(pos: Vector2, radius: float):
+	attractor_position = pos
+	attractor_radius = radius
+
+func reset_attractor():
+	attractor_position = null
+
+
+# 為了處理輸入位置跳躍而寫的邏輯, 導致 player 要用 set_target_position 設定位置
 @export var smoothing_speed: float = 30.0
 var target_position: Vector2 = Vector2(0, 3000)
 
-
 func set_target_position(new_position: Vector2):
+	if attractor_position:
+		# 簡易的 attractor: 靠近就會吸住
+		if (new_position - attractor_position).length() < attractor_radius:
+			target_position = attractor_position
+			return
 	target_position = new_position
-
 
 func _physics_process(delta: float):
 	position = position.lerp(target_position, smoothing_speed * delta)
+
 
 
 func _ready() -> void:

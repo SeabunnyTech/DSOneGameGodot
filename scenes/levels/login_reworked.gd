@@ -57,6 +57,11 @@ func _process(_delta: float) -> void:
 	var should_show_two_logo = player2.state == PState.LOST
 	_heads_to_logo_layout(should_show_two_logo)
 
+	# 更新 player 的吸子位置
+	for index in range(len(players)):
+		var logo = logos[index]
+		players[index].set_attractor(logo.circle_center, logo.circle_radius)
+
 	# 再來是更新 player 的觸發反應
 	for player in players:
 		var logo_triggered = logos[player.index].overlaps_trigger_area(player)
@@ -76,16 +81,16 @@ func _process(_delta: float) -> void:
 func _decide_logo_state_and_heads_there(index):
 	var logo = logos[index]
 	var player = players[index]
-	var heading_state
+	var logo_heading_state
 	var triggered = false
 	if player.state in [PState.FADED, PState.LOST]:
 		# 只有第一個 logo 在 player 消失時還會待著進入 IDLE
-		heading_state = LState.IDLE if index == 0 else LState.HIDDEN
+		logo_heading_state = LState.IDLE if index == 0 else LState.HIDDEN
 	else:
 		# 看有沒有接觸決定要觸發或不觸發
 		triggered = logo.overlaps_trigger_area(player)
-		heading_state = LState.TRIGGERED if triggered else LState.INVITING
-	logo.heads_to_state(heading_state)
+		logo_heading_state = LState.TRIGGERED if triggered else LState.INVITING
+	logo.heads_to_state(logo_heading_state)
 
 
 
