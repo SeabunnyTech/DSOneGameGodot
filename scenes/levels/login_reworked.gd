@@ -16,14 +16,17 @@ enum State {
 var LState = DSOneLogo.State
 @onready var logo1 = $DSOneLogo1
 @onready var logo2 = $DSOneLogo2
+@onready var logos = [logo1, logo2]
 
 var PState = Player.State
 var player1 = PlayerManager.player1
 var player2 = PlayerManager.player2
-
+var players = [player1, player2]
 
 @onready var window_size = DisplayServer.window_get_size()
 @onready var logo2_offset = Vector2i(0.2 * window_size[0], 0)
+
+
 
 func _ready() -> void:
 	# 設定 logo 的色相與 player 相符
@@ -47,68 +50,62 @@ func _process(_delta: float) -> void:
 	# 觀察場上的玩家與 logo 狀態, 決定下一步要往哪走
 
 	# 先處理個別 logo 的反應
-	## logo1 在沒玩家時往 fade, 有玩家時看 trigger 狀態前往 invite 或 triggered 
-	var logo1_heading_state
-	var logo1_triggered = false
-	if player1.state in [PState.FADED, PState.LOST]:
-		logo1_heading_state = LState.IDLE
-	else:
-		logo1_triggered = logo1.overlaps_trigger_area(player1)
-		logo1_heading_state = LState.TRIGGERED if logo1_triggered else LState.INVITING
-	logo1.heads_to_state(logo1_heading_state)
-
-	## logo2 在玩家二不在時藏起, 在場時則同樣會選擇要去 invite 或 triggered
-	var logo2_heading_state
-	var logo2_triggered = false
-	if player2.state in [PState.FADED, PState.LOST]:
-		logo2_heading_state = LState.HIDDEN
-	else:
-		logo2_triggered = logo2.overlaps_trigger_area(player2)
-		logo2_heading_state = LState.TRIGGERED if logo2_triggered else LState.INVITING
-	logo2.heads_to_state(logo2_heading_state)
+	for index in range(len(logos)):
+		_decide_logo_state_and_heads_there(index)
 
 	# 接著要處理兩個 logo 的位置, 一個玩家以下和兩個玩家在場會讓 logo 調整位置
-	if player2.state == PState.LOST:
-		_heads_to_one_logo()
-	else:
-		_heads_to_two_logo()
+	var should_show_two_logo = player2.state == PState.LOST
+	_heads_to_logo_layout(should_show_two_logo)
 
 	# 再來是更新 player 的觸發反應
-	PlayerManager.update_player_trigger_state(player1, logo1_triggered)
-	PlayerManager.update_player_trigger_state(player2, logo2_triggered)
+	for player in players:
+		var logo_triggered = logos[player.index].overlaps_trigger_area(player)
+		PlayerManager.update_player_trigger_state(player, logo_triggered)
 
 	# 最後判定是否要進入下一關
 	if logo1.state == LState.TRIGGERED:
 		if player2.state == PState.LOST:
 			# Go next scene with 1P
 			pass
-		elif logo2 == LState.TRIGGERED:
+		elif logo2.state == LState.TRIGGERED:
 			# Go next scene with 2p
 			pass
 
 
-# 調整 logo 位置的函數
 
-var heading_logo_layout = 1		# 1 代表一個 logo, 2 代表兩個 logo
+func _decide_logo_state_and_heads_there(index):
+	var logo = logos[index]
+	var player = players[index]
+	var heading_state
+	var triggered = false
+	if player.state in [PState.FADED, PState.LOST]:
+		# 只有第一個 logo 在 player 消失時還會待著進入 IDLE
+		heading_state = LState.IDLE if index == 0 else LState.HIDDEN
+	else:
+		# 看有沒有接觸決定要觸發或不觸發
+		triggered = logo.overlaps_trigger_area(player)
+		heading_state = LState.TRIGGERED if triggered else LState.INVITING
+	logo.heads_to_state(heading_state)
+
+
+
+# 調整 logo layout 的兩個小函數
+var heading_to_two_logo_layout = false		# 1 代表一個 logo, 2 代表兩個 logo
 var logo_position_tween
+
+func _heads_to_logo_layout(should_show_two_logo: bool):
+	if heading_to_two_logo_layout == should_show_two_logo:
+		return
+	heading_to_two_logo_layout = should_show_two_logo
+
+	if heading_to_two_logo_layout:
+		_move_logo1(window_size/2)
+	else:
+		_move_logo1(window_size/2 - logo2_offset)
+
 
 func _move_logo1(pos):
 	if logo_position_tween:
 		logo_position_tween.kill()
 	logo_position_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	logo_position_tween.tween_property(logo1, 'position', Vector2(pos[0], pos[1]), 1)
-	#logo_position_tween.parallel()
-
-
-func _heads_to_one_logo():
-	if heading_logo_layout == 1:
-		return
-	heading_logo_layout = 1
-	_move_logo1(window_size/2)
-
-
-func _heads_to_two_logo():
-	if heading_logo_layout == 2:
-		return
-	heading_logo_layout = 2
-	_move_logo1(window_size/2-logo2_offset)
