@@ -368,7 +368,10 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 func _on_player_full_rotation_completed(player: Node, clockwise: bool):
 	var player_index = 0 if player == PlayerManager.player1 else 1
 	rotation_count += 1
-	SignalBus.electrons_to_spawn.emit(1, player_index, 0)
+
+	# 測試用訊號，只對第一關有用，之後會通用化
+	SignalBus.electrons_to_spawn.emit(1, player_index, 0) 
+
 	update_stage()
 
 func _on_player_rotation_detected(player: Node, clockwise: bool, speed: float):
