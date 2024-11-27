@@ -21,10 +21,10 @@ offset_right = 3840.0
 offset_bottom = 2160.0
 color = Color(0.980392, 0.980392, 0.980392, 1)
 
-[node name="LoginTutorialContainer" parent="." instance=ExtResource("2_2tuhy")]
-
 [node name="LoginLogoContainer" parent="." instance=ExtResource("5_wiuf5")]
 y_sort_enabled = true
+
+[node name="LoginTutorialContainer" parent="." instance=ExtResource("2_2tuhy")]
 
 [node name="LoginSelectLevelContainer" type="Node2D" parent="."]
 visible = false

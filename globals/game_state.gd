@@ -29,7 +29,8 @@ enum GameStage {
 	COUNTDOWN_2,
 	COUNTDOWN_1,
 	GAME_PLAY,	 # 遊戲階段
-	GAME_OVER    # 結算階段
+	SCORE,		 # 結算階段
+	GAME_OVER    # 正式結束頁面
 }
 
 var scene_handlers = {
@@ -70,7 +71,9 @@ var current_stage := GameStage.LOGIN_START:
 		update_ui_stage()
 
 var current_tutorial_completed: bool = false
+var current_game_time_expired: bool = false
 var current_countdown_time: float = 0.0
+var scored: bool = false
 
 func _ready() -> void:
 	# 連接玩家註冊與否訊號
@@ -207,12 +210,19 @@ func determine_level1_stage() -> GameStage:
 			return GameStage.COUNTDOWN_2
 		GameStage.COUNTDOWN_1:
 			if current_countdown_time <= 0.0:
+				TimerManager.start_game_timer(10.0) # 遊戲先設定 10 秒
 				return GameStage.GAME_PLAY
 			return GameStage.COUNTDOWN_1
 		GameStage.GAME_PLAY:
+			if current_game_time_expired:
+				# current_game_time_expired = false	
+				ScoreManager.start_score(0)
+				return GameStage.SCORE
 			return GameStage.GAME_PLAY
-		GameStage.GAME_OVER:
-			return GameStage.GAME_OVER
+		GameStage.SCORE:
+			if scored:
+				return GameStage.GAME_OVER
+			return GameStage.SCORE
 	return GameStage.LEVEL_START
 
 func update_scene(new_scene: GameScene) -> void:
@@ -356,7 +366,9 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 	update_ready_players(ready_players)
 
 func _on_player_full_rotation_completed(player: Node, clockwise: bool):
+	var player_index = 0 if player == PlayerManager.player1 else 1
 	rotation_count += 1
+	SignalBus.electrons_to_spawn.emit(1, player_index, 0)
 	update_stage()
 
 func _on_player_rotation_detected(player: Node, clockwise: bool, speed: float):
@@ -395,13 +407,15 @@ func _on_countdown_time_updated(time: float) -> void:
 	update_stage()
 
 func _on_countdown_time_expired() -> void:
+	current_countdown_time = 0.0
 	update_stage()
 
 func _on_game_time_updated(time: float) -> void:
 	pass
 
 func _on_game_time_expired() -> void:
-	pass
+	current_game_time_expired = true
+	update_stage()
 
 # 個別場景的處理函數
 func _handle_login_scene() -> void:

@@ -35,42 +35,43 @@ scale = Vector2(0.8, 0.8)
 script = null
 
 [node name="ElectronSpawn2" parent="." groups=["electron_spawn_area"] instance=ExtResource("7_sr54a")]
-position = Vector2(2766, 2516)
-rotation = 0.197222
+position = Vector2(2702, 2605)
+rotation = 0.403171
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 1
 
 [node name="ElectronSpawn3" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1101, 3656)
-rotation = -0.328122
+position = Vector2(1312, 3706)
+rotation = 0.0733038
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 2
 
 [node name="ElectronSpawn4" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(2871, 4896)
-rotation = 0.263545
+position = Vector2(2712, 4936)
+rotation = 0.66497
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 3
 
 [node name="ElectronSpawn5" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1030, 6255)
+position = Vector2(1232, 6382)
+rotation = 0.200713
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 4
 
 [node name="ElectronSpawn6" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(2883, 7340)
-rotation = 0.479966
+position = Vector2(2775, 7404)
+rotation = 0.747001
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 5
 
 [node name="ElectronSpawn7" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1137, 8170)
-rotation = -0.591667
+position = Vector2(1281, 8281)
+rotation = 0.178024
 scale = Vector2(0.8, 0.8)
 script = null
 metadata/spawn_order = 6
