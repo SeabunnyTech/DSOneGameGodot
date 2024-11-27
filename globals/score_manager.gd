@@ -1,9 +1,12 @@
 extends Node
 
+signal score_updated(scores: Dictionary)
+
 var scores: Dictionary = {
 	0: 0,  # Player 1 score
 	1: 0   # Player 2 score
 }
+
 var spawn_areas: Dictionary = {
 	0: {}, # {player1: {spawn_id: count}}
 	1: {}  # {player2: {spawn_id: count}}
@@ -29,6 +32,8 @@ func start_score(player_id: int) -> void:
 	# TODO: 改成間隔時間觸發（為了應付 level2 的 camera 移動速度，好讓電仔收集速度跟上 camera）
 	for spawn_id in spawn_areas[player_id].keys():
 		await get_tree().create_timer(0.2).timeout
+		# 根據目前場景中 ElectronSpawnArea 的 metadata (player_id, spawn_id) 
+		# 送訊號給 ElectronSpawn，讓它們開始收集電仔
 		SignalBus.electrons_to_collect.emit(player_id, spawn_id)
 
 func reset_scores() -> void:
@@ -36,7 +41,8 @@ func reset_scores() -> void:
 
 func _on_electrons_scoring(count: int, player_id: int) -> void:
 	scores[player_id] += count
-	# TODO: 串到 HUD 顯示
+	score_updated.emit(scores) # 訊號會被 HUD 接收
+	
 
 func _on_scene_changed() -> void:
 	reset_scores()

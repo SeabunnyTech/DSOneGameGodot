@@ -67,16 +67,21 @@ func _on_tutorial_timer_timeout() -> void:
 	tutorial_time_expired.emit()
 
 func _on_game_timer_timeout() -> void:
+	game_time_updated.emit(0)
 	game_time_expired.emit()
 
 func _on_countdown_timer_timeout() -> void:
-	update_timer.stop()
 	countdown_time_expired.emit()
 
 func _on_update_timer_timeout() -> void:
 	var countdown_timer = timers[TimerType.COUNTDOWN]
+	var game_timer = timers[TimerType.GAME]
+
 	if countdown_timer.time_left > 0:
 		countdown_time_updated.emit(countdown_timer.time_left)
+
+	if game_timer.time_left > 0:
+		game_time_updated.emit(game_timer.time_left)
 
 func pause_timer(timer_type: TimerType) -> void:
 	if timers.has(timer_type):

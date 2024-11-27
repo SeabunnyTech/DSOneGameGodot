@@ -69,6 +69,7 @@ func _on_collect_electrons(player_id: int, spawn_id: int):
 
 func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
 	for i in count:
+		# 雖然這邊是 for 迴圈，但多數情況電仔還是一個一個送出
 		var electron = electron_scene.instantiate()
 
 		# 在區域內隨機位置生成
