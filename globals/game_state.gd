@@ -161,6 +161,9 @@ func determine_level1_stage() -> GameStage:
 
 	match current_stage:
 		# TODO: 新增旋轉的 on/off，讓 tutorial 的其他時段不會錯誤產生電仔
+		# TODO: 渦輪順時鐘轉時不產生電仔，同時要顯示對話框
+		# TODO: 計分狀態電仔回推時，要驅動渦輪順時鐘轉
+		# TODO: game over 模式要顯示對話框
 		GameStage.LEVEL_START:
 			TimerManager.start_tutorial_timer(5.0)
 			return GameStage.TUTORIAL_1
