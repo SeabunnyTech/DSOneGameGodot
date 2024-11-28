@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8fmrekoc4h06"
-path="res://.godot/imported/white_circle.png-c15929864c8148ecee4ef132eea9fea3.ctex"
+uid="uid://cfnfgoe83gr8u"
+path="res://.godot/imported/logo_layout.png-d30439e0fa81f9800adac1c2959432b1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/effects/visual/DSOneLogo/white_circle.png"
-dest_files=["res://.godot/imported/white_circle.png-c15929864c8148ecee4ef132eea9fea3.ctex"]
+source_file="res://madebycloud/DSOneLogo/logo_layout.png"
+dest_files=["res://.godot/imported/logo_layout.png-d30439e0fa81f9800adac1c2959432b1.ctex"]
 
 [params]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://6b4fn5a5w1cu"]
 
-[ext_resource type="PackedScene" uid="uid://1s1l6055daqh" path="res://scripts/effects/visual/DSOneLogo/dsonelogo.tscn" id="1_0aphf"]
+[ext_resource type="PackedScene" uid="uid://1s1l6055daqh" path="res://madebycloud/DSOneLogo/dsonelogo.tscn" id="1_0aphf"]
 [ext_resource type="Script" path="res://scenes/levels/login_reworked.gd" id="1_74fnv"]
 
 [node name="LoginReworked" type="Node2D"]
