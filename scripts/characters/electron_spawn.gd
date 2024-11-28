@@ -4,7 +4,6 @@ extends StaticBody2D
 @export var float_speed: float = 0.5
 @export var collection_speed: float = 1.5
 var collecting: bool = false
-var collected_count: int = 0
 
 var electron_scene = preload("res://scenes/characters/electron.tscn")
 var active_electrons: Array[Node] = []
@@ -33,7 +32,6 @@ func collect_electron(electron: Node2D) -> void:
 	
 	# 完成後處理
 	tween.tween_callback(func():
-		collected_count += 1
 		electron.queue_free()
 	)
 
@@ -68,6 +66,12 @@ func _on_collect_electrons(player_id: int, spawn_id: int):
 	collecting = false
 
 func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
+	var self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
+	var self_player_id = get_meta("player_id") if has_meta("player_id") else 0
+
+	if self_spawn_id != spawn_id or self_player_id != player_id:
+		return
+	
 	for i in count:
 		# 雖然這邊是 for 迴圈，但多數情況電仔還是一個一個送出
 		var electron = electron_scene.instantiate()

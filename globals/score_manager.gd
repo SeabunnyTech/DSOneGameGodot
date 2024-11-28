@@ -42,7 +42,6 @@ func reset_scores() -> void:
 func _on_electrons_scoring(count: int, player_id: int) -> void:
 	scores[player_id] += count
 	score_updated.emit(scores) # 訊號會被 HUD 接收
-	
 
 func _on_scene_changed() -> void:
 	reset_scores()

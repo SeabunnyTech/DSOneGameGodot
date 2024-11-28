@@ -47,11 +47,12 @@ signal level1_state_updated(state_info: Dictionary)
 signal level2_state_updated(state_info: Dictionary)
 
 var ui_ready := false
+var hud_ready := false
 var visible_players = Vector2i(0, 0) # (player1, player2) where 1=visible, 0=invisible
 var signup_players = Vector2i(0, 0) # (player1, player2) where 1=signed up, 0=not signed up
 var ready_players = Vector2i(0, 0) # (player1, player2) where 1=ready, 0=not ready
 var entered_level = [Vector2i(0, 0), Vector2i(0, 0)] # [level1(player1, player2), level2(player1, player2)]
-var rotation_count = 0
+var tutorial_rotation_count = Vector2i(0, 0) # (player1, player2) 
 
 var game_data: Dictionary = {
 	"score": 0,
@@ -81,6 +82,7 @@ func _ready() -> void:
 	PlayerManager.player_countdown_completed.connect(_on_player_countdown_complete)
 	# 連接 UI 載入完成訊號
 	SignalBus.ui_ready.connect(_on_ui_ready)
+	SignalBus.hud_ready.connect(_on_hud_ready)
 	# 連接玩家登入、準備完成訊號
 	SignalBus.player_signup_portal_changed.connect(_on_player_signup_portal_changed)
 	SignalBus.player_ready_portal_changed.connect(_on_player_ready_portal_changed)
@@ -146,7 +148,6 @@ func determine_login_stage() -> GameStage:
 			   ready_players[1] == visible_players[1]:
 				return GameStage.LOGIN_SELECT_LEVEL
 			return GameStage.LOGIN_TUTORIAL
-		# TODO: select_level 的判斷式尚未測試，還沒把 transition level 的邏輯串進來
 		GameStage.LOGIN_SELECT_LEVEL:
 			# 如果有人退出準備狀態，回到教學
 			if num_visible_players == 0:
@@ -156,22 +157,28 @@ func determine_login_stage() -> GameStage:
 
 # 第一關場景狀態邏輯
 func determine_level1_stage() -> GameStage:
+	var num_visible_players = visible_players.length_squared()
+
 	match current_stage:
+		# TODO: 新增旋轉的 on/off，讓 tutorial 的其他時段不會錯誤產生電仔
 		GameStage.LEVEL_START:
 			TimerManager.start_tutorial_timer(5.0)
 			return GameStage.TUTORIAL_1
 		GameStage.TUTORIAL_1:
 			if current_tutorial_completed:
-				current_tutorial_completed = false  # 重置標記
+				current_tutorial_completed = false
 				return GameStage.TUTORIAL_2
 			return GameStage.TUTORIAL_1
 		GameStage.TUTORIAL_2:
-			if rotation_count >= 1:
+			if (bool(visible_players[0]) == (tutorial_rotation_count[0] >= 1)) and \
+			   (bool(visible_players[1]) == (tutorial_rotation_count[1] >= 1)):
 				TimerManager.start_tutorial_timer(20.0)
 				return GameStage.TUTORIAL_3
 			return GameStage.TUTORIAL_2
 		GameStage.TUTORIAL_3:
-			if current_tutorial_completed or rotation_count >= 5:
+			if current_tutorial_completed or \
+			   (bool(visible_players[0]) == (tutorial_rotation_count[0] >= 5)) and \
+			   (bool(visible_players[1]) == (tutorial_rotation_count[1] >= 5)):
 				current_tutorial_completed = false
 				TimerManager.start_tutorial_timer(5.0)
 				return GameStage.TUTORIAL_4
@@ -179,6 +186,8 @@ func determine_level1_stage() -> GameStage:
 		GameStage.TUTORIAL_4:
 			if current_tutorial_completed:
 				current_tutorial_completed = false
+				for player_id in range(num_visible_players):
+					ScoreManager.start_score(player_id)
 				TimerManager.start_tutorial_timer(5.0)
 				return GameStage.TUTORIAL_5
 			return GameStage.TUTORIAL_4
@@ -215,8 +224,9 @@ func determine_level1_stage() -> GameStage:
 			return GameStage.COUNTDOWN_1
 		GameStage.GAME_PLAY:
 			if current_game_time_expired:
-				# current_game_time_expired = false	
-				ScoreManager.start_score(0)
+				current_game_time_expired = false
+				for player_id in range(num_visible_players):
+					ScoreManager.start_score(player_id)
 				return GameStage.SCORE
 			return GameStage.GAME_PLAY
 		GameStage.SCORE:
@@ -236,6 +246,7 @@ func update_scene(new_scene: GameScene) -> void:
 
 func update_stage() -> void:
 	update_ui_stage()
+	update_hud_stage()
 	if current_scene in scene_handlers:
 		scene_handlers[current_scene].call()
 	else:
@@ -254,6 +265,20 @@ func update_ui_stage() -> void:
 	}
 
 	ui_state_updated.emit(state_info)
+
+func update_hud_stage() -> void:
+	if not hud_ready:
+		await SignalBus.hud_ready
+
+	var num_visible_players = visible_players.length_squared()
+	
+	var state_info = {
+		"scene": current_scene,
+		"stage": current_stage,
+		"num_visible_players": num_visible_players
+	}
+
+	hud_state_updated.emit(state_info)
 
 func update_login_stage() -> void:
 	var new_stage = determine_login_stage()
@@ -282,10 +307,9 @@ func update_level1_stage() -> void:
 
 	# 整合所有登入相關的狀態資訊
 	var state_info = {
+		"scene": current_scene,
 		"stage": current_stage,
-		"num_visible_players": num_visible_players,
-		"player1_visible": visible_players[0] == 1,
-		"player2_visible": visible_players[1] == 1,
+		"num_visible_players": num_visible_players
 	}
 
 	level1_state_updated.emit(state_info)
@@ -319,16 +343,20 @@ func reset_game_state() -> void:
 	visible_players = Vector2i(0, 0)
 	signup_players = Vector2i(0, 0)
 	ready_players = Vector2i(0, 0)
-	rotation_count = 0
+	tutorial_rotation_count = Vector2i(0, 0)
 
 func _on_ui_ready() -> void:
 	ui_ready = true
 	# UI 準備好後，發送當前狀態
 	update_ui_stage()
 
+func _on_hud_ready() -> void:
+	hud_ready = true
+	update_hud_stage()
+
 func _on_scene_changed() -> void:
 	ui_ready = false
-
+	hud_ready = false
 	var num_visible_players = visible_players.length_squared()
 	var state_info = {
 		"scene": current_scene,
@@ -337,6 +365,7 @@ func _on_scene_changed() -> void:
 	}
 
 	ui_state_updated.emit(state_info)
+	hud_state_updated.emit(state_info)
 
 	update_stage()
 
@@ -366,12 +395,7 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 	update_ready_players(ready_players)
 
 func _on_player_full_rotation_completed(player: Node, clockwise: bool):
-	var player_index = 0 if player == PlayerManager.player1 else 1
-	rotation_count += 1
-
-	# 測試用訊號，只對第一關有用，之後會通用化
-	SignalBus.electrons_to_spawn.emit(1, player_index, 0) 
-
+	tutorial_rotation_count[0 if player == PlayerManager.player1 else 1] += 1
 	update_stage()
 
 func _on_player_rotation_detected(player: Node, clockwise: bool, speed: float):

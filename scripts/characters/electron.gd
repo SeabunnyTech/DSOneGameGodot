@@ -83,4 +83,3 @@ func animate_halos():
 	tween.parallel().tween_property(halo1, "scale", Vector2(1, 1), 0.9).set_trans(Tween.TRANS_CIRC)
 	tween.parallel().tween_property(halo2, "modulate:a", 0.05, 0.9).set_trans(Tween.TRANS_CIRC)
 	tween.parallel().tween_property(halo2, "scale", Vector2(1, 1), 0.9).set_trans(Tween.TRANS_CIRC)
-	
