@@ -83,7 +83,7 @@ scale = Vector2(1.04537, 1.04537)
 sprite_frames = ExtResource("14_ballj")
 animation = &"rotate"
 frame_progress = 0.0994634
-speed_scale = -2.0
+speed_scale = -0.5
 
 [node name="TurbineMid" type="Sprite2D" parent="Player1UI"]
 position = Vector2(2334.99, 1330.54)
@@ -94,7 +94,7 @@ position = Vector2(2137.99, 1389.54)
 scale = Vector2(0.335648, 0.335648)
 sprite_frames = ExtResource("16_e5dbj")
 animation = &"rotate"
-speed_scale = -2.0
+speed_scale = -0.5
 
 [node name="TurbineFront" type="Sprite2D" parent="Player1UI"]
 position = Vector2(2135.99, 1410.54)
@@ -113,4 +113,4 @@ texture = ExtResource("20_ek11l")
 
 [node name="ElectronSpawn" parent="." instance=ExtResource("21_7v4pe")]
 z_index = 5
-position = Vector2(2792, 1017)
+position = Vector2(2784, 1046)

@@ -1,6 +1,7 @@
 extends Node
 
 signal ui_ready
+signal hud_ready
 
 signal player_signup_portal_changed(player: Node, is_entered: bool)
 signal player_ready_portal_changed(player: Node, is_entered: bool)

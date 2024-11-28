@@ -22,6 +22,7 @@ var tween: Tween
 func _ready():
 	load_messages()
 	set_default_messages()
+	
 	GameState.ui_state_updated.connect(_on_ui_state_updated)
 	# 通知 GameState UI 已準備完成
 	SignalBus.ui_ready.emit()
