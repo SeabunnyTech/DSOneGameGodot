@@ -54,7 +54,7 @@ var scales = {
 	State.HIDDEN		:	Vector2(0, 0),
 	State.IDLE		:	Vector2(.9, .9),
 	State.INVITING	:	Vector2(1, 1),
-	State.TRIGGERED	:	Vector2(1.1, 1.1),
+	State.TRIGGERED	:	Vector2(1.2, 1.2),
 }
 
 var transition_times = {
@@ -79,7 +79,7 @@ var transition_times = {
 
 var state = null
 var heading_state = null
-
+var pre_heading_state = null		# 提供切換狀態的路途中要再次變換方向時作判斷
 
 # 方便呼叫避免打錯字
 @onready var scalar_node = $ScalarNode
@@ -112,12 +112,17 @@ func heads_to_state(new_state: State, immediate=false):
 	if heading_state == new_state:
 		return
 
+	# 記下狀態變換過程
+	pre_heading_state = heading_state
 	heading_state = new_state
+
+	# 釋放狀態變換信號
 	on_heading_new_state.emit(heading_state)
 
 	# 不適立即要跳到新狀態的情況
 	if not immediate:
 		_play_transition_tweens(new_state)
+		_play_transition_sfx(new_state)
 		return
 
 	# 立即切到新狀態並啟動對應的到站 tween
@@ -130,11 +135,24 @@ func heads_to_state(new_state: State, immediate=false):
 
 
 
+func _is_leaving_state(the_state: State, include_preheading=true):
+	# 如果剛才準備要進入 the_state 但還沒到就切走了也算 is_leaving_state
+	var was_there = (state == the_state)
+	var was_heading_there = (pre_heading_state == the_state)
+	var is_heading_somewhere_else = (heading_state != the_state)
+
+	if not include_preheading:
+		return was_there and is_heading_somewhere_else
+	else:
+		return (was_there or was_heading_there) and is_heading_somewhere_else 
+
+
 
 func _play_transition_tweens(new_state: State):
-	# HIDDEN 狀態與其它狀態相差較大，所以會有所不同
-	var trans_type = Tween.TRANS_ELASTIC if state == State.HIDDEN and heading_state != State.HIDDEN\
-					 else Tween.TRANS_CUBIC
+	# 動作較大的狀態轉換用 TRANS_ELASTIC
+	var trans_type = Tween.TRANS_CUBIC
+	if _is_leaving_state(State.HIDDEN) or new_state == State.TRIGGERED:
+		trans_type = Tween.TRANS_ELASTIC
 
 	_reset_all_tweens(trans_type)
 
@@ -156,6 +174,21 @@ func _play_transition_tweens(new_state: State):
 
 	# 三段都要播放
 	_play_tweens([main_tween, capsule_tween, circle_tween])
+
+
+
+func _play_transition_sfx(new_state: State):
+	# 只要是離開 hidden 的狀態都會播放 on_showing_sfx
+	if _is_leaving_state(State.HIDDEN):
+		$on_showing_sfx.play()
+
+	# 要成功了播放 triggered 音效
+	if heading_state == State.TRIGGERED:
+		$on_triggered_sfx.play()
+	
+	if _is_leaving_state(State.TRIGGERED):
+		$on_showing_sfx.play()
+
 
 
 # 到達狀態後的反應與呼叫

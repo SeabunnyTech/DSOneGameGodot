@@ -25,10 +25,6 @@ var sva_table = {
 	State.TRIGGERED	:	[1, 1, 1]
 }
 
-@export var init_state: State = State.LOST
-var state: State = State.LOST
-var heading_state
-
 var hue
 @export var index = 0:
 	set(value):
@@ -36,8 +32,13 @@ var hue
 		hue = {0: 0.57, 1:0.45}[index]	# 預設的一些 hue
 
 
+# 狀態轉換相關的變數與函數
+
+@export var init_state: State = State.LOST
+var state: State = State.LOST
+var heading_state
 var tween
-@onready var current_color = modulate
+
 func heads_to_state(new_state, immediate=false):
 	if heading_state == new_state:
 		return
@@ -47,6 +48,21 @@ func heads_to_state(new_state, immediate=false):
 	if heading_state != State.LOST:
 		visible = true
 
+	# 在消失或出現時播放音效
+	var is_heading_lost = (new_state == State.LOST) and (state != State.LOST)
+	var is_showing = (state == State.LOST) and (new_state != State.LOST)
+	if is_heading_lost:
+		$on_lost_sfx.play()
+	elif is_showing:
+		$on_showing_sfx.play()
+
+	# 調整顏色狀態
+	_start_color_transition(new_state, immediate)
+
+
+
+func _start_color_transition(new_state, immediate):
+	# 調整顏色
 	var sva = sva_table[heading_state]
 	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
 	if immediate:
@@ -58,7 +74,7 @@ func heads_to_state(new_state, immediate=false):
 	if tween:
 		tween.kill()
 	tween = create_tween()
-	tween.tween_method(set_color, current_color, target_color, 0.3)
+	tween.tween_method(set_color, modulate, target_color, 0.3)
 	tween.finished.connect(
 		func():
 			state=heading_state
@@ -136,7 +152,7 @@ func _process(_delta: float) -> void:
 
 func set_color(new_color):
 	var col = Color(new_color)
-	current_color = col
+	modulate = col
 	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
 	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
 	$Metaball.update_ball_colors(vec4_colors)

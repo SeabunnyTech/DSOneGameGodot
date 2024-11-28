@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=9 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_htxxl"]
 [ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_rj3o6"]
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="3_qel1b"]
 [ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_y6pit"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_vafl7"]
+[ext_resource type="AudioStream" uid="uid://cgwjb8paulmnq" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
+[ext_resource type="AudioStream" uid="uid://o0ihc03yngig" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
@@ -43,3 +45,9 @@ z = 0.4
 script = ExtResource("5_vafl7")
 f = 3.0
 z = 0.4
+
+[node name="on_showing_sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ypeom")
+
+[node name="on_lost_sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_13j2x")
