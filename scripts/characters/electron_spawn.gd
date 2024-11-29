@@ -8,14 +8,17 @@ var collecting: bool = false
 var electron_scene = preload("res://scenes/characters/electron.tscn")
 var active_electrons: Array[Node] = []
 
+var self_spawn_id: int = 0
+var self_player_id: int = 0
+
 func _ready():
-	var spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
-	var player_id = get_meta("player_id") if has_meta("player_id") else 0
+	self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
+	self_player_id = get_meta("player_id") if has_meta("player_id") else 0
 
 	SignalBus.electrons_to_spawn.connect(_on_spawn_electrons)
 	SignalBus.electrons_to_collect.connect(_on_collect_electrons)
 
-	ScoreManager.register_spawn_area(player_id, spawn_id)
+	ScoreManager.register_spawn_area(self_player_id, self_spawn_id)
 
 func collect_electron(electron: Node2D) -> void:
 	var tween = create_tween()
@@ -32,15 +35,13 @@ func collect_electron(electron: Node2D) -> void:
 	
 	# 完成後處理
 	tween.tween_callback(func():
+		SignalBus.electrons_scoring.emit(1, self_player_id)
 		electron.queue_free()
 	)
 
 func _on_collect_electrons(player_id: int, spawn_id: int):
 	# 尚未判斷這樣是不是好的寫法，若不好管理可修正
 	# 目前寫法是接收廣播訊號 electrons_to_collect，發現不是自己的 spawn_id 或 player_id 就跳過
-	var self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
-	var self_player_id = get_meta("player_id") if has_meta("player_id") else 0
-
 	if self_spawn_id != spawn_id or self_player_id != player_id:
 		return
 	
@@ -56,18 +57,19 @@ func _on_collect_electrons(player_id: int, spawn_id: int):
 			# 添加延遲，讓電子一個接一個被收集
 			await get_tree().create_timer(0.2).timeout
 			collect_electron(electron)
-			SignalBus.electrons_scoring.emit(1, self_player_id)
-			
+
 			# 播放收集音效
 			# AudioManager.play_sfx("electron_collect")
 	
+	SignalBus.electrons_area_scored.emit(self_player_id, self_spawn_id)
+
 	# 等待最後一個動畫完成
 	await get_tree().create_timer(collection_speed + 0.2).timeout
 	collecting = false
 
 func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
-	var self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
-	var self_player_id = get_meta("player_id") if has_meta("player_id") else 0
+	self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
+	self_player_id = get_meta("player_id") if has_meta("player_id") else 0
 
 	if self_spawn_id != spawn_id or self_player_id != player_id:
 		return
@@ -90,8 +92,5 @@ func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
 		active_electrons.append(electron)
 
 func _exit_tree():
-	var spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
-	var player_id = get_meta("player_id") if has_meta("player_id") else 0
-	
 	# Unregister when scene changes/exits
-	ScoreManager.unregister_spawn_area(player_id, spawn_id)
+	ScoreManager.unregister_spawn_area(self_player_id, self_spawn_id)

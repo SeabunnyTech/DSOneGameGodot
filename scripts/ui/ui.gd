@@ -97,9 +97,12 @@ func _handle_level1_state(stage: GameState.GameStage, num_visible_players: int =
 		GameState.GameStage.GAME_PLAY:
 			hide_dialog()
 			hide_popups()
+		GameState.GameStage.SCORE:
+			set_dialog_message("level1", "score")
+			hide_popups()
 		GameState.GameStage.GAME_OVER:
 			set_dialog_message("level1", "game_over")
-			set_popup_message(num_visible_players, "level1", "game_over")
+			hide_popups()
 
 func load_messages():
 	var file = FileAccess.open(messages_path, FileAccess.READ)

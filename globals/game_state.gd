@@ -51,12 +51,13 @@ var hud_ready := false
 var visible_players = Vector2i(0, 0) # (player1, player2) where 1=visible, 0=invisible
 var signup_players = Vector2i(0, 0) # (player1, player2) where 1=signed up, 0=not signed up
 var ready_players = Vector2i(0, 0) # (player1, player2) where 1=ready, 0=not ready
+var scored_players = Vector2i(0, 0) # (player1, player2) where 1=scored, 0=not scored
 var entered_level = [Vector2i(0, 0), Vector2i(0, 0)] # [level1(player1, player2), level2(player1, player2)]
 var tutorial_rotation_count = Vector2i(0, 0) # (player1, player2) 
 
 var game_data: Dictionary = {
-	"score": 0,
-	"time": 0,
+	"score": 0, # 還沒用到
+	"time": 0,  # 還沒用到，沒把總分和時間串到 game_state
 	"level": ""
 }
 
@@ -74,7 +75,6 @@ var current_stage := GameStage.LOGIN_START:
 var current_tutorial_completed: bool = false
 var current_game_time_expired: bool = false
 var current_countdown_time: float = 0.0
-var scored: bool = false
 
 func _ready() -> void:
 	# 連接玩家註冊與否訊號
@@ -86,12 +86,12 @@ func _ready() -> void:
 	# 連接玩家登入、準備完成訊號
 	SignalBus.player_signup_portal_changed.connect(_on_player_signup_portal_changed)
 	SignalBus.player_ready_portal_changed.connect(_on_player_ready_portal_changed)
-	# 連接玩家旋轉訊號
-	SignalBus.player_full_rotation_completed.connect(_on_player_full_rotation_completed)
-	SignalBus.player_rotation_detected.connect(_on_player_rotation_detected)
 	# 連接選擇關卡訊號
 	SignalBus.level_portal_entered.connect(_on_level_portal_entered)
 	SignalBus.level_portal_exited.connect(_on_level_portal_exited)
+	# 連接電仔出現訊號
+	SignalBus.electrons_to_spawn.connect(_on_spawn_electrons)
+	SignalBus.electrons_all_scored.connect(_on_electrons_scored)
 	# 連接計時器訊號
 	TimerManager.tutorial_time_expired.connect(_on_tutorial_time_expired)
 	TimerManager.countdown_time_updated.connect(_on_countdown_time_updated)
@@ -160,10 +160,8 @@ func determine_level1_stage() -> GameStage:
 	var num_visible_players = visible_players.length_squared()
 
 	match current_stage:
-		# TODO: 新增旋轉的 on/off，讓 tutorial 的其他時段不會錯誤產生電仔
-		# TODO: 渦輪順時鐘轉時不產生電仔，同時要顯示對話框
-		# TODO: 計分狀態電仔回推時，要驅動渦輪順時鐘轉
 		# TODO: game over 模式要顯示對話框
+		# TODO: 對話框的 UI 要重新設計調色、新增淡入淡出醒目動畫、提醒要順時鐘旋轉
 		GameStage.LEVEL_START:
 			TimerManager.start_tutorial_timer(5.0)
 			return GameStage.TUTORIAL_1
@@ -180,8 +178,8 @@ func determine_level1_stage() -> GameStage:
 			return GameStage.TUTORIAL_2
 		GameStage.TUTORIAL_3:
 			if current_tutorial_completed or \
-			   (bool(visible_players[0]) == (tutorial_rotation_count[0] >= 5)) and \
-			   (bool(visible_players[1]) == (tutorial_rotation_count[1] >= 5)):
+			   (bool(visible_players[0]) == (tutorial_rotation_count[0] >= 10)) and \
+			   (bool(visible_players[1]) == (tutorial_rotation_count[1] >= 10)):
 				current_tutorial_completed = false
 				TimerManager.start_tutorial_timer(5.0)
 				return GameStage.TUTORIAL_4
@@ -209,6 +207,7 @@ func determine_level1_stage() -> GameStage:
 		GameStage.TUTORIAL_END:
 			if current_tutorial_completed:
 				current_tutorial_completed = false
+				ScoreManager.reset_scores()
 				TimerManager.start_countdown_timer(3.0)
 				return GameStage.COUNTDOWN_3
 			return GameStage.TUTORIAL_END
@@ -222,7 +221,7 @@ func determine_level1_stage() -> GameStage:
 			return GameStage.COUNTDOWN_2
 		GameStage.COUNTDOWN_1:
 			if current_countdown_time <= 0.0:
-				TimerManager.start_game_timer(10.0) # 遊戲先設定 10 秒
+				TimerManager.start_game_timer(80.0) # 遊戲先設定 80 秒
 				return GameStage.GAME_PLAY
 			return GameStage.COUNTDOWN_1
 		GameStage.GAME_PLAY:
@@ -233,9 +232,13 @@ func determine_level1_stage() -> GameStage:
 				return GameStage.SCORE
 			return GameStage.GAME_PLAY
 		GameStage.SCORE:
-			if scored:
+			if scored_players[0] == visible_players[0] and \
+			   scored_players[1] == visible_players[1]:
 				return GameStage.GAME_OVER
 			return GameStage.SCORE
+		GameStage.GAME_OVER:
+			ScoreManager.reset_scores()
+			return GameStage.GAME_OVER
 	return GameStage.LEVEL_START
 
 func update_scene(new_scene: GameScene) -> void:
@@ -397,12 +400,16 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 	ready_players[player_index] = 1 if is_entered else 0
 	update_ready_players(ready_players)
 
-func _on_player_full_rotation_completed(player: Node, clockwise: bool):
-	tutorial_rotation_count[0 if player == PlayerManager.player1 else 1] += 1
+func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
+	if current_scene != GameScene.LEVEL1:
+		return
+
+	tutorial_rotation_count[player_id] += 1
 	update_stage()
 
-func _on_player_rotation_detected(player: Node, clockwise: bool, speed: float):
-	pass
+func _on_electrons_scored(player_id: int):
+	scored_players[player_id] = 1
+	update_stage()
 
 func _on_level_portal_entered(player: Node, level: String):
 	var level_index = 0 if level == "level1" else 1
@@ -426,7 +433,7 @@ func _on_player_countdown_complete(player: Node):
 		change_stage(GameStage.LEVEL_START)
 
 func _on_tutorial_time_updated(time: float) -> void:
-	pass
+	update_stage()
 
 func _on_tutorial_time_expired() -> void:
 	current_tutorial_completed = true

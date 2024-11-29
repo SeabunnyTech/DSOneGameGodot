@@ -15,6 +15,7 @@ var spawn_areas: Dictionary = {
 func _ready() -> void:
 	get_tree().root.connect("ready", _on_scene_changed)
 	SignalBus.electrons_scoring.connect(_on_electrons_scoring)
+	SignalBus.electrons_area_scored.connect(_on_electrons_area_scored)
 
 func register_spawn_area(player_id: int, spawn_id: int) -> void:
 	if not spawn_areas.has(player_id):
@@ -38,10 +39,16 @@ func start_score(player_id: int) -> void:
 
 func reset_scores() -> void:
 	scores = {0: 0, 1: 0}
+	score_updated.emit(scores)
 
 func _on_electrons_scoring(count: int, player_id: int) -> void:
 	scores[player_id] += count
 	score_updated.emit(scores) # 訊號會被 HUD 接收
+
+func _on_electrons_area_scored(player_id: int, spawn_id: int) -> void:
+	spawn_areas[player_id][spawn_id] = 0
+	if spawn_areas[player_id].values().all(func(value: int): return value == 0):
+		SignalBus.electrons_all_scored.emit(player_id)
 
 func _on_scene_changed() -> void:
 	reset_scores()
