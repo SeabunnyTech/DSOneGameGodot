@@ -6,7 +6,9 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_okkx3"]
 shader = ExtResource("1_5ba4t")
 shader_parameter/wave_strength = Vector2(0.9, 0.6)
-shader_parameter/speed = 3.5
+shader_parameter/wave_speed = 3.5
+shader_parameter/bubble_density = 0.3
+shader_parameter/bubble_speed = 0.01
 
 [node name="LowerLake" type="Sprite2D"]
 material = SubResource("ShaderMaterial_okkx3")
