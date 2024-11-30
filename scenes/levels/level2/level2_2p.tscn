@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://scripts/levels/level2.gd" id="1_v1ttv"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_l1kx1"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_o4tnr"]
-[ext_resource type="PackedScene" uid="uid://cxhj1rf18vdlg" path="res://scenes/levels/river1_2p.tscn" id="4_uc7na"]
-[ext_resource type="PackedScene" uid="uid://xenx45c677fa" path="res://scenes/levels/river2_2p.tscn" id="5_rojpe"]
-[ext_resource type="PackedScene" uid="uid://b1hrdh44o3ydg" path="res://scenes/levels/river3_2p.tscn" id="6_k1gsx"]
+[ext_resource type="PackedScene" uid="uid://cxhj1rf18vdlg" path="res://scenes/levels/level2/river1_2p.tscn" id="4_uc7na"]
+[ext_resource type="PackedScene" uid="uid://xenx45c677fa" path="res://scenes/levels/level2/river2_2p.tscn" id="5_rojpe"]
+[ext_resource type="PackedScene" uid="uid://b1hrdh44o3ydg" path="res://scenes/levels/level2/river3_2p.tscn" id="6_k1gsx"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_v1ttv")

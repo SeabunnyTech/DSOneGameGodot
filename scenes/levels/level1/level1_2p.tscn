@@ -1,0 +1,215 @@
+[gd_scene load_steps=24 format=3 uid="uid://bpxgiayon1ysu"]
+
+[ext_resource type="Script" path="res://scripts/levels/level1.gd" id="1_nwqee"]
+[ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_4beqn"]
+[ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="3_lwas2"]
+[ext_resource type="Texture2D" uid="uid://c45uqyeb75ss" path="res://assets/images/backgrounds/static/level1/background.png" id="4_41ps4"]
+[ext_resource type="Texture2D" uid="uid://ci3hxu27wqv7t" path="res://assets/images/backgrounds/animated/level1/cloud1.png" id="5_skij0"]
+[ext_resource type="Texture2D" uid="uid://cv12kc7irmsfu" path="res://assets/images/backgrounds/animated/level1/cloud2.png" id="6_buexa"]
+[ext_resource type="Texture2D" uid="uid://co4ggqwy4lclj" path="res://assets/images/backgrounds/animated/level1/cloud3.png" id="7_kwmq7"]
+[ext_resource type="Texture2D" uid="uid://cpg44r04prrof" path="res://assets/images/backgrounds/static/level1/mountain.png" id="8_t6a40"]
+[ext_resource type="PackedScene" uid="uid://57b4gckppukj" path="res://scenes/levels/level1/lower_lake.tscn" id="9_arrhs"]
+[ext_resource type="PackedScene" uid="uid://dnglfy476ot0d" path="res://scenes/levels/level1/upper_lake.tscn" id="10_1vq4g"]
+[ext_resource type="Texture2D" uid="uid://cog65y5eg825r" path="res://assets/images/backgrounds/static/level1/earth.png" id="11_ivcj5"]
+[ext_resource type="Texture2D" uid="uid://ddscp1o0fyksp" path="res://assets/images/backgrounds/animated/level1/pipe_off.png" id="12_dub1n"]
+[ext_resource type="Texture2D" uid="uid://cwspg5d113fjg" path="res://assets/images/backgrounds/static/level1/building_back.png" id="13_bu2av"]
+[ext_resource type="Texture2D" uid="uid://dla6ddusm46sw" path="res://assets/images/backgrounds/static/level1/turbine_back.png" id="14_6ehse"]
+[ext_resource type="SpriteFrames" uid="uid://bwoqyqbleq7qq" path="res://assets/images/backgrounds/animated/level1/turbine_back.tres" id="15_1021a"]
+[ext_resource type="Texture2D" uid="uid://bxdxnhv72ffuv" path="res://assets/images/backgrounds/static/level1/turbine_mid.png" id="16_65ykw"]
+[ext_resource type="SpriteFrames" uid="uid://872xxwkx1e66" path="res://assets/images/backgrounds/animated/level1/turbine_front.tres" id="17_dea11"]
+[ext_resource type="Texture2D" uid="uid://der8a2j5srmvl" path="res://assets/images/backgrounds/static/level1/turbine_front.png" id="18_tw5ud"]
+[ext_resource type="Texture2D" uid="uid://cch6edcebhkus" path="res://assets/images/backgrounds/static/level1/building_front.png" id="19_ovhjk"]
+[ext_resource type="Texture2D" uid="uid://b7hmv8odoseik" path="res://assets/images/sprites/tutorial_player_level1.svg" id="20_pjwsk"]
+[ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="21_8c4ou"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_k2551"]
+
+[sub_resource type="MeshTexture" id="MeshTexture_trqyb"]
+mesh = SubResource("ArrayMesh_k2551")
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1_nwqee")
+
+[node name="HUD" parent="." instance=ExtResource("2_4beqn")]
+
+[node name="UI" parent="." instance=ExtResource("3_lwas2")]
+
+[node name="Player1UI" type="TextureRect" parent="."]
+clip_contents = true
+offset_left = -228.0
+offset_right = 1916.0
+offset_bottom = 2243.0
+
+[node name="Background" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1187, 1080)
+texture = ExtResource("4_41ps4")
+
+[node name="Cloud" type="Sprite2D" parent="Player1UI"]
+position = Vector2(-733, 0)
+
+[node name="Cloud1" type="Sprite2D" parent="Player1UI/Cloud"]
+position = Vector2(2725, 464)
+texture = ExtResource("5_skij0")
+
+[node name="Cloud2" type="Sprite2D" parent="Player1UI/Cloud"]
+position = Vector2(2132, 166)
+texture = ExtResource("6_buexa")
+
+[node name="Cloud3" type="Sprite2D" parent="Player1UI/Cloud"]
+position = Vector2(3511, 522)
+texture = ExtResource("7_kwmq7")
+
+[node name="Mountain" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1167, 1343)
+texture = ExtResource("8_t6a40")
+
+[node name="LowerLake" parent="Player1UI" instance=ExtResource("9_arrhs")]
+position = Vector2(2393, 2020)
+
+[node name="UpperLake" parent="Player1UI" instance=ExtResource("10_1vq4g")]
+position = Vector2(-117, 692)
+
+[node name="Earth" type="Sprite2D" parent="Player1UI"]
+position = Vector2(421.78, 1122.15)
+texture = ExtResource("11_ivcj5")
+
+[node name="PipeOff" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1030.99, 928)
+texture = ExtResource("12_dub1n")
+
+[node name="BuildingBack" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1639.99, 1336.54)
+texture = ExtResource("13_bu2av")
+
+[node name="TurbineBack" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1839.99, 1326.54)
+texture = ExtResource("14_6ehse")
+
+[node name="TurbineBackRotate" type="AnimatedSprite2D" parent="Player1UI"]
+position = Vector2(1716.21, 1327.04)
+scale = Vector2(1.04537, 1.04537)
+sprite_frames = ExtResource("15_1021a")
+animation = &"rotate"
+speed_scale = -0.5
+
+[node name="TurbineMid" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1601.99, 1330.54)
+texture = ExtResource("16_65ykw")
+
+[node name="TurbineFrontRotate" type="AnimatedSprite2D" parent="Player1UI"]
+position = Vector2(1404.99, 1389.54)
+scale = Vector2(0.335648, 0.335648)
+sprite_frames = ExtResource("17_dea11")
+animation = &"rotate"
+speed_scale = -0.5
+
+[node name="TurbineFront" type="Sprite2D" parent="Player1UI"]
+position = Vector2(1402.99, 1410.54)
+scale = Vector2(0.992977, 1)
+texture = ExtResource("18_tw5ud")
+
+[node name="BuildingFront" type="Sprite2D" parent="Player1UI"]
+visible = false
+position = Vector2(1669.55, 1316.1)
+texture = ExtResource("19_ovhjk")
+
+[node name="Player2UI" type="TextureRect" parent="."]
+clip_contents = true
+offset_left = 1917.0
+offset_top = -1.0
+offset_right = 5061.0
+offset_bottom = 2437.0
+texture = SubResource("MeshTexture_trqyb")
+
+[node name="Background" type="Sprite2D" parent="Player2UI"]
+position = Vector2(974, 1081)
+texture = ExtResource("4_41ps4")
+
+[node name="Cloud" type="Sprite2D" parent="Player2UI"]
+position = Vector2(-946, 1)
+
+[node name="Cloud1" type="Sprite2D" parent="Player2UI/Cloud"]
+position = Vector2(2725, 464)
+texture = ExtResource("5_skij0")
+
+[node name="Cloud2" type="Sprite2D" parent="Player2UI/Cloud"]
+position = Vector2(2132, 166)
+texture = ExtResource("6_buexa")
+
+[node name="Cloud3" type="Sprite2D" parent="Player2UI/Cloud"]
+position = Vector2(3511, 522)
+texture = ExtResource("7_kwmq7")
+
+[node name="Mountain" type="Sprite2D" parent="Player2UI"]
+position = Vector2(954, 1344)
+texture = ExtResource("8_t6a40")
+
+[node name="LowerLake" parent="Player2UI" instance=ExtResource("9_arrhs")]
+position = Vector2(2180, 2021)
+
+[node name="UpperLake" parent="Player2UI" instance=ExtResource("10_1vq4g")]
+position = Vector2(-315, 695)
+
+[node name="Earth" type="Sprite2D" parent="Player2UI"]
+position = Vector2(208.78, 1123.15)
+texture = ExtResource("11_ivcj5")
+
+[node name="PipeOff" type="Sprite2D" parent="Player2UI"]
+position = Vector2(817.99, 929)
+texture = ExtResource("12_dub1n")
+
+[node name="BuildingBack" type="Sprite2D" parent="Player2UI"]
+position = Vector2(1426.99, 1337.54)
+texture = ExtResource("13_bu2av")
+
+[node name="TurbineBack" type="Sprite2D" parent="Player2UI"]
+position = Vector2(1626.99, 1327.54)
+texture = ExtResource("14_6ehse")
+
+[node name="TurbineBackRotate" type="AnimatedSprite2D" parent="Player2UI"]
+position = Vector2(1503.21, 1328.04)
+scale = Vector2(1.04537, 1.04537)
+sprite_frames = ExtResource("15_1021a")
+animation = &"rotate"
+speed_scale = -0.5
+
+[node name="TurbineMid" type="Sprite2D" parent="Player2UI"]
+position = Vector2(1388.99, 1331.54)
+texture = ExtResource("16_65ykw")
+
+[node name="TurbineFrontRotate" type="AnimatedSprite2D" parent="Player2UI"]
+position = Vector2(1191.99, 1390.54)
+scale = Vector2(0.335648, 0.335648)
+sprite_frames = ExtResource("17_dea11")
+animation = &"rotate"
+speed_scale = -0.5
+
+[node name="TurbineFront" type="Sprite2D" parent="Player2UI"]
+position = Vector2(1189.99, 1411.54)
+scale = Vector2(0.992977, 1)
+texture = ExtResource("18_tw5ud")
+
+[node name="BuildingFront" type="Sprite2D" parent="Player2UI"]
+visible = false
+position = Vector2(2372.55, 1316.1)
+texture = ExtResource("19_ovhjk")
+
+[node name="TutorialMimicPlayer" type="Node2D" parent="."]
+position = Vector2(960, 1500)
+scale = Vector2(1.3, 1.3)
+
+[node name="PlayerOne" type="Sprite2D" parent="TutorialMimicPlayer"]
+texture = ExtResource("20_pjwsk")
+
+[node name="PlayerTwo" type="Sprite2D" parent="TutorialMimicPlayer"]
+position = Vector2(1476.92, 0)
+texture = ExtResource("20_pjwsk")
+
+[node name="ElectronSpawn" parent="." instance=ExtResource("21_8c4ou")]
+position = Vector2(1727, 1005)
+scale = Vector2(0.95, 0.95)
+
+[node name="ElectronSpawn2" parent="." instance=ExtResource("21_8c4ou")]
+position = Vector2(3646, 1005)
+scale = Vector2(0.95, 0.95)
+metadata/player_id = 1

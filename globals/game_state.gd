@@ -111,7 +111,7 @@ func determine_scene_path(new_scene: GameScene) -> String:
 		GameScene.LEVEL2:
 			game_data["level"] = "level2"
 
-	var scene_path = "res://scenes/levels/%s_%dp.tscn" % [game_data["level"], num_visible_players] 
+	var scene_path = "res://scenes/levels/%s/%s_%dp.tscn" % [game_data["level"], game_data["level"], num_visible_players] 
 	return scene_path
 
 # 登入狀態邏輯
