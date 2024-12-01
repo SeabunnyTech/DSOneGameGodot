@@ -44,6 +44,15 @@ var player_colors = {
 var active_dev_player: Node = null
 var dev_mode_active: bool = false
 
+
+func num_active_players():
+	var num = 0
+	for player in current_players:
+		if player.state != PState.LOST:
+			num += 1
+	return num
+
+
 # TODO: 同時考量偵測 camera 視角變化時，需要對應到 viewport 和 player 位置
 func handle_center_mass(payload: Variant):
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
