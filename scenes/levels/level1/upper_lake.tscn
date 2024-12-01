@@ -7,8 +7,8 @@
 shader = ExtResource("1_r3v51")
 shader_parameter/wave_strength = Vector2(1.2, 0.6)
 shader_parameter/wave_speed = 2.5
-shader_parameter/bubble_density = 0.3
-shader_parameter/bubble_speed = 0.015
+shader_parameter/bubble_density = 0.15
+shader_parameter/bubble_speed = 0.02
 
 [node name="UpperLake" type="Sprite2D"]
 material = SubResource("ShaderMaterial_ubtnx")
