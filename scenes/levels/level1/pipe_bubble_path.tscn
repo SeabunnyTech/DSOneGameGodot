@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://r8sj6irvbq3c"]
+
+[ext_resource type="Curve2D" uid="uid://blarkdyosi4t1" path="res://assets/images/backgrounds/animated/level1/pipe_bubble_path.tres" id="1_acnta"]
+
+[node name="PipeBubblePath" type="Path2D"]
+curve = ExtResource("1_acnta")
