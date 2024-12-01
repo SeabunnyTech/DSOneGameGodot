@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8wbqa1rf3e01"]
+
+[ext_resource type="Script" path="res://scenes/levels/Login/login.gd" id="1_bnr01"]
+[ext_resource type="AudioStream" uid="uid://ct55wg2ju8b61" path="res://assets/audio/login music candidate1_Pleasant Creek Loop.wav" id="2_lehqc"]
+[ext_resource type="PackedScene" uid="uid://6b4fn5a5w1cu" path="res://scenes/levels/Login/logos.tscn" id="3_0dnh3"]
+[ext_resource type="PackedScene" uid="uid://lh1rudkmnc74" path="res://scenes/levels/Login/welcome.tscn" id="4_sk7p2"]
+
+[node name="Login" type="Node2D"]
+script = ExtResource("1_bnr01")
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lehqc")
+
+[node name="BackgroundWhiteRect" type="ColorRect" parent="."]
+offset_right = 3840.0
+offset_bottom = 2160.0
+
+[node name="WelcomeSubscene" parent="." instance=ExtResource("4_sk7p2")]
+
+[node name="LogoSubscene" parent="." instance=ExtResource("3_0dnh3")]
