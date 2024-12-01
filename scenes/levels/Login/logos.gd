@@ -1,5 +1,10 @@
 extends Node2D
 
+# 轉場的信號
+signal go_welcome_scene
+signal go_tutorial_scene(player_num: int)
+
+
 # 這是一個遊戲場景
 # 每一個遊戲場景都應該管理以下事務
 #
@@ -27,6 +32,46 @@ var players = [player1, player2]
 @onready var logo2_offset = Vector2i(0.2 * window_size[0], 0)
 
 
+@export var disabled = true
+
+
+func enter_scene():
+	# enter scene 執行的前提是, 畫面已經進入全空白狀態
+	# 而這個 scene 一開始也是空無一物
+	modulate.a = 1
+
+	# 關閉 disabled 的一瞬間會開啟 _process
+	# 讓 logo1 彈出來, 完成進入轉場
+	disabled = false
+
+
+func leave_scene(callback: Callable):
+	disabled = true
+	var tween = create_tween()
+	tween.tween_property($FadeoutCurtainRect, 'modulate:a', 1, 1)
+	tween.finished.connect(
+		func():
+			reset()
+			callback.call()
+	)
+
+
+func reset():
+	# 讓這整個物件消失不見先
+	modulate.a = 0
+
+	# 把只用來 Fadeout 的幕簾收起來
+	$FadeoutCurtainRect.modulate.a = 0
+
+	# Logo 藏起來
+	for logo in logos:
+		logo.heads_to_state(LState.HIDDEN, 1)
+
+	# 清除吸子!
+	for player in players:
+		player.reset_attractor()
+
+
 
 func _ready() -> void:
 	# 設定 logo 的色相與 player 相符
@@ -38,6 +83,7 @@ func _ready() -> void:
 	logo2.position = window_size/2 + logo2_offset
 
 
+
 var heading_state
 func _heads_to_state(new_state: State):
 	if heading_state == heading_state:
@@ -46,7 +92,17 @@ func _heads_to_state(new_state: State):
 
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if disabled:
+		return
+	_interact(delta)
+
+
+
+var lost_duration = 0
+@export var lost_time_limit = 5		## 兩個玩家都消失多久以後會回到歡迎頁
+
+func _interact(delta):
 	# 觀察場上的玩家與 logo 狀態, 決定下一步要往哪走
 
 	# 先處理個別 logo 的反應
@@ -67,14 +123,22 @@ func _process(_delta: float) -> void:
 		var logo_triggered = logos[player.index].overlaps_trigger_area(player)
 		PlayerManager.update_player_trigger_state(player, logo_triggered)
 
-	# 最後判定是否要進入下一關
+	# 判定是否要回到最開始的歡迎頁
+	if PlayerManager.num_active_players() == 0:
+		lost_duration += delta
+		if lost_duration > lost_time_limit:
+			leave_scene(func(): go_welcome_scene.emit())
+	else:
+		lost_duration = 0
+
+	# 最後判定是否要進行轉場
 	if logo1.state == LState.TRIGGERED:
 		if player2.state == PState.LOST:
 			# Go next scene with 1P
-			pass
+			leave_scene(func(): go_tutorial_scene.emit(1))
 		elif logo2.state == LState.TRIGGERED:
 			# Go next scene with 2p
-			pass
+			leave_scene(func(): go_tutorial_scene.emit(2))
 
 
 
