@@ -8,7 +8,7 @@ signal on_hidden
 signal on_triggered
 
 
-@export var hue = 0.45:	# 青綠 0.45 水藍 0.57
+@export var hue = 0.57:	# 青綠 0.45 水藍 0.57
 	set(value):
 		hue = value
 		if Engine.is_editor_hint():
@@ -32,8 +32,8 @@ var	capsule_sva = {
 
 var	circle_sva = {
 	State.HIDDEN		:	[0, 0.78, 0],
-	State.IDLE		:	[0, 0.78, 1],
-	State.INVITING	:	[0.2, .78, 1],
+	State.IDLE		:	[0, 0.78, .03],
+	State.INVITING	:	[0.2, .78, .03],
 	State.TRIGGERED	:	[1, 1, 1],
 }
 
@@ -67,8 +67,12 @@ var transition_times = {
 
 # 可以調整的一些參數
 @export var transition_time_multiplier = 0.8
-@export var init_state = State.IDLE
-
+@export var preview_state = State.INVITING:
+	set(value):
+		preview_state = value
+		if Engine.is_editor_hint():
+			heads_to_state(value, true)
+@export var init_state = State.HIDDEN
 
 # 主 tween 掌管全體的狀態
 # 小 tween 控制個別物件的反應
@@ -234,14 +238,20 @@ const SCALES = {
 func _play_inviting_loop_tween():
 	# TODO 這個函數會引發 started with no Tweener 錯誤但是目前沒找到原因
 
+	# 讓圓盤一閃即逝
+	circle_tween.tween_interval(0.6)
+	circle_tween.tween_property(circle_node, "modulate:a", 0.4, 0.1)
+	circle_tween.tween_property(circle_node, "modulate:a", 0, 1.1)
+	#circle_tween.tween_interval(0.2)
+
 	# 讓圓圈反覆縮放
 	## 縮小 / 變半透明
-	circle_tween.tween_property(circle_node, "scale", SCALES.RIPPLE, DURATIONS.RIPPLE)
-	circle_tween.parallel().tween_property(circle_node, "modulate:a", 0.8, DURATIONS.FADE)
+	#circle_tween.tween_property(circle_node, "scale", SCALES.RIPPLE, DURATIONS.RIPPLE)
+	#circle_tween.parallel().tween_property(circle_node, "modulate:a", 0.8, DURATIONS.FADE)
 
 	## 放大 / 變實心
-	circle_tween.tween_property(circle_node, "scale", SCALES.NORMAL, DURATIONS.SQUASH)
-	circle_tween.parallel().tween_property(circle_node, "modulate:a", 1.0, 0.0)
+	#circle_tween.tween_property(circle_node, "scale", SCALES.NORMAL, DURATIONS.SQUASH)
+	#circle_tween.parallel().tween_property(circle_node, "modulate:a", 1.0, 0.0)
 
 	# 讓上下膠囊反覆壓縮
 	capsule_tween.tween_property(capsule_node, "scale", SCALES.SQUASH, DURATIONS.MERGE)
