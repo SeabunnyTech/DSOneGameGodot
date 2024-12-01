@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://q80etp6d7a8u"]
+
+[ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_w08t0"]
+
+[resource]
+default_font = ExtResource("1_w08t0")
+default_font_size = 80
