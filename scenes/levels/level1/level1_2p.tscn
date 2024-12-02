@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://bpxgiayon1ysu"]
+[gd_scene load_steps=29 format=3 uid="uid://bpxgiayon1ysu"]
 
 [ext_resource type="Script" path="res://scripts/levels/level1.gd" id="1_nwqee"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_4beqn"]
@@ -12,9 +12,12 @@
 [ext_resource type="PackedScene" uid="uid://dnglfy476ot0d" path="res://scenes/levels/level1/upper_lake.tscn" id="10_1vq4g"]
 [ext_resource type="Texture2D" uid="uid://cog65y5eg825r" path="res://assets/images/backgrounds/static/level1/earth.png" id="11_ivcj5"]
 [ext_resource type="PackedScene" uid="uid://croqi5n03svod" path="res://scenes/levels/level1/pipe.tscn" id="12_dery5"]
+[ext_resource type="Shader" path="res://assets/shaders/pipe_bulge.gdshader" id="13_3clih"]
 [ext_resource type="Texture2D" uid="uid://cwspg5d113fjg" path="res://assets/images/backgrounds/static/level1/building_back.png" id="13_bu2av"]
 [ext_resource type="Texture2D" uid="uid://dla6ddusm46sw" path="res://assets/images/backgrounds/static/level1/turbine_back.png" id="14_6ehse"]
+[ext_resource type="Texture2D" uid="uid://ddscp1o0fyksp" path="res://assets/images/backgrounds/animated/level1/pipe_off.png" id="14_nravx"]
 [ext_resource type="SpriteFrames" uid="uid://bwoqyqbleq7qq" path="res://assets/images/backgrounds/animated/level1/turbine_back.tres" id="15_1021a"]
+[ext_resource type="Texture2D" uid="uid://b43sf5x0a83op" path="res://assets/images/backgrounds/animated/level1/pipe_on.png" id="15_jr70r"]
 [ext_resource type="Texture2D" uid="uid://bxdxnhv72ffuv" path="res://assets/images/backgrounds/static/level1/turbine_mid.png" id="16_65ykw"]
 [ext_resource type="SpriteFrames" uid="uid://872xxwkx1e66" path="res://assets/images/backgrounds/animated/level1/turbine_front.tres" id="17_dea11"]
 [ext_resource type="Texture2D" uid="uid://der8a2j5srmvl" path="res://assets/images/backgrounds/static/level1/turbine_front.png" id="18_tw5ud"]
@@ -22,10 +25,24 @@
 [ext_resource type="Texture2D" uid="uid://b7hmv8odoseik" path="res://assets/images/sprites/tutorial_player_level1.svg" id="20_pjwsk"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="21_8c4ou"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mgl4f"]
+resource_local_to_scene = true
+shader = ExtResource("13_3clih")
+shader_parameter/transition = 0.0
+shader_parameter/texture_a = ExtResource("14_nravx")
+shader_parameter/texture_b = ExtResource("15_jr70r")
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_k2551"]
 
 [sub_resource type="MeshTexture" id="MeshTexture_trqyb"]
 mesh = SubResource("ArrayMesh_k2551")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jlvba"]
+resource_local_to_scene = true
+shader = ExtResource("13_3clih")
+shader_parameter/transition = 0.0
+shader_parameter/texture_a = ExtResource("14_nravx")
+shader_parameter/texture_b = ExtResource("15_jr70r")
 
 [node name="Level1" type="Node2D"]
 script = ExtResource("1_nwqee")
@@ -74,6 +91,7 @@ position = Vector2(421.78, 1122.15)
 texture = ExtResource("11_ivcj5")
 
 [node name="Pipe" parent="Player1UI" instance=ExtResource("12_dery5")]
+material = SubResource("ShaderMaterial_mgl4f")
 position = Vector2(1066, 956)
 
 [node name="BuildingBack" type="Sprite2D" parent="Player1UI"]
@@ -154,6 +172,7 @@ position = Vector2(208.78, 1123.15)
 texture = ExtResource("11_ivcj5")
 
 [node name="Pipe" parent="Player2UI" instance=ExtResource("12_dery5")]
+material = SubResource("ShaderMaterial_jlvba")
 position = Vector2(852, 956)
 
 [node name="BuildingBack" type="Sprite2D" parent="Player2UI"]

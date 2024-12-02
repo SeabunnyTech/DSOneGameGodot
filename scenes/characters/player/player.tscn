@@ -5,8 +5,8 @@
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="3_qel1b"]
 [ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_y6pit"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_vafl7"]
-[ext_resource type="AudioStream" uid="uid://cgwjb8paulmnq" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
-[ext_resource type="AudioStream" uid="uid://o0ihc03yngig" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
+[ext_resource type="AudioStream" uid="uid://bvcc7f8agostt" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
+[ext_resource type="AudioStream" uid="uid://bbx28jdwd3h5t" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0

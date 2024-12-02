@@ -23,6 +23,7 @@ SignalBus="*res://globals/signal_bus.gd"
 GameState="*res://globals/game_state.gd"
 TimerManager="*res://globals/timer_manager.gd"
 ScoreManager="*res://globals/score_manager.gd"
+AudioManager="*res://assets/audio/audio_manager.tscn"
 PlayerManager="*res://scenes/characters/player/player_manager.gd"
 DebugMessage="*res://scripts/ui/debug_message.gd"
 
