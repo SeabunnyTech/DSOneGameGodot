@@ -5,6 +5,8 @@ extends StaticBody2D
 @export var collection_speed: float = 1.5
 var collecting: bool = false
 
+@onready var spawn_sfx = $SpawnSFX
+@onready var collect_sfx = $CollectSFX
 var electron_scene = preload("res://scenes/characters/electron.tscn")
 var active_electrons: Array[Node] = []
 
@@ -37,6 +39,7 @@ func collect_electron(electron: Node2D) -> void:
 	tween.tween_callback(func():
 		SignalBus.electrons_scoring.emit(1, self_player_id)
 		electron.queue_free()
+		collect_sfx.play()
 	)
 
 func _on_collect_electrons(player_id: int, spawn_id: int):
@@ -57,9 +60,7 @@ func _on_collect_electrons(player_id: int, spawn_id: int):
 			# 添加延遲，讓電子一個接一個被收集
 			await get_tree().create_timer(0.2).timeout
 			collect_electron(electron)
-
-			# 播放收集音效
-			# AudioManager.play_sfx("electron_collect")
+			
 	
 	SignalBus.electrons_area_scored.emit(self_player_id, self_spawn_id)
 
@@ -83,13 +84,15 @@ func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
 
 		var random_scale = randf_range(0.35, 0.5)
 		electron.scale = Vector2(random_scale, random_scale)
-
+		
 		# 設置隨機類型
 		var random_type = randi() % 3
 		electron.set_type(random_type)
-
+		
 		add_child(electron)
 		active_electrons.append(electron)
+		
+		spawn_sfx.play()
 
 func _exit_tree():
 	# Unregister when scene changes/exits
