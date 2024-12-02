@@ -32,8 +32,8 @@ var	capsule_sva = {
 
 var	circle_sva = {
 	State.HIDDEN		:	[0, 0.78, 0],
-	State.IDLE		:	[0, 0.78, .03],
-	State.INVITING	:	[0.2, .78, .03],
+	State.IDLE		:	[0, 0.78, .1],
+	State.INVITING	:	[0.2, .78, .1],
 	State.TRIGGERED	:	[1, 1, 1],
 }
 
@@ -103,6 +103,11 @@ var circle_radius:
 
 func _ready() -> void:
 	heads_to_state(init_state, true)
+
+
+func _process(delta: float) -> void:
+	var is_triggered = state == State.TRIGGERED
+	$ScalarNode/Label.visible = is_triggered and not is_in_transition()
 
 
 # 觸發與離開的反應
@@ -296,6 +301,8 @@ func _play_tweens(tweens):
 		tween.play()
 
 
+func is_in_transition():
+	return heading_state != state
 # 測試用的區塊暫時功成身退
 #func _input(event: InputEvent) -> void:
 

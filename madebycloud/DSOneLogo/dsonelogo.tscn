@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://1s1l6055daqh"]
+[gd_scene load_steps=10 format=3 uid="uid://1s1l6055daqh"]
 
 [ext_resource type="Script" path="res://madebycloud/DSOneLogo/dsonelogo.gd" id="1_72n38"]
 [ext_resource type="Texture2D" uid="uid://cfnfgoe83gr8u" path="res://madebycloud/DSOneLogo/logo_layout.png" id="2_tfn0r"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bkmsjahobb6l7" path="res://madebycloud/DSOneLogo/lower_capsule.png" id="4_5x4ng"]
 [ext_resource type="AudioStream" uid="uid://240xgk6wkxyv" path="res://assets/audio/in_use/bubble-pops.wav" id="6_tpeee"]
 [ext_resource type="AudioStream" uid="uid://d4m8744cyansc" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="7_qb1mg"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="8_sk8ob"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o5xwp"]
 
@@ -41,7 +42,7 @@ scale = Vector2(9, 9)
 shape = SubResource("CircleShape2D_o5xwp")
 
 [node name="Circle" type="Node2D" parent="ScalarNode"]
-modulate = Color(0.78, 0.78, 0.78, 1)
+modulate = Color(0.78, 0.78, 0.78, 0.1)
 position = Vector2(-156, 22)
 
 [node name="BigWhiteCircle" type="Sprite2D" parent="ScalarNode/Circle"]
@@ -58,6 +59,25 @@ texture = ExtResource("3_l3ptx")
 [node name="LowerCapsule" type="Sprite2D" parent="ScalarNode/Capsules"]
 position = Vector2(36, 142)
 texture = ExtResource("4_5x4ng")
+
+[node name="Label" type="Label" parent="ScalarNode"]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -277.778
+offset_top = -450.0
+offset_right = 222.222
+offset_bottom = -369.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("8_sk8ob")
+theme_override_colors/font_color = Color(0, 0.77, 0.0898334, 1)
+theme_override_font_sizes/font_size = 60
+text = "就緒!"
+horizontal_alignment = 1
 
 [node name="on_triggered_sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_qb1mg")
