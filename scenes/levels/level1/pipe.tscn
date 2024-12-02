@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://croqi5n03svod"]
+
+[ext_resource type="Texture2D" uid="uid://ddscp1o0fyksp" path="res://assets/images/backgrounds/animated/level1/pipe_off.png" id="1_1koec"]
+[ext_resource type="Shader" path="res://assets/shaders/pipe_bulge.gdshader" id="1_1piga"]
+[ext_resource type="PackedScene" uid="uid://r8sj6irvbq3c" path="res://scenes/levels/level1/pipe_bubble_path.tscn" id="2_tkfvd"]
+[ext_resource type="Texture2D" uid="uid://b43sf5x0a83op" path="res://assets/images/backgrounds/animated/level1/pipe_on.png" id="3_11nu7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3mvw1"]
+resource_local_to_scene = true
+shader = ExtResource("1_1piga")
+shader_parameter/transition = 0.0
+shader_parameter/texture_a = ExtResource("1_1koec")
+shader_parameter/texture_b = ExtResource("3_11nu7")
+
+[sub_resource type="Curve2D" id="Curve2D_wrs4e"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 2337, -1067, -19.5201, -66.8227, 19.5201, 66.8227, 2809, -1061, -86.079, -195.728, 86.079, 195.728, 2958, -546, 0, 0, 0, 0, 3117, -188)
+}
+point_count = 4
+
+[node name="Pipe" type="Sprite2D"]
+material = SubResource("ShaderMaterial_3mvw1")
+position = Vector2(1802, 956)
+texture = ExtResource("1_1koec")
+
+[node name="PipeBubblePath" parent="." instance=ExtResource("2_tkfvd")]
+position = Vector2(-2961, 615)
+curve = SubResource("Curve2D_wrs4e")
