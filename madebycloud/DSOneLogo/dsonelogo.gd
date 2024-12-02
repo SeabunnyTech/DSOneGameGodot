@@ -2,10 +2,8 @@
 class_name DSOneLogo extends Node2D
 
 # 提供外部使用的信號
-signal on_state_changed(new_state)
-signal on_heading_new_state(new_state)
-signal on_hidden
-signal on_triggered
+signal state_changed(new_state)
+signal heading_new_state(new_state)
 
 
 @export var hue = 0.57:	# 青綠 0.45 水藍 0.57
@@ -83,7 +81,7 @@ var transition_times = {
 
 var state = null
 var heading_state = null
-var pre_heading_state = null		# 提供切換狀態的路途中要再次變換方向時作判斷
+var prev_heading_state = null		# 提供切換狀態的路途中要再次變換方向時作判斷
 
 # 方便呼叫避免打錯字
 @onready var scalar_node = $ScalarNode
@@ -106,8 +104,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var is_triggered = state == State.TRIGGERED
-	$ScalarNode/Label.visible = is_triggered and not is_in_transition()
+	$ScalarNode/Label.visible = is_triggered()
 
 
 # 觸發與離開的反應
@@ -122,11 +119,11 @@ func heads_to_state(new_state: State, immediate=false):
 		return
 
 	# 記下狀態變換過程
-	pre_heading_state = heading_state
+	prev_heading_state = heading_state
 	heading_state = new_state
 
 	# 釋放狀態變換信號
-	on_heading_new_state.emit(heading_state)
+	heading_new_state.emit(heading_state)
 
 	# 不適立即要跳到新狀態的情況
 	if not immediate:
@@ -147,7 +144,7 @@ func heads_to_state(new_state: State, immediate=false):
 func _is_leaving_state(the_state: State, include_preheading=true):
 	# 如果剛才準備要進入 the_state 但還沒到就切走了也算 is_leaving_state
 	var was_there = (state == the_state)
-	var was_heading_there = (pre_heading_state == the_state)
+	var was_heading_there = (prev_heading_state == the_state)
 	var is_heading_somewhere_else = (heading_state != the_state)
 
 	if not include_preheading:
@@ -204,18 +201,14 @@ func _play_transition_sfx(new_state: State):
 func _on_transotion_tween_finished():	
 	# 完成狀態的切換
 	state = heading_state
-	on_state_changed.emit(state)
+	state_changed.emit(state)
 
 	_reset_all_tweens(Tween.TRANS_SINE)
 
 	# 播放接續的動畫, 事實上只有 inviting 比較動感有這個環節
 	match state:
-		State.HIDDEN:
-			on_hidden.emit()
 		State.INVITING:
 			_play_inviting_loop_tween()
-		State.TRIGGERED:
-			on_triggered.emit()
 
 
 const DURATIONS = {
@@ -303,6 +296,10 @@ func _play_tweens(tweens):
 
 func is_in_transition():
 	return heading_state != state
+
+
+func is_triggered():
+	return state==State.TRIGGERED and not is_in_transition()
 # 測試用的區塊暫時功成身退
 #func _input(event: InputEvent) -> void:
 
