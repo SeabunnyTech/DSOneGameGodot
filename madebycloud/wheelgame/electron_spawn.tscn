@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://rbqdijk6vthk"]
+
+[ext_resource type="Script" path="res://madebycloud/wheelgame/electron_spawn.gd" id="1_ylg06"]
+[ext_resource type="AudioStream" uid="uid://bi8telusuue33" path="res://assets/audio/sfx/spawn_sound.wav" id="2_8qj4c"]
+[ext_resource type="AudioStream" uid="uid://coc7w4eqqyos7" path="res://assets/audio/sfx/collect_sound_3.wav" id="3_busap"]
+
+[node name="ElectronSpawn" type="StaticBody2D"]
+script = ExtResource("1_ylg06")
+metadata/spawn_order = 0
+metadata/player_id = 0
+
+[node name="ElectronSpawnArea" type="CollisionPolygon2D" parent="."]
+position = Vector2(-39, 141)
+polygon = PackedVector2Array(-569, -1143, -505, -673, -336, -148, 28, 28, 490, -20, 392, 176, -124, 157, -661, -30, -876, -679, -873, -1127, -634, -1402, 305, -1486, 820, -1389, 919, -1076, 771, -3, 379, 178, 48, 16, 259, -222, 120, -503, 26, -827, -172, -1145)
+
+[node name="SpawnSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_8qj4c")
+volume_db = -5.0
+
+[node name="CollectSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_busap")
+volume_db = -5.0
