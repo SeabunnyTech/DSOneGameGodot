@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://scenes/levels/Login/logos.gd" id="1_vehd0"]
 [ext_resource type="PackedScene" uid="uid://1s1l6055daqh" path="res://madebycloud/DSOneLogo/dsonelogo.tscn" id="2_akdmc"]
-[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="3_gaxa6"]
-[ext_resource type="Script" path="res://scripts/characters/fade_label.gd" id="4_luspe"]
+[ext_resource type="Theme" path="res://assets/themes/LoginTextGuide.tres" id="3_gaxa6"]
+[ext_resource type="Script" path="res://madebycloud/fade_label.gd" id="4_luspe"]
 
 [node name="LogoCompletion" type="Node2D"]
 script = ExtResource("1_vehd0")

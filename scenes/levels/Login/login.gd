@@ -42,7 +42,7 @@ func _connect_transitions():
 	)
 	
 	logo_subscene.go_tutorial_scene.connect(func(player_num):
-		GameState.update_scene(GameState.GameScene.LEVEL1)
+		GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
 	)
 
 

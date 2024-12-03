@@ -82,23 +82,7 @@ func _ready() -> void:
 	# 在編輯器除錯專用
 	if OS.has_feature("editor") and get_tree().current_scene:
 		var temp_scene = detect_current_scene()
-
-		# 根據場景設置適當的初始狀態
-		match temp_scene:
-			GameScene.LEVEL1:
-				current_scene = temp_scene
-				current_stage = GameStage.GAME_PLAY
-				TimerManager.start_game_timer(20.0) # 測試用倒數遊戲時間
-				visible_players = Vector2i(1, 0)  # 只有玩家1可見
-				update_level1_stage()
-				# 模擬一個玩家在場
-			GameScene.LEVEL2:
-				current_scene = temp_scene
-				current_stage = GameStage.GAME_PLAY
-				TimerManager.start_game_timer(80.0)
-				visible_players = Vector2i(1, 0)  # 只有玩家1可見
-				# update_level2_stage()
-				# 模擬一個玩家在場
+		_on_debug_scene(temp_scene)
 
 func _connect_signals() -> void:
 	# 連接玩家註冊與否訊號
@@ -276,6 +260,45 @@ func determine_level1_stage() -> GameStage:
 			ScoreManager.reset_scores()
 			return GameStage.GAME_OVER
 	return GameStage.LEVEL_START
+
+# 測試用 Demo 用的模式
+func jump_to_scene_and_play(new_scene: GameScene) -> void:
+	var scene_path = determine_scene_path(new_scene)
+	# Use call_deferred to ensure the scene change happens at a safe time
+	get_tree().call_deferred("change_scene_to_file", scene_path)
+	get_tree().tree_changed.connect(_on_debug_scene.bind(new_scene), CONNECT_ONE_SHOT)
+
+func _on_debug_scene(new_scene: GameScene) -> void:
+	await get_tree().process_frame # 等待新場景的 _ready 完成
+	ui_ready = false
+	hud_ready = false
+
+	if new_scene == GameScene.LOGIN:
+		return
+	
+	var num_visible_players = 1
+	current_scene = new_scene
+	current_stage = GameStage.GAME_PLAY
+	var state_info = {
+		"scene": current_scene,
+		"stage": current_stage,
+		"num_visible_players": num_visible_players
+	}
+	
+	match new_scene:
+		GameScene.LEVEL1:
+			TimerManager.start_game_timer(20.0) # 測試用倒數遊戲時間
+			level1_state_updated.emit(state_info)
+			# 模擬一個玩家在場
+		GameScene.LEVEL2:
+			TimerManager.start_game_timer(80.0)
+			# level2_state_updated.emit(state_info)
+			# update_level2_stage()
+			# 模擬一個玩家在場
+	
+	ui_state_updated.emit(state_info)
+	hud_state_updated.emit(state_info)
+
 
 func update_scene(new_scene: GameScene) -> void:
 	var scene_path = determine_scene_path(new_scene)
