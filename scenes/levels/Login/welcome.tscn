@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://lh1rudkmnc74"]
+[gd_scene load_steps=6 format=3 uid="uid://lh1rudkmnc74"]
 
 [ext_resource type="Script" path="res://scenes/levels/Login/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_0lg17"]
+[ext_resource type="Texture2D" uid="uid://ciqwvt65k2hwq" path="res://assets/images/drawings/解說圖1-1.PNG" id="3_vyuwr"]
 
 [sub_resource type="Theme" id="Theme_mr7yq"]
 default_font = ExtResource("1_wrufh")
@@ -10,6 +11,7 @@ default_font_size = 80
 
 [node name="Welcome" type="Node2D"]
 script = ExtResource("1_n171j")
+loop_img = null
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 offset_right = 3840.0
@@ -27,6 +29,8 @@ theme_override_constants/separation = 30
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+texture = ExtResource("3_vyuwr")
+expand_mode = 5
 
 [node name="WelcomeTitle" type="Label" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
