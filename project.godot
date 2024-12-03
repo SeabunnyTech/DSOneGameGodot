@@ -20,12 +20,12 @@ config/icon="res://icon.svg"
 ENV="*res://globals/env.gd"
 Globals="*res://globals/globals.gd"
 SignalBus="*res://globals/signal_bus.gd"
+DebugMessage="*res://scripts/ui/debug_message.gd"
 TimerManager="*res://globals/timer_manager.gd"
 GameState="*res://globals/game_state.gd"
 ScoreManager="*res://globals/score_manager.gd"
 AudioManager="*res://assets/audio/audio_manager.tscn"
 PlayerManager="*res://scenes/characters/player/player_manager.gd"
-DebugMessage="*res://scripts/ui/debug_message.gd"
 
 [display]
 
