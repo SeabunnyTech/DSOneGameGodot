@@ -102,12 +102,13 @@ func _on_level1_state_updated(state_info: Dictionary):
 		GameState.GameStage.TUTORIAL_4:
 			rotation_enabled = false
 		GameState.GameStage.GAME_PLAY:
-			AudioManager.play_level_music()
 			rotation_enabled = true
+			set_tutorial_player_visible(false)
+			AudioManager.play_level_music()
 		GameState.GameStage.SCORE:
-			AudioManager.play_victor_music()
 			rotation_enabled = false
-		
+			AudioManager.play_victor_music()
+
 	for i in range(num_visible_players):
 		front_turbines[i].play("rotate")
 		back_turbines[i].play("rotate")

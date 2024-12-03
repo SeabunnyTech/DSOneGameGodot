@@ -77,6 +77,30 @@ var current_game_time_expired: bool = false
 var current_countdown_time: float = 0.0
 
 func _ready() -> void:
+	_connect_signals()
+
+	# 在編輯器除錯專用
+	if OS.has_feature("editor") and get_tree().current_scene:
+		current_scene = detect_current_scene()
+
+		# 根據場景設置適當的初始狀態
+		match current_scene:
+			GameScene.LOGIN:
+				current_stage = GameStage.LOGIN_START
+			GameScene.LEVEL1:
+				current_stage = GameStage.GAME_PLAY
+				TimerManager.start_game_timer(20.0) # 測試用倒數遊戲時間
+				visible_players = Vector2i(1, 0)  # 只有玩家1可見
+				update_level1_stage()
+				# 模擬一個玩家在場
+			GameScene.LEVEL2:
+				TimerManager.start_game_timer(80.0)
+				current_stage = GameStage.COUNTDOWN_1
+				visible_players = Vector2i(1, 0)  # 只有玩家1可見
+				# update_level2_stage()
+				# 模擬一個玩家在場
+
+func _connect_signals() -> void:
 	# 連接玩家註冊與否訊號
 	PlayerManager.player_visibility_changed.connect(_on_player_visibility_changed)
 	PlayerManager.player_countdown_completed.connect(_on_player_countdown_complete)
@@ -98,6 +122,21 @@ func _ready() -> void:
 	TimerManager.countdown_time_expired.connect(_on_countdown_time_expired)
 	TimerManager.game_time_updated.connect(_on_game_time_updated)
 	TimerManager.game_time_expired.connect(_on_game_time_expired)
+
+# 新增這個函數來檢測當前場景
+func detect_current_scene() -> GameScene:
+	var current_scene_path = get_tree().current_scene.scene_file_path.to_lower()
+	
+	if "login" in current_scene_path:
+		return GameScene.LOGIN
+	elif "level1" in current_scene_path:
+		return GameScene.LEVEL1
+	elif "level2" in current_scene_path:
+		return GameScene.LEVEL2
+	
+	# 如果都不符合，返回預設場景
+	push_warning("Unknown scene path: %s, defaulting to LOGIN" % current_scene_path)
+	return GameScene.LOGIN
 
 # 取得場景路徑
 func determine_scene_path(new_scene: GameScene) -> String:

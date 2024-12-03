@@ -48,15 +48,16 @@ func start_tutorial_timer(duration: float) -> void:
 	timer.start()
 
 func start_game_timer(duration: float) -> void:
+	update_timer.start()
 	var timer = timers[TimerType.GAME]
 	timer.wait_time = duration
 	timer.start()
 
 func start_countdown_timer(duration: float) -> void:
+	update_timer.start()
 	var timer = timers[TimerType.COUNTDOWN]
 	timer.wait_time = duration
 	timer.start()
-	update_timer.start()
 
 func get_countdown_timer_time_left() -> float:
 	if timers.has(TimerType.COUNTDOWN):
