@@ -130,6 +130,10 @@ func _physics_process(delta: float):
 func _ready() -> void:
 	$Motion/Angular.connect("full_rotation_completed", SignalBus.player_full_rotation_completed.emit)
 	$Motion/Angular.connect("rotation_detected", SignalBus.player_rotation_detected.emit)	
+	
+	$Motion/Angular.connect("full_rotation_completed", full_rotation_completed.emit)
+	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
+	
 	radial_progress.hide()
 	heads_to_state(init_state, true)
 
