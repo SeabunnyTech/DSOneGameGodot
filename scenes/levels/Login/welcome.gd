@@ -11,7 +11,7 @@ func enter_scene():
 	# 進場的前提是畫面已經是一片白底
 	# 這個畫面將從一片 white_curtain 進入
 	modulate.a = 1
-	
+
 	# 淡出白色前景
 	var tween = create_tween()
 	tween.tween_interval(0.3)
@@ -19,7 +19,7 @@ func enter_scene():
 	tween.finished.connect(func(): disabled = false)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if disabled:
 		return
 

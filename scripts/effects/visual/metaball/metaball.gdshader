@@ -17,14 +17,14 @@ void fragment() {
     vec2 uv = UV;
     float total_influence = 0.0;
     vec4 final_color = vec4(0.0);
-    
+
     // 計算每個球體對當前像素的影響
     for (int i = 0; i < ball_count; i++) {
         float influence = metaball(uv, ball_positions[i], ball_radii[i]);
         total_influence += influence;
         final_color += ball_colors[i] * influence;
     }
-    
+
     // 根據總影響力決定像素顏色
     float threshold = 1.0;
     if (total_influence > threshold) {
