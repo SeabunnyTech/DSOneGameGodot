@@ -137,6 +137,7 @@ func mouse_mode_toggle_player(player_index: int) -> void:
 			player.heads_to_state(PState.ACTIVE)
 		elif current_players[1].state == PState.LOST:
 			active_dev_player = null
+			player.position = get_viewport().get_mouse_position()
 			player.heads_to_state(PState.LOST)
 	
 	# Player 2 specific logic
@@ -146,6 +147,7 @@ func mouse_mode_toggle_player(player_index: int) -> void:
 			player.heads_to_state(PState.ACTIVE)
 		elif active_dev_player == player:
 			active_dev_player = null
+			player.position = get_viewport().get_mouse_position()
 			player.heads_to_state(PState.LOST)
 
 func _on_player_visibility_changed(player: Node) -> void:
