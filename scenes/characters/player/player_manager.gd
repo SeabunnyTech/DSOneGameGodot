@@ -234,7 +234,8 @@ func _process(_delta):
 
 		# Move active player with mouse
 		if active_dev_player:
-			var mouse_pos = get_viewport().get_mouse_position()
+			var mouse_pos = active_dev_player.get_viewport().get_mouse_position()
+			DebugMessage.info("mouse pos: " + str(mouse_pos))
 			active_dev_player.set_target_position(mouse_pos)
 	
 	else:
