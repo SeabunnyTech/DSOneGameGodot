@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://57b4gckppukj" path="res://scenes/levels/level1/lower_lake.tscn" id="9_uq6y8"]
 [ext_resource type="PackedScene" uid="uid://dnglfy476ot0d" path="res://scenes/levels/level1/upper_lake.tscn" id="10_u473h"]
 [ext_resource type="Texture2D" uid="uid://cog65y5eg825r" path="res://assets/images/backgrounds/static/level1/earth.png" id="11_2g420"]
-[ext_resource type="PackedScene" uid="uid://8mm32h2k31js" path="res://scenes/levels/level1/pipe.tscn" id="12_l221c"]
+[ext_resource type="PackedScene" uid="uid://croqi5n03svod" path="res://scenes/levels/level1/pipe.tscn" id="12_l221c"]
 [ext_resource type="Shader" path="res://assets/shaders/pipe_bulge.gdshader" id="13_wmynh"]
 [ext_resource type="Texture2D" uid="uid://ddscp1o0fyksp" path="res://assets/images/backgrounds/animated/level1/pipe_off.png" id="14_jc4lw"]
 [ext_resource type="Texture2D" uid="uid://b43sf5x0a83op" path="res://assets/images/backgrounds/animated/level1/pipe_on.png" id="15_4lg6k"]
@@ -29,7 +29,10 @@ shader_parameter/transition = 0.0
 shader_parameter/texture_a = ExtResource("14_jc4lw")
 shader_parameter/texture_b = ExtResource("15_4lg6k")
 
-[node name="WheelGameEnviromnent" type="Node2D"]
+[node name="WheelGameEnviromnent" type="ColorRect"]
+clip_contents = true
+offset_right = 3840.0
+offset_bottom = 2160.0
 script = ExtResource("1_0cnpv")
 
 [node name="Player1UI" type="Sprite2D" parent="."]
@@ -102,7 +105,6 @@ scale = Vector2(0.992977, 1)
 texture = ExtResource("21_emvrg")
 
 [node name="BuildingFront" type="Sprite2D" parent="Player1UI"]
-visible = false
 position = Vector2(2372.55, 1316.1)
 texture = ExtResource("22_qcaxk")
 

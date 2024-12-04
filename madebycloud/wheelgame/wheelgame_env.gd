@@ -1,4 +1,6 @@
-extends Node2D
+extends ColorRect
+
+signal electron_generated
 
 var num_visible_players = 0
 var turbine_front_speed = 0
@@ -19,6 +21,9 @@ const MAX_LAKE_DELTA_HEIGHT = 280  # 最高湖面升降高度
 
 # TODO: 在一切都測試完後，以下部分 onready 未來可以移到所屬的 subnode 中
 
+
+@onready var entire_env = $Player1UI 
+@onready var building_case = $Player1UI/BuildingFront
 @onready var front_turbines = $Player1UI/TurbineFrontRotate
 @onready var back_turbines = $Player1UI/TurbineBackRotate
 @onready var upper_lake = $Player1UI/UpperLake
@@ -32,7 +37,37 @@ const MAX_LAKE_DELTA_HEIGHT = 280  # 最高湖面升降高度
 var pipe_tweens = null
 
 
+
+
+var camera_tween
+func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
+	if camera_tween:
+		camera_tween.kill()
+
+	var screen_center = Vector2(1920, 1080)
+	var new_position = screen_center - target_center * target_scale
+	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	camera_tween.tween_property(entire_env, 'scale', Vector2(target_scale, target_scale), duration)
+	camera_tween.parallel().tween_property(entire_env, 'position', new_position, duration)
+
+	if callback:
+		camera_tween.finished.connect(callback)
+
+
+var building_case_tween
+func set_building_transparent(transparent=true, duration=1):
+	if building_case_tween:
+		building_case_tween.kill()
+
+	var final_opacity = 0.0 if transparent else 1.0
+
+	building_case_tween = create_tween()
+	building_case_tween.tween_property(building_case, 'modulate:a', final_opacity, duration)
+
+
+
 func _ready():
+	# shift_camera_to(Vector2(2400, 1500), 2)
 	# GameState.level1_state_updated.connect(_on_level1_state_updated)
 
 	# 連接玩家旋轉的訊號
@@ -79,7 +114,8 @@ func generate_electron_and_adjust_lake_level(clockwise: bool):
 		return
 
 	$ElectronSpawn.spawn_electrons(1)
-	
+	electron_generated.emit()
+
 	if delta_lake_height < MAX_LAKE_DELTA_HEIGHT:
 		delta_lake_height += LAKE_HEIGHT_ADJUSTMENT_PER_ROTATION
 		adjust_lake_heights()
