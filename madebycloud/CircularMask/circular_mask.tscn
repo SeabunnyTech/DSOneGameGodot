@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgbjofr2fxpho"]
+
+[ext_resource type="Shader" path="res://madebycloud/CircularMask/circularshader.gdshader" id="1_ifbbx"]
+[ext_resource type="Script" path="res://madebycloud/CircularMask/circular_mask.gd" id="2_iqmg8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bp30i"]
+shader = ExtResource("1_ifbbx")
+shader_parameter/resolution = Vector2(3840, 2160)
+shader_parameter/mask_center = Vector2(1920, 1080)
+shader_parameter/mask_radius = 0.0
+shader_parameter/smoothness = 0.0
+
+[node name="CircularMask" type="ColorRect"]
+material = SubResource("ShaderMaterial_bp30i")
+offset_right = 3840.0
+offset_bottom = 2160.0
+script = ExtResource("2_iqmg8")
