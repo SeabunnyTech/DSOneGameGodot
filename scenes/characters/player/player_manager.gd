@@ -91,41 +91,55 @@ func handle_center_mass(payload: Variant):
 		if i >= player_position.size():
 			player_buffer_counters[i] += 1
 
-func update_player_positions():
-	var num_players = player_position.size()
+func calculate_player_position(center_mass: Vector2, viewport: Viewport) -> Vector2:
+	var camera = viewport.get_camera_2d()
+	var zoom_factor = camera.zoom if camera else Vector2(1, 1)
+	
+	# Convert from Kinect space (512x424) to viewport space
+	var scaled_position = Vector2(
+		(center_mass.x / 512.0) * viewport.size.x,
+		(center_mass.y / 424.0) * viewport.size.y
+	)
+	
+	# Flip Y coordinate and apply camera transformations
+	var final_position = Vector2(
+		scaled_position.x,
+		viewport.size.y - scaled_position.y
+	)
+	
+	if camera:
+		final_position += camera.position - (viewport.size / 2 / zoom_factor)
+	
+	return final_position
 
+func update_player_state(player: Node, new_position: Vector2) -> void:
+	player.set_target_position(new_position)
+	
+	if player.state in [PState.FADED, PState.LOST]:
+		player.position = new_position
+	
+	player.heads_to_state(PState.ACTIVE)
+
+func handle_inactive_player(player: Node) -> void:
+	if not freeze_player_detection and player_buffer_counters[player.index] >= disappearance_buffer_frames:
+		player.heads_to_state(PState.LOST)
+
+func update_player_positions() -> void:
 	for i in range(current_players.size()):
 		var player = current_players[i]
+
 		if not player_viewports.has(i):
 			continue
-
-		if i < num_players:
-			var center_mass = Vector2(player_position[i][0], player_position[i][1])
 			
-			var viewport = player_viewports[i]
-			viewport_size = viewport.size
-			
-			var scaled_position = Vector2(
-				# KinectV2 的解析度是 512x424
-				(center_mass.x / 512.0) * viewport_size.x,
-				(center_mass.y / 424.0) * viewport_size.y
+		if i < player_position.size():
+			var new_position = calculate_player_position(
+				Vector2(player_position[i][0], player_position[i][1]),
+				player_viewports[i]
 			)
-
-			var reversed_position_y = viewport_size.y - scaled_position.y
-			var new_target_position = Vector2(scaled_position.x, reversed_position_y)
-
-			player.set_target_position(new_target_position)
-
-			if player.state in [PState.FADED, PState.LOST]:
-				player.position = new_target_position
-
-			player.heads_to_state(PState.ACTIVE)
+			update_player_state(player, new_position)
 			player_buffer_counters[i] = 0
 		else:
-			if freeze_player_detection:
-				return
-			if player_buffer_counters[i] >= disappearance_buffer_frames:
-				player.heads_to_state(PState.LOST)
+			handle_inactive_player(player)
 
 func mouse_mode_toggle_player(player_index: int) -> void:
 	var player = current_players[player_index]
@@ -137,7 +151,6 @@ func mouse_mode_toggle_player(player_index: int) -> void:
 			player.heads_to_state(PState.ACTIVE)
 		elif current_players[1].state == PState.LOST:
 			active_dev_player = null
-			player.position = get_viewport().get_mouse_position()
 			player.heads_to_state(PState.LOST)
 	
 	# Player 2 specific logic
@@ -147,7 +160,6 @@ func mouse_mode_toggle_player(player_index: int) -> void:
 			player.heads_to_state(PState.ACTIVE)
 		elif active_dev_player == player:
 			active_dev_player = null
-			player.position = get_viewport().get_mouse_position()
 			player.heads_to_state(PState.LOST)
 
 func _on_player_visibility_changed(player: Node) -> void:
@@ -182,11 +194,6 @@ func _init_socket_client():
 	socket_client.payload_received.connect(_on_payload_received)
 
 func _init_player_layer():
-	# var player_layer = CanvasLayer.new()
-	# player_layer.name = "PlayerLayer"
-	# player_layer.layer = 1
-	# add_child(player_layer)
-
 	for idx in range(len(current_players)):
 		var player = current_players[idx]
 		player.index = idx
@@ -234,9 +241,14 @@ func _process(_delta):
 
 		# Move active player with mouse
 		if active_dev_player:
+			var camera = active_dev_player.get_viewport().get_camera_2d()
+			var zoom_factor = camera.zoom if camera else Vector2(1, 1)
 			var mouse_pos = active_dev_player.get_viewport().get_mouse_position()
-			DebugMessage.info("mouse pos: " + str(mouse_pos))
-			active_dev_player.set_target_position(mouse_pos)
+			viewport_size = active_dev_player.get_viewport().size
+
+			if camera:
+				mouse_pos = camera.get_screen_center_position() + (mouse_pos - viewport_size / 2) / zoom_factor
+			update_player_state(active_dev_player, mouse_pos)
 	
 	else:
 		# Normal mode: Use SocketIO
