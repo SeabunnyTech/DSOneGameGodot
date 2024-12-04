@@ -1,9 +1,62 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmk5cd4ky13nc"]
+[gd_scene load_steps=8 format=3 uid="uid://cmk5cd4ky13nc"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/level1_1p_rework.gd" id="1_o3jsl"]
+[ext_resource type="PackedScene" uid="uid://beb3ratbaycsj" path="res://madebycloud/time_score_hud.tscn" id="2_egw8w"]
 [ext_resource type="PackedScene" uid="uid://3n3cmgot5ska" path="res://madebycloud/wheelgame/wheelgame_env.tscn" id="2_ihtve"]
+[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="4_8lec6"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_hlu2i"]
+[ext_resource type="AudioStream" uid="uid://ntra87xlv50g" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="6_0x384"]
+[ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="6_qhmng"]
 
 [node name="Level1_1p" type="Node2D"]
 script = ExtResource("1_o3jsl")
 
+[node name="HUD" parent="." instance=ExtResource("2_egw8w")]
+
 [node name="WheelGameEnviromnent" parent="." instance=ExtResource("2_ihtve")]
+
+[node name="CircularMask" parent="." instance=ExtResource("4_8lec6")]
+center = Vector2(1920, 1080)
+radius = 0.0
+
+[node name="WhiteCurtain" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+offset_right = 3840.0
+offset_bottom = 2160.0
+
+[node name="Title" type="Label" parent="."]
+modulate = Color(0, 0, 0, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1800.0
+offset_top = 920.0
+offset_right = 3720.0
+offset_bottom = 1085.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_hlu2i")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 110
+text = "歡迎來到蓄電大挑戰!"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 207.0
+offset_right = 1926.0
+offset_bottom = 372.0
+theme = ExtResource("5_hlu2i")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "今天我們將化身一顆水滴
+來驅動渦輪發電啦!"
+horizontal_alignment = 1
+
+[node name="GameMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_0x384")
+
+[node name="TutorialMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_qhmng")
