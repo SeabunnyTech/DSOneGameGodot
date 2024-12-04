@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://scripts/levels/level2.gd" id="1_c3wvw"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_djbtx"]
-[ext_resource type="PackedScene" uid="uid://cjmcjpva8u6va" path="res://scenes/levels/level2/river1_1p.tscn" id="4_gj7xl"]
-[ext_resource type="PackedScene" uid="uid://cn6xlv8fshh2w" path="res://scenes/levels/level2/river2_1p.tscn" id="5_safo1"]
-[ext_resource type="PackedScene" uid="uid://bqwegp357ve23" path="res://scenes/levels/level2/river3_1p.tscn" id="6_4kiyq"]
+[ext_resource type="PackedScene" uid="uid://cjmcjpva8u6va" path="res://scenes/levels/level2/river1.tscn" id="4_gj7xl"]
+[ext_resource type="PackedScene" uid="uid://cn6xlv8fshh2w" path="res://scenes/levels/level2/river2.tscn" id="5_safo1"]
+[ext_resource type="PackedScene" uid="uid://bqwegp357ve23" path="res://scenes/levels/level2/river3.tscn" id="6_4kiyq"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="7_sr54a"]
 
 [node name="Level2" type="Node2D"]
@@ -16,9 +16,10 @@ script = ExtResource("1_c3wvw")
 [node name="UI" parent="." instance=ExtResource("2_djbtx")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(1920, 0)
 limit_left = 0
 limit_top = 0
-limit_right = 1920
+limit_right = 3840
 limit_bottom = 5192
 
 [node name="River1" parent="." instance=ExtResource("4_gj7xl")]
