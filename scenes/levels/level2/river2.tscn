@@ -73,46 +73,39 @@ texture = ExtResource("11_k13vs")
 [node name="ElectronSpawn" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(1112, 1099)
 scale = Vector2(0.8, 0.8)
-script = null
 
 [node name="ElectronSpawn2" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(2758, 1780)
 rotation = 0.785398
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 1
 
 [node name="ElectronSpawn3" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(1024, 3047)
 rotation = 0.0733038
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 2
 
 [node name="ElectronSpawn4" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(2807, 4098)
 rotation = 0.66497
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 3
 
 [node name="ElectronSpawn5" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(1168, 5385)
 rotation = 0.200713
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 4
 
 [node name="ElectronSpawn6" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(2754, 6428)
 rotation = 0.747001
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 5
 
 [node name="ElectronSpawn7" parent="." instance=ExtResource("13_w8o6u")]
 position = Vector2(1232, 7420)
 rotation = 0.178024
 scale = Vector2(0.8, 0.8)
-script = null
 metadata/spawn_order = 6

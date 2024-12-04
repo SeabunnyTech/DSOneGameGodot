@@ -1,12 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ctc1wm78mr8p2"]
+[gd_scene load_steps=5 format=3 uid="uid://ctc1wm78mr8p2"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2.gd" id="1_c3wvw"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_djbtx"]
 [ext_resource type="PackedScene" uid="uid://cjmcjpva8u6va" path="res://scenes/levels/level2/river1.tscn" id="4_gj7xl"]
-[ext_resource type="PackedScene" uid="uid://cn6xlv8fshh2w" path="res://scenes/levels/level2/river2.tscn" id="5_safo1"]
-[ext_resource type="PackedScene" uid="uid://bqwegp357ve23" path="res://scenes/levels/level2/river3.tscn" id="6_4kiyq"]
-[ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="7_sr54a"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_c3wvw")
@@ -23,56 +20,3 @@ limit_right = 3840
 limit_bottom = 5192
 
 [node name="River1" parent="." instance=ExtResource("4_gj7xl")]
-
-[node name="River2" parent="." instance=ExtResource("5_safo1")]
-visible = false
-
-[node name="River3" parent="." instance=ExtResource("6_4kiyq")]
-visible = false
-
-[node name="ElectronSpawn" parent="." groups=["electron_spawn_area"] instance=ExtResource("7_sr54a")]
-position = Vector2(1160, 1426)
-scale = Vector2(0.8, 0.8)
-script = null
-
-[node name="ElectronSpawn2" parent="." groups=["electron_spawn_area"] instance=ExtResource("7_sr54a")]
-position = Vector2(2702, 2605)
-rotation = 0.403171
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 1
-
-[node name="ElectronSpawn3" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1312, 3706)
-rotation = 0.0733038
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 2
-
-[node name="ElectronSpawn4" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(2712, 4936)
-rotation = 0.66497
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 3
-
-[node name="ElectronSpawn5" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1232, 6382)
-rotation = 0.200713
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 4
-
-[node name="ElectronSpawn6" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(2775, 7404)
-rotation = 0.747001
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 5
-
-[node name="ElectronSpawn7" parent="." instance=ExtResource("7_sr54a")]
-position = Vector2(1281, 8281)
-rotation = 0.178024
-scale = Vector2(0.8, 0.8)
-script = null
-metadata/spawn_order = 6
