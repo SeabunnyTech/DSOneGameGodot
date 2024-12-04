@@ -63,6 +63,9 @@ var screen_width = Globals.get_viewport_size().x
 
 func _ready():
 	GameState.login_state_updated.connect(_on_login_state_updated)
+	var main_viewport = get_viewport()
+	PlayerManager.register_player_in_viewport(0, main_viewport)
+	PlayerManager.register_player_in_viewport(1, main_viewport)
 	
 	containers["logo"].show()
 	containers["tutorial"].hide()
@@ -312,3 +315,6 @@ func _on_ui_return_area_exited(player: Node2D) -> void:
 func _on_ui_return_area_entered(player: Node2D) -> void:
 	player.start_progress_countdown()
 	pass # Replace with function body.
+
+func _exit_tree():
+	PlayerManager.clear_viewports()

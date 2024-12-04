@@ -51,6 +51,10 @@ var pipe_tweens: Array[Tween] = [null, null]  # 為每個玩家保存一個 twee
 func _ready():
 	GameState.level1_state_updated.connect(_on_level1_state_updated)
 
+	var main_viewport = get_viewport()
+	PlayerManager.register_player_in_viewport(0, main_viewport)
+	PlayerManager.register_player_in_viewport(1, main_viewport)
+
 	# 連接玩家旋轉的訊號
 	SignalBus.player_full_rotation_completed.connect(_on_player_full_rotation_completed)
 	SignalBus.player_rotation_detected.connect(_on_player_rotation_detected)
@@ -58,6 +62,7 @@ func _ready():
 	# 連接電仔正在收集的訊號
 	SignalBus.electrons_scoring.connect(_on_electrons_scoring)
 	SignalBus.electrons_all_scored.connect(_on_electrons_scored)
+	
 
 	for i in range(2): # MINOR_TODO: 把 range(2) 改成實際玩家數
 		if upper_lake[i]:
@@ -87,6 +92,9 @@ func _physics_process(_delta: float) -> void:
 func set_tutorial_player_visible(toggle_visible: bool) -> void:
 	tutorial_player.visible = toggle_visible
 
+func set_house_visible(toggle_visible: bool) -> void:
+	$Player1UI/BuildingFront.visible = toggle_visible
+
 func _on_level1_state_updated(state_info: Dictionary):
 	num_visible_players = state_info.num_visible_players
 
@@ -98,6 +106,7 @@ func _on_level1_state_updated(state_info: Dictionary):
 			set_tutorial_player_visible(true)
 		GameState.GameStage.TUTORIAL_2:
 			rotation_enabled = true
+			set_house_visible(false)
 			set_tutorial_player_visible(false)
 		GameState.GameStage.TUTORIAL_4:
 			rotation_enabled = false

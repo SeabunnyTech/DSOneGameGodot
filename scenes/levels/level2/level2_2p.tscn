@@ -1,12 +1,12 @@
 [gd_scene load_steps=5 format=3 uid="uid://d0b5oa8ojcn7x"]
 
-[ext_resource type="Script" path="res://scripts/levels/level2.gd" id="1_v1ttv"]
+[ext_resource type="Script" path="res://scripts/levels/level2_2p.gd" id="1_1vo57"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_l1kx1"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_o4tnr"]
 [ext_resource type="PackedScene" uid="uid://cjmcjpva8u6va" path="res://scenes/levels/level2/river1.tscn" id="4_pfgq8"]
 
 [node name="Level2" type="Node2D"]
-script = ExtResource("1_v1ttv")
+script = ExtResource("1_1vo57")
 
 [node name="HUD" parent="." instance=ExtResource("2_o4tnr")]
 
@@ -21,6 +21,7 @@ offset_bottom = 2160.0
 layout_mode = 2
 
 [node name="SubViewport" type="SubViewport" parent="GameScene/Player1UI"]
+disable_3d = true
 handle_input_locally = false
 size = Vector2i(1920, 2160)
 render_target_update_mode = 4
