@@ -34,8 +34,11 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_kf582")
 
 [node name="PortalArea" type="Area2D" parent="Portal"]
+visibility_layer = 2
 position = Vector2(-19200, -10800)
 scale = Vector2(10, 10)
+collision_layer = 16
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Portal/PortalArea"]
 position = Vector2(1904.3, 1081.7)
@@ -58,8 +61,11 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_kf582")
 
 [node name="PortalArea" type="Area2D" parent="Portal2"]
+visibility_layer = 2
 position = Vector2(-19200, -10800)
 scale = Vector2(10, 10)
+collision_layer = 16
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Portal2/PortalArea"]
 position = Vector2(1904.3, 1081.7)

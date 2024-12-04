@@ -17,6 +17,12 @@ func _ready():
 	self_spawn_id = get_meta("spawn_order") if has_meta("spawn_order") else 0
 	self_player_id = get_meta("player_id") if has_meta("player_id") else 0
 
+	var parent_path = str(get_path())
+	if "Player1UI" in parent_path:
+		set_meta("player_id", 0)
+	elif "Player2UI" in parent_path:
+		set_meta("player_id", 1)
+	
 	SignalBus.electrons_to_spawn.connect(_on_spawn_electrons)
 	SignalBus.electrons_to_collect.connect(_on_collect_electrons)
 

@@ -40,6 +40,8 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("6_8scac")
 
 [node name="PortalArea" type="Area2D" parent="LoginSelectLevelContainer/Level1"]
+collision_layer = 16
+collision_mask = 2
 monitoring = false
 monitorable = false
 
@@ -57,6 +59,8 @@ scale = Vector2(1.2, 1.2)
 texture = ExtResource("8_cngyu")
 
 [node name="PortalArea" type="Area2D" parent="LoginSelectLevelContainer/Level2"]
+collision_layer = 16
+collision_mask = 2
 monitoring = false
 monitorable = false
 
