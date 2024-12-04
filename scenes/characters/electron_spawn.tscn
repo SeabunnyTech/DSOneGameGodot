@@ -5,6 +5,8 @@
 [ext_resource type="AudioStream" uid="uid://crwmn2371wbiq" path="res://assets/audio/sfx/collect_sound_3.wav" id="3_busap"]
 
 [node name="ElectronSpawn" type="StaticBody2D"]
+collision_layer = 8
+collision_mask = 4
 script = ExtResource("1_5yll6")
 metadata/spawn_order = 0
 metadata/player_id = 0
