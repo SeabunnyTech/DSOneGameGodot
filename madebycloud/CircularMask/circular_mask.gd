@@ -1,6 +1,10 @@
 @tool
 extends ColorRect
 
+@export var alpha: float:
+	set(value):
+		alpha = value
+		material.set_shader_parameter("alpha", alpha)
 
 
 @export var center = Vector2(800, 800):
