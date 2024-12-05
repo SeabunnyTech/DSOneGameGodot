@@ -51,10 +51,6 @@ var pipe_tweens: Array[Tween] = [null, null]  # 為每個玩家保存一個 twee
 func _ready():
 	GameState.level1_state_updated.connect(_on_level1_state_updated)
 
-	var main_viewport = get_viewport()
-	PlayerManager.register_player_in_viewport(0, main_viewport)
-	PlayerManager.register_player_in_viewport(1, main_viewport)
-
 	# 連接玩家旋轉的訊號
 	SignalBus.player_full_rotation_completed.connect(_on_player_full_rotation_completed)
 	SignalBus.player_rotation_detected.connect(_on_player_rotation_detected)
