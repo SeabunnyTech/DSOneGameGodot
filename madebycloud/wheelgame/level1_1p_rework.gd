@@ -107,7 +107,7 @@ func on_enter():
 	#tween.tween_method(func(center): circular_mask.center = center, Vector2(1920, 1080), Vector2(0 ,0), 1)
 
 	# 1. (白底) 歡迎來到蓄電大挑戰! 在這關我們將化身一顆水滴來驅動渦輪發電喔! (3 sec)
-	tween.tween_interval(10)
+	tween.tween_interval(1)
 	_undate_guide_text('begin')
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 	#tween.tween_interval(3)
