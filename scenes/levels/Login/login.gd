@@ -7,21 +7,24 @@ enum Subscene {
 	LOGOS,
 }
 
+@export var tutorial_music: AudioStream
+
+
 var current_subscene = null
 var scene_change_tween
 
 # subscenes
 @onready var welcome_subscene = $WelcomeSubscene
 @onready var logo_subscene = $LogoSubscene
-
+@onready var level1_1p = $Level1_1p
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 這裡假設 subscene 都會實作 reset()
 	# 而且 reset 完以後會消失, 就可以執行 enter_scene 進場
-	for subscene in [welcome_subscene, logo_subscene]:
+	for subscene in [welcome_subscene, logo_subscene, level1_1p]:
 		subscene.reset()
 
-	_fade_audio_stream($BackgroundMusic, true, 0.5)
+	GlobalAudioPlayer.play_music(tutorial_music, 0.5)
 
 	_connect_transitions()
 
@@ -42,7 +45,8 @@ func _connect_transitions():
 	)
 	
 	logo_subscene.go_tutorial_scene.connect(func(player_num):
-		GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
+		level1_1p.enter_scene()
+		#GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
 	)
 
 
@@ -51,20 +55,6 @@ func _process(delta: float) -> void:
 	pass
 
 
-
+# 這是在需要退出這整個子場景的情況下使用
 func on_leave():
-	_fade_audio_stream($BackgroundMusic)
-
-
-
-func _fade_audio_stream(audio_player, fade_in=false, duration = 2):
-	var audio_tween = create_tween()
-	var start_volume_db = -80.0 if fade_in else -10.0
-	var target_volume_db = -10.0 if fade_in else -80.0
-
-	audio_player.volume_db = start_volume_db
-	audio_tween.tween_property(audio_player, "volume_db", target_volume_db, duration)
-	if fade_in:
-		audio_player.play()
-	else:
-		audio_tween.tween_callback(audio_player.stop)
+	GlobalAudioPlayer.fade_out()
