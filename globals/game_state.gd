@@ -460,7 +460,7 @@ func _on_player_ready_portal_changed(player: Node, is_entered: bool) -> void:
 	ready_players[player_index] = 1 if is_entered else 0
 	update_ready_players(ready_players)
 
-func _on_spawn_electrons(count: int, player_id: int, spawn_id: int):
+func _on_spawn_electrons(_count: int, player_id: int, _spawn_id: int):
 	if current_scene != GameScene.LEVEL1:
 		return
 

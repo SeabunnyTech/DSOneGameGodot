@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/levels/level2_2p.gd" id="1_1vo57"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_l1kx1"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_o4tnr"]
-[ext_resource type="PackedScene" uid="uid://cjmcjpva8u6va" path="res://scenes/levels/level2/river1.tscn" id="4_pfgq8"]
+[ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_ggj66"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_1vo57")
@@ -17,36 +17,12 @@ visible = false
 offset_right = 3844.0
 offset_bottom = 2160.0
 
-[node name="Player1UI" type="SubViewportContainer" parent="GameScene"]
+[node name="RiverGamePlayerOne" parent="GameScene" instance=ExtResource("4_ggj66")]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="SubViewport" type="SubViewport" parent="GameScene/Player1UI"]
-disable_3d = true
-handle_input_locally = false
-size = Vector2i(1920, 2160)
-render_target_update_mode = 4
-
-[node name="Camera2D" type="Camera2D" parent="GameScene/Player1UI/SubViewport"]
-position = Vector2(960, 0)
-zoom = Vector2(2, 2)
-limit_top = 0
-
-[node name="River1" parent="GameScene/Player1UI/SubViewport" instance=ExtResource("4_pfgq8")]
-scale = Vector2(0.5, 0.5)
-
-[node name="Player2UI" type="SubViewportContainer" parent="GameScene"]
+[node name="RiverGamePlayerTwo" parent="GameScene" instance=ExtResource("4_ggj66")]
 layout_mode = 2
-
-[node name="SubViewport" type="SubViewport" parent="GameScene/Player2UI"]
-disable_3d = true
-handle_input_locally = false
-size = Vector2i(1920, 2160)
-render_target_update_mode = 4
-
-[node name="Camera2D" type="Camera2D" parent="GameScene/Player2UI/SubViewport"]
-position = Vector2(960, 540)
-zoom = Vector2(2, 2)
-limit_top = 0
-
-[node name="River1" parent="GameScene/Player2UI/SubViewport" instance=ExtResource("4_pfgq8")]
-scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3

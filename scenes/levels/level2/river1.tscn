@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://cjmcjpva8u6va"]
+[gd_scene load_steps=15 format=3 uid="uid://cjmcjpva8u6va"]
 
+[ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_6i8h2"]
 [ext_resource type="Texture2D" uid="uid://bfmjq2d7ylitm" path="res://assets/images/backgrounds/static/level2/river_1.png" id="1_f60bk"]
 [ext_resource type="Texture2D" uid="uid://bulxdldji8wbc" path="res://assets/images/backgrounds/static/level2/power_1.png" id="2_yob3o"]
 [ext_resource type="Texture2D" uid="uid://evifukryb70a" path="res://assets/images/backgrounds/static/level2/power_2.png" id="3_kcwla"]
@@ -15,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_y6nqd"]
 
 [node name="River1" type="Node2D"]
+script = ExtResource("1_6i8h2")
 
 [node name="RiverMap" type="Sprite2D" parent="."]
 position = Vector2(1920, 5192)
