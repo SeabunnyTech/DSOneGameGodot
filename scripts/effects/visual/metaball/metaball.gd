@@ -7,7 +7,7 @@ extends Node2D
 func _ready():	
 	var cs = canvas_size
 	$ColorRect.size = Vector2(cs, cs)
-	$ColorRect.position = Vector2(-cs/2, -cs/2)
+	$ColorRect.position = Vector2(-cs/2.0, -cs/2.0)
 	$ColorRect.material = $ColorRect.material.duplicate()
 	update_ball_count(ball_count)
 	update_ball_radii(ball_radii)

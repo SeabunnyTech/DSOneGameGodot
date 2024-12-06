@@ -26,15 +26,14 @@ func reset():
 
 var transition_tween
 func _set_visible(visibility, immediate):
-	if transition_tween:
-		transition_tween.kill()
-	transition_tween = create_tween()
-
 	var target_alpha = 1.0 if visibility else 0.0
 
 	if immediate:
 		$HBoxContainer.modulate.a = target_alpha
 	else:
+		if transition_tween:
+			transition_tween.kill()
+		transition_tween = create_tween()
 		transition_tween.tween_property($HBoxContainer, 'modulate:a', target_alpha, 1)
 	
 
