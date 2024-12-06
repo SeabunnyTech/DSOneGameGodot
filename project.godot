@@ -26,6 +26,7 @@ GameState="*res://globals/game_state.gd"
 ScoreManager="*res://globals/score_manager.gd"
 AudioManager="*res://assets/audio/audio_manager.tscn"
 PlayerManager="*res://scenes/characters/player/player_manager.gd"
+GlobalAudioPlayer="*res://globals/audio.gd"
 
 [display]
 
@@ -35,7 +36,7 @@ window/stretch/mode="viewport"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/radial_progress/plugin.cfg")
+enabled=PackedStringArray()
 
 [global_group]
 
