@@ -42,7 +42,7 @@ func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
 	if camera_tween:
 		camera_tween.kill()
 
-	var screen_center = Vector2(1920, 1080)
+	var screen_center = Vector2(1920/2, 2160/2)
 	var new_position = screen_center - target_center * target_scale
 	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	# TODO: 這邊把 river_scene 當作參數傳入，應該會更好？
