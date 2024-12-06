@@ -19,8 +19,8 @@
 [ext_resource type="Texture2D" uid="uid://bxdxnhv72ffuv" path="res://assets/images/backgrounds/static/level1/turbine_mid.png" id="19_hian8"]
 [ext_resource type="SpriteFrames" uid="uid://872xxwkx1e66" path="res://assets/images/backgrounds/animated/level1/turbine_front.tres" id="20_15rq5"]
 [ext_resource type="Texture2D" uid="uid://der8a2j5srmvl" path="res://assets/images/backgrounds/static/level1/turbine_front.png" id="21_emvrg"]
+[ext_resource type="PackedScene" uid="uid://cpijjeb2a03n6" path="res://madebycloud/wheelgame/electron_emitter.tscn" id="21_x0m0p"]
 [ext_resource type="Texture2D" uid="uid://cch6edcebhkus" path="res://assets/images/backgrounds/static/level1/building_front.png" id="22_qcaxk"]
-[ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="24_im1ai"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fg4m2"]
 resource_local_to_scene = true
@@ -108,8 +108,6 @@ texture = ExtResource("21_emvrg")
 position = Vector2(2372.55, 1316.1)
 texture = ExtResource("22_qcaxk")
 
-[node name="ElectronSpawn" parent="." instance=ExtResource("24_im1ai")]
+[node name="ElectronEmitter" parent="." instance=ExtResource("21_x0m0p")]
 z_index = 5
 position = Vector2(2784, 1046)
-collision_layer = 17
-collision_mask = 5

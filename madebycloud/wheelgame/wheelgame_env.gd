@@ -1,23 +1,59 @@
 extends ColorRect
 
 signal electron_generated
+signal lower_lake_level_changed(new_level)
+
+
+enum Orientation{
+	CLOCKWISE,
+	COUNTER_CLOCKWISE,
+	BOTH
+}
+
+@export var allowed_orientation = Orientation.CLOCKWISE
+
+func _is_orientation_allowed(clockwise: bool):
+	if allowed_orientation == Orientation.BOTH:
+		return true
+
+	if clockwise:
+		return allowed_orientation == Orientation.CLOCKWISE
+	else:
+		return allowed_orientation == Orientation.COUNTER_CLOCKWISE
+
 
 var num_visible_players = 0
 var turbine_front_speed = 0
 var turbine_back_speed = 0
 
-var delta_lake_height: float
-var init_upper_lake_position : Vector2
-var init_lower_lake_position : Vector2
+
+# 設定下方水位, 同時會影響上方水位
+var lake_tween
+@export var lake_level_per_rotation = 0.01  # 每次旋轉時，湖面的高度變化
+@export var lower_lake_level: float:		# 從 0~1
+	set(value):
+		lower_lake_level = clamp(value, 0.0, 1.0)
+
+		var height_range = 280.0
+		var delta_lake_pos = Vector2(0, lower_lake_level * height_range)
+
+		if lake_tween:
+			lake_tween.kill()
+		lake_tween = create_tween()
+
+		var upper_lake_pos = Vector2(607, 700)
+		var lower_lake_pos = Vector2(3126, 2350)
+
+		lake_tween.tween_property(upper_lake, "position", upper_lake_pos + delta_lake_pos, 0.3)
+		lake_tween.parallel().tween_property(lower_lake, "position", lower_lake_pos - delta_lake_pos, 0.3)
+		lower_lake_level_changed.emit(value)
+
 
 var rotation_enabled: bool = true
 var pipe_pumping_enabled: bool = false
 
 const DAMPING_FACTOR = 0.95  # 調整這個值來改變渦輪減速速度 (0.9 更快, 0.99 更慢)
 const SPEED_THRESHOLD = 0.01  # 當速度小於這個值時直接設為 0
-const LAKE_HEIGHT_ADJUSTMENT_PER_ROTATION = 2.0  # 每次旋轉時，湖面的高度變化
-const LAKE_HEIGHT_ANIMATION_DURATION = 0.3  # 湖面高度變化動畫持續時間
-const MAX_LAKE_DELTA_HEIGHT = 280  # 最高湖面升降高度
 
 # TODO: 在一切都測試完後，以下部分 onready 未來可以移到所屬的 subnode 中
 
@@ -66,10 +102,13 @@ func set_building_transparent(transparent=true, duration=1):
 
 
 
-func _ready():
-	# shift_camera_to(Vector2(2400, 1500), 2)
-	# GameState.level1_state_updated.connect(_on_level1_state_updated)
+func reset():
+	rotation_enabled = false
+	lower_lake_level = 1
 
+
+
+func _ready():
 	# 連接玩家旋轉的訊號
 	# SignalBus.player_full_rotation_completed.connect(_on_player_full_rotation_completed)
 	# SignalBus.player_rotation_detected.connect(_on_player_rotation_detected)
@@ -79,8 +118,6 @@ func _ready():
 	# SignalBus.electrons_all_scored.connect(_on_electrons_scored)
 
 	# 初始化湖和氣泡
-	init_upper_lake_position = upper_lake.position
-	init_lower_lake_position = lower_lake.position
 	for num in range(num_pipe_bubbles):
 		create_bubble(pipe_bubble_path)
 
@@ -105,20 +142,21 @@ func _physics_process(_delta: float) -> void:
 
 
 
-func generate_electron_and_adjust_lake_level(clockwise: bool):
 
+func react_to_wheel_rotation(clockwise: bool):
+	# 順時針會放水發電
 	if not rotation_enabled:
 		return
 
-	if clockwise:
+	if not _is_orientation_allowed(clockwise):
 		return
 
-	$ElectronSpawn.spawn_electrons(1)
+	$ElectronEmitter.spawn_electrons(1)
 	electron_generated.emit()
 
-	if delta_lake_height < MAX_LAKE_DELTA_HEIGHT:
-		delta_lake_height += LAKE_HEIGHT_ADJUSTMENT_PER_ROTATION
-		adjust_lake_heights()
+	var is_storing_energy = clockwise
+	if is_storing_energy:
+		lower_lake_level -= lake_level_per_rotation
 
 
 
@@ -126,7 +164,8 @@ func rotate_wheel(clockwise: bool, speed: float):
 
 	if not rotation_enabled:
 		return
-	if clockwise:
+
+	if not _is_orientation_allowed(clockwise):
 		return
 
 	var turbine_speed_scale = (1 if clockwise else -1) * speed
@@ -151,9 +190,7 @@ func _on_electrons_scoring(_count: int):
 	back_turbines.speed_scale = 2
 
 	move_pipe_bubbles_backward(0.008)
-	if delta_lake_height > 0:
-		delta_lake_height -= LAKE_HEIGHT_ADJUSTMENT_PER_ROTATION
-		adjust_lake_heights()
+	lower_lake_level += lake_level_per_rotation
 	
 	start_pipe_pumping(0.45)
 
@@ -166,17 +203,6 @@ func _on_game_over(_state_info: Dictionary):
 
 # TODO: 在一切都測試完後，以下 func 未來可以移到所屬的 subnode 中
 # ===========================================
-func adjust_lake_heights() -> void:
-	var tween = create_tween()
-	tween.set_parallel(true)
-	
-	# Move upper lake down
-	var upper_target = init_upper_lake_position + Vector2(0, delta_lake_height)
-	tween.tween_property(upper_lake, "position", upper_target, LAKE_HEIGHT_ANIMATION_DURATION)
-	
-	# Move lower lake up
-	var lower_target = init_lower_lake_position - Vector2(0, delta_lake_height)
-	tween.tween_property(lower_lake, "position", lower_target, LAKE_HEIGHT_ANIMATION_DURATION)
 
 func create_bubble(path: Path2D):
 	var follow = PathFollow2D.new()
