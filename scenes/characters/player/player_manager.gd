@@ -221,7 +221,10 @@ func _process(_delta):
 		# Move active player with mouse
 		if active_dev_player:
 			var mouse_pos = get_viewport().get_mouse_position()
-			active_dev_player.set_target_position(mouse_pos)
+			if active_dev_player.state in [PState.FADED, PState.LOST]:
+				active_dev_player.position = mouse_pos
+			else:
+				active_dev_player.set_target_position(mouse_pos)
 	
 	else:
 		# Normal mode: Use SocketIO

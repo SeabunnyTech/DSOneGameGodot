@@ -123,7 +123,13 @@ func set_target_position(new_position: Vector2):
 	target_position = new_position
 
 func _physics_process(delta: float):
-	position = position.lerp(target_position, smoothing_speed * delta)
+	var to_position = target_position
+	var current_position = position
+	var direction = (to_position - current_position)
+	velocity = direction * smoothing_speed
+
+	# 碰撞判定用，Godot 內建函數
+	move_and_slide()
 
 
 
