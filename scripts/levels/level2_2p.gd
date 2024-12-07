@@ -15,6 +15,8 @@ extends Node2D
 var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
 var camera_velocities = [0.0, 0.0]  # 相機當前速度
 
+var player_in_river_positions = [Vector2(0, 0), Vector2(0, 0)]
+
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
 	
@@ -24,7 +26,12 @@ func _ready():
 	river_game_2.camera_to(Vector2(1920, 2160), 0.5, 1)
 
 func _process(delta: float) -> void:
+	_update_player_in_river_positions()
 	_update_cameras(delta)
+
+func _update_player_in_river_positions() -> void:
+	player_in_river_positions[0] = river_game_1.player_in_river_position(camera_positions[0], camera_zoom_level, PlayerManager.current_players[0].target_position)
+	player_in_river_positions[1] = river_game_2.player_in_river_position(camera_positions[1], camera_zoom_level, PlayerManager.current_players[1].target_position)
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
@@ -50,9 +57,7 @@ func _update_cameras(delta: float) -> void:
 		# 確保相機不會落後於玩家太多
 		var min_camera_y = player_pos.y - screen_height * 0.7
 		camera_positions[i].y = max(camera_positions[i].y, min_camera_y)
-		
-		DebugMessage.info("Camera %d Speed: %s" % [i, camera_velocities[i]])
-		
+
 		# 調用 camera_to
 		river_game.camera_to(
 			camera_positions[i],

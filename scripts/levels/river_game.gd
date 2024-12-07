@@ -38,6 +38,11 @@ func init(player_id: int, num_players: int, river_index: int):
 
 	add_child(river_scene)
 
+func player_in_river_position(camera_position: Vector2, camera_scale: float, player_target_position: Vector2) -> Vector2:
+	var screen_center = Vector2(1920/2, 2160/2)
+	var player_river_pos = camera_position + (player_target_position - screen_center - self.position) / camera_scale
+	return player_river_pos
+
 func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
 	if camera_tween:
 		camera_tween.kill()
