@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://dxst3sfse37ap"]
+
+[ext_resource type="Script" path="res://madebycloud/skip_button/skip_button.gd" id="1_wr6f8"]
+[ext_resource type="Texture2D" uid="uid://cabgvonbembx2" path="res://madebycloud/skip_button/skip_button_shade.png" id="2_hcgbe"]
+[ext_resource type="Texture2D" uid="uid://ch2mfmgor68te" path="res://madebycloud/skip_button/skip_button.png" id="3_pcvvy"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="4_bjj7h"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rq6e1"]
+radius = 67.0
+height = 256.0
+
+[node name="SkipButton" type="Node2D"]
+script = ExtResource("1_wr6f8")
+
+[node name="shade" type="Sprite2D" parent="."]
+texture = ExtResource("2_hcgbe")
+
+[node name="button" type="Sprite2D" parent="."]
+texture = ExtResource("3_pcvvy")
+
+[node name="Label" type="Label" parent="button"]
+offset_left = -80.0
+offset_top = -22.0
+offset_right = 82.0
+offset_bottom = 28.0
+theme = ExtResource("4_bjj7h")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+text = "跳過教學"
+
+[node name="Area2D" type="Area2D" parent="button"]
+visible = false
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="button/Area2D"]
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_rq6e1")
