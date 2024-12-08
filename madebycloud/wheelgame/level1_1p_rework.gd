@@ -31,6 +31,7 @@ func reset():
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
 	wheelgame_env.reset()
 	$SkipButton.fade_away(true)
+	game_started = false
 
 
 func enter_scene():
@@ -116,8 +117,11 @@ func _begin_tutorial():
 	_continue_tutorial()
 
 
-
+var game_started
 func _continue_tutorial():
+	if game_started:
+		return
+
 	if tween:
 		tween.kill()
 
@@ -125,7 +129,7 @@ func _continue_tutorial():
 	tween.tween_interval(0.5)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	tween.tween_interval(0.5)
-	tween.tween_callback(func():_procees_to_game_start())
+	tween.tween_callback(func():_proceed_to_game_start())
 
 
 func _skip_tutorial(_player):
@@ -135,10 +139,10 @@ func _skip_tutorial(_player):
 	wheelgame_env.camera_to(Vector2(1920, 1080))
 	circular_mask.tween_center_radius(Vector2(2420, 1080), 800.0, 1)
 	wheelgame_env.set_building_transparent()
-	tween.tween_callback(func():_procees_to_game_start())
+	tween.tween_callback(func():_proceed_to_game_start())
 
 
-func _procees_to_game_start():
+func _proceed_to_game_start():
 	if $SkipButton.sensetive:
 		$SkipButton.fade_away()
 	if tween:
@@ -167,10 +171,15 @@ func _procees_to_game_start():
 
 	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
 	tween.tween_property(circular_mask, 'alpha', 0, 1)
+	tween.tween_interval(0.5)
 
 	tween.tween_callback(func():
 		wheelgame_env.rotation_enabled = true
-		$HUD.show()
+		#$HUD.update_time($Timer.wait_time)
+		$HUD.fade_in()
+		$HUD.start_timer.call()
+		game_started = true
+		$short_whistle.play()
 		GlobalAudioPlayer.play_music(game_music)
 	)
 	
@@ -186,14 +195,8 @@ func on_leave():
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 
-	# 測試的時候才會成為 main scene
-	
-	reset()
-	# 連接信號:
-	# 1. player1 控制旋轉
-	# 2. 計分板
-
 	if not Engine.is_editor_hint():
+		reset()
 
 		# 電仔生成
 		player.full_rotation_completed.connect(func(_player, clockwise):
@@ -205,11 +208,23 @@ func _ready() -> void:
 			wheelgame_env.rotate_wheel(clockwise, speed)
 		)
 
+		$HUD.timeout.connect(_game_timeout)
+		wheelgame_env.electron_collected.connect($HUD.add_score)
+
 	# 跳過教學的按鈕
 	$SkipButton.triggered.connect(_skip_tutorial)
 
+	# 測試的時候才會成為 main scene
 	if get_tree().current_scene == self:
 		enter_scene()
+
+
+
+func _game_timeout():
+	wheelgame_env.rotation_enabled = false
+	wheelgame_env.collect_electrons.call()
+	$long_whistle.play()
+	GlobalAudioPlayer.stop()
 
 
 
@@ -236,7 +251,7 @@ func _undate_guide_text(new_text_state):
 		'power': '它會成為我們的發電夥伴喔!',
 		'pushit' : '舉起你手上的水滴\n畫圓推動它!',
 		'ready': '看來你已經掌握發電之道了呢!',
-		'final': '看看你能在一分鐘內發出多少電力!',
+		'final': '看看你能在 ' + str($HUD.total_time) +' 秒內發出多少電力!',
 		'start': '',
 	}
 

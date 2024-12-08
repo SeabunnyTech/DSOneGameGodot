@@ -47,7 +47,7 @@ func collect_electrons():
 		var electron = active_electrons[i]
 		if electron != null:
 			# 添加延遲，讓電子一個接一個被收集
-			await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(0.1).timeout
 			collect_electron(electron)
 
 	# 等待最後一個動畫完成

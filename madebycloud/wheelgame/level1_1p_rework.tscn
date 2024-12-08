@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmk5cd4ky13nc"]
+[gd_scene load_steps=11 format=3 uid="uid://cmk5cd4ky13nc"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/level1_1p_rework.gd" id="1_o3jsl"]
 [ext_resource type="PackedScene" uid="uid://beb3ratbaycsj" path="res://madebycloud/time_score_hud.tscn" id="2_egw8w"]
@@ -8,6 +8,8 @@
 [ext_resource type="AudioStream" uid="uid://ntra87xlv50g" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="6_0x384"]
 [ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="6_qhmng"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="7_en88l"]
+[ext_resource type="AudioStream" uid="uid://d2injtmbjuoe4" path="res://assets/audio/sfx/short_whistle.wav" id="9_yei3f"]
+[ext_resource type="AudioStream" uid="uid://bkbg57otuikad" path="res://assets/audio/sfx/long_whistle.wav" id="10_y512d"]
 
 [node name="Level1_1p" type="Node2D"]
 modulate = Color(1, 1, 1, 0)
@@ -16,6 +18,7 @@ game_music = ExtResource("6_0x384")
 tutorial_music = ExtResource("6_qhmng")
 
 [node name="HUD" parent="." instance=ExtResource("2_egw8w")]
+total_time = 10
 
 [node name="WheelGameEnviromnent" parent="." instance=ExtResource("2_ihtve")]
 
@@ -58,3 +61,9 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "今天我們將化身一顆水滴
 來驅動渦輪發電啦!"
 horizontal_alignment = 1
+
+[node name="short_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_yei3f")
+
+[node name="long_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_y512d")
