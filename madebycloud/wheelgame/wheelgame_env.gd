@@ -122,6 +122,7 @@ func _ready():
 	# 連接電仔正在收集的訊號
 	# SignalBus.electrons_scoring.connect(_on_electrons_scoring)
 	# SignalBus.electrons_all_scored.connect(_on_electrons_scored)
+	$ElectronEmitter.electron_collected.connect(_on_electrons_scoring)
 
 	# 初始化湖和氣泡
 	for num in range(num_pipe_bubbles):
@@ -177,9 +178,9 @@ func rotate_wheel(clockwise: bool, speed: float):
 	var turbine_speed_scale = (1 if clockwise else -1) * speed
 	front_turbines.speed_scale = turbine_speed_scale * 5
 	back_turbines.speed_scale = turbine_speed_scale * 5
-	
+	var sign = -1 if clockwise else 1
 	for bubble in bubbles:
-		bubble.progress_ratio = fmod(bubble.progress_ratio + speed * 0.002, 1.0)
+		bubble.progress_ratio = fmod(bubble.progress_ratio + sign * speed * 0.002, 1.0)
 
 	# 根據速度計算 duration
 	# 假設 speed 範圍是 0.0 到 1.0
@@ -192,23 +193,20 @@ func rotate_wheel(clockwise: bool, speed: float):
 
 
 func _on_electrons_scoring(_count: int):
-	front_turbines.speed_scale = 2
-	back_turbines.speed_scale = 2
+	front_turbines.speed_scale = -2
+	back_turbines.speed_scale = -2
 
-	move_pipe_bubbles_backward(0.008)
+	move_pipe_bubbles_backward(-0.008)
 	lower_lake_level += lake_level_per_rotation
 	
 	start_pipe_pumping(0.45)
 
+
+
 func _on_electrons_scored(player_id: int):
 	stop_pipe_pumping()
 
-func _on_game_over(_state_info: Dictionary):
-	pass
 
-
-# TODO: 在一切都測試完後，以下 func 未來可以移到所屬的 subnode 中
-# ===========================================
 
 func create_bubble(path: Path2D):
 	var follow = PathFollow2D.new()
