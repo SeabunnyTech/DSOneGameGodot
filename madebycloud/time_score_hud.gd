@@ -1,27 +1,52 @@
-extends Node
+extends CanvasLayer
+
+signal timeout
 
 @onready var player_one_score: Label = %PlayerOneScore
 @onready var player_one_timer: Label = %PlayerOneTimer
 
 
+@onready var start_timer = $Timer.start
+
+@export var total_time = 30
+
+var seconds_left:
+	set(value):
+		seconds_left = value
+		player_one_timer.text = "%02d:%02d" % [int(seconds_left / 60), int(seconds_left) % 60]
+
+var score = 0:
+	set(value):
+		score = value
+		player_one_score.text = str(score)
+
+
+
 func _ready() -> void:
-	update_score(0)
-	update_time(0)
+	reset()
+	$Timer.timeout.connect(_tick)
 
 
-func show(immediate=false):
+func _tick():
+	seconds_left -= 1
+	if seconds_left == 0:
+		timeout.emit()
+		$Timer.stop()
+
+
+func fade_in(immediate=false):
 	_set_visible(true, immediate)
 
 
 
-func hide(immediate=false):
+func fade_out(immediate=false):
 	_set_visible(false, immediate)
 
 
 func reset():
-	hide(true)
-	player_one_timer.text = '0'
-	player_one_score.text = '0'
+	fade_out(true)
+	seconds_left = total_time
+	score = 0
 
 
 var transition_tween
@@ -35,13 +60,7 @@ func _set_visible(visibility, immediate):
 			transition_tween.kill()
 		transition_tween = create_tween()
 		transition_tween.tween_property($HBoxContainer, 'modulate:a', target_alpha, 1)
-	
 
 
-func update_time(time: float) -> void:
-	player_one_timer.text = "%02d:%02d" % [int(time / 60), int(time) % 60]
-
-
-
-func update_score(scores: float) -> void:
-	player_one_score.text = str(scores)
+func add_score(value):
+	score += value
