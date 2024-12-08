@@ -83,3 +83,10 @@ func animate_halos():
 	tween.parallel().tween_property(halo1, "scale", Vector2(1, 1), 0.9).set_trans(Tween.TRANS_CIRC)
 	tween.parallel().tween_property(halo2, "modulate:a", 0.05, 0.9).set_trans(Tween.TRANS_CIRC)
 	tween.parallel().tween_property(halo2, "scale", Vector2(1, 1), 0.9).set_trans(Tween.TRANS_CIRC)
+
+
+func vanish():
+	var duration = randf_range(0.7, 1.3)
+	var tween = create_tween()
+	tween.tween_property(self, 'modulate:a', 0, duration)
+	tween.tween_callback(self.queue_free)

@@ -111,3 +111,5 @@ texture = ExtResource("22_qcaxk")
 [node name="ElectronEmitter" parent="." instance=ExtResource("21_x0m0p")]
 z_index = 5
 position = Vector2(2784, 1046)
+collision_layer = 8
+collision_mask = 4

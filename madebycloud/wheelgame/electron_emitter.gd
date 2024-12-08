@@ -36,7 +36,6 @@ func collect_electron(electron: Node2D) -> void:
 	)
 
 
-
 func collect_electrons():
 	if collecting:
 		return
@@ -55,6 +54,13 @@ func collect_electrons():
 	await get_tree().create_timer(collection_speed + 0.2).timeout
 	collecting = false
 
+
+# 讓電仔原地消失好像不存在過一樣
+func destroy_electrons():
+	for i in range(active_electrons.size()):
+		active_electrons[i].vanish()
+
+	active_electrons.clear()
 
 
 func spawn_electrons(count: int):

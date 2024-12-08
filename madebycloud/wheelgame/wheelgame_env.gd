@@ -4,6 +4,10 @@ signal electron_generated
 signal lower_lake_level_changed(new_level)
 
 
+# 將摧毀電仔的函數往上暴露
+@onready var destroy_electrons = $ElectronEmitter.destroy_electrons
+
+
 enum Orientation{
 	CLOCKWISE,
 	COUNTER_CLOCKWISE,
