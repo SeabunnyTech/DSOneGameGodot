@@ -39,7 +39,7 @@ var jump_tween
 func _on_triggered_anim(body: Node2D):
 	if not sensetive:
 		return
-
+	$"triggered sfx".play()
 	sensetive = false
 	jump_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	jump_tween.tween_property(self, 'jump_progress', 1, 0.2)

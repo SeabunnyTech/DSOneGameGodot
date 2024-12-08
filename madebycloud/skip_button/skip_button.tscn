@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxst3sfse37ap"]
+[gd_scene load_steps=7 format=3 uid="uid://dxst3sfse37ap"]
 
 [ext_resource type="Script" path="res://madebycloud/skip_button/skip_button.gd" id="1_wr6f8"]
 [ext_resource type="Texture2D" uid="uid://cabgvonbembx2" path="res://madebycloud/skip_button/skip_button_shade.png" id="2_hcgbe"]
 [ext_resource type="Texture2D" uid="uid://ch2mfmgor68te" path="res://madebycloud/skip_button/skip_button.png" id="3_pcvvy"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="4_bjj7h"]
+[ext_resource type="AudioStream" uid="uid://d4m8744cyansc" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_o2ybq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rq6e1"]
 radius = 67.0
@@ -13,6 +14,7 @@ height = 256.0
 script = ExtResource("1_wr6f8")
 
 [node name="shade" type="Sprite2D" parent="."]
+position = Vector2(28.2843, 28.2843)
 texture = ExtResource("2_hcgbe")
 
 [node name="button" type="Sprite2D" parent="."]
@@ -36,3 +38,6 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="button/Area2D"]
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_rq6e1")
+
+[node name="triggered sfx" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_o2ybq")
