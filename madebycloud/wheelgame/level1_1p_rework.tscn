@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cmk5cd4ky13nc"]
+[gd_scene load_steps=9 format=3 uid="uid://cmk5cd4ky13nc"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/level1_1p_rework.gd" id="1_o3jsl"]
 [ext_resource type="PackedScene" uid="uid://beb3ratbaycsj" path="res://madebycloud/time_score_hud.tscn" id="2_egw8w"]
@@ -7,6 +7,7 @@
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_hlu2i"]
 [ext_resource type="AudioStream" uid="uid://ntra87xlv50g" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="6_0x384"]
 [ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="6_qhmng"]
+[ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="7_en88l"]
 
 [node name="Level1_1p" type="Node2D"]
 modulate = Color(1, 1, 1, 0)
@@ -22,6 +23,10 @@ tutorial_music = ExtResource("6_qhmng")
 alpha = 0.0
 center = Vector2(1920, 1080)
 radius = 0.0
+
+[node name="SkipButton" parent="." instance=ExtResource("7_en88l")]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(3500, 1900)
 
 [node name="Title" type="Label" parent="."]
 modulate = Color(0, 0, 0, 0)

@@ -30,6 +30,187 @@ func reset():
 	circular_mask.alpha = 1.0
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
 	wheelgame_env.reset()
+	$SkipButton.fade_away(true)
+
+
+func enter_scene():
+	_begin_tutorial()
+
+
+var tween
+
+func _begin_tutorial():
+	if tween:
+		tween.kill()
+	tween = create_tween()
+
+	# 在一開始停止執行
+
+	tween.pause()
+	GlobalAudioPlayer.play_music(tutorial_music)
+	tween.tween_property(self, 'modulate:a', 1, 1)
+
+	# 1. (白底) 歡迎來到蓄電大挑戰! 在這關我們將化身一顆水滴來驅動渦輪發電喔! (3 sec)
+	tween.tween_interval(0.5)
+	tween.tween_callback(func():_undate_guide_text('begin'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+
+	# 接著冒出跳過按鈕
+	tween.tween_interval(1)
+	tween.tween_callback($SkipButton.showup)
+
+	# 開場說明消失往下接續
+	tween.tween_interval(1)
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+
+
+	# 2. 這一座水力發電廠! 它看起來只是一棟普通的房子對吧!
+	tween.tween_callback(func():
+		wheelgame_env.camera_to(Vector2(3000, 1080))
+		circular_mask.tween_center_radius(Vector2(1200, 1080), 800.0, 1)
+	)
+
+	tween.tween_interval(1)
+	_show_text('case')
+
+
+	# 3. 但它其實一點都不普通喔! 在它平淡的外表下\n內部有著很酷的構造喔!
+	_show_text('show')
+
+	# 4. (一語不發移鏡, 然後外殼轉透明)
+	tween.tween_callback(func():
+		#_undate_guide_text('case')
+		wheelgame_env.camera_to(Vector2(1920, 1080))
+		circular_mask.tween_center_radius(Vector2(2420, 1080), 800.0, 1)
+	)
+	tween.tween_interval(1)
+	tween.tween_callback(func():
+		wheelgame_env.set_building_transparent()
+	)
+
+	tween.tween_interval(1)	
+
+	# 5. 看到了嗎! 這是 ooo 型的發電渦輪!
+	_show_text('inner')
+
+	# 6. 它雖然重達 x 噸, 相當於 N 台轎車, 
+	_show_text('heavy')
+
+	# 7. 但是在你手上的水滴推動下, 它會成為我們的發電喔!
+	_show_text('power')
+
+	# 8. 現在舉起你的水滴試著畫圓推進它吧!
+	tween.tween_callback(func():_undate_guide_text('pushit'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	# 這邊比較特別, 文字出來以後不用急著藏
+
+	tween.tween_callback(func():
+		wheelgame_env.rotation_enabled = true
+	)
+
+	tween.play()
+
+	# 等待產電的信號	
+	tween.tween_interval(2)
+	await wheelgame_env.electron_generated
+	_continue_tutorial()
+
+
+
+func _continue_tutorial():
+	if tween:
+		tween.kill()
+
+	tween = create_tween()
+	tween.tween_interval(0.5)
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+	tween.tween_interval(0.5)
+	tween.tween_callback(func():_procees_to_game_start())
+
+
+func _skip_tutorial(_player):
+	tween.kill()
+	#tween.tween_interval(1)
+	tween = create_tween()
+	wheelgame_env.camera_to(Vector2(1920, 1080))
+	circular_mask.tween_center_radius(Vector2(2420, 1080), 800.0, 1)
+	wheelgame_env.set_building_transparent()
+	tween.tween_callback(func():_procees_to_game_start())
+
+
+func _procees_to_game_start():
+	if $SkipButton.sensetive:
+		$SkipButton.fade_away()
+	if tween:
+		tween.kill()
+
+	tween = create_tween()
+
+	# 9. 非常好! 看來你已經掌握了發電之道呢!
+	_show_text('ready')
+
+	# 10. 將發電機停止並隱藏
+	tween.tween_callback(func():
+		wheelgame_env.camera_to(Vector2(2200, 1080), 1.2)
+		wheelgame_env.rotation_enabled = false
+		circular_mask.tween_center_radius(Vector2(2420, 1080), 0.0, 1)
+		GlobalAudioPlayer.fade_out()
+	)
+	tween.tween_interval(1)
+	tween.tween_callback(wheelgame_env.destroy_electrons)
+
+	# 11. 接下來就進入挑戰吧! 看看你能在一分鐘內發出多少電力呢!
+	_show_text('final')
+
+	# 12. 準備開始!!
+	_show_text('start')
+
+	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
+	tween.tween_property(circular_mask, 'alpha', 0, 1)
+
+	tween.tween_callback(func():
+		wheelgame_env.rotation_enabled = true
+		$HUD.show()
+		GlobalAudioPlayer.play_music(game_music)
+	)
+	
+
+
+func on_leave():
+	pass
+
+
+
+
+@onready var player = PlayerManager.player1
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+
+	# 測試的時候才會成為 main scene
+	
+	reset()
+	# 連接信號:
+	# 1. player1 控制旋轉
+	# 2. 計分板
+
+	if not Engine.is_editor_hint():
+
+		# 電仔生成
+		player.full_rotation_completed.connect(func(_player, clockwise):
+			wheelgame_env.react_to_wheel_rotation(clockwise)
+		)
+
+		# 水輪旋轉
+		player.rotation_detected.connect(func(_player, clockwise, speed):
+			wheelgame_env.rotate_wheel(clockwise, speed)
+		)
+
+	# 跳過教學的按鈕
+	$SkipButton.triggered.connect(_skip_tutorial)
+
+	if get_tree().current_scene == self:
+		enter_scene()
+
 
 
 func _undate_guide_text(new_text_state):
@@ -78,154 +259,9 @@ func _undate_guide_text(new_text_state):
 
 
 
-
-func enter_scene():
-	var tween = create_tween()
-	GlobalAudioPlayer.play_music(tutorial_music)
-	tween.tween_property(self, 'modulate:a', 1, 1)
-
-	# 1. (白底) 歡迎來到蓄電大挑戰! 在這關我們將化身一顆水滴來驅動渦輪發電喔! (3 sec)
-	tween.tween_interval(1)
-	_undate_guide_text('begin')
+func _show_text(text_key, duration=0.1):
+	tween.tween_callback(func():_undate_guide_text(text_key))
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(3)
+	tween.tween_interval(duration)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 2. 這一座水力發電廠! 它看起來只是一棟普通的房子對吧!
-	tween.tween_callback(func():
-		_undate_guide_text('case')
-		wheelgame_env.camera_to(Vector2(3000, 1080))
-		circular_mask.tween_center_radius(Vector2(1200, 1080), 800.0, 1)
-	)
-
-	tween.tween_interval(1)
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 3. 但它其實一點都不普通喔! 在它平淡的外表下\n內部有著很酷的構造喔!
-	tween.tween_callback(func():_undate_guide_text('show'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 4. (一語不發移鏡, 然後外殼轉透明)
-	tween.tween_callback(func():
-		#_undate_guide_text('case')
-		wheelgame_env.camera_to(Vector2(1920, 1080))
-		circular_mask.tween_center_radius(Vector2(2420, 1080), 800.0, 1)
-	)
-	tween.tween_interval(1)
-	tween.tween_callback(func():
-		wheelgame_env.set_building_transparent()
-	)
-
-	tween.tween_interval(1)	
-
-	# 5. 看到了嗎! 這是 ooo 型的發電渦輪!
-	tween.tween_callback(func():_undate_guide_text('inner'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 6. 它雖然重達 x 噸, 相當於 N 台轎車, 
-	tween.tween_callback(func():_undate_guide_text('heavy'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 7. 但是在你手上的水滴推動下, 它會成為我們的發電喔!
-	tween.tween_callback(func():_undate_guide_text('power'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 8. 現在舉起你的水滴試著畫圓推進它吧!
-	tween.tween_callback(func():_undate_guide_text('pushit'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	# 這邊比較特別, 文字出來以後不用急著藏
-
-	tween.tween_callback(func():
-		wheelgame_env.rotation_enabled = true
-	)
-
-	# 等待產電的信號	
-	tween.tween_interval(2)
-	await wheelgame_env.electron_generated
-	continue_tutorial()
-
-
-func continue_tutorial():
-	var tween = create_tween()
-	tween.tween_interval(1)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-	tween.tween_interval(1)
-
-	# 9. 非常好! 看來你已經掌握了發電之道呢!
-	tween.tween_callback(func():_undate_guide_text('ready'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	#tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 10. 將發電機停止並隱藏
-	tween.tween_callback(func():
-		wheelgame_env.camera_to(Vector2(2200, 1080), 1.2)
-		wheelgame_env.rotation_enabled = false
-		circular_mask.tween_center_radius(Vector2(2420, 1080), 0.0, 1)
-		GlobalAudioPlayer.fade_out()
-	)
-	tween.tween_interval(1)
-
-	# 11. 接下來就進入挑戰吧! 看看你能在一分鐘內發出多少電力呢!
-	tween.tween_callback(func():_undate_guide_text('final'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 12. 準備開始!!
-	tween.tween_callback(func():_undate_guide_text('start'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
-	tween.tween_interval(2)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
-
-	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
-	tween.tween_property(circular_mask, 'alpha', 0, 1)
-	#tween.tween_property($WhiteCurtain, 'modulate:a', 0, 1)
-
-	tween.tween_callback(func():
-		wheelgame_env.rotation_enabled = true
-		$HUD.show()
-		GlobalAudioPlayer.play_music(game_music)
-	)
-	
-
-
-func on_leave():
-	pass
-
-
-
-
-@onready var player = PlayerManager.player1
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	reset()
-	# 連接信號:
-	# 1. player1 控制旋轉
-	# 2. 計分板
-
-	# 電仔生成
-	player.full_rotation_completed.connect(func(_player, clockwise):
-		wheelgame_env.react_to_wheel_rotation(clockwise)
-	)
-
-	# 水輪旋轉
-	player.rotation_detected.connect(func(_player, clockwise, speed):
-		wheelgame_env.rotate_wheel(clockwise, speed)
-	)
-
-	enter_scene()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
+	return tween
