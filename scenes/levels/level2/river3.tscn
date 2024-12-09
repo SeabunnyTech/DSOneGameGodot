@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=3 uid="uid://bqwegp357ve23"]
+[gd_scene load_steps=16 format=3 uid="uid://bqwegp357ve23"]
 
 [ext_resource type="Texture2D" uid="uid://b446rs28ol5o2" path="res://assets/images/backgrounds/static/level2/river_3.png" id="1_pq7ja"]
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_r5kgo"]
 [ext_resource type="Texture2D" uid="uid://bulxdldji8wbc" path="res://assets/images/backgrounds/static/level2/power_1.png" id="2_opke5"]
+[ext_resource type="Texture2D" uid="uid://dnfosm18jfkyx" path="res://assets/images/backgrounds/static/level2/river_norm_3.png" id="2_us2ml"]
 [ext_resource type="Texture2D" uid="uid://evifukryb70a" path="res://assets/images/backgrounds/static/level2/power_2.png" id="3_jo88q"]
 [ext_resource type="Texture2D" uid="uid://csx5raxw6uyj7" path="res://assets/images/backgrounds/static/level2/power_3.png" id="4_nvjbf"]
 [ext_resource type="Texture2D" uid="uid://6q7iglww273v" path="res://assets/images/backgrounds/static/level2/power_4.png" id="5_uh5qm"]
@@ -17,6 +18,10 @@
 
 [node name="River3" type="Node2D"]
 script = ExtResource("1_r5kgo")
+
+[node name="RiverNormMap" type="Sprite2D" parent="."]
+position = Vector2(1920, 5196)
+texture = ExtResource("2_us2ml")
 
 [node name="RiverMap" type="Sprite2D" parent="."]
 position = Vector2(1920, 5200)

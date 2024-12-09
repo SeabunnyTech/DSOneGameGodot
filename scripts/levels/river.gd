@@ -8,9 +8,12 @@ var spawn_areas: Array[Node] = []
 var spawn_positions: Array[float] = []
 var positions_initialized: bool = false
 
-var normal_image: Image
+@onready var river_normal_map_sprite = $RiverNormMap
+var river_normal_map: Image
 
 func _ready() -> void:
+	river_normal_map = river_normal_map_sprite.texture.get_image()
+
 	for child in get_children():
 		if child.has_meta("spawn_order"):
 			spawn_areas.append(child)
@@ -42,14 +45,13 @@ func _update_spawn_positions() -> void:
 func are_positions_ready() -> bool:
 	return positions_initialized
 
-
 func get_normal_at_position(pos: Vector2) -> Color:
 	# 確保位置在圖片範圍內
-	var image_size = normal_image.get_size()
+	var image_size = river_normal_map.get_size()
 	var x = clamp(pos.x, 0, image_size.x - 1)
 	var y = clamp(pos.y, 0, image_size.y - 1)
 	
-	return normal_image.get_pixel(x, y)
+	return river_normal_map.get_pixel(x, y)
 
 # 提供取得座標的方法
 func get_spawn_positions() -> Array[float]:
