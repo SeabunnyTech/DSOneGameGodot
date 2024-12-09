@@ -111,7 +111,7 @@ func reset_attractor():
 
 
 # 為了處理輸入位置跳躍而寫的邏輯, 導致 player 要用 set_target_position 設定位置
-@export var smoothing_speed: float = 0.3
+@export var smoothing_speed: float = 30.0
 var target_position: Vector2 = Vector2(0, -1000)
 
 func set_smoothing_speed(new_speed: float):
