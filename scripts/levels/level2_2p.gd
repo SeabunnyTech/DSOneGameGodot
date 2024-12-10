@@ -87,10 +87,12 @@ func _update_cameras(delta: float) -> void:
 		)
 
 func _on_avatar_merged(avatar: Node2D):
-	DebugMessage.info("avatar merged")
+	pass
+	# DebugMessage.info("avatar merged")
 
 func _on_avatar_separated(avatar: Node2D):
-	DebugMessage.info("avatar separated")
+	pass
+	# DebugMessage.info("avatar separated")
 
 func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
 	var avatar_index = 0 if avatar == avatar_1 else 1

@@ -62,3 +62,5 @@ toggle_player2={
 2d_physics/layer_3="Electron"
 2d_physics/layer_4="Electron Spawn Area"
 2d_physics/layer_5="Portal"
+2d_physics/layer_6="Power Plant Checkpoint"
+2d_physics/layer_7="Avatar"

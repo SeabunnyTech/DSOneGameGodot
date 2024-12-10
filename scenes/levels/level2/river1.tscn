@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cjmcjpva8u6va"]
+[gd_scene load_steps=17 format=3 uid="uid://cjmcjpva8u6va"]
 
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_6i8h2"]
 [ext_resource type="Texture2D" uid="uid://bfmjq2d7ylitm" path="res://assets/images/backgrounds/static/level2/river_1.png" id="1_f60bk"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://c6snlk1ay280t" path="res://assets/images/backgrounds/static/level2/power_7.png" id="8_1nfpq"]
 [ext_resource type="Texture2D" uid="uid://54ctokgeuq2b" path="res://assets/images/backgrounds/static/level2/stone_1.png" id="9_fahmb"]
 [ext_resource type="Texture2D" uid="uid://bk3ubhn7oywp" path="res://assets/images/backgrounds/static/level2/driftwood_1.png" id="10_k1dfc"]
+[ext_resource type="PackedScene" uid="uid://bi3xwv2rw4tot" path="res://scenes/levels/level2/power_plant_checkpoint.tscn" id="11_a7p6k"]
 [ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="11_sfy30"]
 [ext_resource type="Texture2D" uid="uid://c8ghm1ltpbaig" path="res://assets/images/backgrounds/static/level2/driftwood_3.png" id="12_o4lwe"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_y6nqd"]
@@ -20,6 +21,7 @@
 script = ExtResource("1_6i8h2")
 
 [node name="RiverNormMap" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(1920, 5192)
 texture = ExtResource("2_0jgxe")
 
@@ -65,6 +67,77 @@ texture = ExtResource("7_6tj8i")
 position = Vector2(1559, 8099)
 texture = ExtResource("8_1nfpq")
 
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="PowerPlantCheckpoint" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(2130, 1502)
+
+[node name="PowerPlantCheckpoint2" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(1312, 2630)
+spawn_id = 1
+
+[node name="PowerPlantCheckpoint3" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(2539, 3718)
+spawn_id = 2
+
+[node name="PowerPlantCheckpoint4" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(1396, 4845)
+spawn_id = 3
+
+[node name="PowerPlantCheckpoint5" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(2517, 6449)
+spawn_id = 4
+
+[node name="PowerPlantCheckpoint6" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(1499, 7410)
+spawn_id = 5
+
+[node name="PowerPlantCheckpoint7" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
+position = Vector2(2446, 8315)
+spawn_id = 6
+
+[node name="ElectronSpawnAreas" type="Node2D" parent="."]
+
+[node name="ElectronSpawn" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(1160, 1426)
+scale = Vector2(0.8, 0.8)
+
+[node name="ElectronSpawn2" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(2702, 2605)
+rotation = 0.403171
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 1
+
+[node name="ElectronSpawn3" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(1312, 3706)
+rotation = 0.0733038
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 2
+
+[node name="ElectronSpawn4" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(2712, 4936)
+rotation = 0.66497
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 3
+
+[node name="ElectronSpawn5" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(1232, 6382)
+rotation = 0.200713
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 4
+
+[node name="ElectronSpawn6" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(2775, 7404)
+rotation = 0.747001
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 5
+
+[node name="ElectronSpawn7" parent="ElectronSpawnAreas" instance=ExtResource("13_y6nqd")]
+position = Vector2(1281, 8281)
+rotation = 0.178024
+scale = Vector2(0.8, 0.8)
+metadata/spawn_order = 6
+
 [node name="Stone1" type="Sprite2D" parent="."]
 position = Vector2(2529, 8016)
 texture = ExtResource("9_fahmb")
@@ -84,43 +157,3 @@ texture = ExtResource("12_o4lwe")
 [node name="Driftwood4" type="Sprite2D" parent="."]
 position = Vector2(2335, 5479)
 texture = ExtResource("10_k1dfc")
-
-[node name="ElectronSpawn" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(1160, 1426)
-scale = Vector2(0.8, 0.8)
-
-[node name="ElectronSpawn2" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(2702, 2605)
-rotation = 0.403171
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 1
-
-[node name="ElectronSpawn3" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(1312, 3706)
-rotation = 0.0733038
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 2
-
-[node name="ElectronSpawn4" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(2712, 4936)
-rotation = 0.66497
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 3
-
-[node name="ElectronSpawn5" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(1232, 6382)
-rotation = 0.200713
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 4
-
-[node name="ElectronSpawn6" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(2775, 7404)
-rotation = 0.747001
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 5
-
-[node name="ElectronSpawn7" parent="." instance=ExtResource("13_y6nqd")]
-position = Vector2(1281, 8281)
-rotation = 0.178024
-scale = Vector2(0.8, 0.8)
-metadata/spawn_order = 6

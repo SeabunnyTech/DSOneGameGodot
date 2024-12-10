@@ -4,6 +4,7 @@ signal merged_with_player
 signal separated_from_player
 signal desired_position_changed(node: Node2D, new_desired_position: Vector2)
 
+@export var player_id: int = 0
 @export var follow_distance: float = 10.0
 @export var merge_distance: float = 50.0
 @export var separation_distance: float = 200.0
@@ -14,6 +15,9 @@ signal desired_position_changed(node: Node2D, new_desired_position: Vector2)
 var is_merged: bool = false
 var target_player: Node2D = null
 # var init_position: Vector2
+
+var last_position: Vector2
+var current_velocity: Vector2
 
 func _ready():
 	# init_position = position
@@ -46,12 +50,9 @@ func _physics_process(_delta):
 		
 		desired_position_changed.emit(self, desired_position)
 
-		# # 檢查河道邊界（使用 RiverGame 的 get_color_at_position）
-		# if river_normal.b > 0.01: # 確保在河道內
-		# 	position = position.lerp(desired_position, 0.1)
-		# else:
-		# 	# 碰到河岸，停止移動
-		# 	separate_from_player()
+	if last_position:
+		current_velocity = (position - last_position) / _delta
+	last_position = position
 
 func init(player: Node2D, init_pos: Vector2):
 	DebugMessage.info("init")

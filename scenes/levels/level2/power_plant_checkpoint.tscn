@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bi3xwv2rw4tot"]
+
+[ext_resource type="Script" path="res://scripts/levels/power_plant_checkpoint.gd" id="1_0mcl5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nxqld"]
+size = Vector2(1076.69, 276.781)
+
+[node name="PowerPlantCheckpoint" type="Area2D"]
+collision_layer = 32
+collision_mask = 64
+script = ExtResource("1_0mcl5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nxqld")

@@ -28,6 +28,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="WaterAvatar" parent="." instance=ExtResource("5_2puta")]
+[node name="WaterAvatar" parent="." groups=["water_avatar"] instance=ExtResource("5_2puta")]
 
-[node name="WaterAvatar2" parent="." instance=ExtResource("5_2puta")]
+[node name="WaterAvatar2" parent="." groups=["water_avatar"] instance=ExtResource("5_2puta")]
+position = Vector2(0, 3)
+player_id = 1
