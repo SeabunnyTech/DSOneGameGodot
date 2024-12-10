@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://ctc1wm78mr8p2"]
+[gd_scene load_steps=6 format=3 uid="uid://ctc1wm78mr8p2"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_djbtx"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
+[ext_resource type="PackedScene" uid="uid://bnsdwdn1obqyu" path="res://scenes/characters/water_avatar.tscn" id="5_3hg07"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_lybcr")
@@ -16,3 +17,5 @@ visible = false
 [node name="RiverGamePlayerOne" parent="." instance=ExtResource("4_p655j")]
 offset_right = 3840.0
 offset_bottom = 2160.0
+
+[node name="WaterAvatar" parent="." instance=ExtResource("5_3hg07")]

@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0b5oa8ojcn7x"]
+[gd_scene load_steps=6 format=3 uid="uid://d0b5oa8ojcn7x"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2_2p.gd" id="1_1vo57"]
 [ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_l1kx1"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_o4tnr"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_ggj66"]
+[ext_resource type="PackedScene" uid="uid://bnsdwdn1obqyu" path="res://scenes/characters/water_avatar.tscn" id="5_2puta"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_1vo57")
@@ -26,3 +27,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="WaterAvatar" parent="." instance=ExtResource("5_2puta")]
+
+[node name="WaterAvatar2" parent="." instance=ExtResource("5_2puta")]

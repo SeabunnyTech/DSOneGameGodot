@@ -163,7 +163,6 @@ func _process(_delta: float) -> void:
 
 	metaball_node.update_ball_positions(ball_positions)
 
-
 func set_color(new_color):
 	var col = Color(new_color)
 	modulate = col

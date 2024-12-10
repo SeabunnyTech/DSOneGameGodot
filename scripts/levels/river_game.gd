@@ -41,9 +41,9 @@ func init(player_id: int, num_players: int, river_index: int):
 func get_color_at_position(player_pos: Vector2) -> Color:
 	return river_scene.get_normal_at_position(player_pos)
 
-func player_in_river_position(screen_center: Vector2, camera_position: Vector2, camera_scale: float, player_target_position: Vector2) -> Vector2:
-	var player_river_pos = camera_position + (player_target_position - screen_center - self.position) / camera_scale
-	return player_river_pos
+func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, camera_scale: float, avatar_target_position: Vector2) -> Vector2:
+	var avatar_river_pos = camera_position + (avatar_target_position - screen_center - self.position) / camera_scale
+	return avatar_river_pos
 
 func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callback=null):
 	if camera_tween:
