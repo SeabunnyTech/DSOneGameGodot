@@ -4,10 +4,10 @@ extends Node2D
 @export var num_rivers_scenes = 3
 
 @export var camera_zoom_level = 0.65
+@export var camera_y_threshold = 0.4  # 螢幕 40% 以下時開始加速
+@export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
-@export var camera_y_threshold = 0.2  # 螢幕 50% 以下時開始加速
-@export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
 
 @onready var river_game_1 = $GameScene/RiverGamePlayerOne
 @onready var river_game_2 = $GameScene/RiverGamePlayerTwo
@@ -24,23 +24,22 @@ var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
 var camera_velocities = [0.0, 0.0]  # 相機當前速度
 # TODO: 設定相機邊界範圍
 
-var player_in_river_positions = [Vector2(0, 0), Vector2(0, 0)]
-
+# TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
 	
 	for i in range(num_players):
 		river_games[i].init(i, num_players, random_river_index)
+		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
+
 		avatars[i].init(PlayerManager.current_players[i], avatar_init_positions[i])
 		avatars[i].merged_with_player.connect(_on_avatar_merged)
 		avatars[i].separated_from_player.connect(_on_avatar_separated)
 		avatars[i].desired_position_changed.connect(_on_avatar_desired_position_changed)
 
-		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
-
 func _process(delta: float) -> void:
-	# _update_player_in_river_positions()
 	_update_cameras(delta)
+	# _update_player_in_river_positions()
 
 # func _update_player_in_river_positions() -> void:
 # 	for i in range(num_players):

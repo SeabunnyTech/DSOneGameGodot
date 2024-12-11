@@ -18,6 +18,7 @@ var positions_initialized: bool = false
 @onready var river_normal_map_sprite = $RiverNormMap
 @onready var electron_spawn_areas_node = $ElectronSpawnAreas
 @onready var checkpoints_node = $Checkpoints
+@onready var starting_point = $StartingPoint
 
 var river_normal_map: Image
 
@@ -85,12 +86,10 @@ func get_spawn_aposition(spawn_id: int) -> float:
 	return 0.0
 
 func _on_checkpoint_passed(checkpoint: Node, speed: float, player_id: int, spawn_id: int) -> void:
-	# # 計算獲得的電仔數量
+	# 計算獲得的電仔數量
 	var speed_ratio = (speed - min_speed_threshold) / (max_speed_bonus - min_speed_threshold)
 	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
 	
-	# # 播放音效
-	# # sfx_player.play()
 	spawn_areas[spawn_id].spawn_electrons(electron_count)
 	DebugMessage.info("Checkpoint passed: " + str(spawn_id) + " player_id: " + str(player_id))
 

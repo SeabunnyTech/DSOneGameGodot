@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bqwegp357ve23"]
+[gd_scene load_steps=18 format=3 uid="uid://bqwegp357ve23"]
 
 [ext_resource type="Texture2D" uid="uid://b446rs28ol5o2" path="res://assets/images/backgrounds/static/level2/river_3.png" id="1_pq7ja"]
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_r5kgo"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dnfosm18jfkyx" path="res://assets/images/backgrounds/static/level2/river_norm_3.png" id="2_us2ml"]
 [ext_resource type="Texture2D" uid="uid://evifukryb70a" path="res://assets/images/backgrounds/static/level2/power_2.png" id="3_jo88q"]
 [ext_resource type="Texture2D" uid="uid://csx5raxw6uyj7" path="res://assets/images/backgrounds/static/level2/power_3.png" id="4_nvjbf"]
+[ext_resource type="Texture2D" uid="uid://bx6bc4dna35rc" path="res://assets/images/backgrounds/static/level2/river_earth_3.png" id="5_r2hvs"]
 [ext_resource type="Texture2D" uid="uid://6q7iglww273v" path="res://assets/images/backgrounds/static/level2/power_4.png" id="5_uh5qm"]
 [ext_resource type="Texture2D" uid="uid://se3odcyid3bd" path="res://assets/images/backgrounds/static/level2/power_5.png" id="6_i7r17"]
 [ext_resource type="Texture2D" uid="uid://cbelsc0iiwt7h" path="res://assets/images/backgrounds/static/level2/power_6.png" id="7_v8mh1"]
@@ -29,73 +30,42 @@ texture = ExtResource("2_us2ml")
 position = Vector2(1920, 5200)
 texture = ExtResource("1_pq7ja")
 
-[node name="RiverCollision" type="StaticBody2D" parent="."]
-visible = false
-position = Vector2(1920, 5200)
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RiverCollision"]
-polygon = PackedVector2Array(-1901, -5197, 1920, -5191, 1918, 5110, 1127, 4989, 735, 4888, 519, 4799, 287, 4616, 47, 4474, -177, 4258, -253, 4062, -231, 3927, -96, 3869, 175, 3850, 351, 3798, 475, 3698, 545, 3546, 562, 3412, 562, 3281, 695, 3043, 781, 2879, 782, 2711, 737, 2580, 636, 2515, 386, 2476, 29, 2471, -151, 2465, -163, 2426, -72, 2383, 207, 2331, 406, 2230, 513, 2101, 565, 1931, 536, 1787, 480, 1714, 365, 1640, 92, 1595, -287, 1535, -481, 1459, -534, 1388, -551, 1301, -504, 1202, -377, 1168, -133, 1197, 132, 1196, 376, 1153, 505, 1097, 690, 961, 819, 778, 873, 621, 886, 468, 863, 312, 794, 183, 650, 32, 404, -69, 109, -104, -135, -48, -260, -100, -374, -257, -413, -397, -381, -518, -269, -585, -67, -628, 271, -747, 484, -900, 593, -1063, 617, -1185, 596, -1344, 459, -1547, 160, -1778, -156, -1917, -371, -2012, -470, -2106, -484, -2194, -451, -2268, -296, -2279, -9, -2266, 219, -2272, 436, -2337, 644, -2459, 763, -2590, 844, -2746, 860, -2894, 825, -3046, 768, -3157, 646, -3279, 499, -3378, 275, -3472, 78, -3549, -74, -3616, -99, -3661, -56, -3731, 126, -3828, 320, -3924, 395, -4021, 400, -4118, 374, -4347, 334, -4582, 552, -4674, 516, -4954, 315, -5102, -156, -5067, -395, -4959, -431, -4774, -78, -4616, -36, -4555, -22, -4459, 11, -4291, 13, -4182, -56, -4091, -179, -3979, -312, -3902, -395, -3833, -449, -3749, -470, -3641, -452, -3532, -360, -3397, -223, -3290, -32, -3195, 262, -3061, 375, -2976, 426, -2900, 419, -2805, 373, -2733, 251, -2648, 47, -2591, -236, -2622, -429, -2663, -577, -2699, -681, -2683, -784, -2629, -869, -2540, -944, -2426, -969, -2289, -963, -2182, -916, -2048, -835, -1929, -686, -1782, -526, -1668, -297, -1549, -106, -1464, 52, -1309, 103, -1145, 53, -1037, -144, -944, -571, -859, -742, -762, -816, -675, -851, -578, -865, -345, -799, -88, -718, 71, -522, 237, -345, 303, -152, 298, 64, 250, 274, 244, 429, 281, 527, 363, 558, 492, 532, 617, 449, 725, 328, 807, 152, 864, -7, 878, -246, 867, -466, 882, -659, 938, -795, 1053, -868, 1221, -891, 1369, -859, 1519, -741, 1695, -502, 1820, -53, 1907, 155, 1936, 161, 1968, 41, 2015, -262, 2083, -425, 2141, -531, 2236, -581, 2339, -581, 2478, -498, 2634, -317, 2736, 55, 2764, 161, 2776, 215, 2831, 232, 2898, 177, 2969, 111, 2999, 57, 3050, 52, 3099, 67, 3186, 101, 3290, 110, 3381, 82, 3436, -30, 3499, -153, 3509, -324, 3514, -549, 3530, -693, 3565, -766, 3651, -832, 3826, -844, 4006, -800, 4170, -709, 4399, -637, 4539, -644, 4663, -782, 4821, -974, 4909, -1219, 4970, -1375.61, 4987.62, -1842, 5036, -1930, 5050)
-disabled = true
-
-[node name="PowerPlants" type="Node2D" parent="."]
-
-[node name="Power1" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(1590, 2075)
-texture = ExtResource("2_opke5")
-
-[node name="Power2" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(2509, 2898)
-texture = ExtResource("3_jo88q")
-
-[node name="Power3" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(1168, 3742)
-texture = ExtResource("4_nvjbf")
-
-[node name="Power4" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(2301, 4629)
-texture = ExtResource("5_uh5qm")
-
-[node name="Power5" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(1730, 5565)
-texture = ExtResource("6_i7r17")
-
-[node name="Power6" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(2527, 6402)
-texture = ExtResource("7_v8mh1")
-
-[node name="Power7" type="Sprite2D" parent="PowerPlants"]
-position = Vector2(1435, 8196)
-texture = ExtResource("8_gmwg4")
-
 [node name="Checkpoints" type="Node2D" parent="."]
 position = Vector2(1920, 5196)
 
 [node name="PowerPlantCheckpoint" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(526, -2956)
+position = Vector2(656, -2871)
 
 [node name="PowerPlantCheckpoint2" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-562, -2093)
+position = Vector2(-727, -2101)
+scale = Vector2(-1, 1)
 spawn_id = 1
 
 [node name="PowerPlantCheckpoint3" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(381, -1213)
+position = Vector2(397, -1206)
 spawn_id = 2
 
 [node name="PowerPlantCheckpoint4" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-503, -333)
+position = Vector2(-655, -336)
+scale = Vector2(-1, 1)
 spawn_id = 3
 
 [node name="PowerPlantCheckpoint5" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(692, 521)
+position = Vector2(767, 505)
 spawn_id = 4
 
 [node name="PowerPlantCheckpoint6" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-503, 1380)
+position = Vector2(-760, 1379)
+scale = Vector2(-1, 1)
 spawn_id = 5
 
 [node name="PowerPlantCheckpoint7" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(381, 3178)
+position = Vector2(347, 3212)
 spawn_id = 6
+
+[node name="RiverEarthMap" type="Sprite2D" parent="."]
+position = Vector2(1920, 5200)
+texture = ExtResource("5_r2hvs")
 
 [node name="ElectronSpawnAreas" type="Node2D" parent="."]
 
@@ -138,6 +108,36 @@ position = Vector2(1171, 8456)
 rotation = 0.178024
 scale = Vector2(0.8, 0.8)
 metadata/spawn_order = 6
+
+[node name="PowerPlants" type="Node2D" parent="."]
+
+[node name="Power1" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(1590, 2075)
+texture = ExtResource("2_opke5")
+
+[node name="Power2" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(2509, 2898)
+texture = ExtResource("3_jo88q")
+
+[node name="Power3" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(1168, 3742)
+texture = ExtResource("4_nvjbf")
+
+[node name="Power4" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(2301, 4629)
+texture = ExtResource("5_uh5qm")
+
+[node name="Power5" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(1730, 5565)
+texture = ExtResource("6_i7r17")
+
+[node name="Power6" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(2527, 6402)
+texture = ExtResource("7_v8mh1")
+
+[node name="Power7" type="Sprite2D" parent="PowerPlants"]
+position = Vector2(1435, 8196)
+texture = ExtResource("8_gmwg4")
 
 [node name="Driftwood3" type="Sprite2D" parent="."]
 position = Vector2(2233, 6972)

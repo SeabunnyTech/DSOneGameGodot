@@ -1,9 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bi3xwv2rw4tot"]
+[gd_scene load_steps=4 format=3 uid="uid://bi3xwv2rw4tot"]
 
 [ext_resource type="Script" path="res://scripts/levels/power_plant_checkpoint.gd" id="1_0mcl5"]
+[ext_resource type="Texture2D" uid="uid://ckjuumxwg5lay" path="res://assets/images/backgrounds/static/level2/checkpoint.png" id="3_3282d"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nxqld"]
-size = Vector2(1076.69, 276.781)
+size = Vector2(950.345, 93)
 
 [node name="PowerPlantCheckpoint" type="Area2D"]
 collision_layer = 32
@@ -11,4 +12,11 @@ collision_mask = 64
 script = ExtResource("1_0mcl5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.26494e-07, 7.5)
+rotation = 3.14159
+scale = Vector2(1, -1)
 shape = SubResource("RectangleShape2D_nxqld")
+
+[node name="Checkpoint" type="Sprite2D" parent="."]
+position = Vector2(1, -6)
+texture = ExtResource("3_3282d")
