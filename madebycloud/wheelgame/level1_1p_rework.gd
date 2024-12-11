@@ -1,6 +1,11 @@
 @tool
 extends Node2D
 
+
+signal go_back_to_login
+
+
+
 # 這個 level 的一些行為:
 # 1. 剛進入時會有一些教學, 基本上就是 文字 ui 和運鏡的 tween 一個接一個
 # 2. 可以考慮給一個跳過按鈕
@@ -19,23 +24,47 @@ extends Node2D
 @onready var guide_message = $Title
 @onready var wheelgame_env = $WheelGameEnviromnent
 @onready var circular_mask = $CircularMask
+@onready var player_waiter = $"1p_player_waiter"
 
 
 # reset 非常重要, 定義了動畫能夠順利執行的起始條件
 # 在編輯器預覽的設定和 reset 後的設定可以不一樣
 func reset():
+
+	# 隱藏關卡本身
 	modulate.a = 0
+
+	# 介紹用的訊息與遮罩
 	guide_message.modulate.a = 0
-	$HUD.reset()
 	circular_mask.alpha = 1.0
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
-	wheelgame_env.reset()
 	$SkipButton.fade_away(true)
+
+	# 遊戲本體及記分板
+	wheelgame_env.reset()
+	$HUD.reset()
 	game_started = false
+
+	# 備用的邏輯
+	player_waiter.reset()
 
 
 func enter_scene():
 	_begin_tutorial()
+
+
+
+func leave_scene_for_restart():
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	tween.tween_property(self, 'modulate:a', 0, 1)
+	tween.tween_interval(1.5)
+	tween.tween_callback(func():
+		reset()
+		go_back_to_login.emit()
+	)
+
 
 
 var tween
@@ -74,7 +103,6 @@ func _begin_tutorial():
 	tween.tween_interval(1)
 	_show_text('case')
 
-
 	# 3. 但它其實一點都不普通喔! 在它平淡的外表下\n內部有著很酷的構造喔!
 	_show_text('show')
 
@@ -107,6 +135,7 @@ func _begin_tutorial():
 
 	tween.tween_callback(func():
 		wheelgame_env.rotation_enabled = true
+		player_waiter.set_wait_for_player(true)
 	)
 
 	tween.play()
@@ -119,6 +148,7 @@ func _begin_tutorial():
 
 var game_started
 func _continue_tutorial():
+	player_waiter.set_wait_for_player(false)
 	if game_started:
 		return
 
@@ -143,6 +173,7 @@ func _skip_tutorial(_player):
 
 
 func _proceed_to_game_start():
+	player_waiter.set_wait_for_player(false)
 	if $SkipButton.sensetive:
 		$SkipButton.fade_away()
 	if tween:
@@ -201,6 +232,8 @@ func _ready() -> void:
 		# 電仔生成
 		player.full_rotation_completed.connect(func(_player, clockwise):
 			wheelgame_env.react_to_wheel_rotation(clockwise)
+			if game_started:
+				$HUD.add_score(1)
 		)
 
 		# 水輪旋轉
@@ -208,8 +241,13 @@ func _ready() -> void:
 			wheelgame_env.rotate_wheel(clockwise, speed)
 		)
 
+		# 連接UI 及遊戲環境
 		$HUD.timeout.connect(_game_timeout)
-		wheelgame_env.electron_collected.connect($HUD.add_score)
+		#wheelgame_env.electron_collected.connect($HUD.add_score)
+
+		# 連接 player lost 計時器
+		player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
+
 
 	# 跳過教學的按鈕
 	$SkipButton.triggered.connect(_skip_tutorial)

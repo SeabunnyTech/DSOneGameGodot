@@ -49,6 +49,11 @@ func _connect_transitions():
 		#GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
 	)
 
+	level1_1p.go_back_to_login.connect(func():
+		current_subscene = Subscene.WELCOME
+		welcome_subscene.enter_scene()
+	)
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

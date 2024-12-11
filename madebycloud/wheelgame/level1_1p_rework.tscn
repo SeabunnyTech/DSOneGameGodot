@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cmk5cd4ky13nc"]
+[gd_scene load_steps=12 format=3 uid="uid://cmk5cd4ky13nc"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/level1_1p_rework.gd" id="1_o3jsl"]
 [ext_resource type="PackedScene" uid="uid://beb3ratbaycsj" path="res://madebycloud/time_score_hud.tscn" id="2_egw8w"]
@@ -9,7 +9,8 @@
 [ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="6_qhmng"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="7_en88l"]
 [ext_resource type="AudioStream" uid="uid://d2injtmbjuoe4" path="res://assets/audio/sfx/short_whistle.wav" id="9_yei3f"]
-[ext_resource type="AudioStream" uid="uid://bkbg57otuikad" path="res://assets/audio/sfx/long_whistle.wav" id="10_y512d"]
+[ext_resource type="AudioStream" uid="uid://cew0ndub4c4vk" path="res://assets/audio/sfx/long_whistle.wav" id="10_y512d"]
+[ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="11_a7wm1"]
 
 [node name="Level1_1p" type="Node2D"]
 modulate = Color(1, 1, 1, 0)
@@ -67,3 +68,6 @@ stream = ExtResource("9_yei3f")
 
 [node name="long_whistle" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_y512d")
+
+[node name="1p_player_waiter" type="Node" parent="."]
+script = ExtResource("11_a7wm1")
