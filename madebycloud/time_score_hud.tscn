@@ -10,24 +10,22 @@
 script = ExtResource("1_x0eoc")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 2160.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -234.0
+offset_right = 174.0
+offset_bottom = 600.0
 grow_horizontal = 2
-scale = Vector2(1.00056, 1.00963)
 size_flags_vertical = 3
 
 [node name="PlayerOneContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 40
 
 [node name="ScoreContainer" type="MarginContainer" parent="HBoxContainer/PlayerOneContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 30
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/PlayerOneContainer/ScoreContainer"]
 layout_mode = 2
@@ -55,11 +53,6 @@ vertical_alignment = 1
 
 [node name="TimerContainer" type="MarginContainer" parent="HBoxContainer/PlayerOneContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-theme_override_constants/margin_top = 30
-theme_override_constants/margin_right = 60
-theme_override_constants/margin_bottom = 100
 
 [node name="PanelContainer" type="PanelContainer" parent="HBoxContainer/PlayerOneContainer/TimerContainer"]
 layout_mode = 2

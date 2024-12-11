@@ -7,6 +7,7 @@ signal timeout
 
 
 @onready var start_timer = $Timer.start
+@onready var container = $HBoxContainer
 
 @export var total_time = 30
 
@@ -54,12 +55,12 @@ func _set_visible(visibility, immediate):
 	var target_alpha = 1.0 if visibility else 0.0
 
 	if immediate:
-		$HBoxContainer.modulate.a = target_alpha
+		container.modulate.a = target_alpha
 	else:
 		if transition_tween:
 			transition_tween.kill()
 		transition_tween = create_tween()
-		transition_tween.tween_property($HBoxContainer, 'modulate:a', target_alpha, 1)
+		transition_tween.tween_property(container, 'modulate:a', target_alpha, 1)
 
 
 func add_score(value):
