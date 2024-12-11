@@ -6,23 +6,48 @@ signal spawn_positions_ready(positions: Array)
 
 var spawn_areas: Array[Node] = []
 var spawn_positions: Array[float] = []
+var checkpoints: Array[Node] = []  # 存儲所有 checkpoint
+
 var positions_initialized: bool = false
 
-var normal_image: Image
+@export var min_speed_threshold = 100.0  # 最低需要的速度
+@export var max_speed_bonus = 500.0      # 達到此速度會得到最多電仔
+@export var min_electrons = 1            # 最少產生電仔數
+@export var max_electrons = 10            # 最多產生電仔數
+
+@onready var river_normal_map_sprite = $RiverNormMap
+@onready var electron_spawn_areas_node = $ElectronSpawnAreas
+@onready var checkpoints_node = $Checkpoints
+@onready var starting_point = $StartingPoint
+
+var river_normal_map: Image
 
 func _ready() -> void:
-	for child in get_children():
+	river_normal_map = river_normal_map_sprite.texture.get_image()
+
+	# 註冊 river_scene 下的 spawn_areas signal
+	for child in electron_spawn_areas_node.get_children():
 		if child.has_meta("spawn_order"):
 			spawn_areas.append(child)
 			
 			# 連接每個電仔生成區的訊號
 			child.electrons_scoring.connect(_on_spawn_scoring)
 			child.electrons_scored.connect(_on_spawn_scored)
+		
+	# 註冊 river_scene 下的 checkpoints signal
+	for child in checkpoints_node.get_children():
+		DebugMessage.info("Checkpoint found: " + str(child.spawn_id))
+		checkpoints.append(child)
+		# 連接 checkpoint 信號
+		child.checkpoint_passed.connect(
+			func(speed, player_id, spawn_id): 
+				_on_checkpoint_passed(child, speed, player_id, spawn_id)
+		)
 	
 	# 確保排序
 	spawn_areas.sort_custom(func(a, b): 
 		return a.get_meta("spawn_order") < b.get_meta("spawn_order"))
-	
+
 	await get_tree().process_frame
 	_update_spawn_positions()
 
@@ -42,14 +67,13 @@ func _update_spawn_positions() -> void:
 func are_positions_ready() -> bool:
 	return positions_initialized
 
-
 func get_normal_at_position(pos: Vector2) -> Color:
 	# 確保位置在圖片範圍內
-	var image_size = normal_image.get_size()
+	var image_size = river_normal_map.get_size()
 	var x = clamp(pos.x, 0, image_size.x - 1)
 	var y = clamp(pos.y, 0, image_size.y - 1)
 	
-	return normal_image.get_pixel(x, y)
+	return river_normal_map.get_pixel(x, y)
 
 # 提供取得座標的方法
 func get_spawn_positions() -> Array[float]:
@@ -60,6 +84,14 @@ func get_spawn_aposition(spawn_id: int) -> float:
 	if spawn_id >= 0 and spawn_id < spawn_positions.size():
 		return spawn_positions[spawn_id]
 	return 0.0
+
+func _on_checkpoint_passed(checkpoint: Node, speed: float, player_id: int, spawn_id: int) -> void:
+	# 計算獲得的電仔數量
+	var speed_ratio = (speed - min_speed_threshold) / (max_speed_bonus - min_speed_threshold)
+	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
+	
+	spawn_areas[spawn_id].spawn_electrons(electron_count)
+	DebugMessage.info("Checkpoint passed: " + str(spawn_id) + " player_id: " + str(player_id))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

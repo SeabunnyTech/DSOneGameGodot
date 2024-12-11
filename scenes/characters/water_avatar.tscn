@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://bnsdwdn1obqyu"]
+
+[ext_resource type="Script" path="res://scripts/characters/water_avatar.gd" id="1_1rxx5"]
+[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="1_c23hg"]
+[ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="3_hatqj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_683io"]
+
+[node name="WaterAvatar" type="CharacterBody2D"]
+collision_layer = 64
+collision_mask = 32
+script = ExtResource("1_1rxx5")
+
+[node name="Metaball" parent="." instance=ExtResource("1_c23hg")]
+ball_count = 2
+ball_radii = Array[float]([20.0, 35.0])
+
+[node name="InertiaFollower" type="Node2D" parent="Metaball"]
+script = ExtResource("3_hatqj")
+f = 3.0
+z = 0.4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_683io")

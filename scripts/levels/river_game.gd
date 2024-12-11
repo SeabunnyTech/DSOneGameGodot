@@ -38,16 +38,17 @@ func init(player_id: int, num_players: int, river_index: int):
 
 	add_child(river_scene)
 
-func player_in_river_position(camera_position: Vector2, camera_scale: float, player_target_position: Vector2) -> Vector2:
-	var screen_center = Vector2(1920/2, 2160/2)
-	var player_river_pos = camera_position + (player_target_position - screen_center - self.position) / camera_scale
-	return player_river_pos
+func get_color_at_position(player_pos: Vector2) -> Color:
+	return river_scene.get_normal_at_position(player_pos)
 
-func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
+func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, camera_scale: float, avatar_target_position: Vector2) -> Vector2:
+	var avatar_river_pos = camera_position + (avatar_target_position - screen_center - self.position) / camera_scale
+	return avatar_river_pos
+
+func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callback=null):
 	if camera_tween:
 		camera_tween.kill()
 
-	var screen_center = Vector2(1920/2, 2160/2)
 	var new_position = screen_center - target_center * target_scale
 	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	# TODO: 這邊把 river_scene 當作參數傳入，應該會更好？

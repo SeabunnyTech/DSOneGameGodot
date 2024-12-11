@@ -112,7 +112,10 @@ func reset_attractor():
 
 # 為了處理輸入位置跳躍而寫的邏輯, 導致 player 要用 set_target_position 設定位置
 @export var smoothing_speed: float = 30.0
-var target_position: Vector2 = Vector2(0, 3000)
+var target_position: Vector2 = Vector2(0, -1000)
+
+func set_smoothing_speed(new_speed: float):
+	smoothing_speed = new_speed
 
 func set_target_position(new_position: Vector2):
 	if attractor_position:
@@ -123,13 +126,14 @@ func set_target_position(new_position: Vector2):
 	target_position = new_position
 
 func _physics_process(delta: float):
-	var to_position = target_position
-	var current_position = position
-	var direction = (to_position - current_position)
-	velocity = direction * smoothing_speed
+	position = position.lerp(target_position, smoothing_speed * delta)
+	# var to_position = target_position
+	# var current_position = position
+	# var direction = (to_position - current_position)
+	# velocity = direction * smoothing_speed
 
-	# 碰撞判定用，Godot 內建函數
-	move_and_slide()
+	# # 碰撞判定用，Godot 內建函數
+	# move_and_slide()
 
 
 
@@ -158,7 +162,6 @@ func _process(_delta: float) -> void:
 		inertia_follower2.position]
 
 	metaball_node.update_ball_positions(ball_positions)
-
 
 func set_color(new_color):
 	var col = Color(new_color)
