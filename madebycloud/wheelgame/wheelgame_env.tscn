@@ -1,7 +1,7 @@
 [gd_scene load_steps=23 format=3 uid="uid://3n3cmgot5ska"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/wheelgame_env.gd" id="1_0cnpv"]
-[ext_resource type="Texture2D" uid="uid://c45uqyeb75ss" path="res://assets/images/backgrounds/static/level1/background.png" id="4_eafum"]
+[ext_resource type="Texture2D" uid="uid://ig2w8dfx34cs" path="res://assets/images/backgrounds/static/level1/background_low.png" id="2_eyg55"]
 [ext_resource type="Texture2D" uid="uid://ci3hxu27wqv7t" path="res://assets/images/backgrounds/animated/level1/cloud1.png" id="5_ngqr1"]
 [ext_resource type="Texture2D" uid="uid://cv12kc7irmsfu" path="res://assets/images/backgrounds/animated/level1/cloud2.png" id="6_6lh43"]
 [ext_resource type="Texture2D" uid="uid://co4ggqwy4lclj" path="res://assets/images/backgrounds/animated/level1/cloud3.png" id="7_i3t3x"]
@@ -38,8 +38,9 @@ script = ExtResource("1_0cnpv")
 [node name="Player1UI" type="Sprite2D" parent="."]
 
 [node name="Background" type="Sprite2D" parent="Player1UI"]
-position = Vector2(1920, 1080)
-texture = ExtResource("4_eafum")
+position = Vector2(2104, 135)
+scale = Vector2(15, 15)
+texture = ExtResource("2_eyg55")
 
 [node name="Cloud" type="Sprite2D" parent="Player1UI"]
 
@@ -108,8 +109,9 @@ texture = ExtResource("21_emvrg")
 position = Vector2(2372.55, 1316.1)
 texture = ExtResource("22_qcaxk")
 
-[node name="ElectronEmitter" parent="." instance=ExtResource("21_x0m0p")]
+[node name="ElectronEmitter" parent="Player1UI" instance=ExtResource("21_x0m0p")]
 z_index = 5
-position = Vector2(2784, 1046)
+position = Vector2(1152, 400)
+rotation = -1.22173
 collision_layer = 8
 collision_mask = 4
