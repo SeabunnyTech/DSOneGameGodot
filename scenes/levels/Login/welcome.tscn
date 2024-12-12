@@ -11,7 +11,6 @@ default_font_size = 80
 
 [node name="Welcome" type="Node2D"]
 script = ExtResource("1_n171j")
-loop_img = null
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 offset_right = 3840.0
@@ -46,8 +45,3 @@ theme = ExtResource("2_0lg17")
 theme_override_colors/font_color = Color(0.103744, 0.103744, 0.103744, 1)
 text = "現在就站到地面的標記點上，舉起控制盤，開始接受挑戰吧!"
 horizontal_alignment = 1
-
-[node name="WhiteRectCurtain" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(3840, 2160)
-offset_right = 40.0
-offset_bottom = 40.0
