@@ -75,7 +75,8 @@ func showup():
 		alpah_tween.kill()
 	alpah_tween = create_tween()
 	alpah_tween.tween_property(self, 'modulate:a', 1, 1)
-	alpah_tween.tween_callback(func():sensetive = true)
+	alpah_tween.parallel().tween_interval(0.5)
+	alpah_tween.parallel().tween_callback(func():sensetive = true)
 
 
 func _ready() -> void:
