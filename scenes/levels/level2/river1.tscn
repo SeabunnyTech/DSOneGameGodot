@@ -42,6 +42,7 @@ spawn_id = 1
 
 [node name="PowerPlantCheckpoint3" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
 position = Vector2(2506, 3773)
+scale = Vector2(1.2, 1.2)
 spawn_id = 2
 
 [node name="PowerPlantCheckpoint4" parent="Checkpoints" instance=ExtResource("11_a7p6k")]
@@ -111,30 +112,37 @@ metadata/spawn_order = 6
 [node name="PowerPlants" type="Node2D" parent="."]
 
 [node name="Power1" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1407, 1305)
 texture = ExtResource("2_yob3o")
 
 [node name="Power2" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2236, 2400)
 texture = ExtResource("3_kcwla")
 
 [node name="Power3" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1631, 3527)
 texture = ExtResource("4_wg6qd")
 
 [node name="Power4" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2406, 4706)
 texture = ExtResource("5_xpiay")
 
 [node name="Power5" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1520, 6203)
 texture = ExtResource("6_8h4i6")
 
 [node name="Power6" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2412, 7234)
 texture = ExtResource("7_6tj8i")
 
 [node name="Power7" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1559, 8099)
 texture = ExtResource("8_1nfpq")
 

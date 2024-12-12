@@ -9,15 +9,15 @@ extends Node2D
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
 
+@export var screen_center = Vector2(3840.0/2, 2160.0/2)
+@export var camera_position = Vector2(1920, 1080)
+@export var camera_velocitie = 0.0  # 相機當前速度
+
 @onready var river_game_1 = $RiverGamePlayerOne
 
 @onready var avatar_1 = $WaterAvatar
+@export var avatar_init_positions = Vector2(2090, 460)
 var avatar_is_stuck = false
-var avatar_init_positions = Vector2(2090, 460)
-
-var screen_center = Vector2(3840/2, 2160/2)
-var camera_position = Vector2(1920, 1080)
-var camera_velocitie = 0.0  # 相機當前速度
 
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
@@ -31,17 +31,16 @@ func _ready():
 	avatar_1.separated_from_player.connect(_on_avatar_separated)
 	avatar_1.desired_position_changed.connect(_on_avatar_desired_position_changed)
 
-
 func _process(delta: float) -> void:
 	_update_cameras(delta)
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
 	var river_game = river_game_1
-	var player_pos = avatar_1.position
+	var avatar_pos = avatar_1.position
 
 	# 計算相機移動速度
-	var relative_y = player_pos.y / screen_height
+	var relative_y = avatar_pos.y / screen_height
 	var target_speed = lerp(
 		min_camera_speed,
 		max_camera_speed,
@@ -54,12 +53,11 @@ func _update_cameras(delta: float) -> void:
 	# 平滑過渡到目標速度
 	camera_velocitie = lerp(camera_velocitie, target_speed, camera_smoothing)
 	
+	if not river_game.is_camera_in_map(camera_position + Vector2(0, camera_velocitie * delta), screen_center, camera_zoom_level):
+		return
+
 	# 更新相機位置
 	camera_position.y += camera_velocitie * delta
-
-	# 確保相機不會落後於玩家太多
-	var min_camera_y = player_pos.y - screen_height * 0.7
-	camera_position.y = max(camera_position.y, min_camera_y)
 
 	# 調用 camera_to
 	river_game.camera_to(

@@ -3,7 +3,7 @@ extends Area2D
 
 signal checkpoint_passed(speed: float, player_id: int, spawn_id: int)
 
-@export var min_speed_threshold = 100.0  # 最低需要的速度
+@export var min_speed_threshold = 10.0  # 最低需要的速度
 @export var spawn_id: int = 0            # 對應的 electron spawn id
 
 @onready var sfx_player = $CheckpointSFX
@@ -32,5 +32,5 @@ func _on_body_entered(body: Node2D):
 	# 進入冷卻
 	is_active = false
 	cooldown_timer = COOLDOWN_TIME
-	
+
 	checkpoint_passed.emit(speed, body.player_id, spawn_id)

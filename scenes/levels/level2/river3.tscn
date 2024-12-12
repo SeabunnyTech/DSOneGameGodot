@@ -34,33 +34,37 @@ texture = ExtResource("1_pq7ja")
 position = Vector2(1920, 5196)
 
 [node name="PowerPlantCheckpoint" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(656, -2871)
+position = Vector2(642, -2869)
+scale = Vector2(1.2, 1.2)
 
 [node name="PowerPlantCheckpoint2" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-727, -2101)
-scale = Vector2(-1, 1)
+position = Vector2(-710, -2171)
+scale = Vector2(1.3, 1.3)
 spawn_id = 1
 
 [node name="PowerPlantCheckpoint3" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(397, -1206)
+position = Vector2(352, -1206)
+scale = Vector2(1.35, 1.35)
 spawn_id = 2
 
 [node name="PowerPlantCheckpoint4" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-655, -336)
-scale = Vector2(-1, 1)
+position = Vector2(-627, -438)
+scale = Vector2(1.25, 1.25)
 spawn_id = 3
 
 [node name="PowerPlantCheckpoint5" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(767, 505)
+position = Vector2(710, 541)
+scale = Vector2(0.9, 0.9)
 spawn_id = 4
 
 [node name="PowerPlantCheckpoint6" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(-760, 1379)
-scale = Vector2(-1, 1)
+position = Vector2(-710, 1357)
+scale = Vector2(0.9, 0.9)
 spawn_id = 5
 
 [node name="PowerPlantCheckpoint7" parent="Checkpoints" instance=ExtResource("11_5cjmj")]
-position = Vector2(347, 3212)
+position = Vector2(329, 3284)
+scale = Vector2(1.2, 1.2)
 spawn_id = 6
 
 [node name="RiverEarthMap" type="Sprite2D" parent="."]
@@ -112,30 +116,37 @@ metadata/spawn_order = 6
 [node name="PowerPlants" type="Node2D" parent="."]
 
 [node name="Power1" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1590, 2075)
 texture = ExtResource("2_opke5")
 
 [node name="Power2" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2509, 2898)
 texture = ExtResource("3_jo88q")
 
 [node name="Power3" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1168, 3742)
 texture = ExtResource("4_nvjbf")
 
 [node name="Power4" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2301, 4629)
 texture = ExtResource("5_uh5qm")
 
 [node name="Power5" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1730, 5565)
 texture = ExtResource("6_i7r17")
 
 [node name="Power6" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(2527, 6402)
 texture = ExtResource("7_v8mh1")
 
 [node name="Power7" type="Sprite2D" parent="PowerPlants"]
+z_index = 1
 position = Vector2(1435, 8196)
 texture = ExtResource("8_gmwg4")
 

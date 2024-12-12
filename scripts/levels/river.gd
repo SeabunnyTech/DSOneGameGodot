@@ -36,7 +36,6 @@ func _ready() -> void:
 		
 	# 註冊 river_scene 下的 checkpoints signal
 	for child in checkpoints_node.get_children():
-		DebugMessage.info("Checkpoint found: " + str(child.spawn_id))
 		checkpoints.append(child)
 		# 連接 checkpoint 信號
 		child.checkpoint_passed.connect(
@@ -67,6 +66,18 @@ func _update_spawn_positions() -> void:
 func are_positions_ready() -> bool:
 	return positions_initialized
 
+func is_camera_in_map(camera_position: Vector2, screen_center: Vector2, camera_zoom_level: float) -> bool:
+	var min_camera_y_in_map = camera_position.y - screen_center.y / camera_zoom_level
+	var max_camera_y_in_map = camera_position.y + screen_center.y / camera_zoom_level
+
+	var image_size = river_normal_map.get_size()
+
+	# Camera 超出地圖範圍
+	if min_camera_y_in_map < 0 or max_camera_y_in_map > image_size.y:
+		return false
+
+	return true
+
 func get_normal_at_position(pos: Vector2) -> Color:
 	# 確保位置在圖片範圍內
 	var image_size = river_normal_map.get_size()
@@ -91,7 +102,6 @@ func _on_checkpoint_passed(checkpoint: Node, speed: float, player_id: int, spawn
 	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
 	
 	spawn_areas[spawn_id].spawn_electrons(electron_count)
-	DebugMessage.info("Checkpoint passed: " + str(spawn_id) + " player_id: " + str(player_id))
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:

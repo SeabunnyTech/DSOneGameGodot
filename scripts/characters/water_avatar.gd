@@ -38,7 +38,6 @@ func _physics_process(_delta):
 		return
 		
 	if target_player:
-		# DebugMessage.info("target_player: " + str(target_player.name))
 		var distance = position.distance_to(target_player.position)
 		if distance > separation_distance:
 			separate_from_player()
@@ -55,7 +54,6 @@ func _physics_process(_delta):
 	last_position = position
 
 func init(player: Node2D, init_pos: Vector2):
-	DebugMessage.info("init")
 	target_player = player
 	position = init_pos
 
@@ -72,13 +70,11 @@ func separate_from_player():
 	start_waiting_animation()
 
 func start_waiting_animation():
-	DebugMessage.info("start_waiting_animation")
 	var tween = create_tween().set_loops()
 	tween.tween_property(self, "modulate:a", 0.5, 0.5)
 	tween.tween_property(self, "modulate:a", 1.0, 0.5)
 
 func stop_waiting_animation():
-	DebugMessage.info("stop_waiting_animation")
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 1.0, 0.2)
 

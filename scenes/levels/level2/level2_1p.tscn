@@ -18,4 +18,4 @@ visible = false
 offset_right = 3840.0
 offset_bottom = 2160.0
 
-[node name="WaterAvatar" parent="." groups=["water_avater"] instance=ExtResource("5_3hg07")]
+[node name="WaterAvatar" parent="." groups=["water_avatar"] instance=ExtResource("5_3hg07")]

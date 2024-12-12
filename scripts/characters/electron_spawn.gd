@@ -74,6 +74,9 @@ func spawn_electrons(count: int):
 		# 設置隨機類型
 		var random_type = randi() % 3
 		electron.set_type(random_type)
+
+		# 隨機設定 z-index 為 0 或 2，會顯示在電廠前或後
+		electron.z_index = 2 if randi() % 2 == 0 else 0
 		
 		add_child(electron)
 		active_electrons.append(electron)
