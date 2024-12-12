@@ -100,7 +100,6 @@ func get_spawn_aposition(spawn_id: int) -> float:
 
 func _on_checkpoint_passed(player_id: int, spawn_id: int) -> void:
 	# 計算獲得的電仔數量
-	DebugMessage.info("current_camera_velocity: %s" % current_camera_velocity)
 	var speed_ratio = (current_camera_velocity - min_camera_speed) / (max_camera_speed - min_camera_speed)
 	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
 	

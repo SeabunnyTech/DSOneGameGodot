@@ -22,6 +22,7 @@ extends Node2D
 @onready var avatars = [avatar_1, avatar_2]
 @export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
 var avatar_is_stuck = [false, false]
+var avatar_is_separated = [false, false]
 
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
@@ -54,13 +55,17 @@ func _update_cameras(delta: float) -> void:
 			max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 		)
 
-		if avatar_is_stuck[i]:
+		if avatar_is_stuck[i] or avatar_is_separated[i]:
 			target_speed = 0.0
 
 		# 平滑過渡到目標速度
 		camera_velocities[i] = lerp(camera_velocities[i], target_speed, camera_smoothing)
 		
-		if not river_game.is_camera_in_map(camera_positions[i] + Vector2(0, camera_velocities[i] * delta), screen_center, camera_zoom_level):
+		if not river_game.is_camera_in_map(
+			camera_positions[i] + Vector2(0, camera_velocities[i] * delta),
+			screen_center,
+			camera_zoom_level
+		):
 			return
 
 		# 更新相機位置
@@ -76,12 +81,10 @@ func _update_cameras(delta: float) -> void:
 		)
 
 func _on_avatar_merged(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar merged")
+	avatar_is_separated[avatar.player_id] = false
 
 func _on_avatar_separated(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar separated")
+	avatar_is_separated[avatar.player_id] = true
 
 func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
 	var avatar_index = 0 if avatar == avatar_1 else 1

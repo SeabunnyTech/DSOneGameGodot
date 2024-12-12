@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-signal merged_with_player
-signal separated_from_player
+signal merged_with_player(node: Node2D)
+signal separated_from_player(node: Node2D)
 signal desired_position_changed(node: Node2D, new_desired_position: Vector2)
 
 @export var player_id: int = 0
@@ -58,15 +58,13 @@ func init(player: Node2D, init_pos: Vector2):
 	position = init_pos
 
 func merge_with_player():
-	DebugMessage.info("merge_with_player")
 	is_merged = true
-	merged_with_player.emit()
+	merged_with_player.emit(self)
 	stop_waiting_animation()
 
 func separate_from_player():
-	DebugMessage.info("separate_from_player")
 	is_merged = false
-	separated_from_player.emit()
+	separated_from_player.emit(self)
 	start_waiting_animation()
 
 func start_waiting_animation():

@@ -18,6 +18,7 @@ extends Node2D
 @onready var avatar_1 = $WaterAvatar
 @export var avatar_init_positions = Vector2(2090, 460)
 var avatar_is_stuck = false
+var avatar_is_separated = false
 
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
@@ -47,7 +48,7 @@ func _update_cameras(delta: float) -> void:
 		max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 	)
 
-	if avatar_is_stuck:
+	if avatar_is_stuck or avatar_is_separated:
 		target_speed = 0.0
 
 	# 平滑過渡到目標速度
@@ -59,7 +60,6 @@ func _update_cameras(delta: float) -> void:
 	# 更新相機位置
 	camera_position.y += camera_velocity * delta
 	river_game.update_camera_velocity(camera_velocity)
-
 	# 調用 camera_to
 	river_game.camera_to(
 		screen_center,
@@ -68,14 +68,11 @@ func _update_cameras(delta: float) -> void:
 		0.2  # 速度越快，duration 越短
 	)
 
-
 func _on_avatar_merged(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar merged")
+	avatar_is_separated = false
 
 func _on_avatar_separated(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar separated")
+	avatar_is_separated = true
 
 func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
 	var river_game = river_game_1
