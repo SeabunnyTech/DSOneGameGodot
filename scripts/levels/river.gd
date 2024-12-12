@@ -98,6 +98,9 @@ func get_spawn_aposition(spawn_id: int) -> float:
 		return spawn_positions[spawn_id]
 	return 0.0
 
+func get_river_scene_size() -> Vector2:
+	return river_normal_map_sprite.texture.get_size()
+
 func _on_checkpoint_passed(player_id: int, spawn_id: int) -> void:
 	# 計算獲得的電仔數量
 	var speed_ratio = (current_camera_velocity - min_camera_speed) / (max_camera_speed - min_camera_speed)

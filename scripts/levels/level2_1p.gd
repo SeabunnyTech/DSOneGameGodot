@@ -13,7 +13,10 @@ extends Node2D
 @export var camera_position = Vector2(1920, 1080)
 @export var camera_velocity = 0.0  # 相機當前速度
 
+@onready var hud = $HUD
+
 @onready var river_game_1 = $RiverGamePlayerOne
+var river_scene_size = Vector2.ZERO
 
 @onready var avatar_1 = $WaterAvatar
 @export var avatar_init_positions = Vector2(2090, 460)
@@ -23,9 +26,13 @@ var avatar_is_separated = false
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
+
+	hud.update_minimap(random_river_index)
 	
 	river_game_1.init(0, num_players, random_river_index)
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
+	river_scene_size = river_game_1.get_river_scene_size()
+	DebugMessage.info("river_scene_size: %s" % river_scene_size)
 
 	avatar_1.init(PlayerManager.current_players[0], avatar_init_positions)
 	avatar_1.merged_with_player.connect(_on_avatar_merged)
@@ -34,6 +41,14 @@ func _ready():
 
 func _process(delta: float) -> void:
 	_update_cameras(delta)
+	_update_minimap()
+
+func _update_minimap() -> void:
+	var min_camera_y_in_map = camera_position.y - screen_center.y / camera_zoom_level
+	var camera_y_size_in_map = screen_center.y * 2 / camera_zoom_level
+	var position_ratio = min_camera_y_in_map / (river_scene_size.y - camera_y_size_in_map)
+	
+	hud.move_1p_minimap_camera(position_ratio, 0.2)
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度

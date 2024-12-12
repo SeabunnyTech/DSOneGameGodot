@@ -13,9 +13,12 @@ extends Node2D
 @export var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
 @export var camera_velocities = [0.0, 0.0]  # 相機當前速度
 
+@onready var hud = $HUD
+
 @onready var river_game_1 = $GameScene/RiverGamePlayerOne
 @onready var river_game_2 = $GameScene/RiverGamePlayerTwo
 @onready var river_games = [river_game_1, river_game_2]
+var river_scene_size = Vector2.ZERO
 
 @onready var avatar_1 = $WaterAvatar
 @onready var avatar_2 = $WaterAvatar2
@@ -24,13 +27,17 @@ extends Node2D
 var avatar_is_stuck = [false, false]
 var avatar_is_separated = [false, false]
 
+
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
 	
 	for i in range(num_players):
+		hud.update_minimap(random_river_index)
+
 		river_games[i].init(i, num_players, random_river_index)
 		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
+		river_scene_size = river_games[i].get_river_scene_size()
 
 		avatars[i].init(PlayerManager.current_players[i], avatar_init_positions[i])
 		avatars[i].merged_with_player.connect(_on_avatar_merged)
@@ -39,6 +46,15 @@ func _ready():
 
 func _process(delta: float) -> void:
 	_update_cameras(delta)
+	_update_minimap()
+
+func _update_minimap() -> void:
+	for i in range(num_players):
+		var min_camera_y_in_map = camera_positions[i].y - screen_center.y / camera_zoom_level
+		var camera_y_size_in_map = screen_center.y * 2 / camera_zoom_level
+		var position_ratio = min_camera_y_in_map / (river_scene_size.y - camera_y_size_in_map)
+		
+		hud.move_2p_minimap_camera(i, position_ratio, 0.2)
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度

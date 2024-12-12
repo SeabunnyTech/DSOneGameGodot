@@ -41,6 +41,9 @@ func init(player_id: int, num_players: int, river_index: int):
 func get_color_at_position(avatar_pos: Vector2) -> Color:
 	return river_scene.get_normal_at_position(avatar_pos)
 
+func get_river_scene_size() -> Vector2:
+	return river_scene.get_river_scene_size()
+
 func is_camera_in_map(camera_position: Vector2, screen_center: Vector2, camera_zoom_level: float) -> bool:
 	return river_scene.is_camera_in_map(camera_position, screen_center, camera_zoom_level)
 
