@@ -65,6 +65,7 @@ func _update_cameras(delta: float) -> void:
 
 		# 更新相機位置
 		camera_positions[i].y += camera_velocities[i] * delta
+		river_game.update_camera_velocity(camera_velocities[i])
 
 		# 調用 camera_to
 		river_game.camera_to(

@@ -10,10 +10,12 @@ var checkpoints: Array[Node] = []  # 存儲所有 checkpoint
 
 var positions_initialized: bool = false
 
-@export var min_speed_threshold = 100.0  # 最低需要的速度
-@export var max_speed_bonus = 500.0      # 達到此速度會得到最多電仔
+var current_camera_velocity: float = 0.0
+
+@export var min_camera_speed = 10.0
+@export var max_camera_speed = 800.0 	 # 達到此速度會得到最多電仔
 @export var min_electrons = 1            # 最少產生電仔數
-@export var max_electrons = 10            # 最多產生電仔數
+@export var max_electrons = 20           # 最多產生電仔數
 
 @onready var river_normal_map_sprite = $RiverNormMap
 @onready var electron_spawn_areas_node = $ElectronSpawnAreas
@@ -39,8 +41,8 @@ func _ready() -> void:
 		checkpoints.append(child)
 		# 連接 checkpoint 信號
 		child.checkpoint_passed.connect(
-			func(speed, player_id, spawn_id): 
-				_on_checkpoint_passed(child, speed, player_id, spawn_id)
+			func(player_id, spawn_id): 
+				_on_checkpoint_passed(player_id, spawn_id)
 		)
 	
 	# 確保排序
@@ -96,9 +98,10 @@ func get_spawn_aposition(spawn_id: int) -> float:
 		return spawn_positions[spawn_id]
 	return 0.0
 
-func _on_checkpoint_passed(checkpoint: Node, speed: float, player_id: int, spawn_id: int) -> void:
+func _on_checkpoint_passed(player_id: int, spawn_id: int) -> void:
 	# 計算獲得的電仔數量
-	var speed_ratio = (speed - min_speed_threshold) / (max_speed_bonus - min_speed_threshold)
+	DebugMessage.info("current_camera_velocity: %s" % current_camera_velocity)
+	var speed_ratio = (current_camera_velocity - min_camera_speed) / (max_camera_speed - min_camera_speed)
 	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
 	
 	spawn_areas[spawn_id].spawn_electrons(electron_count)

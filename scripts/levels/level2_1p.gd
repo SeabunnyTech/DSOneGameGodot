@@ -11,7 +11,7 @@ extends Node2D
 
 @export var screen_center = Vector2(3840.0/2, 2160.0/2)
 @export var camera_position = Vector2(1920, 1080)
-@export var camera_velocitie = 0.0  # 相機當前速度
+@export var camera_velocity = 0.0  # 相機當前速度
 
 @onready var river_game_1 = $RiverGamePlayerOne
 
@@ -51,13 +51,14 @@ func _update_cameras(delta: float) -> void:
 		target_speed = 0.0
 
 	# 平滑過渡到目標速度
-	camera_velocitie = lerp(camera_velocitie, target_speed, camera_smoothing)
+	camera_velocity = lerp(camera_velocity, target_speed, camera_smoothing)
 	
-	if not river_game.is_camera_in_map(camera_position + Vector2(0, camera_velocitie * delta), screen_center, camera_zoom_level):
+	if not river_game.is_camera_in_map(camera_position + Vector2(0, camera_velocity * delta), screen_center, camera_zoom_level):
 		return
 
 	# 更新相機位置
-	camera_position.y += camera_velocitie * delta
+	camera_position.y += camera_velocity * delta
+	river_game.update_camera_velocity(camera_velocity)
 
 	# 調用 camera_to
 	river_game.camera_to(

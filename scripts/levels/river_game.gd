@@ -62,6 +62,9 @@ func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callb
 	if callback:
 		camera_tween.finished.connect(callback)
 
+func update_camera_velocity(velocity: float) -> void:
+	river_scene.current_camera_velocity = velocity
+
 func _on_spawn_checkpoint_positions(positions: Array):
 	DebugMessage.info("spawn_checkpoint_positions: %s" % str(positions))
 
