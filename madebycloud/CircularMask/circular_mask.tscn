@@ -16,4 +16,3 @@ material = SubResource("ShaderMaterial_bp30i")
 offset_right = 3840.0
 offset_bottom = 2160.0
 script = ExtResource("2_iqmg8")
-alpha = null
