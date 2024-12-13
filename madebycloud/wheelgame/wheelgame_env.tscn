@@ -39,7 +39,10 @@ _data = {
 }
 point_count = 19
 
-[node name="WheelGameEnviromnent" type="Node2D"]
+[node name="WheelGameEnviromnent" type="ColorRect"]
+clip_contents = true
+offset_right = 3840.0
+offset_bottom = 2160.0
 script = ExtResource("1_0cnpv")
 
 [node name="Player1UI" type="Sprite2D" parent="."]
