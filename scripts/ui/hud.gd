@@ -13,6 +13,22 @@ extends Node
 
 @onready var separator: VSeparator = $HBoxContainer/VSeparator
 
+@onready var one_player_minimap_clip_zone: TextureRect = $HBoxContainer/PlayerOneMiniMap/MiniMap/OnePlayerClipZone
+@onready var two_players_minimap_clip_zones: Array[TextureRect] = [
+	$HBoxContainer/PlayerOneMiniMap/MiniMap/TwoPlayersClipZone,
+	$HBoxContainer/PlayerTwoMiniMap/MiniMap/TwoPlayersClipZone
+]
+@onready var minimap: Array[TextureRect] = [
+	$HBoxContainer/PlayerOneMiniMap/MiniMap,
+	$HBoxContainer/PlayerTwoMiniMap/MiniMap
+]
+
+const MINIMAP_PATHS = {
+	0: "res://assets/images/backgrounds/static/level2/mini_map_river_1.png",
+	1: "res://assets/images/backgrounds/static/level2/mini_map_river_2.png",
+	2: "res://assets/images/backgrounds/static/level2/mini_map_river_3.png"
+}
+
 func _ready() -> void:
 	# Connect to timer updates
 	TimerManager.game_time_updated.connect(_on_game_time_updated)
@@ -75,14 +91,45 @@ func _handle_level2_state(stage: GameState.GameStage, num_visible_players: int =
 		player_one_minimap.show()
 		player_two_minimap.show()
 		separator.show()
+
+		one_player_minimap_clip_zone.hide()
+		for clip_zone in two_players_minimap_clip_zones:
+			clip_zone.show()
 	else:
 		player_two_container.hide()
 		player_one_minimap.show()
 		player_two_minimap.hide()
 		separator.hide()
 
+		one_player_minimap_clip_zone.show()
+
 	match stage:
 		GameState.GameStage.LEVEL_START:
 			pass
 		GameState.GameStage.TUTORIAL_1:
 			pass
+
+func update_minimap(river_id: int) -> void:
+	if not MINIMAP_PATHS.has(river_id):
+		push_error("Invalid river_id: %s" % river_id)
+		return
+		
+	var texture_path = MINIMAP_PATHS[river_id]
+	var texture = load(texture_path) as Texture2D
+	
+	# 更新所有小地圖的材質
+	for map in minimap:
+		if map:
+			map.texture = texture
+
+func minimap_tween(clip_zone: TextureRect, position: float, duration: float) -> void:
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(clip_zone, "position:y", position, duration)
+
+func move_1p_minimap_camera(position_ratio: float, duration: float) -> void:
+	var player_clip_zone = one_player_minimap_clip_zone
+	minimap_tween(player_clip_zone, position_ratio * 640, duration)
+
+func move_2p_minimap_camera(player_id: int, position_ratio: float, duration: float) -> void:
+	var player_clip_zone = two_players_minimap_clip_zones[player_id]
+	minimap_tween(player_clip_zone, position_ratio * 480, duration)

@@ -22,7 +22,6 @@ scale = Vector2(1.00056, 1.00963)
 size_flags_vertical = 3
 
 [node name="PlayerOneMiniMap" type="MarginContainer" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = 100
@@ -120,12 +119,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 theme = ExtResource("5_hqgcc")
 
 [node name="PlayerTwoMiniMap" type="MarginContainer" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/margin_left = 100
@@ -137,16 +134,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 texture = ExtResource("1_bwacd")
 
-[node name="OnePlayerClipZone" type="TextureRect" parent="HBoxContainer/PlayerTwoMiniMap/MiniMap"]
-layout_mode = 0
-offset_right = 384.0
-offset_bottom = 305.0
-scale = Vector2(0.8, 0.8)
-pivot_offset = Vector2(0, -200)
-texture = ExtResource("2_qyxgy")
-
 [node name="TwoPlayersClipZone" type="TextureRect" parent="HBoxContainer/PlayerTwoMiniMap/MiniMap"]
-visible = false
 layout_mode = 0
 offset_right = 282.0
 offset_bottom = 365.0
@@ -155,7 +143,6 @@ pivot_offset = Vector2(0, 460)
 texture = ExtResource("3_up1yc")
 
 [node name="PlayerTwoContainer" type="VBoxContainer" parent="HBoxContainer"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 

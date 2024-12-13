@@ -9,58 +9,72 @@ extends Node2D
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
 
+@export var screen_center = Vector2(3840.0/2, 2160.0/2)
+@export var camera_position = Vector2(1920, 1080)
+@export var camera_velocity = 0.0  # 相機當前速度
+
+@onready var hud = $HUD
+
 @onready var river_game_1 = $RiverGamePlayerOne
+var river_scene_size = Vector2.ZERO
 
 @onready var avatar_1 = $WaterAvatar
+@export var avatar_init_positions = Vector2(2090, 460)
 var avatar_is_stuck = false
-var avatar_init_positions = Vector2(2090, 460)
-
-var screen_center = Vector2(3840/2, 2160/2)
-var camera_position = Vector2(1920, 1080)
-var camera_velocitie = 0.0  # 相機當前速度
+var avatar_is_separated = false
 
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
+
+	hud.update_minimap(random_river_index)
 	
 	river_game_1.init(0, num_players, random_river_index)
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
+	river_scene_size = river_game_1.get_river_scene_size()
+	DebugMessage.info("river_scene_size: %s" % river_scene_size)
 
 	avatar_1.init(PlayerManager.current_players[0], avatar_init_positions)
 	avatar_1.merged_with_player.connect(_on_avatar_merged)
 	avatar_1.separated_from_player.connect(_on_avatar_separated)
 	avatar_1.desired_position_changed.connect(_on_avatar_desired_position_changed)
 
-
 func _process(delta: float) -> void:
 	_update_cameras(delta)
+	_update_minimap()
+
+func _update_minimap() -> void:
+	var min_camera_y_in_map = camera_position.y - screen_center.y / camera_zoom_level
+	var camera_y_size_in_map = screen_center.y * 2 / camera_zoom_level
+	var position_ratio = min_camera_y_in_map / (river_scene_size.y - camera_y_size_in_map)
+	
+	hud.move_1p_minimap_camera(position_ratio, 0.2)
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
 	var river_game = river_game_1
-	var player_pos = avatar_1.position
+	var avatar_pos = avatar_1.position
 
 	# 計算相機移動速度
-	var relative_y = player_pos.y / screen_height
+	var relative_y = avatar_pos.y / screen_height
 	var target_speed = lerp(
 		min_camera_speed,
 		max_camera_speed,
 		max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 	)
 
-	if avatar_is_stuck:
+	if avatar_is_stuck or avatar_is_separated:
 		target_speed = 0.0
 
 	# 平滑過渡到目標速度
-	camera_velocitie = lerp(camera_velocitie, target_speed, camera_smoothing)
+	camera_velocity = lerp(camera_velocity, target_speed, camera_smoothing)
 	
+	if not river_game.is_camera_in_map(camera_position + Vector2(0, camera_velocity * delta), screen_center, camera_zoom_level):
+		return
+
 	# 更新相機位置
-	camera_position.y += camera_velocitie * delta
-
-	# 確保相機不會落後於玩家太多
-	var min_camera_y = player_pos.y - screen_height * 0.7
-	camera_position.y = max(camera_position.y, min_camera_y)
-
+	camera_position.y += camera_velocity * delta
+	river_game.update_camera_velocity(camera_velocity)
 	# 調用 camera_to
 	river_game.camera_to(
 		screen_center,
@@ -69,14 +83,11 @@ func _update_cameras(delta: float) -> void:
 		0.2  # 速度越快，duration 越短
 	)
 
-
 func _on_avatar_merged(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar merged")
+	avatar_is_separated = false
 
 func _on_avatar_separated(avatar: Node2D):
-	pass
-	# DebugMessage.info("avatar separated")
+	avatar_is_separated = true
 
 func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
 	var river_game = river_game_1

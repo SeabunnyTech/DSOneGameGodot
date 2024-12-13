@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-signal merged_with_player
-signal separated_from_player
+signal merged_with_player(node: Node2D)
+signal separated_from_player(node: Node2D)
 signal desired_position_changed(node: Node2D, new_desired_position: Vector2)
 
 @export var player_id: int = 0
@@ -38,7 +38,6 @@ func _physics_process(_delta):
 		return
 		
 	if target_player:
-		# DebugMessage.info("target_player: " + str(target_player.name))
 		var distance = position.distance_to(target_player.position)
 		if distance > separation_distance:
 			separate_from_player()
@@ -55,30 +54,25 @@ func _physics_process(_delta):
 	last_position = position
 
 func init(player: Node2D, init_pos: Vector2):
-	DebugMessage.info("init")
 	target_player = player
 	position = init_pos
 
 func merge_with_player():
-	DebugMessage.info("merge_with_player")
 	is_merged = true
-	merged_with_player.emit()
+	merged_with_player.emit(self)
 	stop_waiting_animation()
 
 func separate_from_player():
-	DebugMessage.info("separate_from_player")
 	is_merged = false
-	separated_from_player.emit()
+	separated_from_player.emit(self)
 	start_waiting_animation()
 
 func start_waiting_animation():
-	DebugMessage.info("start_waiting_animation")
 	var tween = create_tween().set_loops()
 	tween.tween_property(self, "modulate:a", 0.5, 0.5)
 	tween.tween_property(self, "modulate:a", 1.0, 0.5)
 
 func stop_waiting_animation():
-	DebugMessage.info("stop_waiting_animation")
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 1.0, 0.2)
 

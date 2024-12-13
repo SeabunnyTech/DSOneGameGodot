@@ -38,8 +38,14 @@ func init(player_id: int, num_players: int, river_index: int):
 
 	add_child(river_scene)
 
-func get_color_at_position(player_pos: Vector2) -> Color:
-	return river_scene.get_normal_at_position(player_pos)
+func get_color_at_position(avatar_pos: Vector2) -> Color:
+	return river_scene.get_normal_at_position(avatar_pos)
+
+func get_river_scene_size() -> Vector2:
+	return river_scene.get_river_scene_size()
+
+func is_camera_in_map(camera_position: Vector2, screen_center: Vector2, camera_zoom_level: float) -> bool:
+	return river_scene.is_camera_in_map(camera_position, screen_center, camera_zoom_level)
 
 func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, camera_scale: float, avatar_target_position: Vector2) -> Vector2:
 	var avatar_river_pos = camera_position + (avatar_target_position - screen_center - self.position) / camera_scale
@@ -50,6 +56,7 @@ func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callb
 		camera_tween.kill()
 
 	var new_position = screen_center - target_center * target_scale
+
 	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	# TODO: 這邊把 river_scene 當作參數傳入，應該會更好？
 	camera_tween.tween_property(river_scene, 'scale', Vector2(target_scale, target_scale), duration)
@@ -58,6 +65,9 @@ func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callb
 	if callback:
 		camera_tween.finished.connect(callback)
 
+func update_camera_velocity(velocity: float) -> void:
+	river_scene.current_camera_velocity = velocity
+
 func _on_spawn_checkpoint_positions(positions: Array):
 	DebugMessage.info("spawn_checkpoint_positions: %s" % str(positions))
 
@@ -65,4 +75,5 @@ func _on_spawn_area_scored(spawn_id: int):
 	SignalBus.spawn_area_scored.emit(player_id, spawn_id)
 
 func _on_spawn_area_scoring(count: int):
+	DebugMessage.info("spawn_area_scoring: %s" % count)
 	SignalBus.spawn_area_scoring.emit(player_id, count)
