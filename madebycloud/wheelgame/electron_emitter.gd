@@ -1,6 +1,6 @@
 extends StaticBody2D
 
-signal electron_collected(count)
+signal electron_collected(electron)
 
 
 @export var float_range: float = 50.0
@@ -17,21 +17,23 @@ var active_electrons: Array[Node] = []
 
 func collect_electron(electron: Node2D) -> void:
 	var tween = create_tween()
-	
+
 	# 吸入效果
 	tween.tween_property(electron, "position", 
 		Vector2.ZERO, collection_speed
 	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-	
+
 	# 縮小消失
-	tween.parallel().tween_property(electron, "scale",
-		Vector2.ONE * 0.3, collection_speed
-	).set_trans(Tween.TRANS_BACK)
-	
+	#tween.parallel().tween_property(electron, "scale",
+	#	Vector2.ONE * 0.3, collection_speed
+	#).set_trans(Tween.TRANS_BACK)
+
 	# 完成後處理
 	tween.tween_callback(func():
-		electron_collected.emit(1)
-		electron.queue_free()
+		electron.move_and_colliding = false
+		remove_child(electron)
+		electron_collected.emit(electron)
+		#electron.queue_free()
 		collect_sfx.play()
 	)
 
@@ -41,13 +43,16 @@ func collect_electrons():
 		return
 
 	collecting = true
-	
+	var collect_delay = 1 / (active_electrons.size())
+	if collect_delay > 0.1:
+		collect_delay = 0.1
+
 	# 依序收集所有電子
 	for i in range(active_electrons.size()):
 		var electron = active_electrons[i]
 		if electron != null:
 			# 添加延遲，讓電子一個接一個被收集
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(collect_delay).timeout
 			collect_electron(electron)
 
 	# 等待最後一個動畫完成
