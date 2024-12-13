@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cn6xlv8fshh2w"]
+[gd_scene load_steps=27 format=3 uid="uid://cn6xlv8fshh2w"]
 
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_gb5v0"]
 [ext_resource type="Texture2D" uid="uid://b5bi5duai1t7n" path="res://assets/images/backgrounds/static/level2/river_2.png" id="1_wk5dn"]
@@ -17,6 +17,15 @@
 [ext_resource type="Texture2D" uid="uid://bk3ubhn7oywp" path="res://assets/images/backgrounds/static/level2/driftwood_1.png" id="11_k13vs"]
 [ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="12_p58bb"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_w8o6u"]
+[ext_resource type="PackedScene" uid="uid://ofavfypf5ox3" path="res://scenes/levels/level2/finish_line.tscn" id="18_ygplu"]
+[ext_resource type="Texture2D" uid="uid://cegvovouiwkyj" path="res://assets/images/backgrounds/animated/level2/bird.png" id="19_tlcok"]
+[ext_resource type="Texture2D" uid="uid://xynuwvfs3684" path="res://assets/images/backgrounds/animated/level2/fish.png" id="20_o8jcu"]
+[ext_resource type="Texture2D" uid="uid://djsc1k46o531o" path="res://assets/images/backgrounds/animated/level2/cloud3.png" id="21_0d0qq"]
+[ext_resource type="Texture2D" uid="uid://cbajyfla50nx1" path="res://assets/images/backgrounds/animated/level2/cloud2.png" id="22_ao4au"]
+[ext_resource type="Texture2D" uid="uid://7yafkvh46vk3" path="res://assets/images/backgrounds/animated/level2/cloud1.png" id="23_sc3hl"]
+[ext_resource type="Texture2D" uid="uid://bd50i3tnu5okr" path="res://assets/images/backgrounds/static/level2/stone_3.png" id="24_k2kb3"]
+[ext_resource type="Texture2D" uid="uid://davk0gmlnuo1y" path="res://assets/images/backgrounds/static/level2/stone_4.png" id="25_tj8y3"]
+[ext_resource type="Texture2D" uid="uid://cfmv6qkst4iuy" path="res://assets/images/backgrounds/static/level2/stone_2.png" id="26_tnx4w"]
 
 [node name="River2" type="Node2D"]
 script = ExtResource("1_gb5v0")
@@ -153,7 +162,7 @@ position = Vector2(1590, 6860)
 texture = ExtResource("9_38e68")
 
 [node name="Stone1" type="Sprite2D" parent="."]
-position = Vector2(2163, 8059)
+position = Vector2(1413, 8015)
 texture = ExtResource("10_gpjiq")
 
 [node name="Driftwood1" type="Sprite2D" parent="."]
@@ -165,5 +174,89 @@ position = Vector2(1312, 1705)
 texture = ExtResource("12_p58bb")
 
 [node name="Driftwood4" type="Sprite2D" parent="."]
-position = Vector2(2297, 6005)
+position = Vector2(1730, 4805)
 texture = ExtResource("11_k13vs")
+
+[node name="FinishLine" parent="." instance=ExtResource("18_ygplu")]
+position = Vector2(2022, 9696)
+
+[node name="Bird" type="Sprite2D" parent="."]
+position = Vector2(2827, 7748)
+texture = ExtResource("19_tlcok")
+
+[node name="Fish" type="Sprite2D" parent="."]
+position = Vector2(2366, 8016)
+texture = ExtResource("20_o8jcu")
+
+[node name="Fish2" type="Sprite2D" parent="."]
+position = Vector2(2037, 4597)
+scale = Vector2(2, 2)
+texture = ExtResource("20_o8jcu")
+
+[node name="Fish3" type="Sprite2D" parent="."]
+position = Vector2(2320, 2562)
+texture = ExtResource("20_o8jcu")
+
+[node name="Cloud3" type="Sprite2D" parent="."]
+position = Vector2(545, 2457)
+texture = ExtResource("21_0d0qq")
+
+[node name="Cloud2" type="Sprite2D" parent="."]
+position = Vector2(3107, 1048)
+texture = ExtResource("22_ao4au")
+
+[node name="Cloud4" type="Sprite2D" parent="."]
+position = Vector2(817, 4152)
+texture = ExtResource("21_0d0qq")
+
+[node name="Cloud5" type="Sprite2D" parent="."]
+position = Vector2(3115, 5853)
+texture = ExtResource("22_ao4au")
+
+[node name="Cloud6" type="Sprite2D" parent="."]
+position = Vector2(2933, 3401)
+texture = ExtResource("21_0d0qq")
+
+[node name="Cloud1" type="Sprite2D" parent="."]
+position = Vector2(761, 6191)
+texture = ExtResource("23_sc3hl")
+
+[node name="Cloud7" type="Sprite2D" parent="."]
+position = Vector2(1312, 326)
+texture = ExtResource("21_0d0qq")
+
+[node name="Driftwood5" type="Sprite2D" parent="."]
+position = Vector2(1591, 8694)
+texture = ExtResource("11_k13vs")
+
+[node name="Driftwood6" type="Sprite2D" parent="."]
+position = Vector2(2463, 9205)
+texture = ExtResource("12_p58bb")
+
+[node name="Driftwood7" type="Sprite2D" parent="."]
+position = Vector2(1955, 7911)
+texture = ExtResource("9_38e68")
+
+[node name="Stone3" type="Sprite2D" parent="."]
+position = Vector2(2561, 6805)
+texture = ExtResource("24_k2kb3")
+
+[node name="Stone4" type="Sprite2D" parent="."]
+position = Vector2(1514, 5962)
+texture = ExtResource("25_tj8y3")
+
+[node name="Fish4" type="Sprite2D" parent="."]
+position = Vector2(2265, 8688)
+texture = ExtResource("20_o8jcu")
+
+[node name="Stone2" type="Sprite2D" parent="."]
+position = Vector2(2401, 2609)
+texture = ExtResource("26_tnx4w")
+
+[node name="Stone5" type="Sprite2D" parent="."]
+position = Vector2(2566, 2716)
+texture = ExtResource("10_gpjiq")
+
+[node name="Stone6" type="Sprite2D" parent="."]
+position = Vector2(2254, 1034)
+texture = ExtResource("25_tj8y3")

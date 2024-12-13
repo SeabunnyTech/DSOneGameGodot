@@ -23,6 +23,13 @@ var river_scene_size = Vector2.ZERO
 var avatar_is_stuck = false
 var avatar_is_separated = false
 
+var reversed_spawn_positions: Array[float] = []
+var scoring_in_progress = false
+var current_scoring_index = 0
+var game_mode = true # 遊戲模式，true 為遊戲中，false 為遊戲結束準備計分
+
+var score = {0: 0, 1: 0}
+
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
@@ -31,13 +38,21 @@ func _ready():
 	
 	river_game_1.init(0, num_players, random_river_index)
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
+	river_game_1.finish_line_passed.connect(_on_finish_line_passed)
+	river_game_1.spawn_area_scored.connect(_on_spawn_area_scored)
+	river_game_1.spawn_area_scoring.connect(_on_spawn_area_scoring)
+	river_game_1.checkpoint_passed.connect(_on_checkpoint_passed)
 	river_scene_size = river_game_1.get_river_scene_size()
-	DebugMessage.info("river_scene_size: %s" % river_scene_size)
 
 	avatar_1.init(PlayerManager.current_players[0], avatar_init_positions)
 	avatar_1.merged_with_player.connect(_on_avatar_merged)
 	avatar_1.separated_from_player.connect(_on_avatar_separated)
 	avatar_1.desired_position_changed.connect(_on_avatar_desired_position_changed)
+
+	PlayerManager.current_players[0].set_attractor(avatar_1.position, 100)
+	PlayerManager.current_players[0].index = 1
+
+	AudioManager.play_level_music()
 
 func _process(delta: float) -> void:
 	_update_cameras(delta)
@@ -83,8 +98,21 @@ func _update_cameras(delta: float) -> void:
 		0.2  # 速度越快，duration 越短
 	)
 
+func _on_finish_line_passed(player_id: int):
+	game_mode = false
+	TimerManager.stop_timer(TimerManager.TimerType.GAME)
+	AudioManager.play_victor_music()
+
+func _on_checkpoint_passed(player_id: int, count: int):
+	score[player_id] += count
+	hud.update_score_display(score)
+
+func _on_game_scoring(avatar: Node2D):
+	pass
+
 func _on_avatar_merged(avatar: Node2D):
 	avatar_is_separated = false
+	PlayerManager.current_players[0].reset_attractor()
 
 func _on_avatar_separated(avatar: Node2D):
 	avatar_is_separated = true
@@ -104,3 +132,54 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		avatar_is_stuck = false
 	else:
 		avatar_is_stuck = true
+
+
+
+
+
+
+
+
+
+# ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
+
+func move_to_next_scoring_position(player_id: int):
+	if current_scoring_index >= reversed_spawn_positions.size():
+		scoring_in_progress = false
+		return
+		
+	var target_position = Vector2(
+		camera_position.x,
+		reversed_spawn_positions[current_scoring_index]
+	)
+	var river_game = river_game_1
+	
+	# 移動相機到指定位置
+	river_game.camera_to(
+		screen_center,
+		target_position,
+		camera_zoom_level,
+		1.0,
+		func(): _on_camera_reached_scoring_position(player_id)
+	)
+
+func _on_camera_reached_scoring_position(player_id: int):
+	if not scoring_in_progress:
+		return
+		
+	# 觸發當前位置的計分
+	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
+	river_game_1.trigger_spawn_area_scoring(spawn_id)
+
+func _on_spawn_area_scoring(player_id: int, _spawn_id: int, count: int):
+	pass
+
+func _on_spawn_area_scored(player_id: int, _spawn_id: int):
+	current_scoring_index += 1
+	move_to_next_scoring_position(player_id)
+
+func start_scoring_sequence(avatar: Node2D):
+	scoring_in_progress = true
+	current_scoring_index = 0
+
+	move_to_next_scoring_position(avatar.player_id)

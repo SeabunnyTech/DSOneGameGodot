@@ -61,6 +61,9 @@ func collect_electrons():
 	collecting = false
 
 func spawn_electrons(count: int):
+	call_deferred("_deferred_spawn_electrons", count)
+
+func _deferred_spawn_electrons(count: int):
 	for i in count:
 		# 雖然這邊是 for 迴圈，但多數情況電仔還是一個一個送出
 		var electron = electron_scene.instantiate()

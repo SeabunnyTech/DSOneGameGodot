@@ -1,9 +1,9 @@
 extends ColorRect
 
-signal river_initialized(player_id: int)
-signal spawn_area_scored(spawn_id: int)
-signal spawn_area_scoring(count: int)
-
+signal spawn_area_scoring(player_id: int, spawn_id: int, count: int)
+signal spawn_area_scored(player_id: int, spawn_id: int)
+signal checkpoint_passed(player_id: int, count: int)
+signal finish_line_passed(player_id: int)
 var player_id: int = 0
 
 # 存此次遊戲所隨機選擇的 river scene
@@ -13,6 +13,8 @@ var river_scenes = [
 	preload("res://scenes/levels/level2/river2.tscn"),
 	preload("res://scenes/levels/level2/river3.tscn")
 ]
+
+var spawn_area_positions: Array[float] = []
 
 var camera_tween
 
@@ -29,8 +31,9 @@ func init(player_id: int, num_players: int, river_index: int):
 	river_scene = river_scenes[river_index].instantiate()
 	river_scene.spawn_area_scored.connect(_on_spawn_area_scored)
 	river_scene.spawn_area_scoring.connect(_on_spawn_area_scoring)
-	river_scene.spawn_positions_ready.connect(_on_spawn_checkpoint_positions)
-
+	river_scene.spawn_positions_ready.connect(_on_spawn_area_positions)
+	river_scene.finish_line_passed.connect(finish_line_passed.emit)
+	river_scene.checkpoint_passed.connect(checkpoint_passed.emit)
 	# 根據 player_index 設定 scale (0 為單人模式，1,2 為雙人模式)
 	var scale_value = 0.5 if num_players == 2 else 1.0 
 	river_scene.scale = Vector2(scale_value, scale_value)
@@ -68,12 +71,31 @@ func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callb
 func update_camera_velocity(velocity: float) -> void:
 	river_scene.current_camera_velocity = velocity
 
-func _on_spawn_checkpoint_positions(positions: Array):
-	DebugMessage.info("spawn_checkpoint_positions: %s" % str(positions))
+func _on_spawn_area_positions(positions: Array):
+	spawn_area_positions = positions
+
+func _on_spawn_area_scoring(spawn_id: int, count: int):
+	DebugMessage.info("spawn_area_scoring: %s" % count)
+	spawn_area_scoring.emit(player_id, spawn_id, count)
 
 func _on_spawn_area_scored(spawn_id: int):
-	SignalBus.spawn_area_scored.emit(player_id, spawn_id)
+	spawn_area_scored.emit(player_id, spawn_id)
 
-func _on_spawn_area_scoring(count: int):
-	DebugMessage.info("spawn_area_scoring: %s" % count)
-	SignalBus.spawn_area_scoring.emit(player_id, count)
+
+
+
+
+
+
+
+
+
+# ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
+
+func get_reversed_spawn_positions() -> Array[float]:
+	var reversed_spawn_positions = spawn_area_positions.duplicate()
+	reversed_spawn_positions.reverse()
+	return reversed_spawn_positions
+
+func trigger_spawn_area_scoring(spawn_id: int) -> void:
+	river_scene.trigger_spawn_area_scoring(spawn_id)

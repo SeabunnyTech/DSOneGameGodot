@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cjmcjpva8u6va"]
+[gd_scene load_steps=26 format=3 uid="uid://cjmcjpva8u6va"]
 
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_6i8h2"]
 [ext_resource type="Texture2D" uid="uid://bfmjq2d7ylitm" path="res://assets/images/backgrounds/static/level2/river_1.png" id="1_f60bk"]
@@ -17,6 +17,14 @@
 [ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="11_sfy30"]
 [ext_resource type="Texture2D" uid="uid://c8ghm1ltpbaig" path="res://assets/images/backgrounds/static/level2/driftwood_3.png" id="12_o4lwe"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_y6nqd"]
+[ext_resource type="PackedScene" uid="uid://ofavfypf5ox3" path="res://scenes/levels/level2/finish_line.tscn" id="18_65u3q"]
+[ext_resource type="Texture2D" uid="uid://cegvovouiwkyj" path="res://assets/images/backgrounds/animated/level2/bird.png" id="19_73nbj"]
+[ext_resource type="Texture2D" uid="uid://xynuwvfs3684" path="res://assets/images/backgrounds/animated/level2/fish.png" id="20_qpnrj"]
+[ext_resource type="Texture2D" uid="uid://djsc1k46o531o" path="res://assets/images/backgrounds/animated/level2/cloud3.png" id="21_83hqd"]
+[ext_resource type="Texture2D" uid="uid://cbajyfla50nx1" path="res://assets/images/backgrounds/animated/level2/cloud2.png" id="22_k44dy"]
+[ext_resource type="Texture2D" uid="uid://7yafkvh46vk3" path="res://assets/images/backgrounds/animated/level2/cloud1.png" id="23_wj1du"]
+[ext_resource type="Texture2D" uid="uid://bd50i3tnu5okr" path="res://assets/images/backgrounds/static/level2/stone_3.png" id="24_uc4ba"]
+[ext_resource type="Texture2D" uid="uid://davk0gmlnuo1y" path="res://assets/images/backgrounds/static/level2/stone_4.png" id="25_alcqn"]
 
 [node name="River1" type="Node2D"]
 script = ExtResource("1_6i8h2")
@@ -165,3 +173,71 @@ texture = ExtResource("12_o4lwe")
 [node name="Driftwood4" type="Sprite2D" parent="."]
 position = Vector2(2335, 5479)
 texture = ExtResource("10_k1dfc")
+
+[node name="FinishLine" parent="." instance=ExtResource("18_65u3q")]
+position = Vector2(1730, 9773)
+
+[node name="Bird" type="Sprite2D" parent="."]
+position = Vector2(2827, 7748)
+texture = ExtResource("19_73nbj")
+
+[node name="Fish" type="Sprite2D" parent="."]
+position = Vector2(2519, 8602)
+texture = ExtResource("20_qpnrj")
+
+[node name="Fish2" type="Sprite2D" parent="."]
+position = Vector2(1646, 4217)
+scale = Vector2(2, 2)
+texture = ExtResource("20_qpnrj")
+
+[node name="Fish3" type="Sprite2D" parent="."]
+position = Vector2(2276, 3019)
+texture = ExtResource("20_qpnrj")
+
+[node name="Cloud3" type="Sprite2D" parent="."]
+position = Vector2(545, 2457)
+texture = ExtResource("21_83hqd")
+
+[node name="Cloud2" type="Sprite2D" parent="."]
+position = Vector2(3107, 1048)
+texture = ExtResource("22_k44dy")
+
+[node name="Cloud4" type="Sprite2D" parent="."]
+position = Vector2(1087, 4142)
+texture = ExtResource("21_83hqd")
+
+[node name="Cloud5" type="Sprite2D" parent="."]
+position = Vector2(3115, 5853)
+texture = ExtResource("22_k44dy")
+
+[node name="Cloud6" type="Sprite2D" parent="."]
+position = Vector2(2933, 3401)
+texture = ExtResource("21_83hqd")
+
+[node name="Cloud1" type="Sprite2D" parent="."]
+position = Vector2(1564, 5978)
+texture = ExtResource("23_wj1du")
+
+[node name="Cloud7" type="Sprite2D" parent="."]
+position = Vector2(1312, 326)
+texture = ExtResource("21_83hqd")
+
+[node name="Driftwood5" type="Sprite2D" parent="."]
+position = Vector2(2118, 8839)
+texture = ExtResource("10_k1dfc")
+
+[node name="Driftwood6" type="Sprite2D" parent="."]
+position = Vector2(1383, 9283)
+texture = ExtResource("11_sfy30")
+
+[node name="Driftwood7" type="Sprite2D" parent="."]
+position = Vector2(2268, 7866)
+texture = ExtResource("12_o4lwe")
+
+[node name="Stone3" type="Sprite2D" parent="."]
+position = Vector2(2561, 6805)
+texture = ExtResource("24_uc4ba")
+
+[node name="Stone4" type="Sprite2D" parent="."]
+position = Vector2(1980, 5993)
+texture = ExtResource("25_alcqn")

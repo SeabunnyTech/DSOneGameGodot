@@ -50,6 +50,10 @@ func _update_timer_display(time: float) -> void:
 	player_one_timer.text = "%02d:%02d" % [int(time / 60), int(time) % 60]
 	player_two_timer.text = "%02d:%02d" % [int(time / 60), int(time) % 60]
 
+func update_score_display(scores: Dictionary) -> void:
+	player_one_score.text = str(scores[0])
+	player_two_score.text = str(scores[1])
+
 func _update_score_display(scores: Dictionary) -> void:
 	player_one_score.text = str(scores[0])
 	player_two_score.text = str(scores[1])
