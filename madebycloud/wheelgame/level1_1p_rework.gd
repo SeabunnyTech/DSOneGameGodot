@@ -32,6 +32,7 @@ signal go_back_to_login
 func reset():
 
 	# 隱藏關卡本身
+	visible = false
 	modulate.a = 0
 
 	# 介紹用的訊息與遮罩
@@ -50,6 +51,7 @@ func reset():
 
 
 func enter_scene():
+	visible = true
 	_begin_tutorial()
 
 
@@ -157,17 +159,29 @@ func _continue_tutorial():
 
 	tween = create_tween()
 	tween.tween_interval(0.5)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+	tween.tween_callback(func():
+		wheelgame_env.camera_to(Vector2(2100, 1000), 0.8)
+		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 1.5)
+	)
+	tween.tween_interval(0.2)
+	tween.tween_property(guide_message, 'modulate:a', 0, 0.5)
+
 	tween.tween_interval(0.5)
+	_show_text('stored', 3)
+	tween.tween_interval(0.5)
+
 	tween.tween_callback(func():_proceed_to_game_start())
 
 
 func _skip_tutorial(_player):
 	tween.kill()
-	#tween.tween_interval(1)
 	tween = create_tween()
+
+	tween.tween_interval(0.5)
+	circular_mask.tween_radius(0.0, 1)
 	wheelgame_env.camera_to(Vector2(1920, 1080))
-	circular_mask.tween_center_radius(Vector2(2420, 1080), 800.0, 1)
+
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	wheelgame_env.set_building_transparent()
 	tween.tween_callback(func():_proceed_to_game_start())
 
@@ -181,18 +195,19 @@ func _proceed_to_game_start():
 
 	tween = create_tween()
 
-	# 9. 非常好! 看來你已經掌握了發電之道呢!
-	_show_text('ready')
-
 	# 10. 將發電機停止並隱藏
 	tween.tween_callback(func():
 		wheelgame_env.camera_to(Vector2(2200, 1080), 1.2)
 		wheelgame_env.rotation_enabled = false
-		circular_mask.tween_center_radius(Vector2(2420, 1080), 0.0, 1)
+		circular_mask.tween_radius(0.0, 1)
 		GlobalAudioPlayer.fade_out()
 	)
-	tween.tween_interval(1)
+
 	tween.tween_callback(wheelgame_env.destroy_electrons)
+	tween.tween_interval(1)
+
+	# 9. 既然你已經掌握蓄電之道
+	_show_text('ready')
 
 	# 11. 接下來就進入挑戰吧! 看看你能在一分鐘內發出多少電力呢!
 	_show_text('final')
@@ -273,22 +288,24 @@ func _undate_guide_text(new_text_state):
 		'show' : '但它其實一點都不普通喔!',
 		'inner': '看到了嗎!',
 		'heavy': '它重達 x 噸',
-		'power': '但在水滴的作用下',
-		'pushit': '現在就來推它吧!!',
-		'ready': '非常好!',
+		'power': '在它的強力加持下',
+		'pushit': '現在就來試試吧!!',
+		'stored': '非常好!',
+		'ready': '既然你已經掌握了蓄電之道!',
 		'final': '接下來我們就進入挑戰吧!',
 		'start': '準備開始!!',
 	}
 
 	var guides = {
-		'begin' : '今天我們將化身一顆水滴\n來驅動渦輪發電啦!',
+		'begin' : '今天我們將化身一顆水滴\n來擔任蓄電工作啦!',
 		'case' : '它看起來就像是一棟普通的房子對吧!',
 		'show' : '在它平淡的外表下\n內部有著很酷的構造喔!',
 		'inner': '這是 ooo 型的發電渦輪!',
 		'heavy': '相當於 N 台轎車!',
-		'power': '它會成為我們的發電夥伴喔!',
-		'pushit' : '舉起你手上的水滴\n畫圓推動它!',
-		'ready': '看來你已經掌握發電之道了呢!',
+		'power': '小小的水滴也可以用來蓄電喔!',
+		'pushit' : '舉起你手上的水滴\n順時鐘畫圓推動它!',
+		'stored': '被抽到了高處的水\n乘載了滿滿的重力位能\n再次被放下時就可以轉換成電力喔!',
+		'ready': '',
 		'final': '看看你能在 ' + str($HUD.total_time) +' 秒內發出多少電力!',
 		'start': '',
 	}
@@ -301,7 +318,8 @@ func _undate_guide_text(new_text_state):
 		'heavy': Vector2(80, 920),
 		'power': Vector2(0, 920),
 		'pushit': Vector2(0, 920),
-		'ready': Vector2(0, 920),
+		'stored': Vector2(2150, 800),
+		'ready': Vector2(960, 920),
 		'final': Vector2(960, 920),
 		'start': Vector2(960, 920),
 	}
@@ -312,9 +330,9 @@ func _undate_guide_text(new_text_state):
 
 
 
-func _show_text(text_key, duration=0.1):
+func _show_text(text_key, duration=0.1, trans_duration=1):
 	tween.tween_callback(func():_undate_guide_text(text_key))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_property(guide_message, 'modulate:a', 1, trans_duration)
 	tween.tween_interval(duration)
-	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+	tween.tween_property(guide_message, 'modulate:a', 0, trans_duration)
 	return tween

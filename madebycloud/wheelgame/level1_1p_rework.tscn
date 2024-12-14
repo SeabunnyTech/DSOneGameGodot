@@ -24,7 +24,6 @@ total_time = 10
 [node name="WheelGameEnviromnent" parent="." instance=ExtResource("2_ihtve")]
 
 [node name="CircularMask" parent="." instance=ExtResource("4_8lec6")]
-alpha = 0.0
 center = Vector2(1920, 1080)
 radius = 0.0
 

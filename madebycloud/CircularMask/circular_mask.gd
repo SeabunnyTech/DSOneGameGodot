@@ -26,6 +26,26 @@ var call_back_tween
 var radius_tween
 
 
+
+func tween_radius(new_radius=null, duration=1, callback=null):
+	if radius_tween:
+		radius_tween.kill()
+		radius_tween = create_tween()\
+						.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+		radius_tween.tween_method(func(value): radius = value, radius, new_radius, duration)
+
+	if callback:
+		if call_back_tween:
+			call_back_tween.kill()
+		call_back_tween = create_tween()
+		call_back_tween.tween_interval(duration)
+		call_back_tween.finished.connect(callback)
+
+
+
+
+
 func tween_center_radius(new_center=null, new_radius=null, duration=1, callback=null):
 	if new_center:
 		if center_tween != null:

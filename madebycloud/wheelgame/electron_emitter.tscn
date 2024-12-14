@@ -9,8 +9,8 @@ collision_layer = 3
 script = ExtResource("1_whk1c")
 
 [node name="ElectronSpawnArea" type="CollisionPolygon2D" parent="."]
-position = Vector2(-39, 141)
-polygon = PackedVector2Array(-569, -1143, -505, -673, -336, -148, 28, 28, 490, -20, 392, 176, -124, 157, -661, -30, -876, -679, -873, -1127, -634, -1402, 305, -1486, 820, -1389, 919, -1076, 771, -3, 379, 178, 48, 16, 259, -222, 120, -503, 26, -827, -172, -1145)
+position = Vector2(127, 91)
+polygon = PackedVector2Array(-809, -1173, -827, -697, -663, -225, -378, -120, -24, -47, 232, -38, 836, 54, 606, 370, -121, 441, -706, 367, -980, -130, -1151, -669, -1160, -1212, -891, -1578, 305, -1486, 820, -1389, 919, -1076, 724, 286, 41, 69, 335, -83, 351, -280, 360, -701, 357, -1282, -171, -1291, -634, -1280)
 
 [node name="SpawnSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_p3gl1")

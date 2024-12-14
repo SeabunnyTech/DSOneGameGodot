@@ -5,10 +5,11 @@ signal lower_lake_level_changed(new_level)
 
 
 # 將電仔的函數及信號往上暴露
-@onready var destroy_electrons = $ElectronEmitter.destroy_electrons
-@onready var collect_electrons = $ElectronEmitter.collect_electrons
+@onready var emitter = $Player1UI/ElectronEmitter
+@onready var destroy_electrons = emitter.destroy_electrons
+@onready var collect_electrons = emitter.collect_electrons
 
-@onready var electron_collected = $ElectronEmitter.electron_collected
+#@onready var electron_collected = emitter.electron_collected
 
 enum Orientation{
 	CLOCKWISE,
@@ -122,7 +123,8 @@ func _ready():
 	# 連接電仔正在收集的訊號
 	# SignalBus.electrons_scoring.connect(_on_electrons_scoring)
 	# SignalBus.electrons_all_scored.connect(_on_electrons_scored)
-	$ElectronEmitter.electron_collected.connect(_on_electrons_scoring)
+	emitter.electron_collected.connect(_on_electrons_scoring)
+	emitter.electron_collected.connect($Player1UI/Path2D._pass_electron)
 
 	# 初始化湖和氣泡
 	for num in range(num_pipe_bubbles):
@@ -139,7 +141,7 @@ func _process(_delta):
 func _physics_process(_delta: float) -> void:
 	front_turbines.speed_scale *= DAMPING_FACTOR
 	back_turbines.speed_scale *= DAMPING_FACTOR
-	
+
 	# 當速度很小時直接設為 0
 	if max(abs(front_turbines.speed_scale), abs(back_turbines.speed_scale)) < SPEED_THRESHOLD:
 		front_turbines.speed_scale = 0
@@ -158,7 +160,7 @@ func react_to_wheel_rotation(clockwise: bool):
 	if not _is_orientation_allowed(clockwise):
 		return
 
-	$ElectronEmitter.spawn_electrons(1)
+	emitter.spawn_electrons(1)
 	electron_generated.emit()
 
 	var is_storing_energy = clockwise
@@ -178,9 +180,9 @@ func rotate_wheel(clockwise: bool, speed: float):
 	var turbine_speed_scale = (1 if clockwise else -1) * speed
 	front_turbines.speed_scale = turbine_speed_scale * 5
 	back_turbines.speed_scale = turbine_speed_scale * 5
-	var sign = -1 if clockwise else 1
+	var sgn = -1 if clockwise else 1
 	for bubble in bubbles:
-		bubble.progress_ratio = fmod(bubble.progress_ratio + sign * speed * 0.002, 1.0)
+		bubble.progress_ratio = fmod(bubble.progress_ratio + sgn * speed * 0.002, 1.0)
 
 	# 根據速度計算 duration
 	# 假設 speed 範圍是 0.0 到 1.0
@@ -192,7 +194,7 @@ func rotate_wheel(clockwise: bool, speed: float):
 
 
 
-func _on_electrons_scoring(_count: int):
+func _on_electrons_scoring(electron):
 	front_turbines.speed_scale = -2
 	back_turbines.speed_scale = -2
 
