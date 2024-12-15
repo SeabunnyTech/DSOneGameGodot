@@ -26,6 +26,7 @@ signal go_back_to_login
 @onready var circular_mask = $CircularMask
 @onready var player_waiter = $"1p_player_waiter"
 
+@onready var time_board = $TimeBoard
 
 # reset 非常重要, 定義了動畫能夠順利執行的起始條件
 # 在編輯器預覽的設定和 reset 後的設定可以不一樣
@@ -43,7 +44,9 @@ func reset():
 
 	# 遊戲本體及記分板
 	wheelgame_env.reset()
-	$HUD.reset()
+	time_board.reset()
+	time_board.modulate.a = 0
+	time_board.size = Vector2(3840, 2160)
 	game_started = false
 
 	# 備用的邏輯
@@ -119,16 +122,20 @@ func _begin_tutorial():
 		wheelgame_env.set_building_transparent()
 	)
 
-	tween.tween_interval(1)	
+	tween.tween_interval(1)
 
-	# 5. 看到了嗎! 這是 ooo 型的發電渦輪!
+	# 5. 在水輪機的強力加持之下, 小小的水滴也可以成為儲能的媒介!
 	_show_text('inner')
 
-	# 6. 它雖然重達 x 噸, 相當於 N 台轎車, 
-	_show_text('heavy')
+	tween.tween_callback(func():
+		wheelgame_env.camera_to(Vector2(2100, 1000), 0.8)
+		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 1.5)
+	)
 
-	# 7. 但是在你手上的水滴推動下, 它會成為我們的發電喔!
-	_show_text('power')
+	tween.tween_interval(1.5)
+
+	# 6. 換句話說! 電廠後方山上的水池, 其實也可以被想成是一個電池喔! 
+	_show_text('metaphor')
 
 	# 8. 現在舉起你的水滴試著畫圓推進它吧!
 	tween.tween_callback(func():_undate_guide_text('pushit'))
@@ -159,10 +166,7 @@ func _continue_tutorial():
 
 	tween = create_tween()
 	tween.tween_interval(0.5)
-	tween.tween_callback(func():
-		wheelgame_env.camera_to(Vector2(2100, 1000), 0.8)
-		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 1.5)
-	)
+	
 	tween.tween_interval(0.2)
 	tween.tween_property(guide_message, 'modulate:a', 0, 0.5)
 
@@ -216,24 +220,25 @@ func _proceed_to_game_start():
 	_show_text('start')
 
 	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
+	tween.tween_property(time_board, 'modulate:a', 1, 0.5)
+
+	tween.tween_property(time_board, 'size', Vector2(3840, 400), 1)\
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_property(circular_mask, 'alpha', 0, 1)
-	tween.tween_interval(0.5)
+
+
+	#tween.tween_interval(0.5)
 
 	tween.tween_callback(func():
 		wheelgame_env.rotation_enabled = true
 		#$HUD.update_time($Timer.wait_time)
-		$HUD.fade_in()
-		$HUD.start_timer.call()
+		time_board.start()
 		game_started = true
 		$short_whistle.play()
 		GlobalAudioPlayer.play_music(game_music)
 	)
+
 	
-
-
-func on_leave():
-	pass
-
 
 
 
@@ -247,8 +252,8 @@ func _ready() -> void:
 		# 電仔生成
 		player.full_rotation_completed.connect(func(_player, clockwise):
 			wheelgame_env.react_to_wheel_rotation(clockwise)
-			if game_started:
-				$HUD.add_score(1)
+			#if game_started:
+				#$HUD.add_score(1)
 		)
 
 		# 水輪旋轉
@@ -256,8 +261,10 @@ func _ready() -> void:
 			wheelgame_env.rotate_wheel(clockwise, speed)
 		)
 
+		
+
 		# 連接UI 及遊戲環境
-		$HUD.timeout.connect(_game_timeout)
+		time_board.timeout.connect(_game_timeout)
 		#wheelgame_env.electron_collected.connect($HUD.add_score)
 
 		# 連接 player lost 計時器
@@ -272,12 +279,59 @@ func _ready() -> void:
 		enter_scene()
 
 
-
+var game_stop_tween
 func _game_timeout():
+	game_started = false
 	wheelgame_env.rotation_enabled = false
-	wheelgame_env.collect_electrons.call()
 	$long_whistle.play()
+
+	# 延遲後退相機畫面
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+
+	game_stop_tween.tween_callback(func():
+		wheelgame_env.camera_to(Vector2(1920,1080), 1.0, 2)
+	)
+
+	game_stop_tween.tween_property(time_board, 'modulate:a', 0, 0.5)	
+	game_stop_tween.tween_interval(0.5)
+
+	wheelgame_env.show_score_board()
+	game_stop_tween.tween_callback(wheelgame_env.collect_electrons)
+
+	#game_stop_tween.tween_interval(3)
+
+	# 挑戰完成! 10 秒後
+	
+	#$HUD.go_big()
+
 	GlobalAudioPlayer.stop()
+	await wheelgame_env.all_electron_collected
+	_congrats_and_return()
+
+
+func _congrats_and_return():
+
+	var end_duration = 3
+	var thanks_duration = 3
+	var wait_duration = 2
+
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	tween.tween_interval(wait_duration)
+	_show_text('congrats', end_duration, 1)
+	_show_text('thanks')
+
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+	game_stop_tween.tween_interval(wait_duration)
+	game_stop_tween.tween_property(circular_mask, 'alpha', 1, 1)
+	game_stop_tween.tween_interval(end_duration)
+	game_stop_tween.tween_interval(thanks_duration)
+	game_stop_tween.tween_callback(leave_scene_for_restart)
 
 
 
@@ -286,42 +340,48 @@ func _undate_guide_text(new_text_state):
 		'begin' : '歡迎來到蓄電大挑戰!',
 		'case' : '這是一座水力發電廠',
 		'show' : '但它其實一點都不普通喔!',
-		'inner': '看到了嗎!',
-		'heavy': '它重達 x 噸',
-		'power': '在它的強力加持下',
+		'inner': '當水輪機發力把水抽到山上時!',
+		'metaphor': '換句話說!',
 		'pushit': '現在就來試試吧!!',
 		'stored': '非常好!',
 		'ready': '既然你已經掌握了蓄電之道!',
 		'final': '接下來我們就進入挑戰吧!',
 		'start': '準備開始!!',
+		'congrats' : '挑戰完成!',
+		'thanks' : '感謝你的參與',
 	}
 
+	var rpm = str(wheelgame_env.score / $TimeBoard.total_time * 60)
+
 	var guides = {
-		'begin' : '今天我們將化身一顆水滴\n來擔任蓄電工作啦!',
+		'begin' : '今天我們將化身一顆水滴\n來進行蓄電工作啦!',
 		'case' : '它看起來就像是一棟普通的房子對吧!',
-		'show' : '在它平淡的外表下\n內部有著很酷的構造喔!',
-		'inner': '這是 ooo 型的發電渦輪!',
-		'heavy': '相當於 N 台轎車!',
-		'power': '小小的水滴也可以用來蓄電喔!',
-		'pushit' : '舉起你手上的水滴\n順時鐘畫圓推動它!',
+		'show' : '在它平淡的外表下\n內部裝著一台巨大的水輪機呢!',
+		'inner': '小小的水滴也可以成為儲能的媒介!',
+		'metaphor': '電廠後方山上的水池\n其實也可以被想成是一個電池喔!',
+		'pushit' : '舉起你手上的控盤\n順時鐘畫圓來抽水到上池蓄積能量吧!',
 		'stored': '被抽到了高處的水\n乘載了滿滿的重力位能\n再次被放下時就可以轉換成電力喔!',
 		'ready': '',
-		'final': '看看你能在 ' + str($HUD.total_time) +' 秒內發出多少電力!',
+		'final': '看看你能在 ' + str($TimeBoard.total_time) + ' 秒內發出多少電力!',
 		'start': '',
+		'congrats' : '你在' + str($TimeBoard.total_time) + ' 秒內轉了 ' +\
+					 str(wheelgame_env.score) + ' 圈呢!',
+		'thanks':'電幻一號所祝您身體健康, 手腕舒適!',
 	}
 
 	var guide_text_positions = {
 		'begin' : Vector2(960, 920),
 		'case' : Vector2(1800, 920),
 		'show' : Vector2(1800, 920),
-		'inner': Vector2(80, 920),
-		'heavy': Vector2(80, 920),
-		'power': Vector2(0, 920),
-		'pushit': Vector2(0, 920),
+		'inner': Vector2(-80, 920),
+		'metaphor' : Vector2(2150, 800),
+		'pushit': Vector2(2150, 800),
 		'stored': Vector2(2150, 800),
 		'ready': Vector2(960, 920),
 		'final': Vector2(960, 920),
 		'start': Vector2(960, 920),
+		'congrats' : Vector2(960, 920),
+		'thanks':Vector2(960, 920),
 	}
 
 	$Title.position = guide_text_positions[new_text_state]
@@ -330,7 +390,7 @@ func _undate_guide_text(new_text_state):
 
 
 
-func _show_text(text_key, duration=0.1, trans_duration=1):
+func _show_text(text_key, duration=2, trans_duration=1):
 	tween.tween_callback(func():_undate_guide_text(text_key))
 	tween.tween_property(guide_message, 'modulate:a', 1, trans_duration)
 	tween.tween_interval(duration)

@@ -9,7 +9,9 @@ signal lower_lake_level_changed(new_level)
 @onready var destroy_electrons = emitter.destroy_electrons
 @onready var collect_electrons = emitter.collect_electrons
 
-#@onready var electron_collected = emitter.electron_collected
+@onready var electron_collected = emitter.electron_collected
+@onready var all_electron_collected = emitter.all_electron_collected
+
 
 enum Orientation{
 	CLOCKWISE,
@@ -109,9 +111,26 @@ func set_building_transparent(transparent=true, duration=1):
 
 
 
+@onready var score_board = $ScoreBoard
+var score:
+	get:
+		return score_board.score
+
+var score_board_tween
+func show_score_board():
+	if score_board_tween:
+		score_board_tween.kill()
+
+	score_board_tween = create_tween()
+	score_board_tween.tween_property(score_board, 'modulate:a', 1, 1)
+
+
+
 func reset():
 	rotation_enabled = false
 	lower_lake_level = 1
+	score_board.reset()
+	score_board.modulate.a = 0
 
 
 
@@ -125,6 +144,7 @@ func _ready():
 	# SignalBus.electrons_all_scored.connect(_on_electrons_scored)
 	emitter.electron_collected.connect(_on_electrons_scoring)
 	emitter.electron_collected.connect($Player1UI/Path2D._pass_electron)
+	emitter.electron_collected.connect(func(_e): score_board.add_score())
 
 	# 初始化湖和氣泡
 	for num in range(num_pipe_bubbles):
