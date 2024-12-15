@@ -36,7 +36,7 @@ func leave_scene_after_delay(callback: Callable, delay=2):
 	disabled = true
 	var tween = create_tween()
 	tween.tween_interval(delay)
-	tween.tween_property($FadeoutCurtainRect, 'modulate:a', 1, 1)
+	tween.tween_property(self, 'modulate:a', 0, 1)
 	tween.finished.connect(
 		func():
 			reset()
@@ -47,9 +47,6 @@ func leave_scene_after_delay(callback: Callable, delay=2):
 func reset():
 	# 讓這整個物件消失不見先
 	modulate.a = 0
-
-	# 把只用來 Fadeout 的幕簾收起來
-	$FadeoutCurtainRect.modulate.a = 0
 
 	# Logo 藏起來
 	for logo in logos:

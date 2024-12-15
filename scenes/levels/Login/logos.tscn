@@ -33,9 +33,3 @@ theme = ExtResource("3_gaxa6")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 horizontal_alignment = 1
 script = ExtResource("4_luspe")
-
-[node name="FadeoutCurtainRect" type="ColorRect" parent="."]
-modulate = Color(1, 1, 1, 0)
-offset_right = 3840.0
-offset_bottom = 2160.0
-metadata/_edit_use_anchors_ = true
