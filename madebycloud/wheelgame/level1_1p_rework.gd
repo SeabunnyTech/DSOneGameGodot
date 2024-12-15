@@ -337,7 +337,7 @@ func _congrats_and_return():
 
 func _undate_guide_text(new_text_state):
 	var titles = {
-		'begin' : '歡迎來到蓄電大挑戰!',
+		'begin' : '歡迎來到抽蓄發電大作戰!',
 		'case' : '這是一座水力發電廠',
 		'show' : '但它其實一點都不普通喔!',
 		'inner': '當水輪機發力把水抽到山上時!',
