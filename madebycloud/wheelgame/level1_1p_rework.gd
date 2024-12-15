@@ -125,7 +125,7 @@ func _begin_tutorial():
 	tween.tween_interval(1)
 
 	# 5. 在水輪機的強力加持之下, 小小的水滴也可以成為儲能的媒介!
-	_show_text('inner')
+	_show_text('inner', 3)
 
 	tween.tween_callback(func():
 		wheelgame_env.camera_to(Vector2(2100, 1000), 0.8)
@@ -373,7 +373,7 @@ func _undate_guide_text(new_text_state):
 		'begin' : Vector2(960, 920),
 		'case' : Vector2(1800, 920),
 		'show' : Vector2(1800, 920),
-		'inner': Vector2(-80, 920),
+		'inner': Vector2(-120, 920),
 		'metaphor' : Vector2(2150, 800),
 		'pushit': Vector2(2150, 800),
 		'stored': Vector2(2150, 800),
