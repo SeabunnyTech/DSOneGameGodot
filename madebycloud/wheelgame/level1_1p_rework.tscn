@@ -1,7 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://cmk5cd4ky13nc"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/level1_1p_rework.gd" id="1_o3jsl"]
-[ext_resource type="PackedScene" uid="uid://beb3ratbaycsj" path="res://madebycloud/time_score_hud.tscn" id="2_egw8w"]
 [ext_resource type="PackedScene" uid="uid://3n3cmgot5ska" path="res://madebycloud/wheelgame/wheelgame_env.tscn" id="2_ihtve"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="4_8lec6"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_hlu2i"]
@@ -11,15 +10,13 @@
 [ext_resource type="AudioStream" uid="uid://d2injtmbjuoe4" path="res://assets/audio/sfx/short_whistle.wav" id="9_yei3f"]
 [ext_resource type="AudioStream" uid="uid://cew0ndub4c4vk" path="res://assets/audio/sfx/long_whistle.wav" id="10_y512d"]
 [ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="11_a7wm1"]
+[ext_resource type="PackedScene" uid="uid://d0nj48pnk17oh" path="res://madebycloud/hud/TimeBoard.tscn" id="12_u8p4t"]
 
 [node name="Level1_1p" type="Node2D"]
 modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_o3jsl")
 game_music = ExtResource("6_0x384")
 tutorial_music = ExtResource("6_qhmng")
-
-[node name="HUD" parent="." instance=ExtResource("2_egw8w")]
-total_time = 10
 
 [node name="WheelGameEnviromnent" parent="." instance=ExtResource("2_ihtve")]
 
@@ -70,3 +67,8 @@ stream = ExtResource("10_y512d")
 
 [node name="1p_player_waiter" type="Node" parent="."]
 script = ExtResource("11_a7wm1")
+
+[node name="TimeBoard" parent="." instance=ExtResource("12_u8p4t")]
+offset_right = 3840.0
+offset_bottom = 400.0
+total_time = 5

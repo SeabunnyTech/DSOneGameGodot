@@ -1,7 +1,7 @@
 extends StaticBody2D
 
 signal electron_collected(electron)
-
+signal all_electron_collected
 
 @export var float_range: float = 50.0
 @export var float_speed: float = 0.5
@@ -43,9 +43,7 @@ func collect_electrons():
 		return
 
 	collecting = true
-	var collect_delay = 1 / (active_electrons.size())
-	if collect_delay > 0.1:
-		collect_delay = 0.1
+	var collect_delay = 0.1
 
 	# 依序收集所有電子
 	for i in range(active_electrons.size()):
@@ -58,6 +56,7 @@ func collect_electrons():
 	# 等待最後一個動畫完成
 	await get_tree().create_timer(collection_speed + 0.2).timeout
 	collecting = false
+	all_electron_collected.emit()
 
 
 # 讓電仔原地消失好像不存在過一樣
