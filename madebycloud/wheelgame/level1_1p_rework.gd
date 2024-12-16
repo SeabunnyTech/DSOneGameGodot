@@ -187,6 +187,7 @@ func _skip_tutorial(_player):
 	tween = create_tween()
 
 	tween.tween_interval(0.5)
+	action_guide_img.visible = false
 	circular_mask.tween_radius(0.0, 1)
 	wheelgame_env.camera_to(Vector2(1920, 1080))
 
@@ -367,7 +368,7 @@ func _undate_guide_text(new_text_state):
 		'ready': '',
 		'final': '看看你能在 ' + str($TimeBoard.total_time) + ' 秒內發出多少電力!',
 		'start': '',
-		'congrats' : '你在' + str($TimeBoard.total_time) + ' 秒內轉了 ' +\
+		'congrats' : '你在 ' + str($TimeBoard.total_time) + ' 秒內轉了 ' +\
 					 str(wheelgame_env.score) + ' 圈呢!',
 		'thanks':'電幻一號所祝您身體健康, 手腕舒適!',
 	}
