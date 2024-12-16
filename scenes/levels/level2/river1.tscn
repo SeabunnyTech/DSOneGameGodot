@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cjmcjpva8u6va"]
+[gd_scene load_steps=31 format=3 uid="uid://cjmcjpva8u6va"]
 
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_6i8h2"]
 [ext_resource type="Texture2D" uid="uid://bfmjq2d7ylitm" path="res://assets/images/backgrounds/static/level2/river_1.png" id="1_f60bk"]
@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://ccl2iurumnmyy" path="res://scenes/levels/level2/cloud.tscn" id="21_2bd42"]
 [ext_resource type="Texture2D" uid="uid://djsc1k46o531o" path="res://assets/images/backgrounds/animated/level2/cloud3.png" id="21_83hqd"]
 [ext_resource type="Texture2D" uid="uid://cbajyfla50nx1" path="res://assets/images/backgrounds/animated/level2/cloud2.png" id="22_k44dy"]
+[ext_resource type="Texture2D" uid="uid://cfmv6qkst4iuy" path="res://assets/images/backgrounds/static/level2/stone_2.png" id="23_4bopy"]
 [ext_resource type="Texture2D" uid="uid://7yafkvh46vk3" path="res://assets/images/backgrounds/animated/level2/cloud1.png" id="23_wj1du"]
 [ext_resource type="Texture2D" uid="uid://bd50i3tnu5okr" path="res://assets/images/backgrounds/static/level2/stone_3.png" id="24_uc4ba"]
 [ext_resource type="Texture2D" uid="uid://davk0gmlnuo1y" path="res://assets/images/backgrounds/static/level2/stone_4.png" id="25_alcqn"]
@@ -45,7 +46,7 @@ script = ExtResource("1_6i8h2")
 
 [node name="RiverNormMap" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(1920, 5192)
+position = Vector2(1912, 5256)
 texture = ExtResource("2_0jgxe")
 
 [node name="RiverMap" type="Sprite2D" parent="."]
@@ -267,25 +268,73 @@ z_index = 2
 position = Vector2(-825, 2876)
 texture = ExtResource("23_wj1du")
 
-[node name="Stone1" type="Sprite2D" parent="."]
+[node name="Stone" type="Node2D" parent="."]
+
+[node name="Stone1" type="Sprite2D" parent="Stone"]
 position = Vector2(2529, 8016)
 texture = ExtResource("9_fahmb")
 
-[node name="Driftwood1" type="Sprite2D" parent="."]
+[node name="Stone3" type="Sprite2D" parent="Stone"]
+position = Vector2(2561, 6805)
+texture = ExtResource("24_uc4ba")
+
+[node name="Stone2" type="Sprite2D" parent="Stone"]
+position = Vector2(2114, 4543)
+scale = Vector2(1.33333, 1.33333)
+texture = ExtResource("25_alcqn")
+
+[node name="Stone6" type="Sprite2D" parent="Stone"]
+position = Vector2(2054, 1193)
+texture = ExtResource("25_alcqn")
+
+[node name="Stone4" type="Sprite2D" parent="Stone"]
+position = Vector2(1980, 5993)
+texture = ExtResource("25_alcqn")
+
+[node name="Stone7" type="Sprite2D" parent="Stone"]
+position = Vector2(2506, 3188)
+scale = Vector2(2.51449, 2.51449)
+texture = ExtResource("23_4bopy")
+
+[node name="Stone5" type="Sprite2D" parent="Stone"]
+position = Vector2(1989, 2131)
+scale = Vector2(1.58571, 1.58571)
+texture = ExtResource("23_4bopy")
+
+[node name="Driftwood" type="Node2D" parent="."]
+
+[node name="Driftwood1" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1206, 4532)
 texture = ExtResource("10_k1dfc")
 
-[node name="Driftwood2" type="Sprite2D" parent="."]
+[node name="Driftwood8" type="Sprite2D" parent="Driftwood"]
+position = Vector2(1714, 1984)
+scale = Vector2(0.848837, 0.848837)
+texture = ExtResource("10_k1dfc")
+
+[node name="Driftwood2" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1885, 3309)
 texture = ExtResource("11_sfy30")
 
-[node name="Driftwood3" type="Sprite2D" parent="."]
+[node name="Driftwood3" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1590, 6860)
 texture = ExtResource("12_o4lwe")
 
-[node name="Driftwood4" type="Sprite2D" parent="."]
+[node name="Driftwood4" type="Sprite2D" parent="Driftwood"]
 position = Vector2(2335, 5479)
 texture = ExtResource("10_k1dfc")
+
+[node name="Driftwood5" type="Sprite2D" parent="Driftwood"]
+position = Vector2(2118, 8839)
+texture = ExtResource("10_k1dfc")
+
+[node name="Driftwood6" type="Sprite2D" parent="Driftwood"]
+position = Vector2(1383, 9283)
+texture = ExtResource("11_sfy30")
+
+[node name="Driftwood7" type="Sprite2D" parent="Driftwood"]
+position = Vector2(2268, 7866)
+texture = ExtResource("12_o4lwe")
 
 [node name="FinishLine" parent="." instance=ExtResource("18_65u3q")]
 position = Vector2(1730, 9773)
@@ -306,23 +355,3 @@ texture = ExtResource("20_qpnrj")
 [node name="Fish3" type="Sprite2D" parent="."]
 position = Vector2(2276, 3019)
 texture = ExtResource("20_qpnrj")
-
-[node name="Driftwood5" type="Sprite2D" parent="."]
-position = Vector2(2118, 8839)
-texture = ExtResource("10_k1dfc")
-
-[node name="Driftwood6" type="Sprite2D" parent="."]
-position = Vector2(1383, 9283)
-texture = ExtResource("11_sfy30")
-
-[node name="Driftwood7" type="Sprite2D" parent="."]
-position = Vector2(2268, 7866)
-texture = ExtResource("12_o4lwe")
-
-[node name="Stone3" type="Sprite2D" parent="."]
-position = Vector2(2561, 6805)
-texture = ExtResource("24_uc4ba")
-
-[node name="Stone4" type="Sprite2D" parent="."]
-position = Vector2(1980, 5993)
-texture = ExtResource("25_alcqn")

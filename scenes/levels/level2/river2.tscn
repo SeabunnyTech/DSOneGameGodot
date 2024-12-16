@@ -46,7 +46,7 @@ script = ExtResource("1_gb5v0")
 
 [node name="RiverNormMap" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(1920, 5196)
+position = Vector2(1924, 5271)
 texture = ExtResource("2_gs1u0")
 
 [node name="RiverMap" type="Sprite2D" parent="."]
@@ -274,25 +274,74 @@ z_index = 2
 position = Vector2(170, 3808)
 texture = ExtResource("23_sc3hl")
 
-[node name="Driftwood3" type="Sprite2D" parent="."]
-position = Vector2(1590, 6860)
+[node name="Driftwood" type="Node2D" parent="."]
+
+[node name="Driftwood3" type="Sprite2D" parent="Driftwood"]
+position = Vector2(2273, 6912)
 texture = ExtResource("9_38e68")
 
-[node name="Stone1" type="Sprite2D" parent="."]
-position = Vector2(1413, 8015)
-texture = ExtResource("10_gpjiq")
-
-[node name="Driftwood1" type="Sprite2D" parent="."]
+[node name="Driftwood1" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1337, 3699)
 texture = ExtResource("11_k13vs")
 
-[node name="Driftwood2" type="Sprite2D" parent="."]
+[node name="Driftwood2" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1312, 1705)
 texture = ExtResource("12_p58bb")
 
-[node name="Driftwood4" type="Sprite2D" parent="."]
+[node name="Driftwood4" type="Sprite2D" parent="Driftwood"]
 position = Vector2(1730, 4805)
 texture = ExtResource("11_k13vs")
+
+[node name="Driftwood5" type="Sprite2D" parent="Driftwood"]
+position = Vector2(1591, 8694)
+texture = ExtResource("11_k13vs")
+
+[node name="Driftwood6" type="Sprite2D" parent="Driftwood"]
+position = Vector2(2463, 9205)
+texture = ExtResource("12_p58bb")
+
+[node name="Driftwood7" type="Sprite2D" parent="Driftwood"]
+position = Vector2(1438, 8002)
+scale = Vector2(0.869231, 0.869231)
+texture = ExtResource("9_38e68")
+
+[node name="Stone" type="Node2D" parent="."]
+
+[node name="Stone1" type="Sprite2D" parent="Stone"]
+position = Vector2(2485, 6985)
+texture = ExtResource("10_gpjiq")
+
+[node name="Stone3" type="Sprite2D" parent="Stone"]
+position = Vector2(2134, 8614)
+texture = ExtResource("24_k2kb3")
+
+[node name="Stone4" type="Sprite2D" parent="Stone"]
+position = Vector2(1514, 5962)
+texture = ExtResource("25_tj8y3")
+
+[node name="Stone2" type="Sprite2D" parent="Stone"]
+position = Vector2(2401, 2609)
+texture = ExtResource("26_tnx4w")
+
+[node name="Stone9" type="Sprite2D" parent="Stone"]
+position = Vector2(4879, 10533)
+texture = ExtResource("10_gpjiq")
+
+[node name="Stone7" type="Sprite2D" parent="Stone"]
+position = Vector2(2485, 5674)
+texture = ExtResource("10_gpjiq")
+
+[node name="Stone5" type="Sprite2D" parent="Stone"]
+position = Vector2(2557, 2704)
+texture = ExtResource("10_gpjiq")
+
+[node name="Stone8" type="Sprite2D" parent="Stone"]
+position = Vector2(2311, 4762)
+texture = ExtResource("25_tj8y3")
+
+[node name="Stone6" type="Sprite2D" parent="Stone"]
+position = Vector2(2254, 1034)
+texture = ExtResource("25_tj8y3")
 
 [node name="FinishLine" parent="." instance=ExtResource("18_ygplu")]
 position = Vector2(2022, 9696)
@@ -314,38 +363,6 @@ texture = ExtResource("20_o8jcu")
 position = Vector2(2320, 2562)
 texture = ExtResource("20_o8jcu")
 
-[node name="Driftwood5" type="Sprite2D" parent="."]
-position = Vector2(1591, 8694)
-texture = ExtResource("11_k13vs")
-
-[node name="Driftwood6" type="Sprite2D" parent="."]
-position = Vector2(2463, 9205)
-texture = ExtResource("12_p58bb")
-
-[node name="Driftwood7" type="Sprite2D" parent="."]
-position = Vector2(1955, 7911)
-texture = ExtResource("9_38e68")
-
-[node name="Stone3" type="Sprite2D" parent="."]
-position = Vector2(2561, 6805)
-texture = ExtResource("24_k2kb3")
-
-[node name="Stone4" type="Sprite2D" parent="."]
-position = Vector2(1514, 5962)
-texture = ExtResource("25_tj8y3")
-
 [node name="Fish4" type="Sprite2D" parent="."]
 position = Vector2(2265, 8688)
 texture = ExtResource("20_o8jcu")
-
-[node name="Stone2" type="Sprite2D" parent="."]
-position = Vector2(2401, 2609)
-texture = ExtResource("26_tnx4w")
-
-[node name="Stone5" type="Sprite2D" parent="."]
-position = Vector2(2566, 2716)
-texture = ExtResource("10_gpjiq")
-
-[node name="Stone6" type="Sprite2D" parent="."]
-position = Vector2(2254, 1034)
-texture = ExtResource("25_tj8y3")
