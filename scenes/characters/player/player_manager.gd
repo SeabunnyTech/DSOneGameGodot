@@ -20,7 +20,7 @@ signal player_countdown_completed(player: Node)
 
 # 用 hsv 中的色相 hue 區分玩家, 用飽和度 saturation 及透明度 alpha 來表達不同狀態
 var player_hue = {
-	0:0.57,
+	0:0.50,
 	1:0.45
 }
 

@@ -16,18 +16,18 @@ scale = Vector2(1, -1)
 shape = SubResource("RectangleShape2D_nj3jh")
 
 [node name="FinishLine" type="Sprite2D" parent="."]
-z_index = 20
+z_index = 10
 position = Vector2(0, -91)
 scale = Vector2(0.816409, 0.709459)
 texture = ExtResource("2_658ed")
 
 [node name="Bird" type="Sprite2D" parent="."]
-z_index = 20
+z_index = 10
 position = Vector2(-600, -84)
 texture = ExtResource("1_aeaxu")
 
 [node name="Bird2" type="Sprite2D" parent="."]
-z_index = 20
+z_index = 10
 position = Vector2(600, -84)
 scale = Vector2(-1, 1)
 texture = ExtResource("1_aeaxu")

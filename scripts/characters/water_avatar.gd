@@ -21,11 +21,12 @@ var current_velocity: Vector2
 
 var waiting_tween: Tween
 
-var base_color = Color.from_hsv(0.45, 0.6, 1, 1)
+var base_color = Color.from_hsv(0.50, 0.6, 1, 1)
+var waiting_color = Color.from_hsv(0.48, 0.6, 0.3, 1)
 
 func _ready():
 	# 開始閃爍動畫
-	set_color(Color.from_hsv(0.45, 0.6, 1, 1))
+	set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	start_waiting_animation()
 
 func _process(_delta):
@@ -62,17 +63,19 @@ func init(player: Node2D, init_pos: Vector2):
 	position = init_pos
 
 func merge_with_player():
+	set_color(base_color)
 	is_merged = true
 	merged_with_player.emit(self)
 	stop_waiting_animation()
 
 func separate_from_player():
+	set_color(waiting_color)
 	is_merged = false
 	separated_from_player.emit(self)
 	start_waiting_animation()
 
 func start_waiting_animation():
-	set_color(base_color)
+	set_color(waiting_color)
 	# 停止之前的動畫（如果有的話）
 	if waiting_tween:
 		waiting_tween.kill()

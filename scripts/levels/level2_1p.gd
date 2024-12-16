@@ -8,6 +8,7 @@ signal go_back_to_login
 
 @export var game_music: AudioStream
 @export var tutorial_music: AudioStream
+@export var victory_music: AudioStream
 
 @export var screen_center = Vector2(3840.0/2, 2160.0/2)
 @export var camera_position = Vector2(1920, 1080):
@@ -36,7 +37,6 @@ var river_scene_size = Vector2.ZERO
 var reversed_spawn_positions: Array[float] = []
 var scoring_in_progress = false
 var current_scoring_index = 0
-var game_mode = true # 遊戲模式，true 為遊戲中，false 為遊戲結束準備計分
 
 var score = {0: 0, 1: 0}
 
@@ -69,6 +69,7 @@ func reset():
 
 func enter_scene():
 	visible = true
+	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
 	_begin_tutorial()
 
 func leave_scene_for_restart():
@@ -85,6 +86,8 @@ func leave_scene_for_restart():
 var tween
 
 func _begin_tutorial():
+	river_game_1.init_player()
+
 	if tween:
 		tween.kill()
 	tween = create_tween()
@@ -102,16 +105,18 @@ func _begin_tutorial():
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 
 	# 接著冒出跳過按鈕
-	tween.tween_interval(1)
-	tween.tween_callback(skip_button.showup)
+	tween.tween_callback(func():
+		skip_button.showup()
+	)
 
 	# 開場說明消失往下接續
+	
 	tween.tween_interval(1)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 
 	# 2. 擺動你手上的控制器，吸附到上方閃爍的水滴就能控制方向!
 	tween.tween_callback(func():
-		river_game_1.start_tutorial()
+		river_game_1.show_avatar()
 		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.1)
 		circular_mask.tween_center_radius(Vector2(1920, 800), 700.0, 1)
 	)
@@ -142,7 +147,7 @@ func _continue_tutorial_1():
 	tween.tween_interval(0.5)
 	
 	tween.tween_callback(func():
-		river_game_1.start_tutorial()
+		river_game_1.show_avatar()
 		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.15)
 		circular_mask.tween_center_radius(Vector2(2160, 800), 500.0, 1.5)
 	)
@@ -187,14 +192,14 @@ func _continue_tutorial_2():
 
 	tween.tween_callback(func():
 		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1)
-		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 0.5)
+		circular_mask.tween_center_radius(Vector2(1920, 2160), 1800.0, 0.5)
 	)
 
 	_show_text('downstream')
 
 	tween.tween_interval(0.5)
 	tween.tween_callback(func():
-		circular_mask.tween_center_radius(Vector2(1920, 2160), 2000.0, 0.5)
+		circular_mask.tween_center_radius(Vector2(1920, 2160), 1800.0, 0.5)
 	)
 
 	# 6.經過了這麼多電廠，發現原來一滴水可以發很多次電!
@@ -271,14 +276,66 @@ func _proceed_to_game_start():
 		river_game_1.start_game()
 
 		camera_enabled = true
-		
+
+		TimerManager.start_game_timer(30)
 		GlobalAudioPlayer.play_music(game_music)
 	)
 
 	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
 	tween.tween_property(circular_mask, 'alpha', 0, 1)
 
-	
+var game_stop_tween
+func _game_timeout():
+	TimerManager.stop_timer(TimerManager.TimerType.GAME)
+	GlobalAudioPlayer.stop()
+
+	GlobalAudioPlayer.play_music(victory_music)
+
+	game_started = false
+
+	$long_whistle.play()
+
+	# 延遲後退相機畫面
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+
+	game_stop_tween.tween_callback(func():
+		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.0, 2)
+	)
+
+	game_stop_tween.tween_property(hud, 'modulate:a', 0, 0.5)	
+	game_stop_tween.tween_interval(10)
+	game_stop_tween.tween_callback(func():
+		hud.hide()
+		GlobalAudioPlayer.stop()
+		_congrats_and_return()
+	)
+
+
+
+func _congrats_and_return():
+
+	var end_duration = 3
+	var thanks_duration = 3
+	var wait_duration = 2
+
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	tween.tween_interval(wait_duration)
+	_show_text('congrats', end_duration, 1)
+	_show_text('thanks')
+
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+	game_stop_tween.tween_interval(wait_duration)
+	game_stop_tween.tween_property(circular_mask, 'alpha', 1, 1)
+	game_stop_tween.tween_interval(end_duration)
+	game_stop_tween.tween_interval(thanks_duration)
+	game_stop_tween.tween_callback(leave_scene_for_restart)
+
 
 
 # ================== Tutorial ==================
@@ -306,8 +363,8 @@ func _undate_guide_text(new_text_state):
 		'electron': '水滴就完成了偉大的發電任務!',
 		'ready': '接下來就讓我們開始挑戰吧!',
 		'start': '',
-		'congrats': '你在 秒內\n收集了 ' + str(score) + ' 個電仔獸!',
-		'thanks': '電幻一號所祝您身體健康, 手腕舒適!'
+		'congrats': '小水滴在美麗的大甲溪流域產生 ' + str(score[0]) + ' 個電仔!',
+		'thanks': '電幻一號所祝您身體健康!'
 	}
 
 	var guide_text_positions = {
@@ -315,10 +372,11 @@ func _undate_guide_text(new_text_state):
 		'control' : Vector2(960, 1600),
 		'obstacle': Vector2(-80, 920),
 		'speed' : Vector2(2080, 960),
-		'downstream' : Vector2(2150, 800),
+		'downstream' : Vector2(2160, 180),
 		'electron': Vector2(2160, 180),
 		'ready': Vector2(960, 920),
 		'start': Vector2(960, 920),
+		'congrats': Vector2(960, 920),
 		'thanks': Vector2(960, 920),
 	}
 
@@ -340,13 +398,10 @@ func _show_text(text_key, duration=2, trans_duration=1):
 
 # TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
-	reset()
-	# var random_river_index = randi() % num_rivers_scenes
-
-	# hud.update_minimap(random_river_index)
 	
-	# 初始化 river_2 給 tutorial 用
-	river_game_1.init(0, num_players, 1) # player_id, num_players, river_index
+	reset()
+
+	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
 
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
 	river_game_1.finish_line_passed.connect(_on_finish_line_passed)
@@ -358,6 +413,8 @@ func _ready():
 	player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
 
 	skip_button.triggered.connect(_skip_tutorial)
+
+	TimerManager.game_time_expired.connect(_game_timeout)
 
 	# 測試的時候才會成為 main scene
 	if get_tree().current_scene == self:
@@ -409,13 +466,12 @@ func _update_cameras(delta: float) -> void:
 	)
 
 func _on_finish_line_passed(_player_id: int):
-	game_mode = false
-	TimerManager.stop_timer(TimerManager.TimerType.GAME)
-	AudioManager.play_victor_music()
+	_game_timeout()
 
 func _on_checkpoint_passed(player_id: int, count: int):
-	score[player_id] += count
-	hud.update_score_display(score)
+	if game_started:
+		score[player_id] += count
+		hud.update_score_display(score)
 
 
 

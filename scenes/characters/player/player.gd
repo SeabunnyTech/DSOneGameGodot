@@ -22,14 +22,14 @@ var sva_table = {
 	State.LOST		:	[0, 1, 0],
 	State.FADED		:	[0, 1, 0.2],
 	State.ACTIVE		:	[0.6, 1, 1],
-	State.TRIGGERED	:	[1, 1, 1]
+	State.TRIGGERED	:	[1, 1, 1],
 }
 
 var hue
 @export var index = 0:
 	set(value):
 		index = value
-		hue = {0: 0.57, 1:0.45}[index]	# 預設的一些 hue
+		hue = {0: 0.50, 1:0.45}[index]	# 預設的一些 hue
 
 
 # 狀態轉換相關的變數與函數
@@ -163,12 +163,15 @@ func _process(_delta: float) -> void:
 
 	metaball_node.update_ball_positions(ball_positions)
 
+func set_radii(new_radius: Array[float]):
+	metaball_node.update_ball_radii(new_radius)
+
 func set_color(new_color):
 	var col = Color(new_color)
 	modulate = col
 	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
 	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-	$Metaball.update_ball_colors(vec4_colors)
+	metaball_node.update_ball_colors(vec4_colors)
 
 func start_progress_countdown(time: float = 5.0) -> void:
 	radial_progress.show()

@@ -18,6 +18,7 @@ signal finish_line_passed(player_id: int)
 var player_id: int = 0
 
 var is_playable = false
+var checkpoint_enabled = false
 
 # 存此次遊戲所隨機選擇的 river scene
 var river_scene: Node2D
@@ -85,16 +86,24 @@ func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, 
 	return avatar_river_pos
 
 func enable_checkpoint():
-	is_playable = true
+	checkpoint_enabled = true
 
-func start_tutorial():
+func init_player():
+	var radii: Array[float] = [18.0, 15.0, 12.0]
+	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[0].set_radii(radii)
+
+func show_avatar():
+	is_playable = true
 	avatar.show()
 
 func end_tutorial():
+	checkpoint_enabled = false
 	avatar.hide()
 
 func start_game():
 	is_playable = true
+	checkpoint_enabled = true
 	avatar.show()
 
 func reset():
@@ -146,7 +155,7 @@ func _on_spawn_area_scored(spawn_id: int):
 	spawn_area_scored.emit(player_id, spawn_id)
 
 func _on_checkpoint_passed(_player_id: int, count: int):
-	if is_playable:
+	if checkpoint_enabled:
 		checkpoint_passed.emit(_player_id, count)
 
 func _on_game_scoring(avatar: Node2D):
@@ -161,6 +170,8 @@ func _on_avatar_separated(avatar: Node2D):
 	avatar_is_separated = true
 
 func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+	if not is_playable:
+		return
 
 	var avatar_in_river_position = avatar_in_river_position(
 		screen_center,

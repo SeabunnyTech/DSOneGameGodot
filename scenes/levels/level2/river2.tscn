@@ -231,37 +231,46 @@ texture = ExtResource("8_1vc5t")
 position = Vector2(711, 2083)
 
 [node name="Cloud" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 texture = ExtResource("23_sc3hl")
 
 [node name="Cloud7" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(1772, 6203)
 texture = ExtResource("21_0d0qq")
 
 [node name="Cloud2" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(457, -1526)
 texture = ExtResource("21_0d0qq")
 
 [node name="Cloud3" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(2498, -915)
 texture = ExtResource("22_ao4au")
 
 [node name="Cloud4" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(327, 5893)
 texture = ExtResource("21_0d0qq")
 
 [node name="Cloud6" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(2248, 986)
 texture = ExtResource("21_0d0qq")
 
 [node name="Cloud9" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(419, 7047)
 texture = ExtResource("22_ao4au")
 
 [node name="Cloud8" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(2491, 3044)
 texture = ExtResource("22_ao4au")
 
 [node name="Cloud5" parent="Cloud" instance=ExtResource("24_k0ol4")]
+z_index = 2
 position = Vector2(170, 3808)
 texture = ExtResource("23_sc3hl")
 

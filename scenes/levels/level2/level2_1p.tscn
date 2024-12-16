@@ -1,19 +1,23 @@
-[gd_scene load_steps=10 format=3 uid="uid://ctc1wm78mr8p2"]
+[gd_scene load_steps=13 format=3 uid="uid://ctc1wm78mr8p2"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
 [ext_resource type="PackedScene" uid="uid://ds1koirixejn6" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
 [ext_resource type="AudioStream" uid="uid://2yqqqaec6emn" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_dgsee"]
 [ext_resource type="AudioStream" uid="uid://ckn0xs75mr3qx" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_qkv4s"]
+[ext_resource type="AudioStream" uid="uid://dbnfrq3iw5rxo" path="res://assets/audio/archive/game over music_Lively Meadow Victory Fanfare.wav" id="4_2odhm"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="6_2ckte"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_llw8i"]
 [ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="6_mr3ob"]
 [ext_resource type="Theme" path="res://assets/themes/LoginTextGuide.tres" id="7_3aevv"]
+[ext_resource type="AudioStream" uid="uid://b8qyv86b2gaou" path="res://assets/audio/sfx/short_whistle.wav" id="10_pr7h7"]
+[ext_resource type="AudioStream" uid="uid://m85p4gnmvys0" path="res://assets/audio/sfx/long_whistle.wav" id="11_wykju"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_lybcr")
 game_music = ExtResource("2_dgsee")
 tutorial_music = ExtResource("3_qkv4s")
+victory_music = ExtResource("4_2odhm")
 
 [node name="HUD" parent="." instance=ExtResource("2_6qy6p")]
 visible = false
@@ -23,13 +27,13 @@ offset_right = 3840.0
 offset_bottom = 2160.0
 
 [node name="CircularMask" parent="." instance=ExtResource("6_2ckte")]
-z_index = 5
+z_index = 15
 center = Vector2(1920, 1080)
 radius = 0.0
 
 [node name="SkipButton" parent="." instance=ExtResource("6_llw8i")]
 modulate = Color(1, 1, 1, 0)
-z_index = 8
+z_index = 15
 position = Vector2(3500, 1900)
 
 [node name="1p_player_waiter" type="Node" parent="."]
@@ -66,3 +70,9 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "今天我們將化身一顆水滴
 來驅動渦輪發電啦!"
 horizontal_alignment = 1
+
+[node name="short_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_pr7h7")
+
+[node name="long_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_wykju")

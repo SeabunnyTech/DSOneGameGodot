@@ -13,4 +13,5 @@ grow_vertical = 2
 script = ExtResource("1_6nxkf")
 
 [node name="WaterAvatar" parent="." groups=["water_avatar"] instance=ExtResource("2_0jylu")]
+visible = false
 z_index = 10

@@ -31,7 +31,7 @@ const MINIMAP_PATHS = {
 
 func _ready() -> void:
 	# Connect to timer updates
-	# TimerManager.game_time_updated.connect(_on_game_time_updated)
+	TimerManager.game_time_updated.connect(_on_game_time_updated)
 	
 	# # Connect to score updates
 	# ScoreManager.score_updated.connect(_on_score_updated)
