@@ -7,8 +7,6 @@ enum Subscene {
 	LOGOS,
 }
 
-@export var tutorial_music: AudioStream
-
 
 var current_subscene = null
 var scene_change_tween
@@ -16,15 +14,16 @@ var scene_change_tween
 # subscenes
 @onready var welcome_subscene = $WelcomeSubscene
 @onready var logo_subscene = $LogoSubscene
+@onready var select_subscene = $SelectSubscene
+
 @onready var level1_1p = $Level1_1p
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 這裡假設 subscene 都會實作 reset()
 	# 而且 reset 完以後會消失, 就可以執行 enter_scene 進場
-	for subscene in [welcome_subscene, logo_subscene, level1_1p]:
+	for subscene in [welcome_subscene, logo_subscene, select_subscene, level1_1p]:
 		subscene.reset()
-
-	GlobalAudioPlayer.play_music(tutorial_music, 0.5)
 
 	_connect_transitions()
 
@@ -45,8 +44,20 @@ func _connect_transitions():
 	)
 	
 	logo_subscene.go_tutorial_scene.connect(func(player_num):
-		level1_1p.enter_scene()
+		select_subscene.enter_scene(player_num)
 		#GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
+	)
+	
+	select_subscene.leave_for_level.connect(
+		func(level, player_num):
+			print('going ' + str(level))
+			match level:
+				0:
+					welcome_subscene.enter_scene()
+				1:
+					level1_1p.enter_scene()
+				2:
+					pass
 	)
 
 	level1_1p.go_back_to_login.connect(func():

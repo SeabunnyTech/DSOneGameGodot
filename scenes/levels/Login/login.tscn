@@ -1,18 +1,18 @@
 [gd_scene load_steps=6 format=3 uid="uid://b8wbqa1rf3e01"]
 
 [ext_resource type="Script" path="res://scenes/levels/Login/login.gd" id="1_bnr01"]
-[ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_lehqc"]
 [ext_resource type="PackedScene" uid="uid://6b4fn5a5w1cu" path="res://scenes/levels/Login/logos.tscn" id="3_0dnh3"]
+[ext_resource type="PackedScene" uid="uid://btnj03qeeyjly" path="res://scenes/levels/Login/select.tscn" id="4_q7p1b"]
 [ext_resource type="PackedScene" uid="uid://lh1rudkmnc74" path="res://scenes/levels/Login/welcome.tscn" id="4_sk7p2"]
 [ext_resource type="PackedScene" uid="uid://cmk5cd4ky13nc" path="res://madebycloud/wheelgame/level1_1p_rework.tscn" id="5_nc7ok"]
 
 [node name="Login" type="Node2D"]
 script = ExtResource("1_bnr01")
-tutorial_music = ExtResource("2_lehqc")
 
 [node name="WelcomeSubscene" parent="." instance=ExtResource("4_sk7p2")]
-disabled = false
 
 [node name="LogoSubscene" parent="." instance=ExtResource("3_0dnh3")]
+
+[node name="SelectSubscene" parent="." instance=ExtResource("4_q7p1b")]
 
 [node name="Level1_1p" parent="." instance=ExtResource("5_nc7ok")]
