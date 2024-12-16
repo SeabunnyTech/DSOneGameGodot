@@ -241,7 +241,7 @@ func determine_level1_stage() -> GameStage:
 			return GameStage.COUNTDOWN_2
 		GameStage.COUNTDOWN_1:
 			if current_countdown_time <= 0.0:
-				TimerManager.start_game_timer(80.0) # 遊戲先設定 80 秒
+				# TimerManager.start_game_timer(80.0) # 遊戲先設定 80 秒
 				return GameStage.GAME_PLAY
 			return GameStage.COUNTDOWN_1
 		GameStage.GAME_PLAY:
@@ -287,11 +287,11 @@ func _on_debug_scene(new_scene: GameScene) -> void:
 	
 	match new_scene:
 		GameScene.LEVEL1:
-			TimerManager.start_game_timer(20.0) # 測試用倒數遊戲時間
+			# TimerManager.start_game_timer(20.0) # 測試用倒數遊戲時間
 			level1_state_updated.emit(state_info)
 			# 模擬一個玩家在場
 		GameScene.LEVEL2:
-			TimerManager.start_game_timer(30.0)
+			# TimerManager.start_game_timer(30.0)
 			level2_state_updated.emit(state_info)
 			# level2_state_updated.emit(state_info)
 			# update_level2_stage()
