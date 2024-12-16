@@ -22,7 +22,6 @@ var current_camera_velocity: float = 0.0
 @onready var river_normal_map_sprite = $RiverNormMap
 @onready var electron_spawn_areas_node = $ElectronSpawnAreas
 @onready var checkpoints_node = $Checkpoints
-@onready var starting_point = $StartingPoint
 @onready var finish_line = $FinishLine
 
 var river_normal_map: Image

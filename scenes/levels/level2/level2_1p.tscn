@@ -2,19 +2,16 @@
 
 [ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
 [ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
-[ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_djbtx"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="6_2ckte"]
+[ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_llw8i"]
+[ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="6_mr3ob"]
 [ext_resource type="Theme" path="res://assets/themes/LoginTextGuide.tres" id="7_3aevv"]
-[ext_resource type="PackedScene" uid="uid://d0nj48pnk17oh" path="res://madebycloud/hud/TimeBoard.tscn" id="8_17kl6"]
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_lybcr")
 
 [node name="HUD" parent="." instance=ExtResource("2_6qy6p")]
-
-[node name="UI" parent="." instance=ExtResource("2_djbtx")]
-visible = false
 
 [node name="RiverGamePlayerOne" parent="." instance=ExtResource("4_p655j")]
 offset_right = 3840.0
@@ -24,8 +21,16 @@ offset_bottom = 2160.0
 center = Vector2(1920, 1080)
 radius = 0.0
 
+[node name="SkipButton" parent="." instance=ExtResource("6_llw8i")]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(3500, 1900)
+
+[node name="1p_player_waiter" type="Node" parent="."]
+script = ExtResource("6_mr3ob")
+
 [node name="Title" type="Label" parent="."]
 modulate = Color(0, 0, 0, 0)
+z_index = 20
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -54,8 +59,3 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "今天我們將化身一顆水滴
 來驅動渦輪發電啦!"
 horizontal_alignment = 1
-
-[node name="TimeBoard" parent="." instance=ExtResource("8_17kl6")]
-offset_right = 3840.0
-offset_bottom = 400.0
-total_time = 5
