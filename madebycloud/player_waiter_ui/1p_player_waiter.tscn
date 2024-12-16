@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://jkaqke4nipbi"]
+
+[ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="1_tteso"]
+
+[node name="1pPlayerWaiter" type="Node"]
+script = ExtResource("1_tteso")
