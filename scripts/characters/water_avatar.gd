@@ -19,8 +19,11 @@ var target_player: Node2D = null
 var last_position: Vector2
 var current_velocity: Vector2
 
+var waiting_tween: Tween
+
+var base_color = Color.from_hsv(0.45, 0.6, 1, 1)
+
 func _ready():
-	# init_position = position
 	# 開始閃爍動畫
 	set_color(Color.from_hsv(0.45, 0.6, 1, 1))
 	start_waiting_animation()
@@ -54,6 +57,8 @@ func _physics_process(_delta):
 	last_position = position
 
 func init(player: Node2D, init_pos: Vector2):
+	player_id = player.index
+	DebugMessage.info("WaterAvatar player_id: %s" % player_id)
 	target_player = player
 	position = init_pos
 
@@ -68,13 +73,36 @@ func separate_from_player():
 	start_waiting_animation()
 
 func start_waiting_animation():
-	var tween = create_tween().set_loops()
-	tween.tween_property(self, "modulate:a", 0.5, 0.5)
-	tween.tween_property(self, "modulate:a", 1.0, 0.5)
+	set_color(base_color)
+	# 停止之前的動畫（如果有的話）
+	if waiting_tween:
+		waiting_tween.kill()
+	
+	waiting_tween = create_tween()
+	waiting_tween.set_loops() # 設置無限循環
+
+	waiting_tween.tween_method(
+		func(alpha: float): 
+			set_color(Color(base_color, alpha)),
+		1.0, 0.3, 0.5
+	)
+	# 再淡入
+	waiting_tween.tween_method(
+		func(alpha: float): 
+			set_color(Color(base_color, alpha)),
+		0.3, 1.0, 0.5
+	)
 
 func stop_waiting_animation():
-	var tween = create_tween()
-	tween.tween_property(self, "modulate:a", 1.0, 0.2)
+	if waiting_tween:
+		waiting_tween.kill()
+
+	waiting_tween = create_tween()
+	waiting_tween.tween_method(
+		func(alpha: float): 
+			set_color(Color(base_color, alpha)),
+		0.3, 1.0, 0.5
+	)
 
 func set_color(target_color: Color):
 	var col = Color(target_color)

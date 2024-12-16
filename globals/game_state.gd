@@ -291,7 +291,7 @@ func _on_debug_scene(new_scene: GameScene) -> void:
 			level1_state_updated.emit(state_info)
 			# 模擬一個玩家在場
 		GameScene.LEVEL2:
-			TimerManager.start_game_timer(80.0)
+			TimerManager.start_game_timer(30.0)
 			level2_state_updated.emit(state_info)
 			# level2_state_updated.emit(state_info)
 			# update_level2_stage()

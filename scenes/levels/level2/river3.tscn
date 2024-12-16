@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bqwegp357ve23"]
+[gd_scene load_steps=31 format=3 uid="uid://bqwegp357ve23"]
 
 [ext_resource type="Texture2D" uid="uid://b446rs28ol5o2" path="res://assets/images/backgrounds/static/level2/river_3.png" id="1_pq7ja"]
 [ext_resource type="Script" path="res://scripts/levels/river.gd" id="1_r5kgo"]
@@ -8,7 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://csx5raxw6uyj7" path="res://assets/images/backgrounds/static/level2/power_3.png" id="4_nvjbf"]
 [ext_resource type="Texture2D" uid="uid://bx6bc4dna35rc" path="res://assets/images/backgrounds/static/level2/river_earth_3.png" id="5_r2hvs"]
 [ext_resource type="Texture2D" uid="uid://6q7iglww273v" path="res://assets/images/backgrounds/static/level2/power_4.png" id="5_uh5qm"]
+[ext_resource type="Texture2D" uid="uid://dos5yl2l1mo7b" path="res://assets/images/backgrounds/animated/level2/splash_one.png" id="6_3gxg2"]
 [ext_resource type="Texture2D" uid="uid://se3odcyid3bd" path="res://assets/images/backgrounds/static/level2/power_5.png" id="6_i7r17"]
+[ext_resource type="Material" uid="uid://dgr0ag4aw4gx3" path="res://assets/shaders/SplashParticleBig.tres" id="7_3at1v"]
 [ext_resource type="Texture2D" uid="uid://cbelsc0iiwt7h" path="res://assets/images/backgrounds/static/level2/power_6.png" id="7_v8mh1"]
 [ext_resource type="Texture2D" uid="uid://c6snlk1ay280t" path="res://assets/images/backgrounds/static/level2/power_7.png" id="8_gmwg4"]
 [ext_resource type="Texture2D" uid="uid://c8ghm1ltpbaig" path="res://assets/images/backgrounds/static/level2/driftwood_3.png" id="9_vi7if"]
@@ -17,6 +19,27 @@
 [ext_resource type="Texture2D" uid="uid://bk3ubhn7oywp" path="res://assets/images/backgrounds/static/level2/driftwood_1.png" id="11_dobyj"]
 [ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="12_dt0hf"]
 [ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_d7nlp"]
+[ext_resource type="PackedScene" uid="uid://ccl2iurumnmyy" path="res://scenes/levels/level2/cloud.tscn" id="14_kyonb"]
+[ext_resource type="PackedScene" uid="uid://ofavfypf5ox3" path="res://scenes/levels/level2/finish_line.tscn" id="18_2dbnb"]
+[ext_resource type="Texture2D" uid="uid://cegvovouiwkyj" path="res://assets/images/backgrounds/animated/level2/bird.png" id="19_u8cpl"]
+[ext_resource type="Texture2D" uid="uid://xynuwvfs3684" path="res://assets/images/backgrounds/animated/level2/fish.png" id="20_c1e2l"]
+[ext_resource type="Texture2D" uid="uid://djsc1k46o531o" path="res://assets/images/backgrounds/animated/level2/cloud3.png" id="21_a648q"]
+[ext_resource type="Texture2D" uid="uid://cbajyfla50nx1" path="res://assets/images/backgrounds/animated/level2/cloud2.png" id="22_m16k2"]
+[ext_resource type="Texture2D" uid="uid://7yafkvh46vk3" path="res://assets/images/backgrounds/animated/level2/cloud1.png" id="23_hlyuo"]
+[ext_resource type="Texture2D" uid="uid://bd50i3tnu5okr" path="res://assets/images/backgrounds/static/level2/stone_3.png" id="24_1ampg"]
+[ext_resource type="Texture2D" uid="uid://davk0gmlnuo1y" path="res://assets/images/backgrounds/static/level2/stone_4.png" id="25_dlgvu"]
+[ext_resource type="Texture2D" uid="uid://cfmv6qkst4iuy" path="res://assets/images/backgrounds/static/level2/stone_2.png" id="26_7ycra"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oqrau"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 60.0
+initial_velocity_min = 150.0
+initial_velocity_max = 250.0
+gravity = Vector3(0, 250, 0)
+scale_min = 0.1
+scale_max = 0.3
+color = Color(1, 1, 1, 0.568627)
 
 [node name="River3" type="Node2D"]
 script = ExtResource("1_r5kgo")
@@ -70,6 +93,62 @@ spawn_id = 6
 [node name="RiverEarthMap" type="Sprite2D" parent="."]
 position = Vector2(1920, 5200)
 texture = ExtResource("5_r2hvs")
+
+[node name="Splash" type="Node2D" parent="."]
+position = Vector2(0, 33)
+
+[node name="SplashParticle" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2057, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = SubResource("ParticleProcessMaterial_oqrau")
+texture = ExtResource("6_3gxg2")
+speed_scale = 1.2
+randomness = 1.0
+
+[node name="SplashParticle2" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2117, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = SubResource("ParticleProcessMaterial_oqrau")
+texture = ExtResource("6_3gxg2")
+speed_scale = 1.2
+randomness = 1.0
+
+[node name="SplashParticle3" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2165, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = SubResource("ParticleProcessMaterial_oqrau")
+texture = ExtResource("6_3gxg2")
+speed_scale = 1.2
+randomness = 1.0
+
+[node name="SplashParticle4" type="GPUParticles2D" parent="Splash"]
+position = Vector2(1992, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = SubResource("ParticleProcessMaterial_oqrau")
+texture = ExtResource("6_3gxg2")
+speed_scale = 1.2
+randomness = 1.0
+
+[node name="SplashParticleBig" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2091, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = ExtResource("7_3at1v")
+texture = ExtResource("6_3gxg2")
+randomness = 1.0
+
+[node name="SplashParticleBig2" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2142, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = ExtResource("7_3at1v")
+texture = ExtResource("6_3gxg2")
+randomness = 1.0
+
+[node name="SplashParticleBig3" type="GPUParticles2D" parent="Splash"]
+position = Vector2(2023, 608)
+scale = Vector2(0.998461, 1.0206)
+process_material = ExtResource("7_3at1v")
+texture = ExtResource("6_3gxg2")
+randomness = 1.0
 
 [node name="ElectronSpawnAreas" type="Node2D" parent="."]
 
@@ -150,12 +229,55 @@ z_index = 1
 position = Vector2(1435, 8196)
 texture = ExtResource("8_gmwg4")
 
+[node name="Cloud" type="Node2D" parent="."]
+position = Vector2(711, 2083)
+
+[node name="Cloud" parent="Cloud" instance=ExtResource("14_kyonb")]
+texture = ExtResource("23_hlyuo")
+
+[node name="Cloud7" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(2243, 6137)
+texture = ExtResource("21_a648q")
+
+[node name="Cloud2" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(457, -1526)
+texture = ExtResource("21_a648q")
+
+[node name="Cloud3" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(2498, -915)
+texture = ExtResource("22_m16k2")
+
+[node name="Cloud4" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(356, 5595)
+texture = ExtResource("21_a648q")
+
+[node name="Cloud6" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(2486, 544)
+texture = ExtResource("21_a648q")
+
+[node name="Cloud9" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(2091, 7339)
+texture = ExtResource("22_m16k2")
+
+[node name="Cloud8" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(2445, 2253)
+texture = ExtResource("22_m16k2")
+
+[node name="Cloud10" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(-77, 6936)
+texture = ExtResource("23_hlyuo")
+
+[node name="Cloud5" parent="Cloud" instance=ExtResource("14_kyonb")]
+position = Vector2(-102, 3861)
+texture = ExtResource("23_hlyuo")
+
 [node name="Driftwood3" type="Sprite2D" parent="."]
-position = Vector2(2233, 6972)
+position = Vector2(2204, 6944)
+scale = Vector2(0.592308, 0.592308)
 texture = ExtResource("9_vi7if")
 
 [node name="Stone1" type="Sprite2D" parent="."]
-position = Vector2(2529, 8016)
+position = Vector2(2562, 7818)
 texture = ExtResource("10_yslgi")
 
 [node name="Driftwood1" type="Sprite2D" parent="."]
@@ -169,3 +291,60 @@ texture = ExtResource("12_dt0hf")
 [node name="Driftwood4" type="Sprite2D" parent="."]
 position = Vector2(1697, 6155)
 texture = ExtResource("11_dobyj")
+
+[node name="FinishLine" parent="." instance=ExtResource("18_2dbnb")]
+position = Vector2(1730, 9773)
+
+[node name="Bird" type="Sprite2D" parent="."]
+position = Vector2(2827, 7748)
+texture = ExtResource("19_u8cpl")
+
+[node name="Fish" type="Sprite2D" parent="."]
+position = Vector2(2022, 6907)
+texture = ExtResource("20_c1e2l")
+
+[node name="Fish2" type="Sprite2D" parent="."]
+position = Vector2(2037, 4597)
+scale = Vector2(2, 2)
+texture = ExtResource("20_c1e2l")
+
+[node name="Fish3" type="Sprite2D" parent="."]
+position = Vector2(2276, 3019)
+texture = ExtResource("20_c1e2l")
+
+[node name="Driftwood5" type="Sprite2D" parent="."]
+position = Vector2(1330, 8957)
+texture = ExtResource("11_dobyj")
+
+[node name="Driftwood6" type="Sprite2D" parent="."]
+position = Vector2(2219, 8914)
+texture = ExtResource("12_dt0hf")
+
+[node name="Driftwood7" type="Sprite2D" parent="."]
+position = Vector2(2210, 7947)
+scale = Vector2(0.546154, 0.546154)
+texture = ExtResource("9_vi7if")
+
+[node name="Stone3" type="Sprite2D" parent="."]
+position = Vector2(2561, 6805)
+texture = ExtResource("24_1ampg")
+
+[node name="Stone4" type="Sprite2D" parent="."]
+position = Vector2(1514, 5962)
+texture = ExtResource("25_dlgvu")
+
+[node name="Fish4" type="Sprite2D" parent="."]
+position = Vector2(2404, 8615)
+texture = ExtResource("20_c1e2l")
+
+[node name="Stone2" type="Sprite2D" parent="."]
+position = Vector2(2401, 2609)
+texture = ExtResource("26_7ycra")
+
+[node name="Stone5" type="Sprite2D" parent="."]
+position = Vector2(1293, 2633)
+texture = ExtResource("10_yslgi")
+
+[node name="Stone6" type="Sprite2D" parent="."]
+position = Vector2(2254, 1034)
+texture = ExtResource("25_dlgvu")

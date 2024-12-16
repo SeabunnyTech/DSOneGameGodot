@@ -3,6 +3,8 @@ extends Node2D
 signal spawn_area_scoring(spawn_id: int, count: int)
 signal spawn_area_scored(spawn_id: int)
 signal spawn_positions_ready(positions: Array)
+signal checkpoint_passed(player_id: int, count: int)
+signal finish_line_passed(player_id: int)
 
 var spawn_areas: Array[Node] = []
 var spawn_positions: Array[float] = []
@@ -20,7 +22,7 @@ var current_camera_velocity: float = 0.0
 @onready var river_normal_map_sprite = $RiverNormMap
 @onready var electron_spawn_areas_node = $ElectronSpawnAreas
 @onready var checkpoints_node = $Checkpoints
-@onready var starting_point = $StartingPoint
+@onready var finish_line = $FinishLine
 
 var river_normal_map: Image
 
@@ -44,6 +46,9 @@ func _ready() -> void:
 			func(player_id, spawn_id): 
 				_on_checkpoint_passed(player_id, spawn_id)
 		)
+
+	if finish_line:
+		finish_line.finish_line_passed.connect(finish_line_passed.emit)
 	
 	# 確保排序
 	spawn_areas.sort_custom(func(a, b): 
@@ -107,6 +112,7 @@ func _on_checkpoint_passed(player_id: int, spawn_id: int) -> void:
 	var electron_count = ceil(lerp(min_electrons, max_electrons, speed_ratio))
 	
 	spawn_areas[spawn_id].spawn_electrons(electron_count)
+	checkpoint_passed.emit(player_id, electron_count)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -117,3 +123,17 @@ func _on_spawn_scoring(spawn_id: int, count: int) -> void:
 
 func _on_spawn_scored(spawn_id: int) -> void:
 	spawn_area_scored.emit(spawn_id)
+
+
+
+
+
+
+
+# ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
+
+func trigger_spawn_area_scoring(spawn_id: int) -> void:
+	if spawn_id < 0 or spawn_id >= spawn_areas.size():
+		return
+
+	spawn_areas[spawn_id].collect_electrons()

@@ -1,5 +1,8 @@
 extends Node2D
 
+# =============================
+# TODO: level2_1p 和 level2_2p gdscript 可以合併（也許
+
 @export var num_players = 2
 @export var num_rivers_scenes = 3
 
@@ -20,15 +23,20 @@ extends Node2D
 @onready var river_games = [river_game_1, river_game_2]
 var river_scene_size = Vector2.ZERO
 
-@onready var avatar_1 = $WaterAvatar
-@onready var avatar_2 = $WaterAvatar2
-@onready var avatars = [avatar_1, avatar_2]
-@export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
-var avatar_is_stuck = [false, false]
-var avatar_is_separated = [false, false]
+# @onready var avatar_1 = $WaterAvatar
+# @onready var avatar_2 = $WaterAvatar2
+# @onready var avatars = [avatar_1, avatar_2]
+# @export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
+# var avatar_is_stuck = [false, false]
+# var avatar_is_separated = [false, false]
+
+var reversed_spawn_positions: Array[float] = []
+var scoring_in_progress = false
+
+var current_scoring_index = 0
+var game_mode = true # 遊戲模式，true 為遊戲中，false 為遊戲結束準備計分
 
 
-# TODO: level2_1p 和 level2_2p gdscript 可以合併
 func _ready():
 	var random_river_index = randi() % num_rivers_scenes
 	
@@ -37,23 +45,25 @@ func _ready():
 
 		river_games[i].init(i, num_players, random_river_index)
 		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
+		river_games[i].finish_line_passed.connect(_on_finish_line_passed)
+		river_games[i].spawn_area_scored.connect(_on_spawn_area_scored)
+		river_games[i].spawn_area_scoring.connect(_on_spawn_area_scoring)
+
 		river_scene_size = river_games[i].get_river_scene_size()
 
-		avatars[i].init(PlayerManager.current_players[i], avatar_init_positions[i])
-		avatars[i].merged_with_player.connect(_on_avatar_merged)
-		avatars[i].separated_from_player.connect(_on_avatar_separated)
-		avatars[i].desired_position_changed.connect(_on_avatar_desired_position_changed)
-
+		AudioManager.play_level_music()
+		
 func _process(delta: float) -> void:
-	_update_cameras(delta)
-	_update_minimap()
+	if game_mode:	
+		_update_cameras(delta)
+		_update_minimap()
 
 func _update_minimap() -> void:
 	for i in range(num_players):
 		var min_camera_y_in_map = camera_positions[i].y - screen_center.y / camera_zoom_level
 		var camera_y_size_in_map = screen_center.y * 2 / camera_zoom_level
 		var position_ratio = min_camera_y_in_map / (river_scene_size.y - camera_y_size_in_map)
-		
+
 		hud.move_2p_minimap_camera(i, position_ratio, 0.2)
 
 func _update_cameras(delta: float) -> void:
@@ -61,7 +71,7 @@ func _update_cameras(delta: float) -> void:
 
 	for i in range(num_players):
 		var river_game = river_games[i]
-		var avatar_pos = avatars[i].position
+		var avatar_pos = river_game.get_avatar_position()
 
 		# 計算相機移動速度
 		var relative_y = avatar_pos.y / screen_height
@@ -71,7 +81,7 @@ func _update_cameras(delta: float) -> void:
 			max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 		)
 
-		if avatar_is_stuck[i] or avatar_is_separated[i]:
+		if river_game.avatar_is_stuck or river_game.avatar_is_separated:
 			target_speed = 0.0
 
 		# 平滑過渡到目標速度
@@ -96,25 +106,93 @@ func _update_cameras(delta: float) -> void:
 			0.2  # 速度越快，duration 越短
 		)
 
-func _on_avatar_merged(avatar: Node2D):
-	avatar_is_separated[avatar.player_id] = false
+func _on_finish_line_passed(player_id: int):
+	game_mode = false
 
-func _on_avatar_separated(avatar: Node2D):
-	avatar_is_separated[avatar.player_id] = true
+func _on_game_scoring(avatar: Node2D):
+	pass
 
-func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
-	var avatar_index = 0 if avatar == avatar_1 else 1
-	var river_game = river_games[avatar_index]
+# func _on_avatar_merged(avatar: Node2D):
+# 	avatar_is_separated[avatar.player_id] = false
+# 	for i in range(num_players):
+# 		PlayerManager.current_players[i].reset_attractor()
+
+# func _on_avatar_separated(avatar: Node2D):
+# 	avatar_is_separated[avatar.player_id] = true
+# 	for i in range(num_players):
+# 		PlayerManager.current_players[i].set_attractor(avatars[i].position, 100)	
+
+# func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+# 	var avatar_index = 0 if avatar == avatar_1 else 1
+# 	var river_game = river_games[avatar_index]
 	
-	var avatar_in_river_position = river_game.avatar_in_river_position(
+# 	var avatar_in_river_position = river_game.avatar_in_river_position(
+# 		screen_center,
+# 		camera_positions[avatar_index],
+# 		camera_zoom_level,
+# 		new_desired_position)
+# 	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
+	
+# 	if river_normal.b > 0.001: # 確保在河道內
+# 		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
+# 		avatar_is_stuck[avatar_index] = false
+# 	else:
+# 		avatar_is_stuck[avatar_index] = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
+
+
+func start_scoring_sequence(avatar: Node2D):
+	scoring_in_progress = true
+	current_scoring_index = 0
+
+	move_to_next_scoring_position(avatar.player_id)
+
+func move_to_next_scoring_position(player_id: int):
+	if current_scoring_index >= reversed_spawn_positions.size():
+		scoring_in_progress = false
+		return
+		
+	var target_position = Vector2(
+		camera_positions[player_id].x,
+		reversed_spawn_positions[current_scoring_index]
+	)
+	var river_game = river_games[player_id]
+	
+	# 移動相機到指定位置
+	river_game.camera_to(
 		screen_center,
-		camera_positions[avatar_index],
+		target_position,
 		camera_zoom_level,
-		new_desired_position)
-	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
-	
-	if river_normal.b > 0.001: # 確保在河道內
-		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
-		avatar_is_stuck[avatar_index] = false
-	else:
-		avatar_is_stuck[avatar_index] = true
+		1.0,
+		func(): _on_camera_reached_scoring_position(player_id)
+	)
+
+func _on_camera_reached_scoring_position(player_id: int):
+	if not scoring_in_progress:
+		return
+		
+	# 觸發當前位置的計分
+	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
+	river_games[player_id].trigger_spawn_area_scoring(spawn_id)
+
+func _on_spawn_area_scored(player_id: int, _spawn_id: int):
+	current_scoring_index += 1
+	move_to_next_scoring_position(player_id)
+
+func _on_spawn_area_scoring(player_id: int, _spawn_id: int, count: int):
+	pass

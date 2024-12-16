@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cn45so1jw4crg"]
+[gd_scene load_steps=3 format=3 uid="uid://cn45so1jw4crg"]
 
 [ext_resource type="Script" path="res://scripts/levels/river_game.gd" id="1_6nxkf"]
+[ext_resource type="PackedScene" uid="uid://bnsdwdn1obqyu" path="res://scenes/characters/water_avatar.tscn" id="2_0jylu"]
 
 [node name="RiverGame" type="ColorRect"]
 clip_contents = true
@@ -10,3 +11,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6nxkf")
+
+[node name="WaterAvatar" parent="." groups=["water_avatar"] instance=ExtResource("2_0jylu")]
+z_index = 10

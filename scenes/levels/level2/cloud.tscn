@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ccl2iurumnmyy"]
+
+[ext_resource type="Script" path="res://scripts/levels/cloud.gd" id="1_ty88u"]
+
+[node name="Cloud" type="Sprite2D"]
+script = ExtResource("1_ty88u")
