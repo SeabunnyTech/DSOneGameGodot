@@ -23,8 +23,7 @@ var players = [player1, player2]
 
 
 func enter_scene():
-	# enter scene 執行的前提是, 畫面已經進入全空白狀態
-	# 而這個 scene 一開始也是空無一物
+	visible = true
 	modulate.a = 1
 
 	# 關閉 disabled 的一瞬間會開啟 _process
@@ -46,7 +45,7 @@ func leave_scene_after_delay(callback: Callable, delay=2):
 
 func reset():
 	# 讓這整個物件消失不見先
-	modulate.a = 0
+	visible = false
 
 	# Logo 藏起來
 	for logo in logos:
