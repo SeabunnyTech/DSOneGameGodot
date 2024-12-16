@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://ctc1wm78mr8p2"]
+[gd_scene load_steps=10 format=3 uid="uid://ctc1wm78mr8p2"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
-[ext_resource type="PackedScene" uid="uid://cthtatigjtayw" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
+[ext_resource type="PackedScene" uid="uid://ds1koirixejn6" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
+[ext_resource type="AudioStream" uid="uid://2yqqqaec6emn" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_dgsee"]
+[ext_resource type="AudioStream" uid="uid://c0bo8ofypa6n1" path="res://assets/audio/archive/game over music_Lively Meadow (Song Loop) B 118.wav" id="3_bbdq8"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="6_2ckte"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_llw8i"]
@@ -10,14 +12,18 @@
 
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_lybcr")
+game_music = ExtResource("2_dgsee")
+tutorial_music = ExtResource("3_bbdq8")
 
 [node name="HUD" parent="." instance=ExtResource("2_6qy6p")]
+visible = false
 
 [node name="RiverGamePlayerOne" parent="." instance=ExtResource("4_p655j")]
 offset_right = 3840.0
 offset_bottom = 2160.0
 
 [node name="CircularMask" parent="." instance=ExtResource("6_2ckte")]
+z_index = 5
 center = Vector2(1920, 1080)
 radius = 0.0
 

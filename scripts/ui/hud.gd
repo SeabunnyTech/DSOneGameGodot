@@ -31,13 +31,13 @@ const MINIMAP_PATHS = {
 
 func _ready() -> void:
 	# Connect to timer updates
-	TimerManager.game_time_updated.connect(_on_game_time_updated)
+	# TimerManager.game_time_updated.connect(_on_game_time_updated)
 	
-	# Connect to score updates
-	ScoreManager.score_updated.connect(_on_score_updated)
+	# # Connect to score updates
+	# ScoreManager.score_updated.connect(_on_score_updated)
 
-	# Connect to game state updates, to turn on/off hud 1p/2p score and timer, or even minimap display
-	GameState.hud_state_updated.connect(_on_hud_state_updated)
+	# # Connect to game state updates, to turn on/off hud 1p/2p score and timer, or even minimap display
+	# GameState.hud_state_updated.connect(_on_hud_state_updated)
 
 	# Initialize displays
 	_update_score_display({0: 0, 1: 0})
@@ -64,54 +64,54 @@ func _on_game_time_updated(time: float) -> void:
 func _on_score_updated(scores: Dictionary) -> void:
 	_update_score_display(scores)
 
-func _on_hud_state_updated(state_info: Dictionary) -> void:
-	var scene = state_info.scene
-	var stage = state_info.stage
-	var num_visible_players = state_info.num_visible_players
+# func _on_hud_state_updated(state_info: Dictionary) -> void:
+# 	var scene = state_info.scene
+# 	var stage = state_info.stage
+# 	var num_visible_players = state_info.num_visible_players
 
-	match scene:
-		GameState.GameScene.LEVEL1:
-			_handle_level1_state(stage, num_visible_players)
-		GameState.GameScene.LEVEL2:
-			_handle_level2_state(stage, num_visible_players)
+# 	match scene:
+# 		GameState.GameScene.LEVEL1:
+# 			_handle_level1_state(stage, num_visible_players)
+# 		GameState.GameScene.LEVEL2:
+# 			_handle_level2_state(stage, num_visible_players)
 
-func _handle_level1_state(stage: GameState.GameStage, num_visible_players: int = 0) -> void:
-	if num_visible_players == 2:
-		player_two_container.show()
-		separator.show()
-	else:
-		player_two_container.hide()
-		separator.hide()
+# func _handle_level1_state(stage: GameState.GameStage, num_visible_players: int = 0) -> void:
+# 	if num_visible_players == 2:
+# 		player_two_container.show()
+# 		separator.show()
+# 	else:
+# 		player_two_container.hide()
+# 		separator.hide()
 
-	match stage:
-		GameState.GameStage.LEVEL_START:
-			pass
-		GameState.GameStage.TUTORIAL_1:
-			pass
+# 	match stage:
+# 		GameState.GameStage.LEVEL_START:
+# 			pass
+# 		GameState.GameStage.TUTORIAL_1:
+# 			pass
 
-func _handle_level2_state(stage: GameState.GameStage, num_visible_players: int = 0) -> void:
-	if num_visible_players == 2:
-		player_two_container.show()
-		player_one_minimap.show()
-		player_two_minimap.show()
-		separator.show()
+# func _handle_level2_state(stage: GameState.GameStage, num_visible_players: int = 0) -> void:
+# 	if num_visible_players == 2:
+# 		player_two_container.show()
+# 		player_one_minimap.show()
+# 		player_two_minimap.show()
+# 		separator.show()
 
-		one_player_minimap_clip_zone.hide()
-		for clip_zone in two_players_minimap_clip_zones:
-			clip_zone.show()
-	else:
-		player_two_container.hide()
-		player_one_minimap.show()
-		player_two_minimap.hide()
-		separator.hide()
+# 		one_player_minimap_clip_zone.hide()
+# 		for clip_zone in two_players_minimap_clip_zones:
+# 			clip_zone.show()
+# 	else:
+# 		player_two_container.hide()
+# 		player_one_minimap.show()
+# 		player_two_minimap.hide()
+# 		separator.hide()
 
-		one_player_minimap_clip_zone.show()
+# 		one_player_minimap_clip_zone.show()
 
-	match stage:
-		GameState.GameStage.LEVEL_START:
-			pass
-		GameState.GameStage.TUTORIAL_1:
-			pass
+# 	match stage:
+# 		GameState.GameStage.LEVEL_START:
+# 			pass
+# 		GameState.GameStage.TUTORIAL_1:
+# 			pass
 
 func update_minimap(river_id: int) -> void:
 	if not MINIMAP_PATHS.has(river_id):
