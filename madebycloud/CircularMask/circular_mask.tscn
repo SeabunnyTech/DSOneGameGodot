@@ -5,7 +5,7 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bp30i"]
 shader = ExtResource("1_ifbbx")
-shader_parameter/alpha = 0.0
+shader_parameter/alpha = 1.0
 shader_parameter/mask_center = Vector2(1920, 1080)
 shader_parameter/mask_radius = 0.0
 

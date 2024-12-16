@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/levels/Login/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_0lg17"]
-[ext_resource type="AudioStream" uid="uid://vnsrgk38xtao" path="res://assets/audio/archive/login music candidate1_Pleasant Creek.mp3" id="2_mxj1r"]
+[ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_f32jj"]
 [ext_resource type="Texture2D" uid="uid://ciqwvt65k2hwq" path="res://assets/images/drawings/解說圖1-1.PNG" id="3_vyuwr"]
 
 [sub_resource type="Theme" id="Theme_mr7yq"]
@@ -13,7 +13,7 @@ default_font_size = 80
 [node name="Welcome" type="Node2D"]
 script = ExtResource("1_n171j")
 disabled = false
-tutorial_music = ExtResource("2_mxj1r")
+tutorial_music = ExtResource("2_f32jj")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 offset_right = 3840.0

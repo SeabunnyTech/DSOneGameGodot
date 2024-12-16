@@ -26,6 +26,8 @@ signal go_back_to_login
 @onready var circular_mask = $CircularMask
 @onready var player_waiter = $"1p_player_waiter"
 
+@onready var action_guide_img = $action_guide_img
+
 @onready var time_board = $TimeBoard
 
 # reset 非常重要, 定義了動畫能夠順利執行的起始條件
@@ -41,6 +43,8 @@ func reset():
 	circular_mask.alpha = 1.0
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
 	$SkipButton.fade_away(true)
+	action_guide_img.visible = 0
+	action_guide_img.modulate.a = 0
 
 	# 遊戲本體及記分板
 	wheelgame_env.reset()
@@ -60,12 +64,7 @@ func enter_scene():
 
 
 func leave_scene_for_restart():
-	if tween:
-		tween.kill()
-	tween = create_tween()
-	tween.tween_property(self, 'modulate:a', 0, 1)
-	tween.tween_interval(1.5)
-	tween.tween_callback(func():
+	circular_mask.tween_radius(0.0, 1.0, func():
 		reset()
 		go_back_to_login.emit()
 	)
@@ -91,11 +90,11 @@ func _begin_tutorial():
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 
 	# 接著冒出跳過按鈕
-	tween.tween_interval(1)
+	tween.tween_interval(0.8)
 	tween.tween_callback($SkipButton.showup)
 
 	# 開場說明消失往下接續
-	tween.tween_interval(1)
+	tween.tween_interval(0.8)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 
 
@@ -128,8 +127,8 @@ func _begin_tutorial():
 	_show_text('inner', 3)
 
 	tween.tween_callback(func():
-		wheelgame_env.camera_to(Vector2(2100, 1000), 0.8)
-		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 1.5)
+		wheelgame_env.camera_to(Vector2(2200, 1000), 0.8)
+		circular_mask.tween_center_radius(Vector2(1350, 1080), 1000.0, 1.5)
 	)
 
 	tween.tween_interval(1.5)
@@ -138,8 +137,13 @@ func _begin_tutorial():
 	_show_text('metaphor')
 
 	# 8. 現在舉起你的水滴試著畫圓推進它吧!
-	tween.tween_callback(func():_undate_guide_text('pushit'))
+	tween.tween_callback(func():
+		_undate_guide_text('pushit')
+		action_guide_img.visible = true
+	)
+	
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_property(action_guide_img, 'modulate:a', 1, 1)
 	# 這邊比較特別, 文字出來以後不用急著藏
 
 	tween.tween_callback(func():
@@ -168,6 +172,7 @@ func _continue_tutorial():
 	tween.tween_interval(0.5)
 	
 	tween.tween_interval(0.2)
+	tween.tween_property(action_guide_img, 'modulate:a', 0, 1)
 	tween.tween_property(guide_message, 'modulate:a', 0, 0.5)
 
 	tween.tween_interval(0.5)
@@ -211,13 +216,13 @@ func _proceed_to_game_start():
 	tween.tween_interval(1)
 
 	# 9. 既然你已經掌握蓄電之道
-	_show_text('ready')
+	_show_text('ready', 1)
 
 	# 11. 接下來就進入挑戰吧! 看看你能在一分鐘內發出多少電力呢!
-	_show_text('final')
+	_show_text('final', 1.5)
 
 	# 12. 準備開始!!
-	_show_text('start')
+	_show_text('start', 1)
 
 	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
 	tween.tween_property(time_board, 'modulate:a', 1, 0.5)
@@ -351,8 +356,6 @@ func _undate_guide_text(new_text_state):
 		'thanks' : '感謝你的參與',
 	}
 
-	var rpm = str(wheelgame_env.score / $TimeBoard.total_time * 60)
-
 	var guides = {
 		'begin' : '今天我們將化身一顆水滴\n來進行蓄電工作啦!',
 		'case' : '它看起來就像是一棟普通的房子對吧!',
@@ -374,8 +377,8 @@ func _undate_guide_text(new_text_state):
 		'case' : Vector2(1800, 920),
 		'show' : Vector2(1800, 920),
 		'inner': Vector2(-120, 920),
-		'metaphor' : Vector2(2150, 800),
-		'pushit': Vector2(2150, 800),
+		'metaphor' : Vector2(2100, 800),
+		'pushit': Vector2(2100, 450),
 		'stored': Vector2(2150, 800),
 		'ready': Vector2(960, 920),
 		'final': Vector2(960, 920),

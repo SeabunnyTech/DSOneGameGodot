@@ -30,12 +30,14 @@ enum State {
 }
 
 
-func reset():
-	disabled = true
-
-
 @onready var p1_progress = $P1ProgressTracker
 @onready var p2_progress = $P2ProgressTracker
+
+
+func reset():
+	disabled = true
+	p1_progress.reset()
+	p2_progress.reset()
 
 
 
@@ -64,8 +66,6 @@ func _ready():
 
 func _on_option_triggered():
 	if player_num == 1:
-		
-		print('selected! ' + title)
 		all_player_ready.emit()
 
 
