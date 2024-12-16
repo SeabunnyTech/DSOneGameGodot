@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3 uid="uid://btnj03qeeyjly"]
+
+[ext_resource type="Script" path="res://scenes/levels/Login/select.gd" id="1_q2gye"]
+[ext_resource type="PackedScene" uid="uid://pwe0uy0n54cu" path="res://madebycloud/LevelOption/leveloption.tscn" id="2_frkrv"]
+[ext_resource type="Texture2D" uid="uid://imilr6qsmeuv" path="res://assets/images/backgrounds/static/login_select_level1.png" id="3_v7gbq"]
+[ext_resource type="Texture2D" uid="uid://dic7ddfbw1ytc" path="res://assets/images/backgrounds/static/login_select_level2.png" id="4_pw173"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_xyjsi"]
+[ext_resource type="Script" path="res://madebycloud/fade_label.gd" id="6_ansfx"]
+[ext_resource type="PackedScene" uid="uid://jkaqke4nipbi" path="res://madebycloud/player_waiter_ui/1p_player_waiter.tscn" id="7_58y6d"]
+
+[node name="Select" type="Node2D"]
+script = ExtResource("1_q2gye")
+
+[node name="Level1" parent="." instance=ExtResource("2_frkrv")]
+position = Vector2(980, 1000)
+image = ExtResource("3_v7gbq")
+title = "抽蓄發電大作戰"
+
+[node name="Level2" parent="." instance=ExtResource("2_frkrv")]
+position = Vector2(2860, 1000)
+image = ExtResource("4_pw173")
+title = "水流急急棒"
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = 1800.0
+offset_right = 3840.0
+offset_bottom = 1965.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_xyjsi")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "請選擇關卡!"
+horizontal_alignment = 1
+script = ExtResource("6_ansfx")
+
+[node name="1pPlayerWaiter" parent="." instance=ExtResource("7_58y6d")]
