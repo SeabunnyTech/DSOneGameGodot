@@ -1,5 +1,12 @@
 extends Node2D
 
+signal go_back_to_login
+
+
+@onready var hud = $HUD
+
+@onready var river_game_1 = $RiverGamePlayerOne
+
 @export var num_players = 1
 @export var num_rivers_scenes = 3
 
@@ -13,15 +20,7 @@ extends Node2D
 @export var camera_position = Vector2(1920, 1080)
 @export var camera_velocity = 0.0  # 相機當前速度
 
-@onready var hud = $HUD
-
-@onready var river_game_1 = $RiverGamePlayerOne
 var river_scene_size = Vector2.ZERO
-
-@onready var avatar_1 = $WaterAvatar
-@export var avatar_init_positions = Vector2(2090, 460)
-var avatar_is_stuck = false
-var avatar_is_separated = false
 
 var reversed_spawn_positions: Array[float] = []
 var scoring_in_progress = false
@@ -36,21 +35,13 @@ func _ready():
 
 	hud.update_minimap(random_river_index)
 	
-	river_game_1.init(0, num_players, random_river_index)
+	river_game_1.init(0, num_players, random_river_index) # player_id, num_players, river_index
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
 	river_game_1.finish_line_passed.connect(_on_finish_line_passed)
 	river_game_1.spawn_area_scored.connect(_on_spawn_area_scored)
 	river_game_1.spawn_area_scoring.connect(_on_spawn_area_scoring)
 	river_game_1.checkpoint_passed.connect(_on_checkpoint_passed)
 	river_scene_size = river_game_1.get_river_scene_size()
-
-	avatar_1.init(PlayerManager.current_players[0], avatar_init_positions)
-	avatar_1.merged_with_player.connect(_on_avatar_merged)
-	avatar_1.separated_from_player.connect(_on_avatar_separated)
-	avatar_1.desired_position_changed.connect(_on_avatar_desired_position_changed)
-
-	PlayerManager.current_players[0].set_attractor(avatar_1.position, 100)
-	PlayerManager.current_players[0].index = 1
 
 	AudioManager.play_level_music()
 
@@ -68,7 +59,7 @@ func _update_minimap() -> void:
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
 	var river_game = river_game_1
-	var avatar_pos = avatar_1.position
+	var avatar_pos = river_game_1.get_avatar_position()
 
 	# 計算相機移動速度
 	var relative_y = avatar_pos.y / screen_height
@@ -78,7 +69,7 @@ func _update_cameras(delta: float) -> void:
 		max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 	)
 
-	if avatar_is_stuck or avatar_is_separated:
+	if river_game_1.avatar_is_stuck or river_game_1.avatar_is_separated:
 		target_speed = 0.0
 
 	# 平滑過渡到目標速度
@@ -98,7 +89,7 @@ func _update_cameras(delta: float) -> void:
 		0.2  # 速度越快，duration 越短
 	)
 
-func _on_finish_line_passed(player_id: int):
+func _on_finish_line_passed(_player_id: int):
 	game_mode = false
 	TimerManager.stop_timer(TimerManager.TimerType.GAME)
 	AudioManager.play_victor_music()
@@ -107,31 +98,31 @@ func _on_checkpoint_passed(player_id: int, count: int):
 	score[player_id] += count
 	hud.update_score_display(score)
 
-func _on_game_scoring(avatar: Node2D):
-	pass
+# func _on_game_scoring(avatar: Node2D):
+# 	pass
 
-func _on_avatar_merged(avatar: Node2D):
-	avatar_is_separated = false
-	PlayerManager.current_players[0].reset_attractor()
+# func _on_avatar_merged(avatar: Node2D):
+# 	avatar_is_separated = false
+# 	PlayerManager.current_players[0].reset_attractor()
 
-func _on_avatar_separated(avatar: Node2D):
-	avatar_is_separated = true
+# func _on_avatar_separated(avatar: Node2D):
+# 	avatar_is_separated = true
 
-func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
-	var river_game = river_game_1
+# func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+# 	var river_game = river_game_1
 	
-	var avatar_in_river_position = river_game.avatar_in_river_position(
-		screen_center,
-		camera_position,
-		camera_zoom_level,
-		new_desired_position)
-	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
+# 	var avatar_in_river_position = river_game.avatar_in_river_position(
+# 		screen_center,
+# 		camera_position,
+# 		camera_zoom_level,
+# 		new_desired_position)
+# 	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
 	
-	if river_normal.b > 0.001: # 確保在河道內
-		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
-		avatar_is_stuck = false
-	else:
-		avatar_is_stuck = true
+# 	if river_normal.b > 0.001: # 確保在河道內
+# 		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
+# 		avatar_is_stuck = false
+# 	else:
+# 		avatar_is_stuck = true
 
 
 
@@ -163,7 +154,7 @@ func move_to_next_scoring_position(player_id: int):
 		func(): _on_camera_reached_scoring_position(player_id)
 	)
 
-func _on_camera_reached_scoring_position(player_id: int):
+func _on_camera_reached_scoring_position(_player_id: int):
 	if not scoring_in_progress:
 		return
 		
@@ -171,12 +162,12 @@ func _on_camera_reached_scoring_position(player_id: int):
 	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
 	river_game_1.trigger_spawn_area_scoring(spawn_id)
 
-func _on_spawn_area_scoring(player_id: int, _spawn_id: int, count: int):
+func _on_spawn_area_scoring(_player_id: int, _spawn_id: int, count: int):
 	pass
 
-func _on_spawn_area_scored(player_id: int, _spawn_id: int):
+func _on_spawn_area_scored(_player_id: int, _spawn_id: int):
 	current_scoring_index += 1
-	move_to_next_scoring_position(player_id)
+	move_to_next_scoring_position(_player_id)
 
 func start_scoring_sequence(avatar: Node2D):
 	scoring_in_progress = true

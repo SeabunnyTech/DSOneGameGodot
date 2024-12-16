@@ -23,12 +23,12 @@ extends Node2D
 @onready var river_games = [river_game_1, river_game_2]
 var river_scene_size = Vector2.ZERO
 
-@onready var avatar_1 = $WaterAvatar
-@onready var avatar_2 = $WaterAvatar2
-@onready var avatars = [avatar_1, avatar_2]
-@export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
-var avatar_is_stuck = [false, false]
-var avatar_is_separated = [false, false]
+# @onready var avatar_1 = $WaterAvatar
+# @onready var avatar_2 = $WaterAvatar2
+# @onready var avatars = [avatar_1, avatar_2]
+# @export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
+# var avatar_is_stuck = [false, false]
+# var avatar_is_separated = [false, false]
 
 var reversed_spawn_positions: Array[float] = []
 var scoring_in_progress = false
@@ -50,14 +50,9 @@ func _ready():
 		river_games[i].spawn_area_scoring.connect(_on_spawn_area_scoring)
 
 		river_scene_size = river_games[i].get_river_scene_size()
+
+		AudioManager.play_level_music()
 		
-		avatars[i].init(PlayerManager.current_players[i], avatar_init_positions[i])
-		avatars[i].merged_with_player.connect(_on_avatar_merged)
-		avatars[i].separated_from_player.connect(_on_avatar_separated)
-		avatars[i].desired_position_changed.connect(_on_avatar_desired_position_changed)
-
-		PlayerManager.current_players[i].set_attractor(avatars[i].position, 100)
-
 func _process(delta: float) -> void:
 	if game_mode:	
 		_update_cameras(delta)
@@ -76,7 +71,7 @@ func _update_cameras(delta: float) -> void:
 
 	for i in range(num_players):
 		var river_game = river_games[i]
-		var avatar_pos = avatars[i].position
+		var avatar_pos = river_game.get_avatar_position()
 
 		# 計算相機移動速度
 		var relative_y = avatar_pos.y / screen_height
@@ -86,7 +81,7 @@ func _update_cameras(delta: float) -> void:
 			max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 		)
 
-		if avatar_is_stuck[i] or avatar_is_separated[i]:
+		if river_game.avatar_is_stuck or river_game.avatar_is_separated:
 			target_speed = 0.0
 
 		# 平滑過渡到目標速度
@@ -117,32 +112,32 @@ func _on_finish_line_passed(player_id: int):
 func _on_game_scoring(avatar: Node2D):
 	pass
 
-func _on_avatar_merged(avatar: Node2D):
-	avatar_is_separated[avatar.player_id] = false
-	for i in range(num_players):
-		PlayerManager.current_players[i].reset_attractor()
+# func _on_avatar_merged(avatar: Node2D):
+# 	avatar_is_separated[avatar.player_id] = false
+# 	for i in range(num_players):
+# 		PlayerManager.current_players[i].reset_attractor()
 
-func _on_avatar_separated(avatar: Node2D):
-	avatar_is_separated[avatar.player_id] = true
-	for i in range(num_players):
-		PlayerManager.current_players[i].set_attractor(avatars[i].position, 100)	
+# func _on_avatar_separated(avatar: Node2D):
+# 	avatar_is_separated[avatar.player_id] = true
+# 	for i in range(num_players):
+# 		PlayerManager.current_players[i].set_attractor(avatars[i].position, 100)	
 
-func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
-	var avatar_index = 0 if avatar == avatar_1 else 1
-	var river_game = river_games[avatar_index]
+# func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+# 	var avatar_index = 0 if avatar == avatar_1 else 1
+# 	var river_game = river_games[avatar_index]
 	
-	var avatar_in_river_position = river_game.avatar_in_river_position(
-		screen_center,
-		camera_positions[avatar_index],
-		camera_zoom_level,
-		new_desired_position)
-	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
+# 	var avatar_in_river_position = river_game.avatar_in_river_position(
+# 		screen_center,
+# 		camera_positions[avatar_index],
+# 		camera_zoom_level,
+# 		new_desired_position)
+# 	var river_normal = river_game.get_color_at_position(avatar_in_river_position)
 	
-	if river_normal.b > 0.001: # 確保在河道內
-		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
-		avatar_is_stuck[avatar_index] = false
-	else:
-		avatar_is_stuck[avatar_index] = true
+# 	if river_normal.b > 0.001: # 確保在河道內
+# 		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
+# 		avatar_is_stuck[avatar_index] = false
+# 	else:
+# 		avatar_is_stuck[avatar_index] = true
 
 
 

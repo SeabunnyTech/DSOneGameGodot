@@ -4,6 +4,16 @@ signal spawn_area_scoring(player_id: int, spawn_id: int, count: int)
 signal spawn_area_scored(player_id: int, spawn_id: int)
 signal checkpoint_passed(player_id: int, count: int)
 signal finish_line_passed(player_id: int)
+
+@onready var avatar = $WaterAvatar
+@export var avatar_init_positions = Vector2(2090, 350)
+@export var avatar_is_stuck = false
+@export var avatar_is_separated = false
+
+@export var screen_center = Vector2(3840.0/2, 2160.0/2)
+@export var camera_position = Vector2(1920, 1080)
+@export var camera_zoom_level = 1.2
+
 var player_id: int = 0
 
 # 存此次遊戲所隨機選擇的 river scene
@@ -19,12 +29,14 @@ var spawn_area_positions: Array[float] = []
 var camera_tween
 
 func _ready() -> void:
-	pass
+	avatar.merged_with_player.connect(_on_avatar_merged)
+	avatar.separated_from_player.connect(_on_avatar_separated)
+	avatar.desired_position_changed.connect(_on_avatar_desired_position_changed)
 
 func _process(_delta: float) -> void:
 	pass
 
-func init(player_id: int, num_players: int, river_index: int):
+func init(_player_id: int, num_players: int, river_index: int):
 	# 確保 index 在有效範圍內
 	river_index = clampi(river_index, 0, river_scenes.size() - 1)
 	
@@ -39,6 +51,14 @@ func init(player_id: int, num_players: int, river_index: int):
 	river_scene.scale = Vector2(scale_value, scale_value)
 	river_scene.position = Vector2.ZERO
 
+	if num_players == 2:
+		avatar_init_positions = Vector2(1045, 350)
+
+	avatar.init(PlayerManager.current_players[_player_id], avatar_init_positions)
+	
+	PlayerManager.current_players[0].set_attractor(avatar.position + self.position, 100)
+	PlayerManager.current_players[0].index = _player_id
+
 	add_child(river_scene)
 
 func get_color_at_position(avatar_pos: Vector2) -> Color:
@@ -47,6 +67,9 @@ func get_color_at_position(avatar_pos: Vector2) -> Color:
 func get_river_scene_size() -> Vector2:
 	return river_scene.get_river_scene_size()
 
+func get_avatar_position() -> Vector2:
+	return avatar.position
+
 func is_camera_in_map(camera_position: Vector2, screen_center: Vector2, camera_zoom_level: float) -> bool:
 	return river_scene.is_camera_in_map(camera_position, screen_center, camera_zoom_level)
 
@@ -54,19 +77,32 @@ func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, 
 	var avatar_river_pos = camera_position + (avatar_target_position - screen_center - self.position) / camera_scale
 	return avatar_river_pos
 
-func camera_to(screen_center, target_center, target_scale=1.0, duration=1, callback=null):
+# func set_screen_center(_screen_center: Vector2):
+# 	self.screen_center = _screen_center
+
+# func set_camera_position(_camera_position: Vector2):
+# 	self.camera_position = _camera_position
+
+# func set_camera_zoom_level(_camera_zoom_level: float):
+# 	self.camera_zoom_level = _camera_zoom_level
+
+func camera_to(_screen_center, _target_center, _target_scale=1.0, _duration=1, _callback=null):
+	self.screen_center = _screen_center
+	self.camera_position = _target_center
+	self.camera_zoom_level = _target_scale
+	
 	if camera_tween:
 		camera_tween.kill()
 
-	var new_position = screen_center - target_center * target_scale
+	var new_position = _screen_center - _target_center * _target_scale
 
 	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	# TODO: 這邊把 river_scene 當作參數傳入，應該會更好？
-	camera_tween.tween_property(river_scene, 'scale', Vector2(target_scale, target_scale), duration)
-	camera_tween.parallel().tween_property(river_scene, 'position', new_position, duration)
+	camera_tween.tween_property(river_scene, 'scale', Vector2(_target_scale, _target_scale), _duration)
+	camera_tween.parallel().tween_property(river_scene, 'position', new_position, _duration)
 
-	if callback:
-		camera_tween.finished.connect(callback)
+	if _callback:
+		camera_tween.finished.connect(_callback)
 
 func update_camera_velocity(velocity: float) -> void:
 	river_scene.current_camera_velocity = velocity
@@ -81,7 +117,30 @@ func _on_spawn_area_scoring(spawn_id: int, count: int):
 func _on_spawn_area_scored(spawn_id: int):
 	spawn_area_scored.emit(player_id, spawn_id)
 
+func _on_game_scoring(avatar: Node2D):
+	pass
 
+func _on_avatar_merged(avatar: Node2D):
+	avatar_is_separated = false
+	PlayerManager.current_players[0].reset_attractor()
+
+func _on_avatar_separated(avatar: Node2D):
+	avatar_is_separated = true
+
+func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+
+	var avatar_in_river_position = avatar_in_river_position(
+		screen_center,
+		camera_position,
+		camera_zoom_level,
+		new_desired_position)
+	var river_normal = get_color_at_position(avatar_in_river_position)
+	
+	if river_normal.b > 0.001: # 確保在河道內
+		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
+		avatar_is_stuck = false
+	else:
+		avatar_is_stuck = true
 
 
 
