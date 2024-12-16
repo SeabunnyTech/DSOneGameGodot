@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
 [ext_resource type="PackedScene" uid="uid://ds1koirixejn6" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
 [ext_resource type="AudioStream" uid="uid://2yqqqaec6emn" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_dgsee"]
-[ext_resource type="AudioStream" uid="uid://c0bo8ofypa6n1" path="res://assets/audio/archive/game over music_Lively Meadow (Song Loop) B 118.wav" id="3_bbdq8"]
+[ext_resource type="AudioStream" uid="uid://ckn0xs75mr3qx" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_qkv4s"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="6_2ckte"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_llw8i"]
@@ -13,7 +13,7 @@
 [node name="Level2" type="Node2D"]
 script = ExtResource("1_lybcr")
 game_music = ExtResource("2_dgsee")
-tutorial_music = ExtResource("3_bbdq8")
+tutorial_music = ExtResource("3_qkv4s")
 
 [node name="HUD" parent="." instance=ExtResource("2_6qy6p")]
 visible = false
