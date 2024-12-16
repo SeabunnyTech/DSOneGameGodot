@@ -50,7 +50,6 @@ func _connect_transitions():
 	
 	select_subscene.leave_for_level.connect(
 		func(level, player_num):
-			print('going ' + str(level))
 			match level:
 				0:
 					welcome_subscene.enter_scene()
