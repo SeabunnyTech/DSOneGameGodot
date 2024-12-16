@@ -6,7 +6,7 @@ signal go_next_scene
 @export var disabled = true
 
 @onready var guide_ui = $CenterContainer/VBoxContainer
-
+@export var tutorial_music: AudioStream
 
 func enter_scene():
 	# 進場的前提是畫面已經是一片白底
@@ -20,16 +20,14 @@ func enter_scene():
 	tween.finished.connect(func():
 		disabled = false
 	)
+	
+	GlobalAudioPlayer.play_music(tutorial_music, 0.5)
 
 
 
 var time_since_process = 0
 var duration_each_img = 0.3
 
-
-func _ready():
-	reset()
-	enter_scene()
 
 
 func _process(delta: float) -> void:
