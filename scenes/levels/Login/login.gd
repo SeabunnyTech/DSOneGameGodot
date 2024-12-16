@@ -17,12 +17,21 @@ var scene_change_tween
 @onready var select_subscene = $SelectSubscene
 
 @onready var level1_1p = $Level1_1p
+@onready var level2_1p = $Level2_1p
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 這裡假設 subscene 都會實作 reset()
 	# 而且 reset 完以後會消失, 就可以執行 enter_scene 進場
-	for subscene in [welcome_subscene, logo_subscene, select_subscene, level1_1p]:
+	var subscenes = [
+		welcome_subscene,
+		logo_subscene,
+		select_subscene,
+		level1_1p,
+		level2_1p,
+	]
+
+	for subscene in subscenes:
 		subscene.reset()
 
 	_connect_transitions()
@@ -56,10 +65,15 @@ func _connect_transitions():
 				1:
 					level1_1p.enter_scene()
 				2:
-					pass
+					level2_1p.enter_scene()
 	)
 
 	level1_1p.go_back_to_login.connect(func():
+		current_subscene = Subscene.WELCOME
+		welcome_subscene.enter_scene()
+	)
+
+	level2_1p.go_back_to_login.connect(func():
 		current_subscene = Subscene.WELCOME
 		welcome_subscene.enter_scene()
 	)
