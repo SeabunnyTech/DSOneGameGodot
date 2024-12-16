@@ -5,9 +5,9 @@
 [ext_resource type="Texture2D" uid="uid://dccgpqi8n2c16" path="res://madebycloud/DSOneLogo/upper_capsule.png" id="3_l3ptx"]
 [ext_resource type="Texture2D" uid="uid://c8fmrekoc4h06" path="res://madebycloud/DSOneLogo/white_circle.png" id="3_n2s7w"]
 [ext_resource type="Texture2D" uid="uid://bkmsjahobb6l7" path="res://madebycloud/DSOneLogo/lower_capsule.png" id="4_5x4ng"]
-[ext_resource type="AudioStream" uid="uid://bmk2xqvtigcxu" path="res://assets/audio/in_use/bubble-pops.wav" id="6_tpeee"]
-[ext_resource type="AudioStream" uid="uid://bqup03oprsxa4" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="7_qb1mg"]
-[ext_resource type="Theme" path="res://assets/themes/LoginTextGuide.tres" id="8_sk8ob"]
+[ext_resource type="AudioStream" uid="uid://240xgk6wkxyv" path="res://assets/audio/in_use/bubble-pops.wav" id="6_tpeee"]
+[ext_resource type="AudioStream" uid="uid://d4m8744cyansc" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="7_qb1mg"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="8_sk8ob"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o5xwp"]
 

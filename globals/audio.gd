@@ -16,8 +16,9 @@ func _ready():
 
 
 func play_music(new_track: AudioStream, fade_duration: float = 1.0):
-	if current_track == new_track:
-		return
+	if current_track:
+		if current_track.resource_path == new_track.resource_path:
+			return
 
 	if stream:
 		fade_out(fade_duration)
