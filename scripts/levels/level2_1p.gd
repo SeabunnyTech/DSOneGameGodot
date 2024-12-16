@@ -309,6 +309,7 @@ func _game_timeout():
 	game_stop_tween.tween_callback(func():
 		hud.hide()
 		GlobalAudioPlayer.stop()
+		river_game_1.restore_player()
 		_congrats_and_return()
 	)
 

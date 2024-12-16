@@ -93,6 +93,11 @@ func init_player():
 	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	PlayerManager.current_players[0].set_radii(radii)
 
+func restore_player():
+	var radii: Array[float] = [40, 35, 30]
+	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[0].set_radii(radii)
+
 func show_avatar():
 	is_playable = true
 	avatar.show()
