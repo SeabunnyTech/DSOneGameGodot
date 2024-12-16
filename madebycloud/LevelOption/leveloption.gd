@@ -77,12 +77,13 @@ func _process(delta: float) -> void:
 	if disabled:
 		return
 
-	var p1_triggering = portal_area.overlaps_body(player1)
-	p1_progress.react(p1_triggering)
+	if not Engine.is_editor_hint():
+		var p1_triggering = portal_area.overlaps_body(player1)
+		p1_progress.react(p1_triggering)
 
-	if player_num == 2:
-		var p2_triggering = portal_area.overlaps_body(player2)
-		p2_progress.react(p2_triggering)
+		if player_num == 2:
+			var p2_triggering = portal_area.overlaps_body(player2)
+			p2_progress.react(p2_triggering)
 
 
 
@@ -96,4 +97,5 @@ func _draw_boarder(progress):
 	draw_line(Vector2(-600, 800), Vector2(progress * 1200 - 600, 800), color, width)
 
 func _draw():
-	_draw_boarder(p1_progress.progress)
+	if not Engine.is_editor_hint():
+		_draw_boarder(p1_progress.progress)
