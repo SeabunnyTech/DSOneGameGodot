@@ -58,7 +58,6 @@ func _physics_process(_delta):
 
 func init(player: Node2D, init_pos: Vector2):
 	player_id = player.index
-	DebugMessage.info("WaterAvatar player_id: %s" % player_id)
 	target_player = player
 	position = init_pos
 

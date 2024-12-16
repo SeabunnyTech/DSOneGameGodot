@@ -29,6 +29,7 @@ radius = 0.0
 
 [node name="SkipButton" parent="." instance=ExtResource("6_llw8i")]
 modulate = Color(1, 1, 1, 0)
+z_index = 8
 position = Vector2(3500, 1900)
 
 [node name="1p_player_waiter" type="Node" parent="."]
