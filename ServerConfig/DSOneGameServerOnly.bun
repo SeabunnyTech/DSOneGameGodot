@@ -1,0 +1,26 @@
+SocketIOServer:
+    host = "0.0.0.0"
+    port = 8080
+    config_file = "configs\\kinectv2.bun"
+
+    DataHub:
+        Clock:
+            interval = 0.01
+            name = "Clock-100Hz"
+
+        Kinectv2:
+            name = "Kinectv2"
+            frame_type = "infrared"
+            debug = False
+			
+		Threshold:
+			name = "Threshold"
+			sources = "Kinectv2"
+			thresh = 150
+			
+		FindContours:
+            name = "Contours"
+            sources = "Threshold"
+            min_area = 400
+			convex_hull = True
+            central_mass = True
