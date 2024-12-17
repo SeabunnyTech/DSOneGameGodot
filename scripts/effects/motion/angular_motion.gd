@@ -6,7 +6,7 @@ signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
 var previous_position: Vector2
 var previous_positions: Array[Vector2] = []
 
-@export var min_vector_length: float = 35.0
+@export var min_vector_length: float = 5.0
 
 @export var min_angle_threshold: float = 5.0
 @export var min_speed_threshold: float = 0.0  # Minimum speed to trigger rotation

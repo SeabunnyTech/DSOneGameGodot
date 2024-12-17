@@ -72,7 +72,6 @@ wait_lost_player_duration = 30
 [node name="TimeBoard" parent="." instance=ExtResource("12_u8p4t")]
 offset_right = 3840.0
 offset_bottom = 400.0
-total_time = 90
 
 [node name="action_guide_img" type="Sprite2D" parent="."]
 visible = false

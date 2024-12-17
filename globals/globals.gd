@@ -1,8 +1,8 @@
 extends Node
 
 # To control players with mouse
-@export var mouse_mode: bool = true
-@export var debug_message: bool = true
+@export var mouse_mode: bool = false
+@export var debug_message: bool = false
 
 var _viewport_size: Vector2 = Vector2(3840, 2160)
 
@@ -11,8 +11,8 @@ var _viewport_size: Vector2 = Vector2(3840, 2160)
 signal viewport_size_changed(new_size: Vector2)
 
 func get_viewport_size() -> Vector2:
-    return _viewport_size
+	return _viewport_size
 
 func set_viewport_size(new_size: Vector2) -> void:
-    _viewport_size = new_size
-    viewport_size_changed.emit(new_size)
+	_viewport_size = new_size
+	viewport_size_changed.emit(new_size)
