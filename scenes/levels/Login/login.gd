@@ -23,6 +23,7 @@ var scene_change_tween
 func _ready() -> void:
 	# 這裡假設 subscene 都會實作 reset()
 	# 而且 reset 完以後會消失, 就可以執行 enter_scene 進場
+	DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
 	var subscenes = [
 		welcome_subscene,
 		logo_subscene,
