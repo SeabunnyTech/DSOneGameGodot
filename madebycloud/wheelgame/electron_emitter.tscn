@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://cpijjeb2a03n6"]
 
 [ext_resource type="Script" path="res://madebycloud/wheelgame/electron_emitter.gd" id="1_whk1c"]
-[ext_resource type="AudioStream" uid="uid://bi8telusuue33" path="res://assets/audio/sfx/spawn_sound.wav" id="2_p3gl1"]
-[ext_resource type="AudioStream" uid="uid://coc7w4eqqyos7" path="res://assets/audio/sfx/collect_sound_3.wav" id="3_ooc65"]
+[ext_resource type="AudioStream" uid="uid://dykt31rlrdco2" path="res://assets/audio/sfx/spawn_sound.wav" id="2_p3gl1"]
+[ext_resource type="AudioStream" uid="uid://pdw1ef4klj4g" path="res://assets/audio/sfx/collect_sound_3.wav" id="3_ooc65"]
 
 [node name="ElectronEmitter" type="StaticBody2D"]
 collision_layer = 3
@@ -14,8 +14,6 @@ polygon = PackedVector2Array(-809, -1173, -827, -697, -663, -225, -378, -120, -2
 
 [node name="SpawnSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_p3gl1")
-volume_db = -5.0
 
 [node name="CollectSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_ooc65")
-volume_db = -5.0

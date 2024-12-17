@@ -319,8 +319,8 @@ func _game_timeout():
 
 func _congrats_and_return():
 
-	var end_duration = 3
-	var thanks_duration = 3
+	var end_duration = 2
+	var thanks_duration = 4
 	var wait_duration = 2
 
 	if tween:
