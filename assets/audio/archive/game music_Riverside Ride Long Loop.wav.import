@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dyb3a280pop3y"
+path="res://.godot/imported/game music_Riverside Ride Long Loop.wav-9e4ceffcf3f270df6e8aad2c33f6611c.sample"
+
+[deps]
+
+source_file="res://assets/audio/archive/game music_Riverside Ride Long Loop.wav"
+dest_files=["res://.godot/imported/game music_Riverside Ride Long Loop.wav-9e4ceffcf3f270df6e8aad2c33f6611c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

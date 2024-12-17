@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bhqk05m03ol6u"
+path="res://.godot/imported/game over music_Lively Meadow Victory Fanfare.wav-1943a0f20b5e3e1aa6ddc298e9dd997a.sample"
+
+[deps]
+
+source_file="res://assets/audio/archive/game over music_Lively Meadow Victory Fanfare.wav"
+dest_files=["res://.godot/imported/game over music_Lively Meadow Victory Fanfare.wav-1943a0f20b5e3e1aa6ddc298e9dd997a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
