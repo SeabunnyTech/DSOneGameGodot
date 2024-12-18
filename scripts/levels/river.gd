@@ -23,8 +23,11 @@ var current_camera_velocity: float = 0.0
 @onready var electron_spawn_areas_node = $ElectronSpawnAreas
 @onready var checkpoints_node = $Checkpoints
 @onready var finish_line = $FinishLine
+@onready var stone_node = $Stone
 
 var river_normal_map: Image
+
+var waiting_tween
 
 func _ready() -> void:
 	river_normal_map = river_normal_map_sprite.texture.get_image()
@@ -124,7 +127,34 @@ func _on_spawn_scoring(spawn_id: int, count: int) -> void:
 func _on_spawn_scored(spawn_id: int) -> void:
 	spawn_area_scored.emit(spawn_id)
 
+func blink_stones():
+	start_waiting_animation(stone_node)
 
+func blink_checkpoint():
+	start_waiting_animation(checkpoints_node)
+
+func stop_blink():
+	stop_waiting_animation(stone_node)
+	stop_waiting_animation(checkpoints_node)
+
+func start_waiting_animation(node):
+	# 停止之前的動畫（如果有的話）
+	if waiting_tween:
+		waiting_tween.kill()
+	
+	waiting_tween = create_tween()
+	waiting_tween.set_loops() # 設置無限循環
+
+	waiting_tween.tween_property(node, "modulate:a", 0, 0.5)
+	# 再淡入
+	waiting_tween.tween_property(node, "modulate:a", 1, 0.5)
+
+func stop_waiting_animation(node):
+	if waiting_tween:
+		waiting_tween.kill()
+
+	waiting_tween = create_tween()
+	waiting_tween.tween_property(node, "modulate:a", 1, 0.5)
 
 
 

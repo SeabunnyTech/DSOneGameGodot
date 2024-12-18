@@ -6,8 +6,6 @@ signal checkpoint_passed(player_id: int, spawn_id: int)
 @export var min_speed_threshold = 10.0  # 最低需要的速度
 @export var spawn_id: int = 0            # 對應的 electron spawn id
 
-@onready var sfx_player = $CheckpointSFX
-
 var is_active = true
 var cooldown_timer: float = 0.0
 var COOLDOWN_TIME = 5.0  # 冷卻時間，避免重複觸發

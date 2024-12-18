@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://scenes/levels/Login/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_0lg17"]
-[ext_resource type="AudioStream" uid="uid://b5nqwb52dq2ak" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_f32jj"]
-[ext_resource type="Texture2D" uid="uid://ciqwvt65k2hwq" path="res://assets/images/drawings/解說圖1-1.PNG" id="3_vyuwr"]
+[ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_f32jj"]
+[ext_resource type="Texture2D" uid="uid://6oh0gfhcmqhw" path="res://assets/images/drawings/解說圖1-1.PNG" id="3_vyuwr"]
 
 [sub_resource type="Theme" id="Theme_mr7yq"]
 default_font = ExtResource("1_wrufh")
@@ -39,7 +39,7 @@ layout_mode = 2
 theme = ExtResource("2_0lg17")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 110
-text = "歡迎來到電幻一號所的水利發電大挑戰!"
+text = "歡迎來到電幻一號所的水力發電大挑戰!"
 horizontal_alignment = 1
 
 [node name="GuideTextLabel" type="Label" parent="CenterContainer/VBoxContainer"]

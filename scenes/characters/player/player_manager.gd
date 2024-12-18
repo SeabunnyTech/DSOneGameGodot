@@ -90,8 +90,11 @@ func update_player_positions():
 			var center_mass = Vector2(player_position[i][0], player_position[i][1])
 
 			var scaled_position = Vector2(
-				(center_mass.x / 512.0) * viewport_size.x,
-				(center_mass.y / 424.0) * viewport_size.y
+				#(center_mass.x / 512.0) * viewport_size.x,
+				#(center_mass.y / 424.0) * viewport_size.y
+				clamp((((center_mass.x / 512.0) - 0.5) * 2  +0.5) * viewport_size.x,0, viewport_size.x),
+				clamp((((center_mass.y / 424.0) - 0.5) * 2 + 0.5)* viewport_size.y,0,viewport_size.y)
+			
 			)
 
 			var reversed_position_y = viewport_size.y - scaled_position.y

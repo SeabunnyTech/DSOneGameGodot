@@ -37,6 +37,7 @@ func reset():
 	# 隱藏關卡本身
 	visible = false
 	modulate.a = 0
+	wheelgame_env.set_collision_enabled(false)
 
 	# 介紹用的訊息與遮罩
 	guide_message.modulate.a = 0
@@ -59,6 +60,7 @@ func reset():
 
 func enter_scene():
 	visible = true
+	wheelgame_env.set_collision_enabled(true)
 	_begin_tutorial()
 
 
@@ -160,6 +162,8 @@ func _begin_tutorial():
 
 
 var game_started
+
+
 func _continue_tutorial():
 	player_waiter.set_wait_for_player(false)
 	if game_started:
@@ -370,7 +374,7 @@ func _undate_guide_text(new_text_state):
 		'start': '',
 		'congrats' : '你在 ' + str($TimeBoard.total_time) + ' 秒內轉了 ' +\
 					 str(wheelgame_env.score) + ' 圈呢!',
-		'thanks':'電幻一號所祝您身體健康, 手腕舒適!',
+		'thanks':'電幻 1 號所祝您身體健康, 手腕舒適!',
 	}
 
 	var guide_text_positions = {

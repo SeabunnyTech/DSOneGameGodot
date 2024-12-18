@@ -7,7 +7,7 @@ signal avatar_merged(player_id: int)
 signal finish_line_passed(player_id: int)
 
 @onready var avatar = $WaterAvatar
-@export var avatar_init_positions = Vector2(2090, 350)
+@export var avatar_init_positions = Vector2(2090, 700)
 @export var avatar_is_stuck = false
 @export var avatar_is_separated = false
 
@@ -93,7 +93,7 @@ func init_player():
 	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	PlayerManager.current_players[0].set_radii(radii)
 
-func restore_player():
+func restore_player_size():
 	var radii: Array[float] = [40, 35, 30]
 	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	PlayerManager.current_players[0].set_radii(radii)
@@ -101,6 +101,12 @@ func restore_player():
 func show_avatar():
 	is_playable = true
 	avatar.show()
+	
+func hide_avatar():
+	avatar.hide()
+	
+func stop_avatar():
+	is_playable = false
 
 func end_tutorial():
 	checkpoint_enabled = false
@@ -113,7 +119,9 @@ func start_game():
 
 func reset():
 	avatar.hide()
+	
 	is_playable = false
+	checkpoint_enabled = false
 
 	if river_scene:
 		river_scene.queue_free()
@@ -148,6 +156,15 @@ func camera_to(_screen_center, _target_center, _target_scale=1.0, _duration=1, _
 
 func update_camera_velocity(velocity: float) -> void:
 	river_scene.current_camera_velocity = velocity
+
+func blink_stones():
+	river_scene.blink_stones()
+
+func blink_checkpoint():
+	river_scene.blink_checkpoint()
+
+func stop_blink():
+	river_scene.stop_blink()
 
 func _on_spawn_area_positions(positions: Array):
 	spawn_area_positions = positions

@@ -110,6 +110,9 @@ func set_building_transparent(transparent=true, duration=1):
 	building_case_tween.tween_property(building_case, 'modulate:a', final_opacity, duration)
 
 
+func set_collision_enabled(enabled: bool):
+	$Player1UI/UpperLake/CharacterBody2D/CollisionShape2D.disabled = not enabled
+	$Player1UI/ElectronEmitter.set_collision_enabled(enabled)
 
 @onready var score_board = $ScoreBoard
 var score:
