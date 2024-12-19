@@ -13,11 +13,11 @@ script = ExtResource("1_1rxx5")
 
 [node name="Metaball" parent="." instance=ExtResource("1_c23hg")]
 ball_count = 2
-ball_radii = Array[float]([20.0, 35.0])
+ball_radii = Array[float]([35.0, 20.0])
 
 [node name="InertiaFollower" type="Node2D" parent="Metaball"]
 script = ExtResource("3_hatqj")
-f = 3.0
+f = 6.0
 z = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

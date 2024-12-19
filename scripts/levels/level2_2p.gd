@@ -7,7 +7,7 @@ extends Node2D
 @export var num_rivers_scenes = 3
 
 @export var camera_zoom_level = 0.65
-@export var camera_y_threshold = 0.4  # 螢幕 40% 以下時開始加速
+@export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
 @export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0

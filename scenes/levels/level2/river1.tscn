@@ -46,7 +46,7 @@ script = ExtResource("1_6i8h2")
 
 [node name="RiverNormMap" type="Sprite2D" parent="."]
 visible = false
-position = Vector2(1912, 5256)
+position = Vector2(1909, 5266)
 texture = ExtResource("2_0jgxe")
 
 [node name="RiverMap" type="Sprite2D" parent="."]

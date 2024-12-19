@@ -2,10 +2,10 @@ extends CharacterBody2D
 
 signal merged_with_player(node: Node2D)
 signal separated_from_player(node: Node2D)
-signal desired_position_changed(node: Node2D, new_desired_position: Vector2)
+signal desired_position_changed(node: Node2D, new_desired_position: Vector2, delta: float)
 
 @export var player_id: int = 0
-@export var follow_distance: float = 10.0
+@export var follow_distance: float = 20.0
 @export var merge_distance: float = 50.0
 @export var separation_distance: float = 200.0
 
@@ -49,9 +49,9 @@ func _physics_process(_delta):
 			
 		# 跟隨玩家，但保持在河道內
 		var direction = (target_player.position - position).normalized()
-		var desired_position = target_player.position - direction * follow_distance
+		var desired_position = lerp(position, target_player.position, 0.8) - direction * follow_distance
 		
-		desired_position_changed.emit(self, desired_position)
+		desired_position_changed.emit(self, desired_position, _delta)
 
 	if last_position:
 		current_velocity = (position - last_position) / _delta

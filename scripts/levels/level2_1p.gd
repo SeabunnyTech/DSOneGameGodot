@@ -17,7 +17,7 @@ signal go_back_to_login
 @export var camera_velocity = 0.0  # 相機當前速度
 
 @export var camera_zoom_level = 1.2
-@export var camera_y_threshold = 0.1  # 螢幕 50% 以下時開始加速
+@export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
 @export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
