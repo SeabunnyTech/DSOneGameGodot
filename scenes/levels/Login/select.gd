@@ -1,9 +1,7 @@
 extends Node2D
 
-signal leave_for_level(level_idx, player_num)
+signal leave_for_level(level_idx)
 
-
-var player_num
 
 @onready var level1_opt = $Level1
 @onready var level2_opt = $Level2
@@ -18,9 +16,8 @@ func reset():
 
 
 var tween
-func enter_scene(registered_player_num):
+func enter_scene():
 	visible = true
-	player_num = registered_player_num
 	if tween:
 		tween.kill()
 	tween = create_tween()
@@ -53,7 +50,7 @@ func leave_scene(new_level: Levels):
 	tween.tween_property(self, 'modulate:a', 0, 1)
 	tween.tween_callback(func():
 		reset()
-		leave_for_level.emit(new_level, player_num)
+		leave_for_level.emit(new_level)
 	)
 	
 

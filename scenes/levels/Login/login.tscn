@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://b8wbqa1rf3e01"]
+[gd_scene load_steps=8 format=3 uid="uid://b8wbqa1rf3e01"]
 
 [ext_resource type="Script" path="res://scenes/levels/Login/login.gd" id="1_bnr01"]
 [ext_resource type="PackedScene" uid="uid://6b4fn5a5w1cu" path="res://scenes/levels/Login/logos.tscn" id="3_0dnh3"]
 [ext_resource type="PackedScene" uid="uid://btnj03qeeyjly" path="res://scenes/levels/Login/select.tscn" id="4_q7p1b"]
 [ext_resource type="PackedScene" uid="uid://lh1rudkmnc74" path="res://scenes/levels/Login/welcome.tscn" id="4_sk7p2"]
-[ext_resource type="PackedScene" uid="uid://cmk5cd4ky13nc" path="res://madebycloud/wheelgame/level1_1p_rework.tscn" id="5_nc7ok"]
+[ext_resource type="PackedScene" uid="uid://c4q7n51urbeaa" path="res://madebycloud/wheelgame/level1_1p_tutorial.tscn" id="5_5fpxw"]
+[ext_resource type="PackedScene" uid="uid://dio54swilmyng" path="res://madebycloud/wheelgame/level1_1p.tscn" id="6_rcshy"]
 [ext_resource type="PackedScene" uid="uid://ctc1wm78mr8p2" path="res://scenes/levels/level2/level2_1p.tscn" id="6_wa8se"]
 
 [node name="Login" type="Node2D"]
@@ -16,6 +17,8 @@ script = ExtResource("1_bnr01")
 
 [node name="SelectSubscene" parent="." instance=ExtResource("4_q7p1b")]
 
-[node name="Level1_1p" parent="." instance=ExtResource("5_nc7ok")]
+[node name="level1_tutorial" parent="." instance=ExtResource("5_5fpxw")]
+
+[node name="Level1_1p" parent="." instance=ExtResource("6_rcshy")]
 
 [node name="Level2_1p" parent="." instance=ExtResource("6_wa8se")]

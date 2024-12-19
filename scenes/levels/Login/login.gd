@@ -1,21 +1,12 @@
 extends Node2D
 
 
-
-enum Subscene {
-	WELCOME,
-	LOGOS,
-}
-
-
-var current_subscene = null
-var scene_change_tween
-
 # subscenes
 @onready var welcome_subscene = $WelcomeSubscene
 @onready var logo_subscene = $LogoSubscene
 @onready var select_subscene = $SelectSubscene
 
+@onready var level1_tutorial = $level1_tutorial
 @onready var level1_1p = $Level1_1p
 @onready var level2_1p = $Level2_1p
 
@@ -28,6 +19,7 @@ func _ready() -> void:
 		welcome_subscene,
 		logo_subscene,
 		select_subscene,
+		level1_tutorial,
 		level1_1p,
 		level2_1p,
 	]
@@ -42,42 +34,38 @@ func _ready() -> void:
 
 func _connect_transitions():
 	# 連接 welcome 到 logo scene
-	welcome_subscene.go_next_scene.connect(func():
-		current_subscene = Subscene.LOGOS
-		logo_subscene.enter_scene()
-	)
+	welcome_subscene.go_next_scene.connect(logo_subscene.enter_scene)
 
 	# 從 LogoSubscene 倒退回 Welcome
-	logo_subscene.go_welcome_scene.connect(func():
-		current_subscene = Subscene.WELCOME
-		welcome_subscene.enter_scene()
-	)
+	logo_subscene.go_welcome_scene.connect(welcome_subscene.enter_scene)
 	
-	logo_subscene.go_tutorial_scene.connect(func(player_num):
-		select_subscene.enter_scene(player_num)
+	logo_subscene.go_select_scene.connect(func(player_num):
+		Globals.intended_player_num = player_num
+		select_subscene.enter_scene()
 		#GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
 	)
 	
+	level1_tutorial.go_level1.connect(func():
+		if Globals.intended_player_num == 1:
+			level1_1p.enter_scene()
+	)
+
 	select_subscene.leave_for_level.connect(
-		func(level, player_num):
+		func(level):
 			match level:
 				0:
 					welcome_subscene.enter_scene()
 				1:
-					level1_1p.enter_scene()
+					level1_tutorial.enter_scene()
 				2:
 					level2_1p.enter_scene()
 	)
 
-	level1_1p.go_back_to_login.connect(func():
-		current_subscene = Subscene.WELCOME
-		welcome_subscene.enter_scene()
-	)
+	for level in [level1_tutorial, level1_1p, level2_1p]:
+		level.go_back_to_login.connect(func():
+			welcome_subscene.enter_scene()
+		)
 
-	level2_1p.go_back_to_login.connect(func():
-		current_subscene = Subscene.WELCOME
-		welcome_subscene.enter_scene()
-	)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

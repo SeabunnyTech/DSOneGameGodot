@@ -2,7 +2,7 @@ extends Node2D
 
 # 轉場的信號
 signal go_welcome_scene
-signal go_tutorial_scene(player_num: int)
+signal go_select_scene(player_num: int)
 
 
 var LState = DSOneLogo.State
@@ -130,10 +130,10 @@ func _interact(delta):
 
 		if player2.state == PState.LOST:
 			# Go next scene with 1P
-			leave_scene_after_delay(func(): go_tutorial_scene.emit(1))
+			leave_scene_after_delay(func(): go_select_scene.emit(1))
 		elif logo2.state == LState.TRIGGERED:
 			# Go next scene with 2p
-			leave_scene_after_delay(func(): go_tutorial_scene.emit(2))
+			leave_scene_after_delay(func(): go_select_scene.emit(2))
 
 
 
