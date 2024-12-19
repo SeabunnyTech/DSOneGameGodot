@@ -49,6 +49,7 @@ func enter_scene():
 
 	visible = true
 	wheelgame_env.set_collision_enabled(true)
+	wheelgame_env.set_building_transparent(true)
 
 	if tween:
 		tween.kill()
@@ -161,47 +162,17 @@ func _congrats_and_return():
 
 func _undate_guide_text(new_text_state):
 	var titles = {
-		'begin' : '歡迎來到抽蓄發電大作戰!',
-		'case' : '這是一座水力發電廠',
-		'show' : '但它其實一點都不普通喔!',
-		'inner': '當水輪機發力把水抽到山上時!',
-		'metaphor': '換句話說!',
-		'pushit': '現在就來試試吧!!',
-		'stored': '非常好!',
-		'ready': '既然你已經掌握了蓄電之道!',
-		'final': '接下來我們就進入挑戰吧!',
-		'start': '準備開始!!',
 		'congrats' : '挑戰完成!',
 		'thanks' : '感謝你的參與',
 	}
 
 	var guides = {
-		'begin' : '今天我們將化身一顆水滴\n來進行蓄電工作啦!',
-		'case' : '它看起來就像是一棟普通的房子對吧!',
-		'show' : '在它平淡的外表下\n內部裝著一台巨大的水輪機呢!',
-		'inner': '小小的水滴也可以成為儲能的媒介!',
-		'metaphor': '電廠後方山上的水池\n其實也可以被想成是一個電池喔!',
-		'pushit' : '舉起你手上的控盤\n順時鐘畫圓來抽水到上池蓄積能量吧!',
-		'stored': '被抽到了高處的水\n乘載了滿滿的重力位能\n再次被放下時就可以轉換成電力喔!',
-		'ready': '',
-		'final': '看看你能在 ' + str($TimeBoard.total_time) + ' 秒內發出多少電力!',
-		'start': '',
 		'congrats' : '你在 ' + str($TimeBoard.total_time) + ' 秒內轉了 ' +\
 					 str(wheelgame_env.score) + ' 圈呢!',
 		'thanks':'電幻 1 號所祝您身體健康, 手腕舒適!',
 	}
 
 	var guide_text_positions = {
-		'begin' : Vector2(960, 920),
-		'case' : Vector2(1800, 920),
-		'show' : Vector2(1800, 920),
-		'inner': Vector2(-120, 920),
-		'metaphor' : Vector2(2100, 800),
-		'pushit': Vector2(2100, 450),
-		'stored': Vector2(2150, 800),
-		'ready': Vector2(960, 920),
-		'final': Vector2(960, 920),
-		'start': Vector2(960, 920),
 		'congrats' : Vector2(960, 920),
 		'thanks':Vector2(960, 920),
 	}
