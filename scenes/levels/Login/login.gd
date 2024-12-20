@@ -8,6 +8,7 @@ extends Node2D
 
 @onready var level1_tutorial = $level1_tutorial
 @onready var level1_1p = $Level1_1p
+@onready var level1_2p = $Level1_2p
 @onready var level2_1p = $Level2_1p
 
 # Called when the node enters the scene tree for the first time.
@@ -21,6 +22,7 @@ func _ready() -> void:
 		select_subscene,
 		level1_tutorial,
 		level1_1p,
+		level1_2p,
 		level2_1p,
 	]
 
@@ -46,8 +48,11 @@ func _connect_transitions():
 	)
 	
 	level1_tutorial.go_level1.connect(func():
-		if Globals.intended_player_num == 1:
-			level1_1p.enter_scene()
+		match Globals.intended_player_num:
+			1:
+				level1_1p.enter_scene()
+			2:
+				level1_2p.enter_scene()
 	)
 
 	select_subscene.leave_for_level.connect(
@@ -61,7 +66,7 @@ func _connect_transitions():
 					level2_1p.enter_scene()
 	)
 
-	for level in [level1_tutorial, level1_1p, level2_1p]:
+	for level in [level1_tutorial, level1_1p, level1_2p, level2_1p]:
 		level.go_back_to_login.connect(func():
 			welcome_subscene.enter_scene()
 		)
