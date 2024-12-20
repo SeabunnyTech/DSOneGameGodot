@@ -8,6 +8,7 @@ extends AudioStreamPlayer
 
 var current_track: AudioStream = null
 var fade_tween: Tween
+var is_muted: bool = false
 
 
 func _ready():
@@ -26,7 +27,11 @@ func play_music(new_track: AudioStream, fade_duration: float = 1.0):
 	current_track = new_track
 	stream = new_track
 	play()
-	fade_in(fade_duration)
+	
+	if is_muted:
+		volume_db = -80
+	else:
+		fade_in(fade_duration)
 
 
 func fade_in(duration: float = 1.0):
@@ -54,3 +59,23 @@ func resume_music():
 
 func set_volume(value: float):
 	volume_db = linear_to_db(value)
+
+func toggle_mute():
+	is_muted = !is_muted
+	if is_muted:
+		# Store current volume before muting
+		var current_vol = volume_db
+		volume_db = -80  # Effectively mute
+		return current_vol
+	else:
+		# Restore volume
+		volume_db = 0  # Or whatever default volume you want
+		return volume_db
+
+func set_mute(mute_state: bool):
+	if mute_state == is_muted:
+		return
+	toggle_mute()
+
+func is_audio_muted() -> bool:
+	return is_muted
