@@ -11,7 +11,9 @@ func reset():
 	visible = false
 	modulate.a = 0
 	level1_opt.disabled = true
+	level1_opt.reset()
 	level2_opt.disabled = true
+	level2_opt.reset()
 	player_waiter.reset()
 
 
