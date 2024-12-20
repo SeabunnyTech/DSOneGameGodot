@@ -14,6 +14,7 @@ signal finish_line_passed(player_id: int)
 @export var screen_center = Vector2(3840.0/2, 2160.0/2)
 @export var camera_position = Vector2(1920, 1080)
 @export var camera_zoom_level = 1.2
+var current_camera_velocity: float = 0.0
 
 var player_id: int = 0
 
@@ -155,7 +156,8 @@ func camera_to(_screen_center, _target_center, _target_scale=1.0, _duration=1, _
 		camera_tween.finished.connect(_callback)
 
 func update_camera_velocity(velocity: float) -> void:
-	river_scene.current_camera_velocity = velocity
+	current_camera_velocity = velocity
+	river_scene.current_camera_velocity = velocity # 傳給下一層的 river scene
 
 func blink_stones():
 	river_scene.blink_stones()
@@ -191,10 +193,11 @@ func _on_avatar_merged(avatar: Node2D):
 func _on_avatar_separated(avatar: Node2D):
 	avatar_is_separated = true
 
-func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2):
+func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: Vector2, delta: float):
 	if not is_playable:
 		return
 
+	var follow_speed = 50
 	var avatar_in_river_position = avatar_in_river_position(
 		screen_center,
 		camera_position,
@@ -202,8 +205,13 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		new_desired_position)
 	var river_normal = get_color_at_position(avatar_in_river_position)
 	
-	if river_normal.b > 0.001: # 確保在河道內
-		avatar.position = avatar.position.lerp(new_desired_position, 0.5)
+	DebugMessage.info("river_normal.b * delta * 10: %s" % (river_normal.b * delta * follow_speed))
+	DebugMessage.info("current_camera_velocity: %s" % current_camera_velocity)
+	if river_normal.b > 0.05: # 確保在河道內
+		var pos_x = lerp(avatar.position.x, new_desired_position.x, river_normal.b * delta * follow_speed)
+		var pos_y = lerp(avatar.position.y, new_desired_position.y, 1 - current_camera_velocity/800.0)
+		avatar.position = Vector2(pos_x, pos_y)
+		# avatar.position = avatar.position.lerp(new_desired_position, river_normal.b * delta * follow_speed)
 		avatar_is_stuck = false
 	else:
 		avatar_is_stuck = true
