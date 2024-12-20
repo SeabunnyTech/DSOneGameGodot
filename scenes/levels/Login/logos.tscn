@@ -9,11 +9,13 @@
 script = ExtResource("1_vehd0")
 
 [node name="DSOneLogo1" parent="." instance=ExtResource("2_akdmc")]
+position = Vector2(1920, 960)
 scale = Vector2(1.2, 1.2)
 preview_state = 2
 init_state = 0
 
 [node name="DSOneLogo2" parent="." instance=ExtResource("2_akdmc")]
+position = Vector2(1920, 960)
 scale = Vector2(1.2, 1.2)
 preview_state = 0
 init_state = 0

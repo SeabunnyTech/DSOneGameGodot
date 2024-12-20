@@ -16,7 +16,7 @@ var player2 = PlayerManager.player2
 var players = [player1, player2]
 
 @onready var window_size = DisplayServer.window_get_size()
-@onready var logo2_offset = Vector2i(0.2 * window_size[0], 0)
+@onready var logo2_offset = 0.2 * window_size[0]
 
 
 @export var disabled = true
@@ -65,8 +65,8 @@ func _ready() -> void:
 	logo2.hue = PlayerManager.player_hue[1]
 
 	# 設定 logo 位置
-	logo1.position = window_size/2
-	logo2.position = window_size/2 + logo2_offset
+	logo1.position.x = window_size[0]/2
+	logo2.position.x = window_size[0]/2 + logo2_offset
 
 	# 連接信號
 	for logo in logos:
@@ -100,7 +100,7 @@ func _interact(delta):
 		logos[index].heads_to_state(logo_heading_states[index])
 
 	# 接著要處理兩個 logo 的位置, 一個玩家以下和兩個玩家在場會讓 logo 調整位置
-	var should_show_two_logo = player2.state == PState.LOST
+	var should_show_two_logo = player2.state != PState.LOST
 	_heads_to_logo_layout(should_show_two_logo)
 
 	# 更新 player 的吸子位置
@@ -224,13 +224,13 @@ func _heads_to_logo_layout(should_show_two_logo: bool):
 	heading_to_two_logo_layout = should_show_two_logo
 
 	if heading_to_two_logo_layout:
-		_move_logo1(window_size/2)
+		_move_logo1(window_size[0]/2 - logo2_offset)		
 	else:
-		_move_logo1(window_size/2 - logo2_offset)
+		_move_logo1(window_size[0]/2)
 
 
-func _move_logo1(pos):
+func _move_logo1(delta_x):
 	if logo_position_tween:
 		logo_position_tween.kill()
 	logo_position_tween = create_tween().set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-	logo_position_tween.tween_property(logo1, 'position', Vector2(pos[0], pos[1]), 1)
+	logo_position_tween.tween_property(logo1, 'position:x', delta_x, 1)

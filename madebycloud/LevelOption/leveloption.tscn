@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://madebycloud/LevelOption/leveloption.gd" id="2_1tws8"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_llbvw"]
 [ext_resource type="PackedScene" uid="uid://s84i5xh3ognd" path="res://madebycloud/LevelOption/ProgressTracker.tscn" id="4_qrpfi"]
-[ext_resource type="AudioStream" uid="uid://d4m8744cyansc" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_gaxjm"]
+[ext_resource type="AudioStream" uid="uid://bmsyc157m5bql" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_gaxjm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tt2my"]
 size = Vector2(1528.57, 1880)
@@ -19,7 +19,7 @@ texture = ExtResource("1_dby07")
 [node name="Label" type="Label" parent="image"]
 anchors_preset = -1
 anchor_left = -0.0161797
-anchor_top = -9.52148e-05
+anchor_top = -9.79004e-05
 anchor_right = 0.316932
 anchor_bottom = -9.79004e-05
 offset_left = -698.571

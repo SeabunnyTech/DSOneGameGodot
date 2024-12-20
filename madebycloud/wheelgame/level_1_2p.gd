@@ -34,8 +34,11 @@ func reset():
 
 	# 遊戲本體及記分板
 	wheelgame_env.reset()
+	wheelgame_env.view_center = Vector2(1800, 1080)
 	wheelgame_env2.reset()
+	wheelgame_env2.view_center = Vector2(1800, 1080)
 	time_board.reset()
+	time_board.modulate.a = 1
 
 	# 備用的邏輯
 	player_waiter.reset()

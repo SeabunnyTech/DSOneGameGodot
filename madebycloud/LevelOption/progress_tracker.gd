@@ -9,6 +9,12 @@ var progress: float = 0.0
 var target_progress: float = 0.0
 var tween
 
+
+func reset():
+	progress = 0.0
+	target_progress = 0.0
+
+
 func react(triggering: bool):
 	var new_target_progress = 1 if triggering else 0
 	if new_target_progress != target_progress:
@@ -23,6 +29,3 @@ func react(triggering: bool):
 		# 走在觸發的路上
 		if triggering:
 			tween.tween_callback(triggered.emit)
-
-func _process(delta: float) -> void:
-	pass

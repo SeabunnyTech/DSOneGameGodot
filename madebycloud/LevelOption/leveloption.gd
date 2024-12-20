@@ -13,8 +13,7 @@ signal all_player_ready
 		title = value
 		$image/Label.text = title
 
-# player_num 是 1 的情況下不會對第二個 player 有任何反應
-@export var player_num: int = 1
+
 var disabled = true
 
 @onready var player1 = PlayerManager.player1
@@ -44,7 +43,11 @@ func reset():
 func _draw_selection_boarder():
 	player1.player_hue
 
+
+
+
 var p1_tween
+var p2_tween
 func _ready():
 	#position = Vector2(1200, 1200)
 	disabled = false
@@ -60,13 +63,29 @@ func _ready():
 			p1_tween.tween_property(self, 'scale', Vector2(1, 1), 0.3)
 	)
 	
-	# 這是為了 1 暫時做的, 現在不會對 2p 有任何反映	
+	p2_progress.heading_altered.connect(func(target_state):
+		if p2_tween:
+			p2_tween.kill()
+		p2_tween = create_tween()
+		if target_state:
+			$OnTriggerSFX.play()
+			p2_tween.tween_property(self, 'scale', Vector2(1.05, 1.05), 0.3)
+		else:
+			p2_tween.tween_property(self, 'scale', Vector2(1, 1), 0.3)
+	)
+
 	p1_progress.triggered.connect(_on_option_triggered)
+	p2_progress.triggered.connect(_on_option_triggered)
 
 
 func _on_option_triggered():
-	if player_num == 1:
+	if Globals.intended_player_num == 1:
 		all_player_ready.emit()
+		reset()
+	elif Globals.intended_player_num == 2:
+		if p1_progress.progress == 1.0 and p2_progress.progress == 1.0:
+			all_player_ready.emit()
+			reset()
 
 
 func _process(delta: float) -> void:
@@ -81,21 +100,33 @@ func _process(delta: float) -> void:
 		var p1_triggering = portal_area.overlaps_body(player1)
 		p1_progress.react(p1_triggering)
 
-		if player_num == 2:
+		if Globals.intended_player_num == 2:
 			var p2_triggering = portal_area.overlaps_body(player2)
 			p2_progress.react(p2_triggering)
 
 
 
 
-func _draw_boarder(progress):
+func _draw_progress(progress, player_idx):
 
+	var hue = player1.hue if player_idx == 1 else player2.hue
+	var y0 = 800 if player_idx == 1 else 860
 	#var rect = Rect2(Vector2(-600, -600), Vector2(1200, 1400))  # 位置和大小
-	var color = Color.from_hsv(player1.hue, 1, 1, progress)
+	var player_color = Color.from_hsv(hue, 1, 1, 1)
+	var light_gray = Color(0.95, 0.95, 0.95)
 	var width = 30.0  # 邊框寬度
 	#draw_rect(rect, color, false, width)
-	draw_line(Vector2(-600, 800), Vector2(progress * 1200 - 600, 800), color, width)
+
+	# p1: 有 p1 與 p2 的進度條
+	# 進度條尾端是灰色
+	draw_line(Vector2(-600, y0), Vector2(progress * 1200 - 600, y0), player_color, width)
+	draw_line(Vector2(progress * 1200 - 600, y0), Vector2(600, y0), light_gray, width)
+	
+
 
 func _draw():
 	if not Engine.is_editor_hint():
-		_draw_boarder(p1_progress.progress)
+		_draw_progress(p1_progress.progress, 1)
+
+		if Globals.intended_player_num == 2:
+			_draw_progress(p2_progress.progress, 2)

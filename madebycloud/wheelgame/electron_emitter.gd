@@ -13,8 +13,12 @@ var collecting: bool = false
 var electron_scene = preload("res://scenes/characters/electron.tscn")
 var active_electrons: Array[Node] = []
 
+
+
 func set_collision_enabled(enabled: bool):
 	$ElectronSpawnArea.disabled = not enabled
+
+
 
 func collect_electron(electron: Node2D) -> void:
 	var tween = create_tween()
@@ -58,9 +62,10 @@ func collect_electrons():
 	await get_tree().create_timer(collection_speed + 0.2).timeout
 	collecting = false
 	all_electron_collected.emit()
+	active_electrons.clear()
 
 
-# 讓電仔原地消失好像不存在過一樣
+# 讓電仔原地消失好像不存在過一樣, 用在教學
 func destroy_electrons():
 	for i in range(active_electrons.size()):
 		active_electrons[i].vanish()

@@ -143,7 +143,7 @@ func reset():
 	score_board.reset()
 	score_board.modulate.a = 0
 	score_board.position = Vector2(0, 0)
-
+	#emitter.reset()
 
 
 func _ready():
@@ -157,6 +157,7 @@ func _ready():
 	emitter.electron_collected.connect(_on_electrons_scoring)
 	emitter.electron_collected.connect($Player1UI/Path2D._pass_electron)
 	emitter.electron_collected.connect(func(_e): score_board.add_score())
+	$Player1UI/Path2D.eletron_hit_end.connect(func(electron): electron.queue_free())
 
 	# 初始化湖和氣泡
 	for num in range(num_pipe_bubbles):
