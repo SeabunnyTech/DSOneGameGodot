@@ -38,6 +38,7 @@ func reset():
 	# 遊戲本體及記分板
 	wheelgame_env.reset()
 	time_board.reset()
+	time_board.modulate.a = 1
 
 	# 備用的邏輯
 	player_waiter.reset()
