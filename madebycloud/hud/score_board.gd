@@ -1,5 +1,6 @@
 extends Control
 
+@onready var crown = $PanelContainer/HBoxContainer/crown
 
 var score = 0:
 	set(value):
@@ -9,6 +10,18 @@ var score = 0:
 
 func reset():
 	score = 0
+	crown.modulate.a = 0
+	crown.scale = Vector2(1,1)
+
+
+var crown_tween
+func add_crown():
+	if crown_tween:
+		crown_tween.kill()
+
+	crown_tween = create_tween()
+	crown_tween.tween_property(crown, 'modulate:a', 1, 1)
+	crown_tween.parallel().tween_property(crown, 'scale', Vector2(1.5, 1.5), 1)
 
 
 var transition_tween
