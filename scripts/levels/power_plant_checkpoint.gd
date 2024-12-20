@@ -6,7 +6,7 @@ signal checkpoint_passed(player_id: int, spawn_id: int)
 @export var min_speed_threshold = 10.0  # 最低需要的速度
 @export var spawn_id: int = 0            # 對應的 electron spawn id
 
-var is_active = true
+var is_active = false
 var cooldown_timer: float = 0.0
 var COOLDOWN_TIME = 5.0  # 冷卻時間，避免重複觸發
 
@@ -58,8 +58,6 @@ func _on_body_entered(body: Node2D):
 	if not is_active or not body.is_in_group("water_avatar"):
 		return
 
-	# 進入冷卻
 	is_active = false
 	cooldown_timer = COOLDOWN_TIME
-
 	checkpoint_passed.emit(body.player_id, spawn_id)

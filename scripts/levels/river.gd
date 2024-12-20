@@ -11,6 +11,7 @@ var spawn_positions: Array[float] = []
 var checkpoints: Array[Node] = []  # 存儲所有 checkpoint
 
 var positions_initialized: bool = false
+var checkpoint_enabled: bool = false
 
 var current_camera_velocity: float = 0.0
 
@@ -108,6 +109,16 @@ func get_spawn_aposition(spawn_id: int) -> float:
 
 func get_river_scene_size() -> Vector2:
 	return river_normal_map_sprite.texture.get_size()
+
+func enable_checkpoint():
+	checkpoint_enabled = true
+	for checkpoint in checkpoints:
+		checkpoint.is_active = true
+
+func disable_checkpoint():
+	checkpoint_enabled = false
+	for checkpoint in checkpoints:
+		checkpoint.is_active = false
 
 func _on_checkpoint_passed(player_id: int, spawn_id: int) -> void:
 	# 計算獲得的電仔數量
