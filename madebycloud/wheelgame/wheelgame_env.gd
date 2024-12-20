@@ -1,3 +1,4 @@
+@tool
 extends ColorRect
 
 signal electron_generated
@@ -83,13 +84,20 @@ var pipe_tweens = null
 
 
 
+@export var view_center:Vector2 = Vector2(1920.0, 1080.0):
+	set(vc):
+		view_center = vc
+		var env = $Player1UI 
+		env.position = size / 2.0 - view_center * env.scale
+
+
 
 var camera_tween
 func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
 	if camera_tween:
 		camera_tween.kill()
 
-	var screen_center = Vector2(1920, 1080)
+	var screen_center = size / 2.0
 	var new_position = screen_center - target_center * target_scale
 	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	camera_tween.tween_property(entire_env, 'scale', Vector2(target_scale, target_scale), duration)
@@ -134,6 +142,7 @@ func reset():
 	lower_lake_level = 1
 	score_board.reset()
 	score_board.modulate.a = 0
+	score_board.position = Vector2(0, 0)
 
 
 
@@ -158,10 +167,27 @@ func _ready():
 	back_turbines.play("rotate")
 
 
-func _process(_delta):
-	pass
+
+var celebrate_tween
+func celebrate():
+	# 播放音效 / 讓分數變大 / 發光 / 戴個皇冠
+	if celebrate_tween:
+		celebrate_tween.kill()
+
+	celebrate_tween = create_tween()
+	#celebrate_tween.tween_property(entire_env, 'scale', Vector2(1.03, 1.03), 1)
+	celebrate_tween.tween_property(self, 'view_center:y', 400, 3)\
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	#camera_to()
+	celebrate_tween.tween_property(score_board, 'position:y', -200, 1)
+	score_board.add_crown()
+
+
 
 func _physics_process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+
 	front_turbines.speed_scale *= DAMPING_FACTOR
 	back_turbines.speed_scale *= DAMPING_FACTOR
 
