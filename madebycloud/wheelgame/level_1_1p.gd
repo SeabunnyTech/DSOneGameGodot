@@ -2,7 +2,7 @@
 extends Node2D
 
 
-signal go_back_to_login
+signal leave_for_level(new_level_name)
 
 
 
@@ -63,7 +63,7 @@ func enter_scene():
 func leave_scene_for_restart():
 	circular_mask.tween_radius(0.0, 1.0, func():
 		reset()
-		go_back_to_login.emit()
+		leave_for_level.emit('welcome')
 	)
 
 

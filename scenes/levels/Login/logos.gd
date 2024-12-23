@@ -1,8 +1,9 @@
 extends Node2D
 
 # 轉場的信號
-signal go_welcome_scene
-signal go_select_scene(player_num: int)
+signal leave_for_level(new_scene_name)
+#signal go_welcome_scene
+#signal go_select_scene(player_num: int)
 
 
 var LState = DSOneLogo.State
@@ -117,7 +118,7 @@ func _interact(delta):
 	if PlayerManager.num_active_players() == 0:
 		lost_duration += delta
 		if lost_duration > lost_time_limit:
-			leave_scene_after_delay(func(): go_welcome_scene.emit(), 0)
+			leave_scene_after_delay(func(): leave_for_level.emit('welcome'), 0)
 	else:
 		lost_duration = 0
 
@@ -130,10 +131,12 @@ func _interact(delta):
 
 		if player2.state == PState.LOST:
 			# Go next scene with 1P
-			leave_scene_after_delay(func(): go_select_scene.emit(1))
+			Globals.intended_player_num = 1
+			leave_scene_after_delay(func(): leave_for_level.emit('select'))
 		elif logo2.state == LState.TRIGGERED:
 			# Go next scene with 2p
-			leave_scene_after_delay(func(): go_select_scene.emit(2))
+			Globals.intended_player_num = 2
+			leave_scene_after_delay(func(): leave_for_level.emit('select'))
 
 
 

@@ -1,6 +1,6 @@
 extends Node2D
 
-signal leave_for_level(level_idx)
+signal leave_for_level(new_level_name)
 
 
 @onready var level1_opt = $Level1
@@ -32,19 +32,13 @@ func enter_scene():
 
 
 func _ready():
-	level1_opt.all_player_ready.connect(func(): leave_scene(Levels.LEVEL1))
-	level2_opt.all_player_ready.connect(func(): leave_scene(Levels.LEVEL2))
-	player_waiter.player_lost_for_too_long.connect(func(): leave_scene(Levels.WELCOME))
+	level1_opt.all_player_ready.connect(func(): leave_scene('level1_tutorial'))
+	level2_opt.all_player_ready.connect(func(): leave_scene('level2_tutorial'))
+	player_waiter.player_lost_for_too_long.connect(func(): leave_scene('welcome'))
 
 
-enum Levels{
-	WELCOME,
-	LEVEL1,
-	LEVEL2,
-}
 
-
-func leave_scene(new_level: Levels):
+func leave_scene(new_level_name):
 	player_waiter.set_wait_for_player(false)
 	if tween:
 		tween.kill()
@@ -52,7 +46,7 @@ func leave_scene(new_level: Levels):
 	tween.tween_property(self, 'modulate:a', 0, 1)
 	tween.tween_callback(func():
 		reset()
-		leave_for_level.emit(new_level)
+		leave_for_level.emit(new_level_name)
 	)
 	
 

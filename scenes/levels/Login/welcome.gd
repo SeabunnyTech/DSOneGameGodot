@@ -1,7 +1,7 @@
 @tool
 extends Node2D
 
-signal go_next_scene
+signal leave_for_level(new_scene_name)
 
 @export var disabled = true
 
@@ -49,7 +49,7 @@ func leave_for_next_scene():
 	tween.finished.connect(
 		func():
 			reset()
-			go_next_scene.emit()
+			leave_for_level.emit('logos')
 	)
 
 

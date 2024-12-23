@@ -2,8 +2,7 @@
 extends Node2D
 
 
-signal go_back_to_login
-signal go_level1
+signal leave_for_level(new_scene_name)
 
 
 # 這個 level 的一些行為:
@@ -63,7 +62,7 @@ func enter_scene():
 func leave_scene_for_restart():
 	circular_mask.tween_radius(0.0, 1.0, func():
 		reset()
-		go_back_to_login.emit()
+		leave_for_level.emit('welcome')
 	)
 
 
@@ -236,7 +235,8 @@ func _proceed_to_game_start():
 		# 瞬間隱藏並切換到起始畫面同樣是只有一個 timeboard 的下一關
 		# 讓觀眾產生兩關連續的錯覺
 		reset()
-		go_level1.emit()
+		var new_level_name = 'level1_1p' if Globals.intended_player_num == 1 else 'level1_2p'
+		leave_for_level.emit(new_level_name)
 	)
 
 	
