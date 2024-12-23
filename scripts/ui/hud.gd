@@ -45,6 +45,20 @@ func _ready() -> void:
 
 	SignalBus.hud_ready.emit()
 
+func display_hud(num_players: int) -> void:
+	var containers = [player_one_container, player_two_container]
+	for i in range(containers.size()):
+		containers[i].visible = i < num_players
+	separator.visible = num_players == 2
+
+func display_minimap(num_players: int) -> void:
+	var minimaps = [player_one_minimap, player_two_minimap]
+	for i in range(minimaps.size()):
+		minimaps[i].visible = i < num_players
+		one_player_minimap_clip_zone.visible = i == 0
+		for clip_zone in two_players_minimap_clip_zones:
+			clip_zone.visible = i == 1
+
 func _update_timer_display(time: float) -> void:
 	# Format time to show one decimal place
 	player_one_timer.text = "%02d:%02d" % [int(time / 60), int(time) % 60]

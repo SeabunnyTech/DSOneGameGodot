@@ -49,25 +49,31 @@ func init(_player_id: int, num_players: int, river_index: int):
 	river_index = clampi(river_index, 0, river_scenes.size() - 1)
 	
 	river_scene = river_scenes[river_index].instantiate()
+
+	_connect_river_signals()
+	_setup_river_scene(num_players)
+	_setup_avatar(_player_id, num_players)
+	add_child(river_scene)
+
+func _connect_river_signals():
 	river_scene.spawn_area_scored.connect(_on_spawn_area_scored)
 	river_scene.spawn_area_scoring.connect(_on_spawn_area_scoring)
 	river_scene.spawn_positions_ready.connect(_on_spawn_area_positions)
 	river_scene.finish_line_passed.connect(finish_line_passed.emit)
 	river_scene.checkpoint_passed.connect(_on_checkpoint_passed)
+
+func _setup_river_scene(num_players: int):
 	# 根據 player_index 設定 scale (0 為單人模式，1,2 為雙人模式)
 	var scale_value = 0.5 if num_players == 2 else 1.0 
 	river_scene.scale = Vector2(scale_value, scale_value)
 	river_scene.position = Vector2.ZERO
 
+func _setup_avatar(_player_id: int, num_players: int):
 	if num_players == 2:
-		avatar_init_positions = Vector2(1045, 350)
-
-	avatar.init(PlayerManager.current_players[_player_id], avatar_init_positions)
+		avatar_init_positions = Vector2(1045, 250)
 	
-	PlayerManager.current_players[0].set_attractor(avatar.position + self.position, 100)
-	PlayerManager.current_players[0].index = _player_id
-
-	add_child(river_scene)
+	avatar.init(PlayerManager.current_players[_player_id], avatar_init_positions)
+	PlayerManager.current_players[_player_id].index = _player_id
 
 func get_color_at_position(avatar_pos: Vector2) -> Color:
 	return river_scene.get_normal_at_position(avatar_pos)
@@ -82,7 +88,7 @@ func is_camera_in_map(_camera_position: Vector2, _screen_center: Vector2, _camer
 	return river_scene.is_camera_in_map(_camera_position, _screen_center, _camera_zoom_level)
 
 func avatar_in_river_position(_screen_center: Vector2, _camera_position: Vector2, _camera_scale: float, _avatar_target_position: Vector2) -> Vector2:
-	var avatar_river_pos = _camera_position + (_avatar_target_position - _screen_center - self.position) / _camera_scale
+	var avatar_river_pos = _camera_position + (_avatar_target_position - _screen_center) / _camera_scale
 	return avatar_river_pos
 
 func enable_checkpoint():
@@ -95,11 +101,15 @@ func init_player():
 	var radii: Array[float] = [18.0, 15.0, 12.0]
 	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	PlayerManager.current_players[0].set_radii(radii)
+	PlayerManager.current_players[1].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[1].set_radii(radii)
 
 func restore_player_size():
 	var radii: Array[float] = [40, 35, 30]
 	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	PlayerManager.current_players[0].set_radii(radii)
+	PlayerManager.current_players[1].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[1].set_radii(radii)
 
 func show_avatar():
 	is_playable = true
@@ -118,7 +128,6 @@ func end_tutorial():
 func start_game():
 	is_playable = true
 	enable_checkpoint()
-	DebugMessage.info("start_game")
 	avatar.show()
 
 func reset():
@@ -203,6 +212,7 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		camera_zoom_level,
 		new_desired_position)
 	var river_normal = get_color_at_position(avatar_in_river_position)
+	DebugMessage.info('avatar_in_river_position: %s' % avatar_in_river_position)
 	
 	if river_normal.b > 0.05: # 確保在河道內
 		var pos_x = lerp(avatar.position.x, new_desired_position.x, river_normal.b * delta * follow_speed)

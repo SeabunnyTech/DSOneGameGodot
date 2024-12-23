@@ -7,9 +7,11 @@ var level_res_paths = {
 	"logos"		:	"res://scenes/levels/Login/logos.tscn",
 	"select"		:	"res://scenes/levels/Login/select.tscn",
 	"level1_tutorial"	:	"res://madebycloud/wheelgame/level1_1p_tutorial.tscn",
-	"level1_1p"	:	"res://madebycloud/wheelgame/level1_1p.tscn",
+	"level1_1p"	:	"res://mad1ebycloud/wheelgame/level1_1p.tscn",
 	"level1_2p"	:	'res://madebycloud/wheelgame/level1_2p.tscn',
+	"level2_tutorial"	:	"res://scenes/levels/level2/level2_tutorial.tscn",
 	"level2_1p"	:	"res://scenes/levels/level2/level2_1p.tscn",
+	"level2_2p"	:	"res://scenes/levels/level2/level2_2p.tscn",
 }
 
 var level_objs = {}

@@ -1,6 +1,6 @@
 extends Node2D
 
-signal go_back_to_login
+signal leave_for_level(new_level_name)
 
 # ========= Old HUD =========
 @onready var hud = $HUD
@@ -14,15 +14,15 @@ signal go_back_to_login
 @export var victory_music: AudioStream
 
 @export var screen_center = Vector2(1920.0/2, 2160.0/2)
-@export var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
+@export var camera_positions = [Vector2(1920, 1080), Vector2(1920, 1080)]
 @export var camera_velocities = [0.0, 0.0]  # 相機當前速度
 
 @export var camera_zoom_level = 0.65
 @export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
-@export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
+@export var camera_smoothing = 0.8    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
-var camera_enabled = [false, false]
+var camera_enabled = false
 
 @onready var guide_message = $Title
 @onready var circular_mask = $CircularMask
@@ -34,6 +34,7 @@ var river_scene_size = Vector2.ZERO
 var reversed_spawn_positions: Array[float] = []
 var scoring_in_progress = false
 var current_scoring_index = 0
+var random_river_index = 0
 
 var game_started = false
 
@@ -45,27 +46,40 @@ func reset():
 
 	# 隱藏關卡本身
 	visible = false
-	modulate.a = 0
 
 	# 介紹用的訊息與遮罩
 	guide_message.modulate.a = 0
-	circular_mask.alpha = 1.0
+	circular_mask.alpha = 0.0
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
 
 	# 遊戲本體
 	river_game_1.reset()
 	river_game_2.reset()
+	
 	# time_board.reset()
 	# time_board.modulate.a = 0
 	# time_board.size = Vector2(3840, 2160)
+	score = {0: 0, 1: 0}
+
 	game_started = false
 	camera_enabled = false
 	camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
 
-
 func enter_scene():
 	visible = true
-	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
+	game_started = true	
+	camera_enabled = true
+
+	num_players = Globals.intended_player_num
+
+	for i in len(river_games):
+		river_games[i].init(i, num_players, random_river_index)
+		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
+		river_games[i].start_game()
+		river_scene_size = river_games[i].get_river_scene_size()
+
+	TimerManager.start_game_timer(30)
+	GlobalAudioPlayer.play_music(game_music)	
 
 var tween
 func leave_scene_for_restart():
@@ -76,28 +90,127 @@ func leave_scene_for_restart():
 	tween.tween_interval(1.5)
 	tween.tween_callback(func():
 		reset()
-		go_back_to_login.emit()
+		leave_for_level.emit('welcome')
 	)
+
+var game_stop_tween
+func _game_timeout():
+	
+	game_started = false
+	camera_enabled = false
+	
+	$long_whistle.play()
+	
+	TimerManager.stop_timer(TimerManager.TimerType.GAME)
+	GlobalAudioPlayer.stop()
+
+	GlobalAudioPlayer.play_music(victory_music)
+	
+	river_game_1.stop_avatar()
+	river_game_2.stop_avatar()
+	river_game_1.timeout_avatar()
+	river_game_2.timeout_avatar()
+
+	# 延遲後退相機畫面
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+
+	game_stop_tween.tween_callback(func():
+		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.0, 4)
+		river_game_2.camera_to(screen_center, Vector2(1920, 1080), 1.0, 4)
+	)
+
+	game_stop_tween.tween_interval(7.5)
+	game_stop_tween.tween_callback(func():
+		hud.hide()
+		GlobalAudioPlayer.stop()
+		river_game_1.restore_player_size()
+		river_game_2.restore_player_size()
+		river_game_1.reset()
+		river_game_2.reset()
+		_congrats_and_return()
+	)
+
+func _congrats_and_return():
+
+	var end_duration = 3
+	var thanks_duration = 3
+	var wait_duration = 2
+
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	tween.tween_interval(wait_duration)
+	_show_text('congrats', end_duration, 1)
+	_show_text('thanks')
+
+	if game_stop_tween:
+		game_stop_tween.kill()
+	game_stop_tween = create_tween()
+	game_stop_tween.tween_interval(wait_duration)
+	game_stop_tween.tween_property(circular_mask, 'alpha', 1, 1)
+	game_stop_tween.tween_interval(end_duration)
+	game_stop_tween.tween_interval(thanks_duration)
+	game_stop_tween.tween_callback(leave_scene_for_restart)
+
+func _show_text(text_key, duration=2, trans_duration=1):
+	tween.tween_callback(func():_undate_guide_text(text_key))
+	tween.tween_property(guide_message, 'modulate:a', 1, trans_duration)
+	tween.tween_interval(duration)
+	tween.tween_property(guide_message, 'modulate:a', 0, trans_duration)
+	return tween
+
+func _undate_guide_text(new_text_state):
+	var titles = {
+		'congrats': '挑戰完成!',
+		'thanks': '感謝你們的參與'
+	}
+
+	var guides = {
+		'congrats': '小水滴在美麗的大甲溪流域產生 ' + str(score[0]) + ' + ' + str(score[1]) + ' 個電仔!',
+		'thanks': '電幻 1 號所祝您身體健康!'
+	}
+
+	var guide_text_positions = {
+		'congrats': Vector2(960, 920),
+		'thanks': Vector2(960, 920),
+	}
+
+	$Title.position = guide_text_positions[new_text_state]
+	$Title.text = titles[new_text_state]
+	$Title/Label.text = guides[new_text_state]
 
 
 func _ready():
-	var random_river_index = randi() % num_rivers_scenes
+
+	reset()
+
+	random_river_index = randi() % num_rivers_scenes
 	
-	for i in range(num_players):
-		hud.update_minimap(random_river_index)
+	num_players = Globals.intended_player_num
 
-		river_games[i].init(i, num_players, random_river_index)
-		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
+	for i in len(river_games):
 		river_games[i].finish_line_passed.connect(_on_finish_line_passed)
-		# river_games[i].spawn_area_scored.connect(_on_spawn_area_scored)
-		# river_games[i].spawn_area_scoring.connect(_on_spawn_area_scoring)
+		river_games[i].checkpoint_passed.connect(_on_checkpoint_passed)
 
-		river_scene_size = river_games[i].get_river_scene_size()
+	camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
+	score = {0: 0, 1: 0}
 
-		AudioManager.play_level_music()
-		
+	hud.update_score_display(score)
+	hud.update_minimap(random_river_index)
+	hud.display_hud(num_players)
+	hud.display_minimap(num_players)
+	hud.show()
+
+	TimerManager.game_time_expired.connect(_game_timeout)
+
+	# 測試的時候才會成為 main scene
+	if get_tree().current_scene == self:
+		enter_scene()
+
 func _process(delta: float) -> void:
-	if game_started:	
+	if camera_enabled:	
 		_update_cameras(delta)
 		_update_minimap()
 
@@ -112,7 +225,7 @@ func _update_minimap() -> void:
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
 
-	for i in range(num_players):
+	for i in len(river_games):
 		var river_game = river_games[i]
 		var avatar_pos = river_game.get_avatar_position()
 
@@ -146,14 +259,17 @@ func _update_cameras(delta: float) -> void:
 			screen_center,
 			camera_positions[i],
 			camera_zoom_level,  # 縮放級別
-			0.2  # 速度越快，duration 越短
+			0.15  # 速度越快，duration 越短
 		)
 
-func _on_finish_line_passed(player_id: int):
-	game_started = false
+func _on_finish_line_passed(_player_id: int):
+	_game_timeout()
 
-func _on_game_scoring(avatar: Node2D):
-	pass
+func _on_checkpoint_passed(player_id: int, count: int):
+	DebugMessage.info('player_id: %d, count: %d' % [player_id, count])
+	if game_started:
+		score[player_id] += count
+		hud.update_score_display(score)
 
 # func _on_avatar_merged(avatar: Node2D):
 # 	avatar_is_separated[avatar.player_id] = false

@@ -1,7 +1,6 @@
 extends Node2D
 
-signal go_back_to_login
-signal go_level2
+signal leave_for_level(new_scene_name)
 
 # ========= Old HUD =========
 @onready var hud = $HUD
@@ -25,7 +24,7 @@ signal go_level2
 
 @export var camera_zoom_level = 1.2
 @export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
-@export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
+@export var camera_smoothing = 0.8    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
 var camera_enabled = false
@@ -72,9 +71,11 @@ func reset():
 	player_waiter.reset()
 
 func enter_scene():
-	num_players = Globals.intended_player_num
+	river_game_tutorial.init(0, 1, 1) # _player_id: int, num_players: int, river_index: int
+	river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
+	river_scene_size = river_game_tutorial.get_river_scene_size()
+
 	visible = true
-	river_game_tutorial.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
 	_begin_tutorial()
 
 func leave_scene_for_restart():
@@ -85,7 +86,7 @@ func leave_scene_for_restart():
 	tween.tween_interval(1.5)
 	tween.tween_callback(func():
 		reset()
-		go_back_to_login.emit()
+		leave_for_level.emit('welcome')
 	)
 
 var tween
@@ -234,6 +235,8 @@ func _continue_tutorial_2():
 
 
 func _skip_tutorial(_player):
+	tutorial_skipped = true
+
 	if tween:
 		tween.kill()
 
@@ -276,31 +279,10 @@ func _proceed_to_game_start():
 
 	tween.tween_interval(0.5)
 
-
-	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
-	tween.tween_property(self, 'modulate:a', 0, 1)
-
 	tween.tween_callback(func():
 		reset()
-		go_level2.emit()
-
-	
-		# var random_river_index = randi() % num_rivers_scenes
-		# game_started = true	
-		# camera_position = Vector2(1920, 1080)
-		# score = {0: 0, 1: 0}
-		# hud.update_score_display(score)
-		# hud.update_minimap(random_river_index)
-		# hud.show()
-
-		# river_game_tutorial.init(0, num_players, random_river_index)
-		# river_game_tutorial.camera_to(screen_center, camera_position, 1)
-		# river_game_tutorial.start_game()
-
-		# camera_enabled = true
-
-		# TimerManager.start_game_timer(30)
-		# GlobalAudioPlayer.play_music(game_music)
+		var new_level_name = 'level2_1p' if Globals.intended_player_num == 1 else 'level2_2p'
+		leave_for_level.emit(new_level_name)
 	)
 
 
@@ -322,7 +304,7 @@ func _undate_guide_text(new_text_state):
 
 	var guides = {
 		'begin': '在大甲溪流域中\n一滴水可以發很多次電!',
-		'control': '擺動你手上的控制器\n吸附到上方閃爍的水滴就能控制方向!',
+		'control': '左邊玩家請擺動你手上的控制器\n吸附到上方閃爍的水滴就能控制方向!',
 		'obstacle': '遇到障礙物要小心閃避\n不然會減慢水滴的速度!',
 		'speed': '水滴移動越快\n經過電廠時就能產生越多電仔喔!',
 		'downstream': '越往下游水流越快\n但也要更小心控制方向!',
@@ -364,11 +346,6 @@ func _show_text(text_key, duration=2, trans_duration=1):
 func _ready():
 	
 	reset()
-	num_players = Globals.intended_player_num
-	river_game_tutorial.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
-
-	river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
-	river_scene_size = river_game_tutorial.get_river_scene_size()
 
 	player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
 

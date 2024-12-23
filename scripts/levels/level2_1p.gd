@@ -1,6 +1,6 @@
 extends Node2D
 
-signal go_back_to_login
+signal leave_for_level(new_scene_name)
 
 # ========= Old HUD =========
 @onready var hud = $HUD
@@ -21,7 +21,7 @@ signal go_back_to_login
 
 @export var camera_zoom_level = 1.2
 @export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
-@export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
+@export var camera_smoothing = 0.8    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
 var camera_enabled = false
@@ -45,7 +45,6 @@ func reset():
 
 	# 隱藏關卡本身
 	visible = false
-	modulate.a = 0
 
 	# 介紹用的訊息與遮罩
 	guide_message.modulate.a = 0
@@ -58,26 +57,22 @@ func reset():
 	# time_board.reset()
 	# time_board.modulate.a = 0
 	# time_board.size = Vector2(3840, 2160)
+	score = {0: 0, 1: 0}
+
 	game_started = false
 	camera_enabled = false
 	camera_position = Vector2(1920, 1080)
 
 func enter_scene():
 	visible = true
+	game_started = true	
 
 	var random_river_index = randi() % num_rivers_scenes
-	game_started = true	
-	camera_position = Vector2(1920, 1080)
-	score = {0: 0, 1: 0}
-	hud.update_score_display(score)
-	hud.update_minimap(random_river_index)
-	hud.show()
-
-	river_game_1.init(0, num_players, random_river_index)
-	river_game_1.camera_to(screen_center, camera_position, 1)
+	
+	river_game_1.init(0, num_players, random_river_index) # 初始化 river_2 給 tutorial 用
+	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
 	river_game_1.start_game()
 
-	circular_mask.alpha = 0.0
 	camera_enabled = true
 
 	TimerManager.start_game_timer(30)
@@ -91,7 +86,7 @@ func leave_scene_for_restart():
 	tween.tween_interval(1.5)
 	tween.tween_callback(func():
 		reset()
-		go_back_to_login.emit()
+		leave_for_level.emit('welcome')
 	)
 
 var game_stop_tween
@@ -190,14 +185,23 @@ func _undate_guide_text(new_text_state):
 func _ready():
 	
 	reset()
-	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
+	
+	num_players = Globals.intended_player_num
 
+	var random_river_index = randi() % num_rivers_scenes
+	
+	river_game_1.init(0, num_players, random_river_index) # 初始化 river_2 給 tutorial 用
 	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
 	river_game_1.finish_line_passed.connect(_on_finish_line_passed)
-	# river_game_1.spawn_area_scored.connect(_on_spawn_area_scored)
-	# river_game_1.spawn_area_scoring.connect(_on_spawn_area_scoring)
 	river_game_1.checkpoint_passed.connect(_on_checkpoint_passed)
 	river_scene_size = river_game_1.get_river_scene_size()
+
+	camera_position = Vector2(1920, 1080)
+	score = {0: 0, 1: 0}
+
+	hud.update_score_display(score)
+	hud.update_minimap(random_river_index)
+	hud.show()
 
 	TimerManager.game_time_expired.connect(_game_timeout)
 

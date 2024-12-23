@@ -6,8 +6,8 @@ signal desired_position_changed(node: Node2D, new_desired_position: Vector2, del
 
 @export var player_id: int = 0
 @export var follow_distance: float = 20.0
-@export var merge_distance: float = 30.0
-@export var separation_distance: float = 150.0
+@export var merge_distance: float = 50.0
+@export var separation_distance: float = 300.0
 
 @onready var metaball = $Metaball
 @onready var inertia_follower = $Metaball/InertiaFollower
@@ -15,10 +15,6 @@ signal desired_position_changed(node: Node2D, new_desired_position: Vector2, del
 var is_timeout: bool = false
 var is_merged: bool = false
 var target_player: Node2D = null
-# var init_position: Vector2
-
-var last_position: Vector2
-var current_velocity: Vector2
 
 var waiting_tween: Tween
 var arrow_tween: Tween
@@ -38,28 +34,26 @@ func _process(_delta):
 	metaball.update_ball_positions(ball_positions)
 
 func _physics_process(_delta):
+	var scene_node_pos = get_parent().position
+	var player_position = target_player.position - scene_node_pos
 	if !is_merged:
-		if target_player and position.distance_to(target_player.position) < merge_distance:
+		if target_player and position.distance_to(player_position) < merge_distance:
 			is_merged = true
 			merge_with_player()
 		return
 		
 	if target_player:
-		var distance = position.distance_to(target_player.position)
+		var distance = position.distance_to(player_position)
 		if distance > separation_distance:
 			is_merged = false
 			separate_from_player()
 			return
 			
 		# 跟隨玩家，但保持在河道內
-		var direction = (target_player.position - position).normalized()
-		var desired_position = lerp(position, target_player.position, 0.8) - direction * follow_distance
+		var direction = (player_position - position).normalized()
+		var desired_position = lerp(position, player_position, 0.75) - direction * follow_distance
 		
 		desired_position_changed.emit(self, desired_position, _delta)
-
-	if last_position:
-		current_velocity = (position - last_position) / _delta
-	last_position = position
 
 func init(player: Node2D, init_pos: Vector2):
 	player_id = player.index
@@ -75,7 +69,6 @@ func timeout_hide():
 	is_timeout = true
 
 func merge_with_player():
-	DebugMessage.info("merge_with_player")
 	$Arrow.hide()
 	self.hide()
 	set_color(base_color)
@@ -84,7 +77,6 @@ func merge_with_player():
 	stop_waiting_animation()
 
 func separate_from_player():
-	DebugMessage.info("separate_from_player")
 	if is_timeout:
 		return
 
