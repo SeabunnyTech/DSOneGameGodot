@@ -195,8 +195,8 @@ func _on_game_scoring(avatar: Node2D):
 
 func _on_avatar_merged(avatar: Node2D):
 	avatar_is_separated = false
-	avatar_merged.emit(player_id)
-	PlayerManager.current_players[0].reset_attractor()
+	if is_playable:
+		avatar_merged.emit(player_id)
 
 func _on_avatar_separated(avatar: Node2D):
 	avatar_is_separated = true
@@ -212,7 +212,7 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		camera_zoom_level,
 		new_desired_position)
 	var river_normal = get_color_at_position(avatar_in_river_position)
-	DebugMessage.info('avatar_in_river_position: %s' % avatar_in_river_position)
+	DebugMessage.info('avatar_in_river_position: %s' % river_normal)
 	
 	if river_normal.b > 0.05: # 確保在河道內
 		var pos_x = lerp(avatar.position.x, new_desired_position.x, river_normal.b * delta * follow_speed)
