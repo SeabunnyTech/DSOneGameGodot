@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bnsdwdn1obqyu"]
+[gd_scene load_steps=7 format=3 uid="uid://bnsdwdn1obqyu"]
 
 [ext_resource type="Script" path="res://scripts/characters/water_avatar.gd" id="1_1rxx5"]
 [ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="1_c23hg"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="3_hatqj"]
+[ext_resource type="Texture2D" uid="uid://c2kkxq6s3uhi5" path="res://assets/images/drawings/arrow.svg" id="4_tb78x"]
+[ext_resource type="Texture2D" uid="uid://ccjj5f5di63eu" path="res://assets/images/drawings/arrow_text.png" id="5_tw1me"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_683io"]
 
@@ -13,7 +15,7 @@ script = ExtResource("1_1rxx5")
 
 [node name="Metaball" parent="." instance=ExtResource("1_c23hg")]
 ball_count = 2
-ball_radii = Array[float]([35.0, 20.0])
+ball_radii = Array[float]([25.0, 20.0])
 
 [node name="InertiaFollower" type="Node2D" parent="Metaball"]
 script = ExtResource("3_hatqj")
@@ -22,3 +24,23 @@ z = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_683io")
+
+[node name="Arrow" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(152, 0)
+rotation = 0.261799
+scale = Vector2(0.641129, 0.641129)
+texture = ExtResource("4_tb78x")
+
+[node name="ArrowText2" type="Sprite2D" parent="Arrow"]
+modulate = Color(0.7, 0.7, 0.7, 0.411765)
+position = Vector2(-4.04465, -105.491)
+rotation = -0.261799
+scale = Vector2(1.00157, 1.00157)
+texture = ExtResource("5_tw1me")
+
+[node name="ArrowText" type="Sprite2D" parent="Arrow"]
+position = Vector2(-10.1792, -110.306)
+rotation = -0.261799
+scale = Vector2(1.00157, 1.00157)
+texture = ExtResource("5_tw1me")

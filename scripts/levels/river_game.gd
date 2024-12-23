@@ -19,7 +19,6 @@ var current_camera_velocity: float = 0.0
 var player_id: int = 0
 
 var is_playable = false
-var checkpoint_enabled = false
 
 # 存此次遊戲所隨機選擇的 river scene
 var river_scene: Node2D
@@ -87,7 +86,10 @@ func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, 
 	return avatar_river_pos
 
 func enable_checkpoint():
-	checkpoint_enabled = true
+	river_scene.enable_checkpoint()
+
+func disable_checkpoint():
+	river_scene.disable_checkpoint()
 
 func init_player():
 	var radii: Array[float] = [18.0, 15.0, 12.0]
@@ -103,26 +105,23 @@ func show_avatar():
 	is_playable = true
 	avatar.show()
 	
-func hide_avatar():
-	avatar.hide()
+func timeout_avatar():
+	avatar.timeout_hide()
 	
 func stop_avatar():
 	is_playable = false
 
 func end_tutorial():
-	checkpoint_enabled = false
+	river_scene.disable_checkpoint()
 	avatar.hide()
 
 func start_game():
 	is_playable = true
-	checkpoint_enabled = true
+	enable_checkpoint()
 	avatar.show()
 
 func reset():
-	avatar.hide()
-	
 	is_playable = false
-	checkpoint_enabled = false
 
 	if river_scene:
 		river_scene.queue_free()
@@ -179,8 +178,7 @@ func _on_spawn_area_scored(spawn_id: int):
 	spawn_area_scored.emit(player_id, spawn_id)
 
 func _on_checkpoint_passed(_player_id: int, count: int):
-	if checkpoint_enabled:
-		checkpoint_passed.emit(_player_id, count)
+	checkpoint_passed.emit(_player_id, count)
 
 func _on_game_scoring(avatar: Node2D):
 	pass

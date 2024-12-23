@@ -12,6 +12,7 @@ signal desired_position_changed(node: Node2D, new_desired_position: Vector2, del
 @onready var metaball = $Metaball
 @onready var inertia_follower = $Metaball/InertiaFollower
 
+var is_timeout: bool = false
 var is_merged: bool = false
 var target_player: Node2D = null
 # var init_position: Vector2
@@ -20,14 +21,15 @@ var last_position: Vector2
 var current_velocity: Vector2
 
 var waiting_tween: Tween
+var arrow_tween: Tween
 
 var base_color = Color.from_hsv(0.50, 0.6, 1, 1)
 var waiting_color = Color.from_hsv(0.48, 0.6, 0.3, 1)
 
 func _ready():
 	# 開始閃爍動畫
-	set_color(Color.from_hsv(0.50, 0.6, 1, 1))
 	start_waiting_animation()
+	start_arrow_animation()
 
 func _process(_delta):
 	# 2 顆 metaball
@@ -61,18 +63,34 @@ func init(player: Node2D, init_pos: Vector2):
 	player_id = player.index
 	target_player = player
 	position = init_pos
+	is_timeout = false
+
+func reset():
+	is_timeout = false
+
+func timeout_hide():
+	self.hide()
+	is_timeout = true
 
 func merge_with_player():
+	$Arrow.hide()
+	self.hide()
 	set_color(base_color)
 	is_merged = true
 	merged_with_player.emit(self)
 	stop_waiting_animation()
 
 func separate_from_player():
+	if is_timeout:
+		return
+
+	$Arrow.show()
+	self.show()
 	set_color(waiting_color)
 	is_merged = false
 	separated_from_player.emit(self)
 	start_waiting_animation()
+	start_arrow_animation()
 
 func start_waiting_animation():
 	set_color(waiting_color)
@@ -83,15 +101,20 @@ func start_waiting_animation():
 	waiting_tween = create_tween()
 	waiting_tween.set_loops() # 設置無限循環
 
+	# 只對 metaball 進行動畫
 	waiting_tween.tween_method(
 		func(alpha: float): 
-			set_color(Color(base_color, alpha)),
+			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
+			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
+			metaball.update_ball_colors(vec4_colors),
 		1.0, 0.3, 0.5
 	)
 	# 再淡入
 	waiting_tween.tween_method(
 		func(alpha: float): 
-			set_color(Color(base_color, alpha)),
+			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
+			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
+			metaball.update_ball_colors(vec4_colors),
 		0.3, 1.0, 0.5
 	)
 
@@ -102,13 +125,41 @@ func stop_waiting_animation():
 	waiting_tween = create_tween()
 	waiting_tween.tween_method(
 		func(alpha: float): 
-			set_color(Color(base_color, alpha)),
+			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
+			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
+			metaball.update_ball_colors(vec4_colors),
 		0.3, 1.0, 0.5
 	)
 
+func start_arrow_animation():
+	if arrow_tween:
+		arrow_tween.kill()
+	
+	arrow_tween = create_tween().set_loops()
+	
+	# Initial position and scale
+	var base_pos = Vector2(125, 0)
+	var base_scale = Vector2(0.641129, 0.641129)
+	
+	# Bounce up
+	arrow_tween.tween_property($Arrow, "position", 
+		base_pos + Vector2(0, -10), 0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	arrow_tween.parallel().tween_property($Arrow, "scale",
+		base_scale * 1.2, 0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	# Bounce down
+	arrow_tween.tween_property($Arrow, "position",
+		base_pos, 0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	arrow_tween.parallel().tween_property($Arrow, "scale",
+		base_scale, 0.5
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+
 func set_color(target_color: Color):
-	var col = Color(target_color)
-	modulate = col
-	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
+	var vec4_col = Vector4(target_color.r, target_color.g, target_color.b, target_color.a)
 	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
 	metaball.update_ball_colors(vec4_colors)
