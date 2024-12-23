@@ -1,81 +1,51 @@
 extends Node2D
 
 
-# subscenes
-@onready var welcome_subscene = $WelcomeSubscene
-@onready var logo_subscene = $LogoSubscene
-@onready var select_subscene = $SelectSubscene
+# 使用一個 dict 避免需要新增變數名稱
+var level_res_paths = {
+	"welcome"	:	"res://scenes/levels/Login/welcome.tscn",
+	"logos"		:	"res://scenes/levels/Login/logos.tscn",
+	"select"		:	"res://scenes/levels/Login/select.tscn",
+	"level1_tutorial"	:	"res://madebycloud/wheelgame/level1_1p_tutorial.tscn",
+	"level1_1p"	:	"res://madebycloud/wheelgame/level1_1p.tscn",
+	"level1_2p"	:	'res://madebycloud/wheelgame/level1_2p.tscn',
+	"level2_1p"	:	"res://scenes/levels/level2/level2_1p.tscn",
+}
 
-@onready var level1_tutorial = $level1_tutorial
-@onready var level1_1p = $Level1_1p
-@onready var level1_2p = $Level1_2p
-@onready var level2_1p = $Level2_1p
+var level_objs = {}
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# 這裡假設 subscene 都會實作 reset()
 	# 而且 reset 完以後會消失, 就可以執行 enter_scene 進場
 	DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
-	var subscenes = [
-		welcome_subscene,
-		logo_subscene,
-		select_subscene,
-		level1_tutorial,
-		level1_1p,
-		level1_2p,
-		level2_1p,
-	]
 
-	for subscene in subscenes:
-		subscene.reset()
+	# 先 preload 所有 level
+	for level_name in level_res_paths:
+		level_objs[level_name] = load(level_res_paths[level_name])
 
-	_connect_transitions()
-
-	welcome_subscene.enter_scene()
+	enter_scene("welcome")
 
 
-func _connect_transitions():
-	# 連接 welcome 到 logo scene
-	welcome_subscene.go_next_scene.connect(logo_subscene.enter_scene)
 
-	# 從 LogoSubscene 倒退回 Welcome
-	logo_subscene.go_welcome_scene.connect(welcome_subscene.enter_scene)
-	
-	logo_subscene.go_select_scene.connect(func(player_num):
-		Globals.intended_player_num = player_num
-		select_subscene.enter_scene()
-		#GameState.jump_to_scene_and_play(GameState.GameScene.LEVEL1)
-	)
-	
-	level1_tutorial.go_level1.connect(func():
-		match Globals.intended_player_num:
-			1:
-				level1_1p.enter_scene()
-			2:
-				level1_2p.enter_scene()
+func enter_scene(scene_name):
+	var new_scene = level_objs[scene_name].instantiate()
+
+	# 必須先 add_child 才能觸發 on ready
+	add_child(new_scene)
+
+	# 相容先前的做法: 先 reset 再 enter_scene()
+	print('entering ', scene_name)
+	new_scene.reset()
+	new_scene.enter_scene()
+
+	# 連接轉換信號
+	new_scene.leave_for_level.connect(func(new_level_name):
+		enter_scene(new_level_name)
+		new_scene.queue_free()
 	)
 
-	select_subscene.leave_for_level.connect(
-		func(level):
-			match level:
-				0:
-					welcome_subscene.enter_scene()
-				1:
-					level1_tutorial.enter_scene()
-				2:
-					level2_1p.enter_scene()
-	)
-
-	for level in [level1_tutorial, level1_1p, level1_2p, level2_1p]:
-		level.go_back_to_login.connect(func():
-			welcome_subscene.enter_scene()
-		)
-
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 
 # 這是在需要退出這整個子場景的情況下使用
