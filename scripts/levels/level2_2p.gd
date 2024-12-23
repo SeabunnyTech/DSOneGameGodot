@@ -1,40 +1,83 @@
 extends Node2D
 
-# =============================
-# TODO: level2_1p 和 level2_2p gdscript 可以合併（也許
+signal go_back_to_login
+
+# ========= Old HUD =========
+@onready var hud = $HUD
+# ===========================
 
 @export var num_players = 2
 @export var num_rivers_scenes = 3
+
+@export var game_music: AudioStream
+@export var tutorial_music: AudioStream
+@export var victory_music: AudioStream
+
+@export var screen_center = Vector2(1920.0/2, 2160.0/2)
+@export var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
+@export var camera_velocities = [0.0, 0.0]  # 相機當前速度
 
 @export var camera_zoom_level = 0.65
 @export var camera_y_threshold = 0.35  # 螢幕 35% 以下時開始加速
 @export var camera_smoothing = 0.1    # 相機平滑度 (0-1)
 @export var min_camera_speed = 10.0
 @export var max_camera_speed = 800.0
+var camera_enabled = [false, false]
 
-@export var screen_center = Vector2(1920.0/2, 2160.0/2)
-@export var camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
-@export var camera_velocities = [0.0, 0.0]  # 相機當前速度
-
-@onready var hud = $HUD
-
+@onready var guide_message = $Title
+@onready var circular_mask = $CircularMask
 @onready var river_game_1 = $GameScene/RiverGamePlayerOne
 @onready var river_game_2 = $GameScene/RiverGamePlayerTwo
 @onready var river_games = [river_game_1, river_game_2]
 var river_scene_size = Vector2.ZERO
 
-# @onready var avatar_1 = $WaterAvatar
-# @onready var avatar_2 = $WaterAvatar2
-# @onready var avatars = [avatar_1, avatar_2]
-# @export var avatar_init_positions = [Vector2(1045, 460.0/2), Vector2(2965, 460.0/2)]
-# var avatar_is_stuck = [false, false]
-# var avatar_is_separated = [false, false]
-
 var reversed_spawn_positions: Array[float] = []
 var scoring_in_progress = false
-
 var current_scoring_index = 0
-var game_mode = true # 遊戲模式，true 為遊戲中，false 為遊戲結束準備計分
+
+var game_started = false
+
+var score = {0: 0, 1: 0}
+
+# reset 非常重要, 定義了動畫能夠順利執行的起始條件
+# 在編輯器預覽的設定和 reset 後的設定可以不一樣
+func reset():
+
+	# 隱藏關卡本身
+	visible = false
+	modulate.a = 0
+
+	# 介紹用的訊息與遮罩
+	guide_message.modulate.a = 0
+	circular_mask.alpha = 1.0
+	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
+
+	# 遊戲本體
+	river_game_1.reset()
+	river_game_2.reset()
+	# time_board.reset()
+	# time_board.modulate.a = 0
+	# time_board.size = Vector2(3840, 2160)
+	game_started = false
+	camera_enabled = false
+	camera_positions = [Vector2(1920, 2160), Vector2(1920, 2160)]
+
+
+func enter_scene():
+	visible = true
+	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
+
+var tween
+func leave_scene_for_restart():
+	if tween:
+		tween.kill()
+	tween = create_tween()
+	tween.tween_property(self, 'modulate:a', 0, 1)
+	tween.tween_interval(1.5)
+	tween.tween_callback(func():
+		reset()
+		go_back_to_login.emit()
+	)
 
 
 func _ready():
@@ -46,15 +89,15 @@ func _ready():
 		river_games[i].init(i, num_players, random_river_index)
 		river_games[i].camera_to(screen_center, Vector2(1920, 2160), 0.5, 1)
 		river_games[i].finish_line_passed.connect(_on_finish_line_passed)
-		river_games[i].spawn_area_scored.connect(_on_spawn_area_scored)
-		river_games[i].spawn_area_scoring.connect(_on_spawn_area_scoring)
+		# river_games[i].spawn_area_scored.connect(_on_spawn_area_scored)
+		# river_games[i].spawn_area_scoring.connect(_on_spawn_area_scoring)
 
 		river_scene_size = river_games[i].get_river_scene_size()
 
 		AudioManager.play_level_music()
 		
 func _process(delta: float) -> void:
-	if game_mode:	
+	if game_started:	
 		_update_cameras(delta)
 		_update_minimap()
 
@@ -107,7 +150,7 @@ func _update_cameras(delta: float) -> void:
 		)
 
 func _on_finish_line_passed(player_id: int):
-	game_mode = false
+	game_started = false
 
 func _on_game_scoring(avatar: Node2D):
 	pass
@@ -156,43 +199,43 @@ func _on_game_scoring(avatar: Node2D):
 # ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
 
 
-func start_scoring_sequence(avatar: Node2D):
-	scoring_in_progress = true
-	current_scoring_index = 0
+# func start_scoring_sequence(avatar: Node2D):
+# 	scoring_in_progress = true
+# 	current_scoring_index = 0
 
-	move_to_next_scoring_position(avatar.player_id)
+# 	move_to_next_scoring_position(avatar.player_id)
 
-func move_to_next_scoring_position(player_id: int):
-	if current_scoring_index >= reversed_spawn_positions.size():
-		scoring_in_progress = false
-		return
+# func move_to_next_scoring_position(player_id: int):
+# 	if current_scoring_index >= reversed_spawn_positions.size():
+# 		scoring_in_progress = false
+# 		return
 		
-	var target_position = Vector2(
-		camera_positions[player_id].x,
-		reversed_spawn_positions[current_scoring_index]
-	)
-	var river_game = river_games[player_id]
+# 	var target_position = Vector2(
+# 		camera_positions[player_id].x,
+# 		reversed_spawn_positions[current_scoring_index]
+# 	)
+# 	var river_game = river_games[player_id]
 	
-	# 移動相機到指定位置
-	river_game.camera_to(
-		screen_center,
-		target_position,
-		camera_zoom_level,
-		1.0,
-		func(): _on_camera_reached_scoring_position(player_id)
-	)
+# 	# 移動相機到指定位置
+# 	river_game.camera_to(
+# 		screen_center,
+# 		target_position,
+# 		camera_zoom_level,
+# 		1.0,
+# 		func(): _on_camera_reached_scoring_position(player_id)
+# 	)
 
-func _on_camera_reached_scoring_position(player_id: int):
-	if not scoring_in_progress:
-		return
+# func _on_camera_reached_scoring_position(player_id: int):
+# 	if not scoring_in_progress:
+# 		return
 		
-	# 觸發當前位置的計分
-	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
-	river_games[player_id].trigger_spawn_area_scoring(spawn_id)
+# 	# 觸發當前位置的計分
+# 	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
+# 	river_games[player_id].trigger_spawn_area_scoring(spawn_id)
 
-func _on_spawn_area_scored(player_id: int, _spawn_id: int):
-	current_scoring_index += 1
-	move_to_next_scoring_position(player_id)
+# func _on_spawn_area_scored(player_id: int, _spawn_id: int):
+# 	current_scoring_index += 1
+# 	move_to_next_scoring_position(player_id)
 
-func _on_spawn_area_scoring(player_id: int, _spawn_id: int, count: int):
-	pass
+# func _on_spawn_area_scoring(player_id: int, _spawn_id: int, count: int):
+# 	pass

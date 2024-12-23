@@ -78,11 +78,11 @@ func get_river_scene_size() -> Vector2:
 func get_avatar_position() -> Vector2:
 	return avatar.position
 
-func is_camera_in_map(camera_position: Vector2, screen_center: Vector2, camera_zoom_level: float) -> bool:
-	return river_scene.is_camera_in_map(camera_position, screen_center, camera_zoom_level)
+func is_camera_in_map(_camera_position: Vector2, _screen_center: Vector2, _camera_zoom_level: float) -> bool:
+	return river_scene.is_camera_in_map(_camera_position, _screen_center, _camera_zoom_level)
 
-func avatar_in_river_position(screen_center: Vector2, camera_position: Vector2, camera_scale: float, avatar_target_position: Vector2) -> Vector2:
-	var avatar_river_pos = camera_position + (avatar_target_position - screen_center - self.position) / camera_scale
+func avatar_in_river_position(_screen_center: Vector2, _camera_position: Vector2, _camera_scale: float, _avatar_target_position: Vector2) -> Vector2:
+	var avatar_river_pos = _camera_position + (_avatar_target_position - _screen_center - self.position) / _camera_scale
 	return avatar_river_pos
 
 func enable_checkpoint():
@@ -118,6 +118,7 @@ func end_tutorial():
 func start_game():
 	is_playable = true
 	enable_checkpoint()
+	DebugMessage.info("start_game")
 	avatar.show()
 
 func reset():
@@ -203,8 +204,6 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		new_desired_position)
 	var river_normal = get_color_at_position(avatar_in_river_position)
 	
-	DebugMessage.info("river_normal.b * delta * 10: %s" % (river_normal.b * delta * follow_speed))
-	DebugMessage.info("current_camera_velocity: %s" % current_camera_velocity)
 	if river_normal.b > 0.05: # 確保在河道內
 		var pos_x = lerp(avatar.position.x, new_desired_position.x, river_normal.b * delta * follow_speed)
 		var pos_y = lerp(avatar.position.y, new_desired_position.y, 1 - current_camera_velocity/800.0)

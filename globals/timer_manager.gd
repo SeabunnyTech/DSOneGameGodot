@@ -69,7 +69,6 @@ func _on_tutorial_timer_timeout() -> void:
 
 func _on_game_timer_timeout() -> void:
 	timers[TimerType.GAME].stop()
-	DebugMessage.info("TIME")
 	game_time_updated.emit(0)
 	game_time_expired.emit()
 

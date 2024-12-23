@@ -6,8 +6,8 @@ signal desired_position_changed(node: Node2D, new_desired_position: Vector2, del
 
 @export var player_id: int = 0
 @export var follow_distance: float = 20.0
-@export var merge_distance: float = 50.0
-@export var separation_distance: float = 200.0
+@export var merge_distance: float = 30.0
+@export var separation_distance: float = 150.0
 
 @onready var metaball = $Metaball
 @onready var inertia_follower = $Metaball/InertiaFollower
@@ -40,12 +40,14 @@ func _process(_delta):
 func _physics_process(_delta):
 	if !is_merged:
 		if target_player and position.distance_to(target_player.position) < merge_distance:
+			is_merged = true
 			merge_with_player()
 		return
 		
 	if target_player:
 		var distance = position.distance_to(target_player.position)
 		if distance > separation_distance:
+			is_merged = false
 			separate_from_player()
 			return
 			
@@ -73,21 +75,23 @@ func timeout_hide():
 	is_timeout = true
 
 func merge_with_player():
+	DebugMessage.info("merge_with_player")
 	$Arrow.hide()
 	self.hide()
 	set_color(base_color)
-	is_merged = true
+	
 	merged_with_player.emit(self)
 	stop_waiting_animation()
 
 func separate_from_player():
+	DebugMessage.info("separate_from_player")
 	if is_timeout:
 		return
 
 	$Arrow.show()
 	self.show()
 	set_color(waiting_color)
-	is_merged = false
+
 	separated_from_player.emit(self)
 	start_waiting_animation()
 	start_arrow_animation()

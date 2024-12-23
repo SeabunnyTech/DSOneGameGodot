@@ -1,10 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://ctc1wm78mr8p2"]
+[gd_scene load_steps=13 format=3 uid="uid://7p82xwuwtyjc"]
 
-[ext_resource type="Script" path="res://scripts/levels/level2_1p.gd" id="1_lybcr"]
+[ext_resource type="Script" path="res://scripts/levels/level2_tutorial.gd" id="1_d36ib"]
 [ext_resource type="PackedScene" uid="uid://ds1koirixejn6" path="res://scenes/ui/hud.tscn" id="2_6qy6p"]
-[ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_dgsee"]
-[ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_qkv4s"]
-[ext_resource type="AudioStream" uid="uid://bhqk05m03ol6u" path="res://assets/audio/archive/game over music_Lively Meadow Victory Fanfare.wav" id="4_2odhm"]
+[ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_m5tr3"]
+[ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_bvrvy"]
+[ext_resource type="AudioStream" uid="uid://bhqk05m03ol6u" path="res://assets/audio/archive/game over music_Lively Meadow Victory Fanfare.wav" id="4_m7r50"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_p655j"]
 [ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="6_2ckte"]
 [ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_llw8i"]
@@ -13,16 +13,16 @@
 [ext_resource type="AudioStream" uid="uid://djhl5kxk4cn13" path="res://assets/audio/sfx/short_whistle.wav" id="10_pr7h7"]
 [ext_resource type="AudioStream" uid="uid://d1hx3jkd04frs" path="res://assets/audio/sfx/long_whistle.wav" id="11_wykju"]
 
-[node name="Level2_1p" type="Node2D"]
-script = ExtResource("1_lybcr")
-game_music = ExtResource("2_dgsee")
-tutorial_music = ExtResource("3_qkv4s")
-victory_music = ExtResource("4_2odhm")
+[node name="Level2_tutorial" type="Node2D"]
+script = ExtResource("1_d36ib")
+game_music = ExtResource("2_m5tr3")
+tutorial_music = ExtResource("3_bvrvy")
+victory_music = ExtResource("4_m7r50")
 
 [node name="HUD" parent="." instance=ExtResource("2_6qy6p")]
 visible = false
 
-[node name="RiverGamePlayerOne" parent="." instance=ExtResource("4_p655j")]
+[node name="RiverGameTutorial" parent="." instance=ExtResource("4_p655j")]
 offset_right = 3840.0
 offset_bottom = 2160.0
 

@@ -11,6 +11,12 @@ signal go_level2
 @export var tutorial_music: AudioStream
 @export var victory_music: AudioStream
 
+@onready var guide_message = $Title
+@onready var river_game_tutorial = $RiverGameTutorial
+@onready var circular_mask = $CircularMask
+@onready var player_waiter = $"1p_player_waiter"
+@onready var skip_button = $SkipButton
+
 @export var screen_center = Vector2(3840.0/2, 2160.0/2)
 @export var camera_position = Vector2(1920, 1080):
 	set(new_position):
@@ -24,16 +30,10 @@ signal go_level2
 @export var max_camera_speed = 800.0
 var camera_enabled = false
 
-@onready var guide_message = $Title
-@onready var river_game_1 = $RiverGamePlayerOne
-@onready var circular_mask = $CircularMask
-@onready var player_waiter = $"1p_player_waiter"
-@onready var skip_button = $SkipButton
-
 @export var num_players = 1
 @export var num_rivers_scenes = 3
 
-var game_started = false
+# var game_started = false
 var tutorial_skipped = false
 
 var river_scene_size = Vector2.ZERO
@@ -58,12 +58,12 @@ func reset():
 	skip_button.fade_away(true)
 
 	# 遊戲本體
-	river_game_1.reset()
+	river_game_tutorial.reset()
 
 	# time_board.reset()
 	# time_board.modulate.a = 0
 	# time_board.size = Vector2(3840, 2160)
-	game_started = false
+	# game_started = false
 	tutorial_skipped = false
 	camera_enabled = false
 	camera_position = Vector2(1920, 1080)
@@ -71,10 +71,10 @@ func reset():
 	# 備用的邏輯
 	player_waiter.reset()
 
-
 func enter_scene():
+	num_players = Globals.intended_player_num
 	visible = true
-	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
+	river_game_tutorial.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
 	_begin_tutorial()
 
 func leave_scene_for_restart():
@@ -91,7 +91,7 @@ func leave_scene_for_restart():
 var tween
 
 func _begin_tutorial():
-	river_game_1.init_player()
+	river_game_tutorial.init_player()
 
 	if tween:
 		tween.kill()
@@ -121,8 +121,8 @@ func _begin_tutorial():
 
 	# 2. 擺動你手上的控制器，吸附到上方閃爍的水滴就能控制方向!
 	tween.tween_callback(func():
-		river_game_1.show_avatar()
-		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.1)
+		river_game_tutorial.show_avatar()
+		river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1.1)
 		circular_mask.tween_center_radius(Vector2(1920, 800), 700.0, 1)
 	)
 
@@ -137,11 +137,11 @@ func _begin_tutorial():
 	# 等待產電的信號	
 	tween.tween_interval(2)
 
-	await river_game_1.avatar_merged
+	await river_game_tutorial.avatar_merged
 	_continue_tutorial_1()
 
 func _continue_tutorial_1():
-	if game_started or tutorial_skipped:
+	if tutorial_skipped:
 		return
 
 	if tween:
@@ -152,9 +152,8 @@ func _continue_tutorial_1():
 	tween.tween_interval(0.5)
 	
 	tween.tween_callback(func():
-		river_game_1.blink_stones()
-		river_game_1.show_avatar()
-		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.15)
+		river_game_tutorial.blink_stones()
+		river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1.15)
 		circular_mask.tween_center_radius(Vector2(2160, 800), 500.0, 1.5)
 	)
 
@@ -162,15 +161,15 @@ func _continue_tutorial_1():
 	_show_text('obstacle')
 
 	tween.tween_callback(func():
-		river_game_1.stop_blink()
-		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1)
+		river_game_tutorial.stop_blink()
+		river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1)
 		circular_mask.tween_center_radius(Vector2(1450, 1080), 1000.0, 1)
 	)
 
 	tween.tween_interval(0.5)
 	
 	tween.tween_callback(func():
-		river_game_1.blink_checkpoint()
+		river_game_tutorial.blink_checkpoint()
 	)
 
 	# 4. 水滴移動越快，經過電廠時就能產生越多電仔喔!
@@ -178,11 +177,11 @@ func _continue_tutorial_1():
 		_undate_guide_text('speed')
 	)
 	
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_property(guide_message, 'modulate:a', 1, 0.5)
 
-	tween.tween_interval(1)
+	tween.tween_interval(0.5)
 	tween.tween_callback(func():
-		river_game_1.enable_checkpoint()
+		river_game_tutorial.enable_checkpoint()
 	)
 	
 	tween.play()
@@ -190,13 +189,13 @@ func _continue_tutorial_1():
 	# 等待玩家通過 checkpoint
 	tween.tween_interval(3)
 
-	await river_game_1.checkpoint_passed
+	await river_game_tutorial.checkpoint_passed
 	_continue_tutorial_2()
 
 func _continue_tutorial_2():
-	river_game_1.stop_blink()
+	river_game_tutorial.stop_blink()
 
-	if game_started or tutorial_skipped:
+	if tutorial_skipped:
 		return
 	if tween:
 		tween.kill()
@@ -207,7 +206,7 @@ func _continue_tutorial_2():
 	camera_enabled = true
 
 	tween.tween_callback(func():
-		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1)
+		river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1)
 		circular_mask.tween_center_radius(Vector2(1920, 2160), 1800.0, 0.5)
 	)
 
@@ -242,7 +241,7 @@ func _skip_tutorial(_player):
 
 	tween.tween_interval(0.5)
 	circular_mask.tween_radius(0.0, 1)
-	river_game_1.camera_to(screen_center, Vector2(1920, 1080))
+	river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080))
 
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	tween.tween_callback(func():_proceed_to_game_start())
@@ -265,7 +264,7 @@ func _proceed_to_game_start():
 
 	tween.tween_callback(func():
 		camera_enabled = false
-		river_game_1.end_tutorial()
+		river_game_tutorial.end_tutorial()
 		circular_mask.tween_radius(0.0, 1)
 	)
 
@@ -277,85 +276,33 @@ func _proceed_to_game_start():
 
 	tween.tween_interval(0.5)
 
-	tween.tween_callback(func():
-		var random_river_index = randi() % num_rivers_scenes
-		game_started = true	
-		camera_position = Vector2(1920, 1080)
-		score = {0: 0, 1: 0}
-		hud.update_score_display(score)
-		hud.update_minimap(random_river_index)
-		hud.show()
-
-		river_game_1.init(0, num_players, random_river_index)
-		river_game_1.camera_to(screen_center, camera_position, 1)
-		river_game_1.start_game()
-
-		camera_enabled = true
-
-		TimerManager.start_game_timer(30)
-		GlobalAudioPlayer.play_music(game_music)
-	)
 
 	# 瞬間關閉圓形遮罩, 慢慢關閉白幕
-	tween.tween_property(circular_mask, 'alpha', 0, 1)
+	tween.tween_property(self, 'modulate:a', 0, 1)
 
-var game_stop_tween
-func _game_timeout():
-	
-	game_started = false
-	camera_enabled = false
-	
-	$long_whistle.play()
-	
-	TimerManager.stop_timer(TimerManager.TimerType.GAME)
-	GlobalAudioPlayer.stop()
+	tween.tween_callback(func():
+		reset()
+		go_level2.emit()
 
-	GlobalAudioPlayer.play_music(victory_music)
 	
-	river_game_1.stop_avatar()
-	river_game_1.timeout_avatar()
+		# var random_river_index = randi() % num_rivers_scenes
+		# game_started = true	
+		# camera_position = Vector2(1920, 1080)
+		# score = {0: 0, 1: 0}
+		# hud.update_score_display(score)
+		# hud.update_minimap(random_river_index)
+		# hud.show()
 
-	# 延遲後退相機畫面
-	if game_stop_tween:
-		game_stop_tween.kill()
-	game_stop_tween = create_tween()
+		# river_game_tutorial.init(0, num_players, random_river_index)
+		# river_game_tutorial.camera_to(screen_center, camera_position, 1)
+		# river_game_tutorial.start_game()
 
-	game_stop_tween.tween_callback(func():
-		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.0, 4)
+		# camera_enabled = true
+
+		# TimerManager.start_game_timer(30)
+		# GlobalAudioPlayer.play_music(game_music)
 	)
 
-	game_stop_tween.tween_interval(7.5)
-	game_stop_tween.tween_callback(func():
-		hud.hide()
-		GlobalAudioPlayer.stop()
-		river_game_1.restore_player_size()
-		river_game_1.reset()
-		_congrats_and_return()
-	)
-
-
-
-func _congrats_and_return():
-
-	var end_duration = 3
-	var thanks_duration = 3
-	var wait_duration = 2
-
-	if tween:
-		tween.kill()
-	tween = create_tween()
-	tween.tween_interval(wait_duration)
-	_show_text('congrats', end_duration, 1)
-	_show_text('thanks')
-
-	if game_stop_tween:
-		game_stop_tween.kill()
-	game_stop_tween = create_tween()
-	game_stop_tween.tween_interval(wait_duration)
-	game_stop_tween.tween_property(circular_mask, 'alpha', 1, 1)
-	game_stop_tween.tween_interval(end_duration)
-	game_stop_tween.tween_interval(thanks_duration)
-	game_stop_tween.tween_callback(leave_scene_for_restart)
 
 # ================== Tutorial ==================
 
@@ -403,8 +350,6 @@ func _undate_guide_text(new_text_state):
 	$Title.text = titles[new_text_state]
 	$Title/Label.text = guides[new_text_state]
 
-
-
 func _show_text(text_key, duration=2, trans_duration=1):
 	tween.tween_callback(func():_undate_guide_text(text_key))
 	tween.tween_property(guide_message, 'modulate:a', 1, trans_duration)
@@ -419,21 +364,15 @@ func _show_text(text_key, duration=2, trans_duration=1):
 func _ready():
 	
 	reset()
-	
-	river_game_1.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
+	num_players = Globals.intended_player_num
+	river_game_tutorial.init(0, num_players, 1) # 初始化 river_2 給 tutorial 用
 
-	river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
-	river_game_1.finish_line_passed.connect(_on_finish_line_passed)
-	river_game_1.spawn_area_scored.connect(_on_spawn_area_scored)
-	river_game_1.spawn_area_scoring.connect(_on_spawn_area_scoring)
-	river_game_1.checkpoint_passed.connect(_on_checkpoint_passed)
-	river_scene_size = river_game_1.get_river_scene_size()
+	river_game_tutorial.camera_to(screen_center, Vector2(1920, 1080), 1, 1)
+	river_scene_size = river_game_tutorial.get_river_scene_size()
 
 	player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
 
 	skip_button.triggered.connect(_skip_tutorial)
-
-	TimerManager.game_time_expired.connect(_game_timeout)
 
 	# 測試的時候才會成為 main scene
 	if get_tree().current_scene == self:
@@ -453,8 +392,8 @@ func _update_minimap() -> void:
 
 func _update_cameras(delta: float) -> void:
 	var screen_height = 2160.0  # 假設這是你的螢幕高度
-	var river_game = river_game_1
-	var avatar_pos = river_game_1.get_avatar_position()
+	var river_game = river_game_tutorial
+	var avatar_pos = river_game_tutorial.get_avatar_position()
 
 	# 計算相機移動速度
 	var relative_y = avatar_pos.y / screen_height
@@ -464,7 +403,7 @@ func _update_cameras(delta: float) -> void:
 		max(0, (relative_y - camera_y_threshold) / (1 - camera_y_threshold))
 	)
 
-	if river_game_1.avatar_is_stuck or river_game_1.avatar_is_separated:
+	if river_game_tutorial.avatar_is_stuck or river_game_tutorial.avatar_is_separated:
 		target_speed = 0.0
 
 	# 平滑過渡到目標速度
@@ -483,56 +422,3 @@ func _update_cameras(delta: float) -> void:
 		camera_zoom_level,  # 縮放級別
 		0.2  # 速度越快，duration 越短
 	)
-
-func _on_finish_line_passed(_player_id: int):
-	_game_timeout()
-
-func _on_checkpoint_passed(player_id: int, count: int):
-	if game_started:
-		score[player_id] += count
-		hud.update_score_display(score)
-
-
-
-# ================= 以下為電仔回收的功能，目前沒用到，備份保留在此
-
-func move_to_next_scoring_position(player_id: int):
-	if current_scoring_index >= reversed_spawn_positions.size():
-		scoring_in_progress = false
-		return
-		
-	var target_position = Vector2(
-		camera_position.x,
-		reversed_spawn_positions[current_scoring_index]
-	)
-	var river_game = river_game_1
-	
-	# 移動相機到指定位置
-	river_game.camera_to(
-		screen_center,
-		target_position,
-		camera_zoom_level,
-		1.0,
-		func(): _on_camera_reached_scoring_position(player_id)
-	)
-
-func _on_camera_reached_scoring_position(_player_id: int):
-	if not scoring_in_progress:
-		return
-		
-	# 觸發當前位置的計分
-	var spawn_id = reversed_spawn_positions.size() - current_scoring_index - 1
-	river_game_1.trigger_spawn_area_scoring(spawn_id)
-
-func _on_spawn_area_scoring(_player_id: int, _spawn_id: int, count: int):
-	pass
-
-func _on_spawn_area_scored(_player_id: int, _spawn_id: int):
-	current_scoring_index += 1
-	move_to_next_scoring_position(_player_id)
-
-func start_scoring_sequence(avatar: Node2D):
-	scoring_in_progress = true
-	current_scoring_index = 0 
-
-	move_to_next_scoring_position(avatar.player_id)

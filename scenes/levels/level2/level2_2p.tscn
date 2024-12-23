@@ -1,16 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://d0b5oa8ojcn7x"]
+[gd_scene load_steps=13 format=3 uid="uid://d0b5oa8ojcn7x"]
 
 [ext_resource type="Script" path="res://scripts/levels/level2_2p.gd" id="1_1vo57"]
-[ext_resource type="PackedScene" uid="uid://uudjketa5htn" path="res://scenes/ui/ui.tscn" id="2_l1kx1"]
 [ext_resource type="PackedScene" uid="uid://ds1koirixejn6" path="res://scenes/ui/hud.tscn" id="2_o4tnr"]
+[ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_ylw8s"]
+[ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_5jqy2"]
 [ext_resource type="PackedScene" uid="uid://cn45so1jw4crg" path="res://scenes/levels/level2/river_game.tscn" id="4_ggj66"]
+[ext_resource type="AudioStream" uid="uid://bhqk05m03ol6u" path="res://assets/audio/archive/game over music_Lively Meadow Victory Fanfare.wav" id="4_igpqk"]
+[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="5_xhdle"]
+[ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://madebycloud/skip_button/skip_button.tscn" id="6_kuiex"]
+[ext_resource type="Script" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="7_822k2"]
+[ext_resource type="Theme" path="res://assets/themes/LoginTextGuide.tres" id="8_w8028"]
+[ext_resource type="AudioStream" uid="uid://djhl5kxk4cn13" path="res://assets/audio/sfx/short_whistle.wav" id="9_5adyn"]
+[ext_resource type="AudioStream" uid="uid://d1hx3jkd04frs" path="res://assets/audio/sfx/long_whistle.wav" id="10_cuntg"]
 
-[node name="Level2" type="Node2D"]
+[node name="Level2_2p" type="Node2D"]
 script = ExtResource("1_1vo57")
+game_music = ExtResource("2_ylw8s")
+tutorial_music = ExtResource("3_5jqy2")
+victory_music = ExtResource("4_igpqk")
 
 [node name="HUD" parent="." instance=ExtResource("2_o4tnr")]
-
-[node name="UI" parent="." instance=ExtResource("2_l1kx1")]
 visible = false
 
 [node name="GameScene" type="HBoxContainer" parent="."]
@@ -26,3 +35,54 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="CircularMask" parent="." instance=ExtResource("5_xhdle")]
+z_index = 15
+center = Vector2(1920, 1080)
+radius = 0.0
+
+[node name="SkipButton" parent="." instance=ExtResource("6_kuiex")]
+modulate = Color(1, 1, 1, 0)
+z_index = 15
+position = Vector2(3500, 1900)
+
+[node name="1p_player_waiter" type="Node" parent="."]
+script = ExtResource("7_822k2")
+
+[node name="Title" type="Label" parent="."]
+modulate = Color(0, 0, 0, 0)
+z_index = 20
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1800.0
+offset_top = 920.0
+offset_right = 3720.0
+offset_bottom = 1085.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("8_w8028")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 110
+text = "歡迎來到蓄電大挑戰!"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 207.0
+offset_right = 1926.0
+offset_bottom = 372.0
+theme = ExtResource("8_w8028")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "今天我們將化身一顆水滴
+來驅動渦輪發電啦!"
+horizontal_alignment = 1
+
+[node name="short_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_5adyn")
+
+[node name="long_whistle" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_cuntg")
