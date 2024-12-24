@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ds1koirixejn6"]
+[gd_scene load_steps=11 format=3 uid="uid://ds1koirixejn6"]
 
 [ext_resource type="Texture2D" uid="uid://cnkrxgbl46d57" path="res://assets/images/backgrounds/static/level2/mini_map_river_1.png" id="1_bwacd"]
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_tnoo0"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dvak267pk8td8" path="res://assets/images/backgrounds/static/level2/mini_map_zone_two_players.png" id="3_up1yc"]
 [ext_resource type="Texture2D" uid="uid://b77w074frqon5" path="res://assets/images/ui/timer_icon.png" id="4_87w1t"]
 [ext_resource type="Theme" uid="uid://cn6wmbmq6ng83" path="res://assets/themes/theme.tres" id="5_hqgcc"]
+[ext_resource type="Texture2D" uid="uid://bqfjl5un3c7ff" path="res://assets/images/ui/crown.png" id="5_yvie7"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_tnoo0")
@@ -53,6 +54,18 @@ texture = ExtResource("3_up1yc")
 [node name="PlayerOneContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="CrownContainer" type="MarginContainer" parent="HBoxContainer/PlayerOneContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/margin_top = 150
+theme_override_constants/margin_right = 150
+
+[node name="Crown" type="TextureRect" parent="HBoxContainer/PlayerOneContainer/CrownContainer"]
+layout_mode = 2
+texture = ExtResource("5_yvie7")
 
 [node name="ScoreContainer" type="MarginContainer" parent="HBoxContainer/PlayerOneContainer"]
 layout_mode = 2
@@ -148,6 +161,18 @@ texture = ExtResource("3_up1yc")
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="CrownContainer" type="MarginContainer" parent="HBoxContainer/PlayerTwoContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+theme_override_constants/margin_top = 150
+theme_override_constants/margin_right = 150
+
+[node name="Crown" type="TextureRect" parent="HBoxContainer/PlayerTwoContainer/CrownContainer"]
+layout_mode = 2
+texture = ExtResource("5_yvie7")
 
 [node name="ScoreContainer" type="MarginContainer" parent="HBoxContainer/PlayerTwoContainer"]
 layout_mode = 2

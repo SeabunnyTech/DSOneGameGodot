@@ -100,6 +100,9 @@ func _game_timeout():
 	camera_enabled = false
 	
 	$long_whistle.play()
+
+
+	
 	
 	TimerManager.stop_timer(TimerManager.TimerType.GAME)
 	GlobalAudioPlayer.stop()
@@ -111,6 +114,8 @@ func _game_timeout():
 	river_game_1.timeout_avatar()
 	river_game_2.timeout_avatar()
 
+	var winner_id = 0 if score[0] > score[1] else 1
+
 	# 延遲後退相機畫面
 	if game_stop_tween:
 		game_stop_tween.kill()
@@ -119,6 +124,8 @@ func _game_timeout():
 	game_stop_tween.tween_callback(func():
 		river_game_1.camera_to(screen_center, Vector2(1920, 1080), 1.0, 4)
 		river_game_2.camera_to(screen_center, Vector2(1920, 1080), 1.0, 4)
+		if score[0] != score[1]:  # Only show crown if there's a clear winner
+			hud.show_crown(winner_id)
 	)
 
 	game_stop_tween.tween_interval(7.5)

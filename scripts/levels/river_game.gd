@@ -212,8 +212,7 @@ func _on_avatar_desired_position_changed(avatar: Node2D, new_desired_position: V
 		camera_zoom_level,
 		new_desired_position)
 	var river_normal = get_color_at_position(avatar_in_river_position)
-	DebugMessage.info('avatar_in_river_position: %s' % river_normal)
-	
+
 	if river_normal.b > 0.05: # 確保在河道內
 		var pos_x = lerp(avatar.position.x, new_desired_position.x, river_normal.b * delta * follow_speed)
 		var pos_y = lerp(avatar.position.y, new_desired_position.y, 1 - current_camera_velocity/800.0)

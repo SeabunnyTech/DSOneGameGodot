@@ -23,6 +23,9 @@ extends Node
 	$HBoxContainer/PlayerTwoMiniMap/MiniMap
 ]
 
+@onready var player_one_crown: MarginContainer = $HBoxContainer/PlayerOneContainer/CrownContainer
+@onready var player_two_crown: MarginContainer = $HBoxContainer/PlayerTwoContainer/CrownContainer
+
 const MINIMAP_PATHS = {
 	0: "res://assets/images/backgrounds/static/level2/mini_map_river_1.png",
 	1: "res://assets/images/backgrounds/static/level2/mini_map_river_2.png",
@@ -58,6 +61,21 @@ func display_minimap(num_players: int) -> void:
 		one_player_minimap_clip_zone.visible = i == 0
 		for clip_zone in two_players_minimap_clip_zones:
 			clip_zone.visible = i == 1
+
+func show_crown(player_id: int):
+	var crown_container = player_one_crown if player_id == 0 else player_two_crown
+	crown_container.visible = true
+	crown_container.modulate.a = 0
+	crown_container.position.y = 50  # Start slightly below final position
+	
+	var tween = create_tween()
+	tween.set_parallel(true)
+	# Fade in
+	tween.tween_property(crown_container, "modulate:a", 1.0, 1.0)
+	# Float up
+	tween.tween_property(crown_container, "position:y", 0.0, 1.0)\
+		.set_trans(Tween.TRANS_BACK)\
+		.set_ease(Tween.EASE_OUT)
 
 func _update_timer_display(time: float) -> void:
 	# Format time to show one decimal place
