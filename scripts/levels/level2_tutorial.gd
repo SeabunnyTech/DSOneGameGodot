@@ -128,7 +128,8 @@ func _begin_tutorial():
 	)
 
 	tween.tween_callback(func():
-		_undate_guide_text('control')
+		var guide_text = 'control_1p' if Globals.intended_player_num == 1 else 'control_2p'
+		_undate_guide_text(guide_text)
 	)
 
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
@@ -291,7 +292,8 @@ func _proceed_to_game_start():
 func _undate_guide_text(new_text_state):
 	var titles = {
 		'begin': '歡迎來到水流急急棒!',
-		'control': '你現在是一顆靈活的水滴!',
+		'control_1p': '你現在是一顆靈活的水滴!',
+		'control_2p': '你們現在是一顆靈活的水滴!',
 		'obstacle': '小心前方的障礙物!',
 		'speed': '水滴的速度很重要喔!',
 		'downstream': '順著水流而下!',
@@ -304,7 +306,8 @@ func _undate_guide_text(new_text_state):
 
 	var guides = {
 		'begin': '在大甲溪流域中\n一滴水可以發很多次電!',
-		'control': '左邊玩家請擺動你手上的控制器\n吸附到上方閃爍的水滴就能控制方向!',
+		'control_1p': '玩家請擺動你手上的控制器\n吸附到上方閃爍的水滴就能控制方向!',
+		'control_2p': '左邊的玩家請擺動你手上的控制器\n吸附到上方閃爍的水滴就能控制方向!',
 		'obstacle': '遇到障礙物要小心閃避\n不然會減慢水滴的速度!',
 		'speed': '水滴移動越快\n經過電廠時就能產生越多電仔喔!',
 		'downstream': '越往下游水流越快\n但也要更小心控制方向!',
@@ -317,7 +320,8 @@ func _undate_guide_text(new_text_state):
 
 	var guide_text_positions = {
 		'begin' : Vector2(960, 920),
-		'control' : Vector2(960, 1600),
+		'control_1p' : Vector2(960, 1600),
+		'control_2p' : Vector2(960, 1600),
 		'obstacle': Vector2(-80, 920),
 		'speed' : Vector2(2080, 960),
 		'downstream' : Vector2(2160, 180),
