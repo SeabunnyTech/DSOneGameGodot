@@ -64,4 +64,3 @@ wait_lost_player_duration = 30
 [node name="TimeBoard" parent="." instance=ExtResource("11_p2iis")]
 offset_right = 3840.0
 offset_bottom = 400.0
-total_time = 5

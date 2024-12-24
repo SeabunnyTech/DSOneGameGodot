@@ -71,7 +71,6 @@ wait_lost_player_duration = 30
 [node name="TimeBoard" parent="." instance=ExtResource("10_vlusi")]
 offset_right = 3840.0
 offset_bottom = 400.0
-total_time = 5
 
 [node name="victory sfx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_quvxn")
