@@ -1,12 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=8 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_htxxl"]
-[ext_resource type="Script" path="res://addons/radial_progress/RadialProgress.gd" id="2_rj3o6"]
 [ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="3_qel1b"]
 [ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_y6pit"]
 [ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_vafl7"]
-[ext_resource type="AudioStream" uid="uid://cgwjb8paulmnq" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
-[ext_resource type="AudioStream" uid="uid://o0ihc03yngig" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
+[ext_resource type="AudioStream" uid="uid://ia6t3w3rnxhr" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
+[ext_resource type="AudioStream" uid="uid://cbm7arhsldbpg" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
@@ -15,18 +14,6 @@ radius = 88.0
 collision_layer = 2
 collision_mask = 3
 script = ExtResource("1_htxxl")
-
-[node name="RadialProgress" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("2_rj3o6")
-radius = 130.0
-progress = 80.0
-thickness = 25.0
-bg_color = Color(0.705882, 0.705882, 0.705882, 0.196078)
-ring = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_4ujkc")

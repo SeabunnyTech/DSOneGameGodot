@@ -2,7 +2,6 @@ class_name Player extends CharacterBody2D
 
 signal on_state_changed(new_state: State)
 
-signal countdown_complete(player: Node2D)
 signal countdown_cancelled(player: Node2D)
 
 
@@ -86,7 +85,6 @@ func _start_color_transition(new_state, immediate):
 
 
 ############
-@onready var radial_progress: Control = $RadialProgress
 @onready var metaball_node: Node = $Metaball
 @onready var inertia_follower1: Node = $Metaball/InertiaFollower
 @onready var inertia_follower2: Node = $Metaball/InertiaFollower/InertiaFollower
@@ -143,18 +141,11 @@ func _ready() -> void:
 	
 	$Motion/Angular.connect("full_rotation_completed", full_rotation_completed.emit)
 	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
-	
-	radial_progress.hide()
+
 	heads_to_state(init_state, true)
 
 
 func _process(_delta: float) -> void:
-	if radial_progress.progress >= 100:
-		radial_progress.progress = 0
-		if is_counting_down:
-			is_counting_down = false
-			countdown_complete.emit(self)
-
 	# 3 顆 metaball
 	var ball_positions: Array[Vector2] = [
 		Vector2(0, 0),
@@ -172,17 +163,3 @@ func set_color(new_color):
 	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
 	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
 	metaball_node.update_ball_colors(vec4_colors)
-
-func start_progress_countdown(time: float = 5.0) -> void:
-	radial_progress.show()
-	is_counting_down = true
-	radial_progress.animate(time) # clockwise
-	radial_progress.progress = 0
-
-func stop_progress_countdown() -> void:
-	if is_counting_down:
-		is_counting_down = false
-
-	radial_progress.progress = 0
-	radial_progress.hide()
-	countdown_cancelled.emit(self)

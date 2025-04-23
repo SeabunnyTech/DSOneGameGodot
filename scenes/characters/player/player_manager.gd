@@ -141,12 +141,6 @@ func toggle_player(player_index: int) -> void:
 func _on_player_visibility_changed(player: Node) -> void:
 	player_visibility_changed.emit(player, player.visible)
 
-func _on_player_countdown_complete(player: Node2D):
-	player_countdown_completed.emit(player)
-
-func _on_player_countdown_cancelled(player: Node2D):
-	print("Player countdown cancelled: ", player.name)
-
 func _on_connection_established():
 	print("Connected to SocketIO server")
 
@@ -184,8 +178,6 @@ func _init_player_layer():
 		player_layer.add_child(player, true)
 		player.add_to_group("player" + str(idx))
 		player.visibility_changed.connect(_on_player_visibility_changed.bind(player))
-		player.countdown_complete.connect(_on_player_countdown_complete)
-		player.countdown_cancelled.connect(_on_player_countdown_cancelled)
 
 func _setup_dev_mode():
 	if Globals.mouse_mode:
