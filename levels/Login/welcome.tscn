@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://lh1rudkmnc74"]
 
-[ext_resource type="Script" path="res://scenes/levels/Login/welcome.gd" id="1_n171j"]
+[ext_resource type="Script" uid="uid://bqavvge6v3lx3" path="res://levels/Login/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_0lg17"]
 [ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_f32jj"]

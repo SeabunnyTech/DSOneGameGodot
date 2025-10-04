@@ -16,7 +16,7 @@ var player1 = PlayerManager.player1
 var player2 = PlayerManager.player2
 var players = [player1, player2]
 
-@onready var window_size = DisplayServer.window_get_size()
+@onready var window_size = Vector2(3840.0, 2160.0)
 @onready var logo2_offset = 0.2 * window_size[0]
 
 
