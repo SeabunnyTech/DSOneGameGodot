@@ -1,7 +1,7 @@
 [gd_scene load_steps=31 format=3 uid="uid://bqwegp357ve23"]
 
 [ext_resource type="Texture2D" uid="uid://b446rs28ol5o2" path="res://assets/images/backgrounds/static/level2/river_3.png" id="1_pq7ja"]
-[ext_resource type="Script" uid="uid://n3rfonb7j4up" path="res://scripts/levels/river.gd" id="1_r5kgo"]
+[ext_resource type="Script" uid="uid://n3rfonb7j4up" path="res://levels/level2/river.gd" id="1_r5kgo"]
 [ext_resource type="Texture2D" uid="uid://bulxdldji8wbc" path="res://assets/images/backgrounds/static/level2/power_1.png" id="2_opke5"]
 [ext_resource type="Texture2D" uid="uid://csr5753a45fmd" path="res://assets/images/backgrounds/static/level2/river_norm_3.png" id="2_us2ml"]
 [ext_resource type="Texture2D" uid="uid://evifukryb70a" path="res://assets/images/backgrounds/static/level2/power_2.png" id="3_jo88q"]

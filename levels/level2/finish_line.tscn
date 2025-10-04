@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://ofavfypf5ox3"]
 
 [ext_resource type="Texture2D" uid="uid://cegvovouiwkyj" path="res://assets/images/backgrounds/animated/level2/bird.png" id="1_aeaxu"]
-[ext_resource type="Script" path="res://scripts/levels/finish_line.gd" id="1_g2kw7"]
-[ext_resource type="Texture2D" uid="uid://c6jjrj7nkoev6" path="res://assets/images/backgrounds/static/level2/finish_line.png" id="2_658ed"]
+[ext_resource type="Script" uid="uid://fqiggv7dbbb7" path="res://levels/level2/finish_line.gd" id="1_g2kw7"]
+[ext_resource type="Texture2D" uid="uid://blfskm5ooplu2" path="res://assets/images/backgrounds/static/level2/finish_line.png" id="2_658ed"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nj3jh"]
 size = Vector2(1875.17, 93)
