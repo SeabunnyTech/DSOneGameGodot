@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dx3vcgah13bgj" path="res://levels/wheelgame/level_1_1p.gd" id="1_iamsx"]
 [ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_ly2vh"]
 [ext_resource type="PackedScene" uid="uid://3n3cmgot5ska" path="res://levels/wheelgame/wheelgame_env.tscn" id="4_q3u2h"]
-[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/CircularMask/circular_mask.tscn" id="5_l5dsj"]
+[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/tutorials/CircularMask/circular_mask.tscn" id="5_l5dsj"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="7_cm6mn"]
 [ext_resource type="AudioStream" uid="uid://djhl5kxk4cn13" path="res://assets/audio/sfx/short_whistle.wav" id="8_n4ejm"]
 [ext_resource type="AudioStream" uid="uid://d1hx3jkd04frs" path="res://assets/audio/sfx/long_whistle.wav" id="9_yva0p"]
