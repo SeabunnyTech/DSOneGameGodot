@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://btnj03qeeyjly"]
 
-[ext_resource type="Script" uid="uid://bxgc8vqb6nhjt" path="res://levels/Login/select.gd" id="1_q2gye"]
-[ext_resource type="PackedScene" uid="uid://pwe0uy0n54cu" path="res://madebycloud/LevelOption/leveloption.tscn" id="2_frkrv"]
+[ext_resource type="Script" uid="uid://bxgc8vqb6nhjt" path="res://levels/Login/select/select.gd" id="1_q2gye"]
+[ext_resource type="PackedScene" uid="uid://pwe0uy0n54cu" path="res://levels/Login/select/LevelOption/leveloption.tscn" id="2_frkrv"]
 [ext_resource type="Texture2D" uid="uid://imilr6qsmeuv" path="res://assets/images/backgrounds/static/login_select_level1.png" id="3_v7gbq"]
 [ext_resource type="Texture2D" uid="uid://dic7ddfbw1ytc" path="res://assets/images/backgrounds/static/login_select_level2.png" id="4_pw173"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_xyjsi"]
