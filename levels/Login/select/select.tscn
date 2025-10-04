@@ -5,8 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://imilr6qsmeuv" path="res://assets/images/backgrounds/static/login_select_level1.png" id="3_v7gbq"]
 [ext_resource type="Texture2D" uid="uid://dic7ddfbw1ytc" path="res://assets/images/backgrounds/static/login_select_level2.png" id="4_pw173"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_xyjsi"]
-[ext_resource type="Script" uid="uid://5c1lm56b1uyr" path="res://madebycloud/fade_label.gd" id="6_ansfx"]
-[ext_resource type="PackedScene" uid="uid://jkaqke4nipbi" path="res://madebycloud/player_waiter_ui/1p_player_waiter.tscn" id="7_58y6d"]
+[ext_resource type="Script" uid="uid://5c1lm56b1uyr" path="res://reusable/fade_label.gd" id="6_ansfx"]
+[ext_resource type="PackedScene" uid="uid://jkaqke4nipbi" path="res://reusable/player_waiter_ui/1p_player_waiter.tscn" id="7_58y6d"]
 
 [node name="Select" type="Node2D"]
 script = ExtResource("1_q2gye")

@@ -1,10 +1,10 @@
 [gd_scene load_steps=7 format=3 uid="uid://dxst3sfse37ap"]
 
-[ext_resource type="Script" path="res://madebycloud/skip_button/skip_button.gd" id="1_wr6f8"]
-[ext_resource type="Texture2D" uid="uid://cabgvonbembx2" path="res://madebycloud/skip_button/skip_button_shade.png" id="2_hcgbe"]
-[ext_resource type="Texture2D" uid="uid://ch2mfmgor68te" path="res://madebycloud/skip_button/skip_button.png" id="3_pcvvy"]
+[ext_resource type="Script" uid="uid://bogekptxdbeut" path="res://reusable/tutorials/skip_button/skip_button.gd" id="1_wr6f8"]
+[ext_resource type="Texture2D" uid="uid://dpxt3l407pap3" path="res://reusable/tutorials/skip_button/skip_button_shade.png" id="2_hcgbe"]
+[ext_resource type="Texture2D" uid="uid://bh1ikf7cl1qfb" path="res://reusable/tutorials/skip_button/skip_button.png" id="3_pcvvy"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="4_bjj7h"]
-[ext_resource type="AudioStream" uid="uid://d4m8744cyansc" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_o2ybq"]
+[ext_resource type="AudioStream" uid="uid://bmsyc157m5bql" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_o2ybq"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rq6e1"]
 radius = 67.0

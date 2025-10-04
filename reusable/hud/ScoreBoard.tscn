@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cjoqhv8508c7k"]
 
-[ext_resource type="Script" path="res://madebycloud/hud/score_board.gd" id="1_vc5os"]
+[ext_resource type="Script" uid="uid://d0ndpoiggjboc" path="res://reusable/hud/score_board.gd" id="1_vc5os"]
 [ext_resource type="StyleBox" uid="uid://dk8u2e2rcxdy" path="res://assets/themes/hud_frame.tres" id="2_32uxf"]
 [ext_resource type="Texture2D" uid="uid://bc77xc0lfg8mh" path="res://assets/images/ui/score_icon.png" id="3_2kctj"]
 [ext_resource type="LabelSettings" uid="uid://c3773vqn4scw5" path="res://assets/themes/hud_label.tres" id="4_w5tmi"]

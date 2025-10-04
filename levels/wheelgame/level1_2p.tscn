@@ -3,13 +3,13 @@
 [ext_resource type="Script" uid="uid://yjct5uaci3c8" path="res://levels/wheelgame/level_1_2p.gd" id="1_ixmfv"]
 [ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_id0ck"]
 [ext_resource type="PackedScene" uid="uid://3n3cmgot5ska" path="res://levels/wheelgame/wheelgame_env.tscn" id="3_n3ag4"]
-[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://madebycloud/tutorials/CircularMask/circular_mask.tscn" id="4_0dykt"]
+[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://reusable/tutorials/CircularMask/circular_mask.tscn" id="4_0dykt"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="6_18k27"]
 [ext_resource type="AudioStream" uid="uid://djhl5kxk4cn13" path="res://assets/audio/sfx/short_whistle.wav" id="7_gldqm"]
 [ext_resource type="AudioStream" uid="uid://d1hx3jkd04frs" path="res://assets/audio/sfx/long_whistle.wav" id="8_taeq2"]
-[ext_resource type="Script" uid="uid://cjvyje5xm3isy" path="res://madebycloud/player_waiter_ui/1p_player_waiter.gd" id="9_i5hut"]
+[ext_resource type="Script" uid="uid://cjvyje5xm3isy" path="res://reusable/player_waiter_ui/1p_player_waiter.gd" id="9_i5hut"]
 [ext_resource type="AudioStream" uid="uid://c81dfyoi70dmg" path="res://assets/audio/sfx/victory_short.wav" id="10_quvxn"]
-[ext_resource type="PackedScene" uid="uid://d0nj48pnk17oh" path="res://madebycloud/hud/TimeBoard.tscn" id="10_vlusi"]
+[ext_resource type="PackedScene" uid="uid://d0nj48pnk17oh" path="res://reusable/hud/TimeBoard.tscn" id="10_vlusi"]
 
 [node name="Level1_2p" type="Node2D"]
 script = ExtResource("1_ixmfv")

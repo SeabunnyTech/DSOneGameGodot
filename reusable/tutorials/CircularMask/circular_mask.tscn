@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cgbjofr2fxpho"]
 
-[ext_resource type="Shader" path="res://madebycloud/CircularMask/circularshader.gdshader" id="1_ifbbx"]
-[ext_resource type="Script" path="res://madebycloud/CircularMask/circular_mask.gd" id="2_iqmg8"]
+[ext_resource type="Shader" uid="uid://bk2bnxs747gty" path="res://reusable/tutorials/CircularMask/circularshader.gdshader" id="1_ifbbx"]
+[ext_resource type="Script" uid="uid://kg05dgfjgvfy" path="res://reusable/tutorials/CircularMask/circular_mask.gd" id="2_iqmg8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bp30i"]
 shader = ExtResource("1_ifbbx")
