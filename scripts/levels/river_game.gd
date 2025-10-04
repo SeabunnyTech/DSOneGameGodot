@@ -23,9 +23,9 @@ var is_playable = false
 # 存此次遊戲所隨機選擇的 river scene
 var river_scene: Node2D
 var river_scenes = [
-	preload("res://scenes/levels/level2/river1.tscn"),
-	preload("res://scenes/levels/level2/river2.tscn"),
-	preload("res://scenes/levels/level2/river3.tscn")
+	preload("res://levels/level2/river1.tscn"),
+	preload("res://levels/level2/river2.tscn"),
+	preload("res://levels/level2/river3.tscn")
 ]
 
 var spawn_area_positions: Array[float] = []
