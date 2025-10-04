@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://pwe0uy0n54cu"]
 
 [ext_resource type="Texture2D" uid="uid://imilr6qsmeuv" path="res://assets/images/backgrounds/static/login_select_level1.png" id="1_dby07"]
-[ext_resource type="Script" path="res://madebycloud/LevelOption/leveloption.gd" id="2_1tws8"]
+[ext_resource type="Script" uid="uid://duv2bmpnedvn1" path="res://madebycloud/LevelOption/leveloption.gd" id="2_1tws8"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_llbvw"]
 [ext_resource type="PackedScene" uid="uid://s84i5xh3ognd" path="res://madebycloud/LevelOption/ProgressTracker.tscn" id="4_qrpfi"]
 [ext_resource type="AudioStream" uid="uid://bmsyc157m5bql" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="5_gaxjm"]

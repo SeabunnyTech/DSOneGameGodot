@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name DSOneLogo extends Node2D
 
 # 提供外部使用的信號
@@ -9,9 +9,9 @@ signal heading_new_state(new_state)
 @export var hue = 0.57:	# 青綠 0.45 水藍 0.57
 	set(value):
 		hue = value
-		if Engine.is_editor_hint():
-			$ScalarNode/Capsules.modulate = Color.from_hsv(hue, 0.7, 1)
-			$ScalarNode/Circle.modulate = Color.from_hsv(hue, 0.4, 1)
+		#if Engine.is_editor_hint():
+		#	$ScalarNode/Capsules.modulate = Color.from_hsv(hue, 0.7, 1)
+		#	$ScalarNode/Circle.modulate = Color.from_hsv(hue, 0.4, 1)
 
 enum State {
 	HIDDEN,
