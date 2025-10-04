@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cpijjeb2a03n6"]
 
-[ext_resource type="Script" path="res://madebycloud/wheelgame/electron_emitter.gd" id="1_whk1c"]
+[ext_resource type="Script" uid="uid://bmdc75davbfbs" path="res://levels/wheelgame/electron_emitter.gd" id="1_whk1c"]
 [ext_resource type="AudioStream" uid="uid://dykt31rlrdco2" path="res://assets/audio/sfx/spawn_sound.wav" id="2_p3gl1"]
 [ext_resource type="AudioStream" uid="uid://pdw1ef4klj4g" path="res://assets/audio/sfx/collect_sound_3.wav" id="3_ooc65"]
 
