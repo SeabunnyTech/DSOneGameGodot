@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="TAIPOWER D/S ONE GAME"
-run/main_scene="res://scenes/levels/Login/login.tscn"
-config/features=PackedStringArray("4.3", "Forward Plus")
+run/main_scene="res://levels/Login/login.tscn"
+config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]

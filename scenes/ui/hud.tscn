@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://ds1koirixejn6"]
 
 [ext_resource type="Texture2D" uid="uid://cnkrxgbl46d57" path="res://assets/images/backgrounds/static/level2/mini_map_river_1.png" id="1_bwacd"]
-[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_tnoo0"]
+[ext_resource type="Script" uid="uid://ccw2kfkudl0wk" path="res://scripts/ui/hud.gd" id="1_tnoo0"]
 [ext_resource type="StyleBox" uid="uid://dk8u2e2rcxdy" path="res://assets/themes/hud_frame.tres" id="2_e71wh"]
 [ext_resource type="Texture2D" uid="uid://bc77xc0lfg8mh" path="res://assets/images/ui/score_icon.png" id="2_ogpko"]
 [ext_resource type="Texture2D" uid="uid://bkcmj6b0jpx7x" path="res://assets/images/backgrounds/static/level2/mini_map_zone_one_player.png" id="2_qyxgy"]
