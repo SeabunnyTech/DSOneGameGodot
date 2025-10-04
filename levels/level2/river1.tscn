@@ -18,7 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://bi3xwv2rw4tot" path="res://levels/level2/power_plant_checkpoint.tscn" id="11_a7p6k"]
 [ext_resource type="Texture2D" uid="uid://ddx46elqjk2hs" path="res://assets/images/backgrounds/static/level2/driftwood_2.png" id="11_sfy30"]
 [ext_resource type="Texture2D" uid="uid://c8ghm1ltpbaig" path="res://assets/images/backgrounds/static/level2/driftwood_3.png" id="12_o4lwe"]
-[ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://scenes/characters/electron_spawn.tscn" id="13_y6nqd"]
+[ext_resource type="PackedScene" uid="uid://rbqdijk6vthk" path="res://reusable/gameplay/electron/electron_spawn.tscn" id="13_y6nqd"]
 [ext_resource type="PackedScene" uid="uid://ofavfypf5ox3" path="res://levels/level2/finish_line.tscn" id="18_65u3q"]
 [ext_resource type="Texture2D" uid="uid://cegvovouiwkyj" path="res://assets/images/backgrounds/animated/level2/bird.png" id="19_73nbj"]
 [ext_resource type="Texture2D" uid="uid://xynuwvfs3684" path="res://assets/images/backgrounds/animated/level2/fish.png" id="20_qpnrj"]

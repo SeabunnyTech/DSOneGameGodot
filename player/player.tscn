@@ -1,9 +1,9 @@
 [gd_scene load_steps=8 format=3 uid="uid://dhlvypir2o1c0"]
 
-[ext_resource type="Script" path="res://scenes/characters/player/player.gd" id="1_htxxl"]
-[ext_resource type="Script" path="res://scripts/effects/motion/angular_motion.gd" id="3_qel1b"]
-[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://scripts/effects/visual/metaball/metaball.tscn" id="4_y6pit"]
-[ext_resource type="Script" path="res://scripts/effects/motion/Inertia.gd" id="5_vafl7"]
+[ext_resource type="Script" uid="uid://b07m4gxcdi1g8" path="res://player/player.gd" id="1_htxxl"]
+[ext_resource type="Script" uid="uid://dgs3fkmyidagk" path="res://player/motion/angular_motion.gd" id="3_qel1b"]
+[ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://player/visual/metaball/metaball.tscn" id="4_y6pit"]
+[ext_resource type="Script" uid="uid://b6ck7dmofywkf" path="res://player/motion/Inertia.gd" id="5_vafl7"]
 [ext_resource type="AudioStream" uid="uid://ia6t3w3rnxhr" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
 [ext_resource type="AudioStream" uid="uid://cbm7arhsldbpg" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
 

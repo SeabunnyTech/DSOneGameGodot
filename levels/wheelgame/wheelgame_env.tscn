@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bu5cfiijgfuow" path="res://levels/wheelgame/wheelgame_env.gd" id="1_0cnpv"]
 [ext_resource type="PackedScene" uid="uid://cjoqhv8508c7k" path="res://reusable/hud/ScoreBoard.tscn" id="2_4jut1"]
 [ext_resource type="Texture2D" uid="uid://50mfipne8x23" path="res://assets/images/backgrounds/static/level1/background_low.png" id="2_eyg55"]
-[ext_resource type="Script" uid="uid://b5mvi2gbn8dh0" path="res://scripts/levels/cloud.gd" id="4_5qwcn"]
+[ext_resource type="Script" uid="uid://b5mvi2gbn8dh0" path="res://reusable/gameplay/cloud.gd" id="4_5qwcn"]
 [ext_resource type="Texture2D" uid="uid://ci3hxu27wqv7t" path="res://assets/images/backgrounds/animated/level1/cloud1.png" id="5_ngqr1"]
 [ext_resource type="Texture2D" uid="uid://cv12kc7irmsfu" path="res://assets/images/backgrounds/animated/level1/cloud2.png" id="6_6lh43"]
 [ext_resource type="Texture2D" uid="uid://co4ggqwy4lclj" path="res://assets/images/backgrounds/animated/level1/cloud3.png" id="7_i3t3x"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cb17mxfdujnlp"]
 
-[ext_resource type="Script" path="res://scripts/characters/electron.gd" id="1_e88nk"]
+[ext_resource type="Script" uid="uid://djd1x3am5nm6e" path="res://reusable/gameplay/electron/electron.gd" id="1_e88nk"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vx0bd"]
 radius = 49.0

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cn45so1jw4crg"]
 
 [ext_resource type="Script" uid="uid://ka8fdy5p0j80" path="res://levels/level2/river_game.gd" id="1_6nxkf"]
-[ext_resource type="PackedScene" uid="uid://bnsdwdn1obqyu" path="res://scenes/characters/water_avatar.tscn" id="2_0jylu"]
+[ext_resource type="PackedScene" uid="uid://bnsdwdn1obqyu" path="res://levels/level2/water_avatar/water_avatar.tscn" id="2_0jylu"]
 
 [node name="RiverGame" type="ColorRect"]
 clip_contents = true
