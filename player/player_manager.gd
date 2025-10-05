@@ -5,7 +5,7 @@ var socket_client: SocketIOClientNode
 var viewport_size: Vector2 = Globals.get_viewport_size()
 
 var PState = Player.State
-var player_scene: PackedScene = preload("res://scenes/characters/player/player.tscn")
+var player_scene: PackedScene = preload("res://player/player.tscn")
 var player1: Node = player_scene.instantiate()
 var player2: Node = player_scene.instantiate()
 

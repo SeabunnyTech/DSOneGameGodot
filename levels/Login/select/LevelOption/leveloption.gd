@@ -39,12 +39,6 @@ func reset():
 
 
 
-func _draw_selection_boarder():
-	player1.player_hue
-
-
-
-
 var p1_tween
 var p2_tween
 func _ready():
@@ -87,7 +81,7 @@ func _on_option_triggered():
 			reset()
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 
 	queue_redraw()
 	# 判斷兩個 player 是否在內, 是的話就 tween 增加 progress

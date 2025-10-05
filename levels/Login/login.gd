@@ -3,9 +3,9 @@ extends Node2D
 
 # 使用一個 dict 避免需要新增變數名稱
 var level_res_paths = {
-	"welcome"	:	"res://levels/Login/welcome.tscn",
-	"logos"		:	"res://levels/Login/logos.tscn",
-	"select"		:	"res://levels/Login/select.tscn",
+	"welcome"	:	"res://levels/Login/welcome/welcome.tscn",
+	"logos"		:	"res://levels/Login/logos/logos.tscn",
+	"select"		:	"res://levels/Login/select/select.tscn",
 	"level1_tutorial"	:	"res://levels/wheelgame/level1_1p_tutorial.tscn",
 	"level1_1p"	:	"res://levels/wheelgame/level1_1p.tscn",
 	"level1_2p"	:	'res://levels/wheelgame/level1_2p.tscn',

@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://y1gddrssupox"]
 
-[ext_resource type="Script" path="res://assets/audio/audio_manager.gd" id="1_rnnuy"]
-[ext_resource type="AudioStream" uid="uid://2yqqqaec6emn" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_elvrp"]
-[ext_resource type="AudioStream" uid="uid://8ix3ud7y80sq" path="res://assets/audio/archive/victory.wav" id="3_2amuo"]
+[ext_resource type="Script" uid="uid://bpkp2ur8q7k6u" path="res://assets/audio/audio_manager.gd" id="1_rnnuy"]
+[ext_resource type="AudioStream" uid="uid://cegah8qnxebr0" path="res://assets/audio/music/game music_Riverside Ride Short Loop.wav" id="2_elvrp"]
+[ext_resource type="AudioStream" uid="uid://bfqk0gomd44lw" path="res://assets/audio/archive/victory.wav" id="3_2amuo"]
 
 [node name="AudioManager" type="Node2D"]
 script = ExtResource("1_rnnuy")

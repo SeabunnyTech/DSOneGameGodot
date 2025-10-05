@@ -48,8 +48,3 @@ func leave_scene(new_level_name):
 		reset()
 		leave_for_level.emit(new_level_name)
 	)
-	
-
-
-func _process(delta: float) -> void:
-	pass

@@ -10,7 +10,7 @@ var collecting: bool = false
 
 @onready var spawn_sfx = $SpawnSFX
 @onready var collect_sfx = $CollectSFX
-var electron_scene = preload("res://scenes/characters/electron.tscn")
+var electron_scene = preload("res://reusable/gameplay/electron/electron.tscn")
 var active_electrons: Array[Node] = []
 
 
