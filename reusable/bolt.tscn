@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsqbr4y3y3pbj"]
+
+[ext_resource type="Script" uid="uid://dnt0kbgdtbayx" path="res://reusable/bolt.gd" id="1_if3kt"]
+[ext_resource type="Texture2D" uid="uid://b5tw4teumbvpj" path="res://assets/images/bolt.png" id="2_xx3rl"]
+
+[node name="Bolt" type="RigidBody2D"]
+z_index = 3
+collision_layer = 0
+collision_mask = 0
+gravity_scale = 3.0
+script = ExtResource("1_if3kt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_xx3rl")

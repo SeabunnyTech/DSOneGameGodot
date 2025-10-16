@@ -10,5 +10,8 @@ func _ready():
 	add_child(timer)
 	timer.start()
 
+	# 隨機分配要打到哪一層
+	collision_layer = 1 << randi_range(1, 3)
+
 func _on_timer_timeout():
 	queue_free()

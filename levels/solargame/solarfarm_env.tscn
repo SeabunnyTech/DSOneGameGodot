@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b1jnlmv86nel5"]
+[gd_scene load_steps=14 format=3 uid="uid://b1jnlmv86nel5"]
 
 [ext_resource type="Texture2D" uid="uid://b7meicxi1qel1" path="res://levels/solargame/9-21示意畫面/完整/無樹的山.png" id="1_5myhm"]
 [ext_resource type="Script" uid="uid://dpellax7jagl8" path="res://levels/solargame/solarfarm_env.gd" id="1_euum8"]
@@ -40,21 +40,17 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wud70"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_stwxm"]
-
 [node name="SolarfarmEnv" type="Node2D"]
 script = ExtResource("1_euum8")
 sun_color_over_time = SubResource("Gradient_p23xs")
 sky_color_over_time = SubResource("Gradient_nvbgn")
-sunlight_progress = 0.859733
+sunlight_progress = 0.204233
 
 [node name="sky_background" type="ColorRect" parent="."]
 light_mask = 16
 offset_right = 3840.0
 offset_bottom = 2160.0
-color = Color(0.341551, 0.587885, 0.819638, 1)
+color = Color(0.262334, 0.561722, 0.851701, 1)
 metadata/_edit_lock_ = true
 
 [node name="lower_sky_gradient" type="TextureRect" parent="sky_background"]
@@ -86,7 +82,7 @@ texture = ExtResource("3_wud70")
 
 [node name="sun_orbit_center" type="Node2D" parent="."]
 position = Vector2(1920, 6000)
-rotation = -0.376712
+rotation = 0.309726
 
 [node name="sun" type="Node2D" parent="sun_orbit_center"]
 position = Vector2(0, -5600)
@@ -94,7 +90,7 @@ position = Vector2(0, -5600)
 [node name="Sunball2d" parent="sun_orbit_center/sun" instance=ExtResource("5_wud70")]
 z_index = 10
 scale = Vector2(1.5, 1.5)
-tint_color = Color(1, 0.896918, 0.715752, 1)
+tint_color = Color(1, 0.915248, 0.766296, 1)
 metadata/_edit_lock_ = true
 
 [node name="SkyLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
@@ -126,16 +122,3 @@ metadata/_edit_lock_ = true
 
 [node name="SolarPanel2d" parent="." instance=ExtResource("5_stwxm")]
 light_mask = 2
-
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2(1500, 1000)
-collision_layer = 8
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(7, 7)
-shape = SubResource("RectangleShape2D_wud70")
-
-[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
-scale = Vector2(0.25, 0.25)
-texture = SubResource("NoiseTexture2D_stwxm")

@@ -33,12 +33,6 @@ var _current_wind_vector: Vector2 = Vector2.ZERO
 
 #endregion
 
-func _on_hit(node: RigidBody2D):
-	$Area2D.modulate = Color(randf(), 1, 1, 1)
-
-func _ready() -> void:
-	# 初始化場景，例如預載入雲的場景等
-	$Area2D.body_entered.connect(_on_hit)
 
 func _process(delta: float) -> void:
 	# 每幀更新的邏輯
