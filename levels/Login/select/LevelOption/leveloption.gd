@@ -1,3 +1,4 @@
+@tool
 extends Node2D
 
 signal all_player_ready
@@ -5,19 +6,18 @@ signal all_player_ready
 @export var image: Texture2D:
 	set(value):
 		image = value
-		$image.texture = image
+		$scalar/image.texture = image
 
 @export var title: String:
 	set(value):
 		title = value
-		$image/Label.text = title
+		$scalar/image/Label.text = title
 
+@export var level_name: String
 
 var disabled = true
 
-@onready var player1 = PlayerManager.player1
-@onready var player2 = PlayerManager.player2
-@onready var portal_area = $PortalArea
+@onready var portal_area = $scalar/PortalArea
 
 
 enum State {
@@ -45,30 +45,33 @@ func _ready():
 	#position = Vector2(1200, 1200)
 	disabled = false
 
-	p1_progress.heading_altered.connect(func(target_state):
-		if p1_tween:
-			p1_tween.kill()
-		p1_tween = create_tween()
-		if target_state:
-			$OnTriggerSFX.play()
-			p1_tween.tween_property(self, 'scale', Vector2(1.05, 1.05), 0.3)
-		else:
-			p1_tween.tween_property(self, 'scale', Vector2(1, 1), 0.3)
-	)
-	
-	p2_progress.heading_altered.connect(func(target_state):
-		if p2_tween:
-			p2_tween.kill()
-		p2_tween = create_tween()
-		if target_state:
-			$OnTriggerSFX.play()
-			p2_tween.tween_property(self, 'scale', Vector2(1.05, 1.05), 0.3)
-		else:
-			p2_tween.tween_property(self, 'scale', Vector2(1, 1), 0.3)
-	)
+	if not Engine.is_editor_hint():
+		p1_progress.heading_altered.connect(func(target_state):
+			if p1_tween:
+				p1_tween.kill()
+			p1_tween = create_tween()
+			if target_state:
+				$OnTriggerSFX.play()
+				p1_tween.tween_property($scalar, 'scale', Vector2(1.05, 1.05), 0.3)
+			else:
+				p1_tween.tween_property($scalar, 'scale', Vector2(1, 1), 0.3)
+		)
+		
+		p2_progress.heading_altered.connect(func(target_state):
+			if p2_tween:
+				p2_tween.kill()
+			p2_tween = create_tween()
+			if target_state:
+				$OnTriggerSFX.play()
+				p2_tween.tween_property($scalar, 'scale', Vector2(1.05, 1.05), 0.3)
+			else:
+				p2_tween.tween_property($scalar, 'scale', Vector2(1, 1), 0.3)
+		)
 
-	p1_progress.triggered.connect(_on_option_triggered)
-	p2_progress.triggered.connect(_on_option_triggered)
+		p1_progress.triggered.connect(_on_option_triggered)
+		p2_progress.triggered.connect(_on_option_triggered)
+
+
 
 
 func _on_option_triggered():
@@ -90,19 +93,20 @@ func _process(_delta: float) -> void:
 		return
 
 	if not Engine.is_editor_hint():
-		var p1_triggering = portal_area.overlaps_body(player1)
+		var PM = PlayerManager
+		var p1_triggering = portal_area.overlaps_body(PM.player1)
 		p1_progress.react(p1_triggering)
 
 		if Globals.intended_player_num == 2:
-			var p2_triggering = portal_area.overlaps_body(player2)
+			var p2_triggering = portal_area.overlaps_body(PM.player2)
 			p2_progress.react(p2_triggering)
 
 
 
 
 func _draw_progress(progress, player_idx):
-
-	var hue = player1.hue if player_idx == 1 else player2.hue
+	var PM = PlayerManager
+	var hue = PM.player1.hue if player_idx == 1 else PM.player2.hue
 	var y0 = 800 if player_idx == 1 else 860
 	#var rect = Rect2(Vector2(-600, -600), Vector2(1200, 1400))  # 位置和大小
 	var player_color = Color.from_hsv(hue, 1, 1, 1)
