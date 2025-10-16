@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://rpuhw02nweta"]
+
+[ext_resource type="Script" uid="uid://bxly57d6e4p0t" path="res://reusable/solarpanel/solar_panel_quad.gd" id="1_t43ws"]
+
+[node name="SolarPanelQuad" type="Polygon2D"]
+light_mask = 2
+color = Color(0.856613, 0.976128, 0.995257, 1)
+polygon = PackedVector2Array(-53, -118, 184, -152, 158, 61, -102, 36)
+script = ExtResource("1_t43ws")
+gap_ratio = 0.1
+border_ratio = 0.05
+panel_color = Color(0.14968, 0.331336, 0.567683, 1)
+solar_cell_light_mask = 4
+metadata/_custom_type_script = "uid://b4ump0vv2frj5"

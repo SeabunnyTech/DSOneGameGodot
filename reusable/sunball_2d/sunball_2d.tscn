@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cymtsc4kj707h"]
+
+[ext_resource type="Shader" uid="uid://din4et1eytgah" path="res://reusable/sunball_2d/sunball_2d.gdshader" id="1_gle8t"]
+[ext_resource type="Script" uid="uid://du8q6cai1cjpc" path="res://reusable/sunball_2d/sunball_2d.gd" id="1_u4m6y"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_gle8t"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_u4m6y"]
+seamless = true
+noise = SubResource("FastNoiseLite_gle8t")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u4m6y"]
+shader = ExtResource("1_gle8t")
+shader_parameter/time_scale = 1.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_u4m6y")
+shader_parameter/flame_speed = 0.3
+shader_parameter/variation_strength = 0.12
+shader_parameter/focus_inner = 0.1
+shader_parameter/focus_outer = 0.4
+shader_parameter/color_steps = 4
+shader_parameter/core_color = Vector3(1.5, 1.15, 0.6)
+shader_parameter/edge_color = Vector3(0.01, 0.1, 0)
+shader_parameter/brightness_boost = 1.0
+shader_parameter/flame_center = Vector2(0.5, 0.5)
+shader_parameter/flame_scale = 1.0
+
+[node name="Sunball2d" type="Node2D"]
+script = ExtResource("1_u4m6y")
+
+[node name="Sprite2D" type="ColorRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_u4m6y")
+custom_minimum_size = Vector2(500, 500)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3 uid="uid://b3ok6wydupiy4"]
+
+[ext_resource type="Script" uid="uid://drups51elpbim" path="res://levels/solargame/light_particle/light_particle.gd" id="1_oy658"]
+[ext_resource type="PackedScene" uid="uid://dbkc1g3cnykq0" path="res://reusable/trail2d/trail2d.tscn" id="2_uj74s"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_oy658"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_klovx"]
+
+[sub_resource type="Gradient" id="Gradient_klovx"]
+offsets = PackedFloat32Array(0, 0.293878, 0.363265, 0.64898)
+colors = PackedColorArray(1, 0.991, 0.82, 1, 1, 0.969333, 0.08, 0.937255, 1, 0.8, 0, 0.921569, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_oy658"]
+gradient = SubResource("Gradient_klovx")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 1)
+
+[node name="LightParticle2" type="RigidBody2D"]
+collision_layer = 8
+collision_mask = 8
+physics_material_override = SubResource("PhysicsMaterial_oy658")
+continuous_cd = 1
+script = ExtResource("1_oy658")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_klovx")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = SubResource("GradientTexture2D_oy658")
+
+[node name="Trail2d" parent="." instance=ExtResource("2_uj74s")]

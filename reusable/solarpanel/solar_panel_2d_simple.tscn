@@ -1,0 +1,113 @@
+[gd_scene load_steps=5 format=3 uid="uid://bg75icofb00mv"]
+
+[ext_resource type="Script" uid="uid://b7gl8n1e2m5xt" path="res://reusable/solarpanel/solar_panel_2d_simple.gd" id="1_toxcf"]
+[ext_resource type="Texture2D" uid="uid://cfyylepb5dn6n" path="res://levels/solargame/9-21示意畫面/完整/山+太陽能.png" id="2_2clc3"]
+[ext_resource type="PackedScene" uid="uid://rpuhw02nweta" path="res://reusable/solarpanel/solar_panel_quad.tscn" id="3_44h25"]
+[ext_resource type="PackedScene" uid="uid://s0ukmu87368k" path="res://reusable/solarpanel/box_quad.tscn" id="4_2clc3"]
+
+[node name="SolarPanel2d" type="Node2D"]
+script = ExtResource("1_toxcf")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(1920, 1775)
+
+[node name="太陽能板" type="Sprite2D" parent="Node2D"]
+visible = false
+texture = ExtResource("2_2clc3")
+metadata/_edit_lock_ = true
+
+[node name="BoxQuad" parent="Node2D" instance=ExtResource("4_2clc3")]
+position = Vector2(-53, -717)
+polygon = PackedVector2Array(-1275.24, 850.06, -1087.04, 853.078, -1119.31, 894.323, -1333.49, 889.293)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="Node2D/BoxQuad"]
+light_mask = 2
+position = Vector2(-1214.3, 880.239)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="Node2D/BoxQuad" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-82.1841, -54.9037, 140.96, -54.9037, 79.125, 72.8567, -195.997, 63.8029)
+thickness_direction = Vector2(3.095, 9.72)
+
+[node name="BoxQuad2" parent="Node2D" instance=ExtResource("4_2clc3")]
+position = Vector2(377, -649)
+polygon = PackedVector2Array(-1331.7, 779.64, -1166.8, 780.646, -1132.75, 817.868, -1365.75, 816.862)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="Node2D/BoxQuad2"]
+light_mask = 2
+position = Vector2(-1260, 810.826)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="Node2D/BoxQuad2" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-189.724, -123.311, 52.2402, -123.311, 76.4365, 1.43164, -233.635, 0.425659)
+thickness_direction = Vector2(-0.02, 12.6)
+
+[node name="BoxQuad2" parent="." instance=ExtResource("4_2clc3")]
+position = Vector2(2681, 1130)
+polygon = PackedVector2Array(-1360.37, 777.628, -1179.35, 775.616, -1134.54, 814.85, -1325.42, 818.874)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="BoxQuad2"]
+light_mask = 2
+position = Vector2(-1262.69, 808.814)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="BoxQuad2" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-241.701, -127.335, 30.7322, -128.341, 81.8135, -0.580444, -205.854, 1.43152)
+thickness_direction = Vector2(-0.02, 12.6)
+
+[node name="BoxQuad3" parent="." instance=ExtResource("4_2clc3")]
+position = Vector2(3042, 1127)
+polygon = PackedVector2Array(-1362.17, 777.628, -1183.83, 779.64, -1129.16, 820.886, -1319.15, 821.892)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="BoxQuad3"]
+light_mask = 2
+position = Vector2(-1262.69, 808.814)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="BoxQuad3" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-244.389, -128.341, 3.84741, -129.347, 85.3982, 5.45557, -187.931, 7.46753)
+thickness_direction = Vector2(-0.02, 12.6)
+
+[node name="BoxQuad4" parent="." instance=ExtResource("4_2clc3")]
+position = Vector2(3388, 1124)
+polygon = PackedVector2Array(-1363.96, 781.652, -1182.93, 780.646, -1113.93, 822.898, -1314.67, 824.91)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="BoxQuad4"]
+light_mask = 2
+position = Vector2(-1265.38, 817.868)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="BoxQuad4" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-259.624, -123.311, -1.52966, -122.305, 107.802, 10.4855, -164.631, 10.4855)
+thickness_direction = Vector2(-0.02, 12.6)
+
+[node name="BoxQuad5" parent="." instance=ExtResource("4_2clc3")]
+position = Vector2(3747, 1121)
+polygon = PackedVector2Array(-1349.62, 784.67, -1176.66, 783.664, -1097.8, 822.898, -1294.95, 824.91)
+thickness_direction = Vector2(0, 25)
+
+[node name="支架_陰影" type="Polygon2D" parent="BoxQuad5"]
+light_mask = 2
+position = Vector2(-1251.94, 813.844)
+color = Color(0.521569, 0.709804, 0.741176, 1)
+polygon = PackedVector2Array(-9, -123, -10, -21, -7, -18, 1, -15, 10, -14, 21, -14, 30, -15, 37, -18, 40, -21, 38, -121)
+
+[node name="SolarPanelQuad" parent="BoxQuad5" instance=ExtResource("3_44h25")]
+position = Vector2(-1170.65, 686.664)
+polygon = PackedVector2Array(-267.689, -119.287, -6.90649, -119.287, 119.452, 8.47351, -159.254, 13.5034)
+thickness_direction = Vector2(-0.02, 12.6)

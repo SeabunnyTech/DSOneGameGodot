@@ -1,0 +1,1 @@
+extends CollisionPolygon2D

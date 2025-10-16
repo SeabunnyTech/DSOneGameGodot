@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://dbkc1g3cnykq0"]
+
+[ext_resource type="Script" uid="uid://cslf1u7bqyw0h" path="res://reusable/trail2d/trail_2d.gd" id="1_umrmh"]
+
+[sub_resource type="Curve" id="Curve_umrmh"]
+_data = [Vector2(0, 0.323699), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_umrmh"]
+colors = PackedColorArray(0.75, 0.512, 0.24, 0, 1, 0.941333, 0.12, 0.184314)
+
+[node name="Trail2d" type="Line2D"]
+width_curve = SubResource("Curve_umrmh")
+default_color = Color(1, 0.882667, 0.12, 1)
+gradient = SubResource("Gradient_umrmh")
+script = ExtResource("1_umrmh")

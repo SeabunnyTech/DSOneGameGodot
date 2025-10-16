@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://s0ukmu87368k"]
+
+[ext_resource type="Script" uid="uid://b4ump0vv2frj5" path="res://reusable/solarpanel/box_quad.gd" id="1_eh2m5"]
+
+[node name="BoxQuad" type="Polygon2D"]
+light_mask = 2
+position = Vector2(23.2905, -0.577332)
+scale = Vector2(1.11587, 0.994048)
+color = Color(0.856613, 0.976128, 0.995257, 1)
+polygon = PackedVector2Array(-48.6531, 17.6826, 362.685, 20.7005, 292.785, 171.599, -102.423, 166.569)
+script = ExtResource("1_eh2m5")
+thickness_direction = Vector2(0, 20)
