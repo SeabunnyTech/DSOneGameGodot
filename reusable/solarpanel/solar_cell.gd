@@ -39,7 +39,7 @@ func emit_a_bolt():
 	var bolt = boltscene.instantiate()
 	get_parent().add_child(bolt)
 	var angle = randf_range(PI*1.3, PI*1.7)
-	var speed = 1000.0
+	var speed = 1500.0
 	bolt.linear_velocity = Vector2(cos(angle), sin(angle)) * speed
 
 

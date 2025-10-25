@@ -11,4 +11,5 @@ gravity_scale = 3.0
 script = ExtResource("1_if3kt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("2_xx3rl")
