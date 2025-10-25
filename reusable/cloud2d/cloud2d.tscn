@@ -5,3 +5,5 @@
 [node name="Cloud2d" type="Node2D"]
 light_mask = 0
 script = ExtResource("1_usqfc")
+spawn_duration = null
+spawn_overlap = null
