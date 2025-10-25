@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dyv6wc04keatr"]
+
+[ext_resource type="Script" uid="uid://bay4rhqh5qiek" path="res://reusable/cloud2d/cloud_2d.gd" id="1_usqfc"]
+
+[node name="Cloud2d" type="Node2D"]
+light_mask = 0
+script = ExtResource("1_usqfc")
