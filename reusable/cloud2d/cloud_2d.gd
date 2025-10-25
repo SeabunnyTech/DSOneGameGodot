@@ -21,23 +21,22 @@ class CircleData:
 	var position: Vector2
 
 func _ready():
-	generate_cloud()
+	generate_cloud_data()
 
-func generate_cloud():
-	# 清除現有的圓形
-	for circle in circles:
-		circle.queue_free()
-	circles.clear()
-	
-	# 第一步：產生底部一橫排的圓形數據
-	var circle_data_array = generate_base_row()
-	
-	# 第二步：播放出場動畫
-	spawn_circles(circle_data_array)
+
+var sun_position: Vector2:
+	set(new_sun_pos):
+		sun_position = new_sun_pos
+		for circle in circles:
+			var relative_sun_pos: Vector2 = sun_position - circle.global_position
+			var sun_dir = relative_sun_pos.normalized()
+			var toon_distance = clamp(relative_sun_pos.length() / 3000, 0.1, 0.3)
+			circle.light_position = Vector2(0.5, 0.5) + toon_distance * sun_dir
+
 
 # 只產生數據，不創建實際節點
-func generate_base_row() -> Array[CircleData]:
-	var data_array: Array[CircleData] = []
+var cloud_data_array: Array[CircleData] = []
+func generate_cloud_data():
 	var current_x = 0.0
 	var y_bias = 0.0
 
@@ -60,21 +59,20 @@ func generate_base_row() -> Array[CircleData]:
 		var data = CircleData.new()
 		data.radius = radius
 		data.position = pos
-		data_array.append(data)
+		cloud_data_array.append(data)
 		
 		# 多數情況會前進到下一步, 偏離的越多越可能再次生成
 		if randf() > 0.3 + 2 * abs(y_ratio):
 			var overlap = radius * randf_range(0.3, 0.7)
 			current_x += radius - overlap
 		else:
-			y_bias = -y_ratio
-	
-	return data_array
+			y_bias = -y_ratio * 1.5
+
 
 # 按順序播放圓圈出場動畫
-func spawn_circles(circle_data_array: Array[CircleData]):
-	for i in range(circle_data_array.size()):
-		var data = circle_data_array[i]
+func play_spawn_animation():
+	for i in range(cloud_data_array.size()):
+		var data = cloud_data_array[i]
 		
 		# 創建圓圈節點
 		var circle = cloud_circle_scene.instantiate()

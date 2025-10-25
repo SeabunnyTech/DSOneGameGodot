@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c01tin3spq14n"]
+
+[ext_resource type="Script" uid="uid://dahpqff6i88v6" path="res://levels/solargame/cloud_manager.gd" id="1_mc66a"]
+
+[node name="CloudManager" type="ColorRect"]
+offset_right = 1000.0
+offset_bottom = 600.0
+color = Color(1, 0.67, 0.67, 0.270588)
+script = ExtResource("1_mc66a")

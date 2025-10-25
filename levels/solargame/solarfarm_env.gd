@@ -71,6 +71,7 @@ func _process(delta: float) -> void:
 		$sky_background.color = sky_color_over_time.sample(sky_light_progress)
 		# 微調太陽顏色
 		$sun_orbit_center/sun/Sunball2d.tint_color = sun_color_over_time.sample(sky_light_progress)
+		#$sun_orbit_center/sun/EnvLight2D.color = sun_color_over_time.sample(sky_light_progress)
 
 
 var LightParticleScene = preload("res://levels/solargame/light_particle/light_particle.tscn")

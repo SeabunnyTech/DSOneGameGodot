@@ -23,6 +23,8 @@ shader_parameter/edge_color = Vector3(0.01, 0.1, 0)
 shader_parameter/brightness_boost = 1.0
 shader_parameter/flame_center = Vector2(0.5, 0.5)
 shader_parameter/flame_scale = 1.0
+shader_parameter/sun_velocity = Vector2(0, 0)
+shader_parameter/trail_strength = 1.0
 
 [node name="Sunball2d" type="Node2D"]
 script = ExtResource("1_u4m6y")
