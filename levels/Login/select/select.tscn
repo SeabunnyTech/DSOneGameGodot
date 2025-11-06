@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://btnj03qeeyjly"]
+[gd_scene load_steps=9 format=3 uid="uid://btnj03qeeyjly"]
 
 [ext_resource type="Script" uid="uid://bxgc8vqb6nhjt" path="res://levels/Login/select/select.gd" id="1_q2gye"]
 [ext_resource type="PackedScene" uid="uid://pwe0uy0n54cu" path="res://levels/Login/select/LevelOption/leveloption.tscn" id="2_frkrv"]
 [ext_resource type="Texture2D" uid="uid://imilr6qsmeuv" path="res://assets/images/backgrounds/static/login_select_level1.png" id="3_v7gbq"]
 [ext_resource type="Texture2D" uid="uid://dic7ddfbw1ytc" path="res://assets/images/backgrounds/static/login_select_level2.png" id="4_pw173"]
+[ext_resource type="Texture2D" uid="uid://pd3w502ef6ed" path="res://assets/images/backgrounds/static/login_select_solarfarm.png" id="5_f84sh"]
 [ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_xyjsi"]
 [ext_resource type="Script" uid="uid://5c1lm56b1uyr" path="res://reusable/fade_label.gd" id="6_ansfx"]
 [ext_resource type="PackedScene" uid="uid://jkaqke4nipbi" path="res://reusable/player_waiter_ui/1p_player_waiter.tscn" id="7_58y6d"]
@@ -28,7 +29,7 @@ level_name = "level2_tutorial"
 [node name="Level3" parent="." instance=ExtResource("2_frkrv")]
 position = Vector2(3020, 1000)
 scale = Vector2(0.8, 0.8)
-image = ExtResource("4_pw173")
+image = ExtResource("5_f84sh")
 title = "陽光保衛戰"
 level_name = "level3_tutorial"
 
