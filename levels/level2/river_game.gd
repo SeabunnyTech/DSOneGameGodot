@@ -99,16 +99,16 @@ func disable_checkpoint():
 
 func init_player():
 	var radii: Array[float] = [18.0, 15.0, 12.0]
-	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[0].modulate = Color.from_hsv(0.50, 0.6, 1, 1)
 	PlayerManager.current_players[0].set_radii(radii)
-	PlayerManager.current_players[1].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[1].modulate = Color.from_hsv(0.50, 0.6, 1, 1)
 	PlayerManager.current_players[1].set_radii(radii)
 
 func restore_player_size():
 	var radii: Array[float] = [40, 35, 30]
-	PlayerManager.current_players[0].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[0].modulate = Color.from_hsv(0.50, 0.6, 1, 1)
 	PlayerManager.current_players[0].set_radii(radii)
-	PlayerManager.current_players[1].set_color(Color.from_hsv(0.50, 0.6, 1, 1))
+	PlayerManager.current_players[1].modulate = Color.from_hsv(0.50, 0.6, 1, 1)
 	PlayerManager.current_players[1].set_radii(radii)
 
 func show_avatar():

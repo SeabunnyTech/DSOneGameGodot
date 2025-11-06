@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=8 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" uid="uid://b07m4gxcdi1g8" path="res://player/player.gd" id="1_htxxl"]
 [ext_resource type="Script" uid="uid://dgs3fkmyidagk" path="res://player/motion/angular_motion.gd" id="3_qel1b"]
@@ -6,15 +6,9 @@
 [ext_resource type="Script" uid="uid://b6ck7dmofywkf" path="res://player/motion/Inertia.gd" id="5_vafl7"]
 [ext_resource type="AudioStream" uid="uid://ia6t3w3rnxhr" path="res://assets/audio/in_use/water_in.wav" id="6_ypeom"]
 [ext_resource type="AudioStream" uid="uid://cbm7arhsldbpg" path="res://assets/audio/in_use/30341__junggle__waterdrop24.wav" id="7_13j2x"]
-[ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="7_boad6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4ujkc"]
 radius = 88.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_rgyib"]
-font = ExtResource("7_boad6")
-font_size = 100
-font_color = Color(0, 0, 0, 1)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -60,7 +54,7 @@ offset_right = 20.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 100
 text = "H"
-label_settings = SubResource("LabelSettings_rgyib")
 horizontal_alignment = 1
 vertical_alignment = 1

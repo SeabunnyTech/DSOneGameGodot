@@ -71,7 +71,7 @@ func timeout_hide():
 func merge_with_player():
 	$Arrow.hide()
 	self.hide()
-	set_color(base_color)
+	metaball.modulate = base_color
 	
 	merged_with_player.emit(self)
 	stop_waiting_animation()
@@ -82,14 +82,14 @@ func separate_from_player():
 
 	$Arrow.show()
 	self.show()
-	set_color(waiting_color)
+	metaball.modulate = waiting_color
 
 	separated_from_player.emit(self)
 	start_waiting_animation()
 	start_arrow_animation()
 
 func start_waiting_animation():
-	set_color(waiting_color)
+	metaball.modulate = waiting_color
 	# 停止之前的動畫（如果有的話）
 	if waiting_tween:
 		waiting_tween.kill()
@@ -97,35 +97,17 @@ func start_waiting_animation():
 	waiting_tween = create_tween()
 	waiting_tween.set_loops() # 設置無限循環
 
-	# 只對 metaball 進行動畫
-	waiting_tween.tween_method(
-		func(alpha: float): 
-			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
-			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-			metaball.update_ball_colors(vec4_colors),
-		1.0, 0.3, 0.5
-	)
+	# 只對 metaball 進行動畫，並加強對比度
+	waiting_tween.tween_property(metaball, 'modulate:a', 0.2, 0.5)
 	# 再淡入
-	waiting_tween.tween_method(
-		func(alpha: float): 
-			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
-			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-			metaball.update_ball_colors(vec4_colors),
-		0.3, 1.0, 0.5
-	)
+	waiting_tween.tween_property(metaball, 'modulate:a', 1.0, 0.5)
 
 func stop_waiting_animation():
 	if waiting_tween:
 		waiting_tween.kill()
 
 	waiting_tween = create_tween()
-	waiting_tween.tween_method(
-		func(alpha: float): 
-			var vec4_col = Vector4(base_color.r, base_color.g, base_color.b, alpha)
-			var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-			metaball.update_ball_colors(vec4_colors),
-		0.3, 1.0, 0.5
-	)
+	waiting_tween.tween_property(metaball, 'modulate:a', 1.0, 0.5)
 
 func start_arrow_animation():
 	if arrow_tween:
@@ -154,8 +136,3 @@ func start_arrow_animation():
 	arrow_tween.parallel().tween_property($Arrow, "scale",
 		base_scale, 0.5
 	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-
-func set_color(target_color: Color):
-	var vec4_col = Vector4(target_color.r, target_color.g, target_color.b, target_color.a)
-	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-	metaball.update_ball_colors(vec4_colors)

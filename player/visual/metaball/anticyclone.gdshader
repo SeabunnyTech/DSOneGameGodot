@@ -6,11 +6,10 @@ uniform float ball_radii[5];
 uniform int ball_count : hint_range(1, 5) = 1;
 
 // Contour line properties
-uniform vec4 line_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
-uniform float start_radius : hint_range(0.01, 1.0) = 0.03;
-uniform float radius_step : hint_range(0.01, 0.5) = 0.02;
-uniform int line_count : hint_range(1, 10) = 2;
-uniform float pixel_line_width : hint_range(0.5, 10.0) = 3.0;
+uniform float start_radius : hint_range(0.01, 1.0) = 0.1;
+uniform float radius_step : hint_range(0.01, 0.5) = 0.1;
+uniform int line_count : hint_range(1, 10) = 5;
+uniform float pixel_line_width : hint_range(0.5, 10.0) = 2.0;
 uniform float fade_factor : hint_range(0.0, 1.0) = 0.7; // How much the lines fade out. 0=no fade, 1=full fade.
 
 // The metaball influence function
@@ -57,5 +56,7 @@ void fragment() {
         }
     }
 
-    COLOR = vec4(line_color.rgb, clamp(alpha, 0.0, 1.0) * line_color.a);
+	// The incoming COLOR already contains the modulated color.
+    // We just need to apply our shape's alpha to it.
+    COLOR.a *= clamp(alpha, 0.0, 1.0);
 }

@@ -29,6 +29,10 @@ var hue
 		hue = {0: 0.50, 1:0.45}[index]	# 預設的一些 hue
 
 
+#var anticyclone_color: Color = Color.BLACK:
+#	set(value):
+#		$AnticycloneH.
+
 # 狀態轉換相關的變數與函數
 
 @export var init_state: State = State.LOST
@@ -63,7 +67,7 @@ func _start_color_transition(_new_state, immediate):
 	var sva = sva_table[heading_state]
 	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
 	if immediate:
-		set_color(target_color)
+		modulate = target_color
 		state = heading_state
 		on_state_changed.emit(state)
 		return
@@ -71,7 +75,7 @@ func _start_color_transition(_new_state, immediate):
 	if tween:
 		tween.kill()
 	tween = create_tween()
-	tween.tween_method(set_color, modulate, target_color, 0.3)
+	tween.tween_property(self, 'modulate', target_color, 0.3)
 	tween.finished.connect(
 		func():
 			state=heading_state
@@ -158,14 +162,23 @@ func _process(_delta: float) -> void:
 func set_visual_mode(is_anticyclone: bool, duration: float = 0.5):
 	metaball_node.switch_visual(is_anticyclone, duration)
 	
-	var tween = get_tree().create_tween()
+	var label_tween = get_tree().create_tween()
 	var target_alpha = 1.0 if is_anticyclone else 0.0
-	tween.tween_property(anticyclone_h_label, "modulate:a", target_alpha, duration)
+	label_tween.tween_property(anticyclone_h_label, "modulate:a", target_alpha, duration)
+
+	# Kill any ongoing color transition before starting a new one
+	if tween:
+		tween.kill()
+
+	if is_anticyclone:
+		# When switching to anticyclone, tween modulate to the label's theme color
+		var anticyclone_color = anticyclone_h_label.get_theme_color("font_color")
+		tween = create_tween()
+		tween.tween_property(self, 'modulate', anticyclone_color, duration)
+	else:
+		# When switching back, restore the color based on the current state
+		heads_to_state(state, false)
 
 
 func set_radii(new_radius: Array[float]):
 	metaball_node.update_ball_radii(new_radius)
-
-func set_color(new_color):
-	var col = Color(new_color)
-	modulate = col
