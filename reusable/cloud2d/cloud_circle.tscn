@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://mof3br28rsas"]
+[gd_scene load_steps=7 format=3 uid="uid://mof3br28rsas"]
 
 [ext_resource type="Script" uid="uid://v4d1j7ieojxg" path="res://reusable/cloud2d/cloud_circle.gd" id="1_36bf7"]
 [ext_resource type="Shader" uid="uid://bkvy0dju2y6sm" path="res://reusable/cloud2d/cloud_circle.gdshader" id="1_ev5jb"]
 [ext_resource type="Script" uid="uid://b6ck7dmofywkf" path="res://player/motion/Inertia.gd" id="1_pea35"]
+[ext_resource type="AudioStream" uid="uid://tpme4edpjlxp" path="res://reusable/cloud2d/sfx/pop-402324.mp3" id="4_tgmbu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pea35"]
 shader = ExtResource("1_ev5jb")
@@ -38,3 +39,7 @@ collision_mask = 14
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InertiaFollower/Area2D"]
 visible = false
 shape = SubResource("CircleShape2D_pea35")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_tgmbu")
+volume_db = -10.0

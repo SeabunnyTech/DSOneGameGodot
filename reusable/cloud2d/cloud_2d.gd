@@ -68,9 +68,13 @@ func generate_cloud_data():
 		else:
 			y_bias = -y_ratio * 1.5
 
+	cloud_data_array.shuffle()
+
 
 # 按順序播放圓圈出場動畫
 func play_spawn_animation():
+
+	$AudioStreamPlayer2D.play()
 	for i in range(cloud_data_array.size()):
 		var data = cloud_data_array[i]
 		
@@ -84,11 +88,12 @@ func play_spawn_animation():
 		circles.append(circle)
 		
 		# 計算延遲時間（有重疊）
-		var delay = i * (spawn_duration - spawn_overlap)
+		var delay = i * 0.03
 		
 		# 創建 Tween 動畫
 		var tween = create_tween()
+
 		tween.tween_property(circle, "scale", Vector2.ONE, spawn_duration)\
-			.set_delay(i * 0.03)\
+			.set_delay(delay)\
 			.set_trans(Tween.TRANS_BACK)\
 			.set_ease(Tween.EASE_OUT)

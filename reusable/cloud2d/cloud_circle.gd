@@ -64,7 +64,6 @@ func on_hit_by_sunlight(sunlight_particle: RigidBody2D):
 	sunlight_particle.queue_free()
 
 
-
 func _update_shader():
 	# 確保節點已經準備好
 	if not is_inside_tree():
