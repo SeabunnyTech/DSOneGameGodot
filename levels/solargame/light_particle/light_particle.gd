@@ -12,7 +12,7 @@ func _ready():
 
 	# 隨機分配要打到哪一層
 	collision_layer = 1 << randi_range(1, 3)
-	collision_mask = collision_layer
+	#collision_mask = collision_layer
 
 func _on_timer_timeout():
 	queue_free()
