@@ -2,8 +2,6 @@ class_name Player extends CharacterBody2D
 
 signal on_state_changed(new_state: State)
 
-signal countdown_cancelled(player: Node2D)
-
 
 signal full_rotation_completed(player: Node2D, clockwise: bool)
 signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
@@ -60,7 +58,7 @@ func heads_to_state(new_state, immediate=false):
 
 
 
-func _start_color_transition(new_state, immediate):
+func _start_color_transition(_new_state, immediate):
 	# 調整顏色
 	var sva = sva_table[heading_state]
 	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
@@ -143,6 +141,7 @@ func _ready() -> void:
 	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
 
 	heads_to_state(init_state, true)
+	anticyclone_h_label.modulate.a = 0.0
 
 
 func _process(_delta: float) -> void:
@@ -153,6 +152,16 @@ func _process(_delta: float) -> void:
 		inertia_follower2.position]
 
 	metaball_node.update_ball_positions(ball_positions)
+
+@onready var anticyclone_h_label = $AnticycloneH
+
+func set_visual_mode(is_anticyclone: bool, duration: float = 0.5):
+	metaball_node.switch_visual(is_anticyclone, duration)
+	
+	var tween = get_tree().create_tween()
+	var target_alpha = 1.0 if is_anticyclone else 0.0
+	tween.tween_property(anticyclone_h_label, "modulate:a", target_alpha, duration)
+
 
 func set_radii(new_radius: Array[float]):
 	metaball_node.update_ball_radii(new_radius)
