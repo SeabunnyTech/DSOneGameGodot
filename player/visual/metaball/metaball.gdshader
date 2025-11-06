@@ -1,9 +1,8 @@
 shader_type canvas_item;
 
-// 分開定義球體屬性的陣列
+// 球體屬性
 uniform vec2 ball_positions[5];
 uniform float ball_radii[5];
-uniform vec4 ball_colors[5];
 uniform int ball_count : hint_range(1, 5) = 3;
 
 
@@ -16,21 +15,19 @@ float metaball(vec2 uv, vec2 center, float radius) {
 void fragment() {
     vec2 uv = UV;
     float total_influence = 0.0;
-    vec4 final_color = vec4(0.0);
 
     // 計算每個球體對當前像素的影響
     for (int i = 0; i < ball_count; i++) {
-        float influence = metaball(uv, ball_positions[i], ball_radii[i]);
-        total_influence += influence;
-        final_color += ball_colors[i] * influence;
+        total_influence += metaball(uv, ball_positions[i], ball_radii[i]);
     }
 
-    // 根據總影響力決定像素顏色
+    // 根據總影響力決定像素的 Alpha 值，RGB 顏色由 modulate 決定
     float threshold = 1.0;
     if (total_influence > threshold) {
-        final_color /= total_influence;
-        COLOR = final_color;
+		// 保留傳入的顏色(COLOR.rgb)，只修改 alpha
+		// 使用 smoothstep 讓邊緣更平滑
+        COLOR.a *= step(threshold, total_influence);
     } else {
-        COLOR = vec4(0.0);
+        COLOR.a = 0.0;
     }
 }

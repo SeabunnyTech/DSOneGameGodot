@@ -33,11 +33,6 @@ func switch_visual(is_anticyclone: bool, duration: float = 0.5):
 		tween.tween_property(color_rect, "modulate:a", 1.0, duration)
 		tween.tween_property(color_rect2, "modulate:a", 0.0, duration)
 
-
-func update_ball_colors(	ball_colors: Array[Vector4]):
-	color_rect.material.set_shader_parameter("ball_colors", ball_colors)
-	# Anticyclone shader does not use ball_colors, so no need to set it for color_rect2
-
 func update_ball_count(new_ball_count: int):
 	ball_count = new_ball_count
 	color_rect.material.set_shader_parameter("ball_count", ball_count)

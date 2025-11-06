@@ -169,6 +169,3 @@ func set_radii(new_radius: Array[float]):
 func set_color(new_color):
 	var col = Color(new_color)
 	modulate = col
-	var vec4_col = Vector4(col.r, col.g, col.b, col.a)
-	var vec4_colors: Array[Vector4] = [vec4_col, vec4_col, vec4_col]
-	metaball_node.update_ball_colors(vec4_colors)

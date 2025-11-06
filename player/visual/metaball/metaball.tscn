@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://clq04q7cckivp"]
+[gd_scene load_steps=6 format=3 uid="uid://clq04q7cckivp"]
 
 [ext_resource type="Script" uid="uid://p3dgetp17f7n" path="res://player/visual/metaball/metaball.gd" id="1_5c2ii"]
 [ext_resource type="Shader" uid="uid://eqxhecawi0sv" path="res://player/visual/metaball/anticyclone.gdshader" id="2_snle2"]
@@ -8,7 +8,6 @@
 shader = ExtResource("2_xirs8")
 shader_parameter/ball_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ball_radii = PackedFloat32Array(0, 0, 0, 0, 0)
-shader_parameter/ball_colors = PackedVector4Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ball_count = 3
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_nuyk2"]
@@ -16,11 +15,11 @@ shader = ExtResource("2_snle2")
 shader_parameter/ball_positions = PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 shader_parameter/ball_radii = PackedFloat32Array(0, 0, 0, 0, 0)
 shader_parameter/ball_count = 1
-shader_parameter/line_color = Color(1, 1, 1, 1)
+shader_parameter/line_color = Color(0, 0, 0, 1)
 shader_parameter/start_radius = 0.03
 shader_parameter/radius_step = 0.02
 shader_parameter/line_count = 2
-shader_parameter/pixel_line_width = 3.0
+shader_parameter/pixel_line_width = 5.00000021375
 shader_parameter/fade_factor = 0.7
 
 [node name="Metaball" type="Node2D"]
