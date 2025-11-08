@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dhlvypir2o1c0"]
+[gd_scene load_steps=9 format=3 uid="uid://dhlvypir2o1c0"]
 
 [ext_resource type="Script" uid="uid://b07m4gxcdi1g8" path="res://player/player.gd" id="1_htxxl"]
+[ext_resource type="Script" uid="uid://dtadal1q7l7ie" path="res://player/motion/linear_motion.gd" id="3_boad6"]
 [ext_resource type="Script" uid="uid://dgs3fkmyidagk" path="res://player/motion/angular_motion.gd" id="3_qel1b"]
 [ext_resource type="PackedScene" uid="uid://clq04q7cckivp" path="res://player/visual/metaball/metaball.tscn" id="4_y6pit"]
 [ext_resource type="Script" uid="uid://b6ck7dmofywkf" path="res://player/motion/Inertia.gd" id="5_vafl7"]
@@ -22,6 +23,9 @@ shape = SubResource("CircleShape2D_4ujkc")
 
 [node name="Angular" type="Node" parent="Motion"]
 script = ExtResource("3_qel1b")
+
+[node name="LinearMotion" type="Node" parent="Motion"]
+script = ExtResource("3_boad6")
 
 [node name="Metaball" parent="." instance=ExtResource("4_y6pit")]
 

@@ -29,12 +29,16 @@ signal on_light_hit_solar_panel
 #region 內部狀態變數
 
 # 當前的風力向量，會影響雲的移動和樹的搖擺
-var _current_wind_vector: Vector2 = Vector2.ZERO
+var _wind_speed: float = 0
+var wind_decay_factor = 5.0
 
 #endregion
+func _physics_process(delta: float) -> void:
+	if not Engine.is_editor_hint():
+		_wind_speed = _wind_speed * (wind_decay_factor ** -delta)
+		$CloudManager.update_wind_speed(_wind_speed)
 
-
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# 每幀更新的邏輯
 	# 1. 根據 _current_wind_vector 移動雲
 	#    - 遍歷 clouds_container 中的所有雲
@@ -114,13 +118,12 @@ func spawn_clouds(count: int, type: String = "default") -> void:
 # --- 風力控制 ---
 
 ## 設定當前的風力
-## @param wind_vector: Vector2 - 風的方向和強度。
-## 例如 Vector2(100, 0) 表示向右的強風；Vector2(0, 0) 表示無風。
-func set_wind(wind_vector: Vector2) -> void:
+## 將游標速度轉換成風力
+func add_wind_speed(x_speed: float) -> void:
 	# 在這裡填寫實作：
 	# 1. 更新內部的風力變數，_process 函數會使用它來移動雲和樹
-	_current_wind_vector = wind_vector
+	_wind_speed += x_speed * 0.3
+
 	# 2. (可選) 你也可以在這裡直接觸發一次性的效果，例如一陣強風的音效
-	pass
 
 #endregion

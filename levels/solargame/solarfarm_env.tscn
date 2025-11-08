@@ -45,13 +45,13 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_euum8")
 sun_color_over_time = SubResource("Gradient_p23xs")
 sky_color_over_time = SubResource("Gradient_nvbgn")
-sunlight_progress = 0.2138
+sunlight_progress = 0.9041666666666667
 
 [node name="sky_background" type="ColorRect" parent="."]
 light_mask = 16
 offset_right = 3840.0
 offset_bottom = 2160.0
-color = Color(0.250487, 0.557809, 0.856497, 1)
+color = Color(0.39657736, 0.60605913, 0.7973654, 1)
 metadata/_edit_lock_ = true
 
 [node name="lower_sky_gradient" type="TextureRect" parent="sky_background"]
@@ -83,7 +83,7 @@ texture = ExtResource("3_wud70")
 
 [node name="sun_orbit_center" type="Node2D" parent="."]
 position = Vector2(1920, 6000)
-rotation = 0.299708
+rotation = -0.42324233
 
 [node name="sun" type="Node2D" parent="sun_orbit_center"]
 position = Vector2(0, -5800)
@@ -91,7 +91,7 @@ position = Vector2(0, -5800)
 [node name="Sunball2d" parent="sun_orbit_center/sun" instance=ExtResource("5_wud70")]
 z_index = 10
 scale = Vector2(1.5, 1.5)
-tint_color = Color(1, 0.88552, 0.77104, 1)
+tint_color = Color(1, 0.83833337, 0.6766667, 1)
 metadata/_edit_lock_ = true
 
 [node name="SkyLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
@@ -137,4 +137,5 @@ offset_left = -28.0
 offset_top = 882.0
 offset_right = 3835.0
 offset_bottom = 1309.0
+color = Color(1, 0.67, 0.67, 0)
 sun_node = NodePath("../sun_orbit_center/sun")

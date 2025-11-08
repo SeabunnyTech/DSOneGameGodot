@@ -6,6 +6,8 @@ signal on_state_changed(new_state: State)
 signal full_rotation_completed(player: Node2D, clockwise: bool)
 signal rotation_detected(player: Node2D, clockwise: bool, speed: float)
 
+signal linear_movement_detected(player: Node2D, x_speed: float)
+signal linear_burst_triggered(player: Node2D, distance: float, average_speed)
 
 enum State {
 	LOST,			# 沒有感應到所以消失了
@@ -138,11 +140,12 @@ func _physics_process(delta: float):
 
 
 func _ready() -> void:
-	$Motion/Angular.connect("full_rotation_completed", SignalBus.player_full_rotation_completed.emit)
-	$Motion/Angular.connect("rotation_detected", SignalBus.player_rotation_detected.emit)	
-	
 	$Motion/Angular.connect("full_rotation_completed", full_rotation_completed.emit)
 	$Motion/Angular.connect("rotation_detected", rotation_detected.emit)	
+
+	$Motion/LinearMotion.connect("linear_movement_detected", linear_movement_detected.emit)
+	$Motion/LinearMotion.connect("linear_burst_triggered", linear_burst_triggered.emit)
+	
 
 	heads_to_state(init_state, true)
 	anticyclone_h_label.modulate.a = 0.0

@@ -5,7 +5,7 @@ class_name CloudManager
 
 
 # 雲朵生成設定
-@export var spawn_interval: float = 3.0  # 每幾秒生成一朵雲
+@export var spawn_interval: float = 0.3  # 每幾秒生成一朵雲
 @export var spawn_area_size: Vector2 = Vector2(1000, 600)  # 生成區域大小
 @export var spawn_offset: Vector2 = Vector2(-200, 0)  # 生成區域偏移
 
@@ -15,6 +15,11 @@ class_name CloudManager
 
 # 雲朵預設設定
 @export var cloud_scene: PackedScene = preload("res://reusable/cloud2d/cloud2d.tscn")
+
+
+# 風力設定
+@export var wind_decay_rate: float = 1.0 # 風力衰減速度
+var wind_speed: float = 0
 
 
 var clouds: Array[Cloud2D] = []
@@ -39,19 +44,37 @@ func _process(delta: float) -> void:
 	# 移動所有雲朵
 	_move_clouds_to_sun(delta)
 
+	# 套用風力並使其隨時間衰減
+	if abs(wind_speed) > 0.1:
+		var screen_width = get_viewport_rect().size.x
+		var screen_center_x = screen_width / 2.0
+		
+		for cloud in clouds:
+			# 計算雲在畫面中的相對位置 (0.0 - 1.0)
+			#var cloud_screen_pos_x = cloud.get_global_transform_with_canvas().origin.x
 
-func spawn_cloud():
+			#if  sign(cloud_screen_pos_x - screen_center_x) == sign(wind_speed):
+			cloud.position.x += wind_speed * delta
+
+			
+		#wind_speed = lerp(wind_speed, 0, wind_decay_rate * delta)
+
+
+func spawn_cloud(pos=null):
 	var cloud: Cloud2D
-	
+
 	cloud = cloud_scene.instantiate()
 	
 	# 隨機生成位置（在生成區域內）
-	var spawn_pos = Vector2(
-		randf_range(0, size.x),
-		randf_range(0, size.y)
-	)
-	cloud.position = spawn_pos
-	
+
+	if not pos:
+		pos = Vector2(
+			randf_range(0, size.x),
+			randf_range(0, size.y)
+		)
+
+	cloud.position = pos
+
 	# 設定太陽方向
 	cloud.sun_position = sun_node.position
 	
@@ -71,7 +94,7 @@ func _move_clouds_to_sun(delta: float) -> void:
 		var direction = (sun_node.global_position - cloud.global_position).normalized().x
 		
 		# 移動雲朵
-		cloud.global_position.x += direction * move_speed * delta
+		cloud.global_position.x += 10.0 * direction * move_speed * delta
 
 
 # 手動生成多朵雲
@@ -90,3 +113,7 @@ func clear_all_clouds() -> void:
 func set_spawn_interval(interval: float) -> void:
 	spawn_interval = interval
 	spawn_timer = 0.0
+
+# 從外部施加一陣風力
+func update_wind_speed(xspeed):
+	wind_speed = xspeed
