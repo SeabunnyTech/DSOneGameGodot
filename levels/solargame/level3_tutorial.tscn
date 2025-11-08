@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwlyhrnk82phm"]
+
+[ext_resource type="Script" uid="uid://b51bth2rtiw3w" path="res://levels/solargame/level3_tutorial.gd" id="1_qp6fi"]
+[ext_resource type="PackedScene" uid="uid://b1jnlmv86nel5" path="res://levels/solargame/solarfarm_env.tscn" id="2_x3uav"]
+
+[node name="Level31pTutorial" type="Node2D"]
+script = ExtResource("1_qp6fi")
+
+[node name="SolarfarmEnv" parent="." instance=ExtResource("2_x3uav")]
+sunlight_progress = 0.12673333333333334
