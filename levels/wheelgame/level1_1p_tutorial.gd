@@ -239,41 +239,37 @@ func _proceed_to_game_start():
 		leave_for_level.emit(new_level_name)
 	)
 
-	
-
-
 
 @onready var player1 = PlayerManager.player1
 @onready var player2 =  PlayerManager.player2
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 
-	if not Engine.is_editor_hint():
-		reset()
+	reset()
 
-		# 電仔生成
-		player1.full_rotation_completed.connect(func(_player, clockwise):
+	# 電仔生成
+	player1.full_rotation_completed.connect(func(_player, clockwise):
+		wheelgame_env.react_to_wheel_rotation(clockwise)
+	)
+
+	# 水輪旋轉
+	player1.rotation_detected.connect(func(_player, clockwise, speed):
+		wheelgame_env.rotate_wheel(clockwise, speed)
+	)
+
+	player2.full_rotation_completed.connect(func(_player, clockwise):
+		if Globals.intended_player_num == 2:
 			wheelgame_env.react_to_wheel_rotation(clockwise)
-		)
+	)
 
-		# 水輪旋轉
-		player1.rotation_detected.connect(func(_player, clockwise, speed):
+	# 水輪旋轉
+	player2.rotation_detected.connect(func(_player, clockwise, speed):
+		if Globals.intended_player_num == 2:
 			wheelgame_env.rotate_wheel(clockwise, speed)
-		)
+	)
 
-		player2.full_rotation_completed.connect(func(_player, clockwise):
-			if Globals.intended_player_num == 2:
-				wheelgame_env.react_to_wheel_rotation(clockwise)
-		)
-
-		# 水輪旋轉
-		player2.rotation_detected.connect(func(_player, clockwise, speed):
-			if Globals.intended_player_num == 2:
-				wheelgame_env.rotate_wheel(clockwise, speed)
-		)
-
-		# 連接 player lost 計時器
-		player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
+	# 連接 player lost 計時器
+	player_waiter.player_lost_for_too_long.connect(leave_scene_for_restart)
 
 
 	# 跳過教學的按鈕
@@ -338,7 +334,7 @@ func _undate_guide_text(new_text_state):
 
 
 
-func _show_text(text_key, duration=2, trans_duration=1):
+func _show_text(text_key, duration=2.0, trans_duration=1.0):
 	tween.tween_callback(func():_undate_guide_text(text_key))
 	tween.tween_property(guide_message, 'modulate:a', 1, trans_duration)
 	tween.tween_interval(duration)

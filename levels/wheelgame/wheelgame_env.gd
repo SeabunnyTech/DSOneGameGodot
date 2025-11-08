@@ -1,4 +1,3 @@
-@tool
 extends ColorRect
 
 signal electron_generated

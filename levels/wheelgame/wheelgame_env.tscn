@@ -31,9 +31,9 @@ size = Vector2(1812, 500)
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fg4m2"]
 resource_local_to_scene = true
 shader = ExtResource("13_wmynh")
-shader_parameter/transition = 0.0
 shader_parameter/texture_a = ExtResource("14_jc4lw")
 shader_parameter/texture_b = ExtResource("15_4lg6k")
+shader_parameter/transition = 0.0
 
 [sub_resource type="Curve2D" id="Curve2D_mfym5"]
 _data = {
