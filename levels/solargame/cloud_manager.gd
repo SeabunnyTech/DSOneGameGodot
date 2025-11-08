@@ -47,16 +47,19 @@ func _process(delta: float) -> void:
 	# 套用風力並使其隨時間衰減
 	if abs(wind_speed) > 0.1:
 		var screen_width = get_viewport_rect().size.x
-		var screen_center_x = screen_width / 2.0
 		
 		for cloud in clouds:
+			var poof_distance = randf_range(300, 600)
 			# 計算雲在畫面中的相對位置 (0.0 - 1.0)
 			#var cloud_screen_pos_x = cloud.get_global_transform_with_canvas().origin.x
 
 			#if  sign(cloud_screen_pos_x - screen_center_x) == sign(wind_speed):
-			cloud.position.x += wind_speed * delta
+			#cloud.position.x += wind_speed * delta
+			if cloud.position.x < poof_distance or cloud.position.x > screen_width-poof_distance:
+				cloud.poof()
+				clouds.erase(cloud)
 
-			
+		
 		#wind_speed = lerp(wind_speed, 0, wind_decay_rate * delta)
 
 

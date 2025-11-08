@@ -30,7 +30,7 @@ signal on_light_hit_solar_panel
 
 # 當前的風力向量，會影響雲的移動和樹的搖擺
 var _wind_speed: float = 0
-var wind_decay_factor = 5.0
+var wind_decay_factor = 50.0
 
 #endregion
 func _physics_process(delta: float) -> void:

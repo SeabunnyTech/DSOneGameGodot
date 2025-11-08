@@ -97,3 +97,22 @@ func play_spawn_animation():
 			.set_delay(delay)\
 			.set_trans(Tween.TRANS_BACK)\
 			.set_ease(Tween.EASE_OUT)
+
+
+func poof():
+	var tween = create_tween().set_parallel(true)
+	for circle in get_children():
+		if not circle is Node2D:
+			continue
+
+		var direction = circle.position.normalized()
+		if direction == Vector2.ZERO:
+			direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
+		
+		var move_to_pos = circle.position + direction * 50 # 向外移動 50 像素
+
+		tween.tween_property(circle, "position", move_to_pos, 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+		tween.tween_property(circle, "scale", Vector2.ZERO, 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+
+	await tween.finished
+	queue_free()
