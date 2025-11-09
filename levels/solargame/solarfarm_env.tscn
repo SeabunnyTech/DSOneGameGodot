@@ -8,14 +8,14 @@
 [ext_resource type="PackedScene" uid="uid://c01tin3spq14n" path="res://levels/solargame/cloud_manager.tscn" id="6_stwxm"]
 
 [sub_resource type="Gradient" id="Gradient_p23xs"]
-colors = PackedColorArray(1, 0.8, 0.6, 1, 1, 1, 1, 1)
+colors = PackedColorArray(0.96862745, 0.9529412, 0.34509805, 1, 1, 0.9254902, 0.5372549, 1)
 
 [sub_resource type="Gradient" id="Gradient_nvbgn"]
 offsets = PackedFloat32Array(0.0421941, 0.162055, 0.641079, 1)
 colors = PackedColorArray(0.119738, 0.217251, 0.309546, 1, 0.414913, 0.612115, 0.789944, 1, 0.1183, 0.51415, 0.91, 1, 0, 0.477185, 0.884798, 1)
 
 [sub_resource type="Gradient" id="Gradient_wud70"]
-colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 0.431373)
+colors = PackedColorArray(0, 0, 0, 0, 0.8117647, 1, 1, 0.25490198)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_stwxm"]
 gradient = SubResource("Gradient_wud70")
@@ -45,13 +45,13 @@ fill_to = Vector2(0.5, 0)
 script = ExtResource("1_euum8")
 sun_color_over_time = SubResource("Gradient_p23xs")
 sky_color_over_time = SubResource("Gradient_nvbgn")
-sunlight_progress = 0.4526
+sunlight_progress = 0.9524666666666667
 
 [node name="sky_background" type="ColorRect" parent="."]
 light_mask = 16
 offset_right = 3840.0
 offset_bottom = 2160.0
-color = Color(0.031245984, 0.4869484, 0.89145446, 1)
+color = Color(0.24994443, 0.39143187, 0.52145725, 1)
 metadata/_edit_lock_ = true
 
 [node name="lower_sky_gradient" type="TextureRect" parent="sky_background"]
@@ -83,7 +83,7 @@ texture = ExtResource("3_wud70")
 
 [node name="sun_orbit_center" type="Node2D" parent="."]
 position = Vector2(1920, 6000)
-rotation = 0.049637165
+rotation = -0.473822
 
 [node name="sun" type="Node2D" parent="sun_orbit_center"]
 position = Vector2(0, -5800)
@@ -91,7 +91,7 @@ position = Vector2(0, -5800)
 [node name="Sunball2d" parent="sun_orbit_center/sun" instance=ExtResource("5_wud70")]
 z_index = 10
 scale = Vector2(1.5, 1.5)
-tint_color = Color(1, 0.98104, 0.96208, 1)
+tint_color = Color(0.97160995, 0.9503315, 0.36336577, 1)
 metadata/_edit_lock_ = true
 
 [node name="SkyLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
