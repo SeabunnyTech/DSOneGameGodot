@@ -17,6 +17,12 @@ class_name CloudManager
 @export var cloud_scene: PackedScene = preload("res://reusable/cloud2d/cloud2d.tscn")
 
 
+@export_flags_2d_physics var collision_channels = 14:
+	set(value):
+		collision_channels = value
+		$InertiaFollower/RigidBody2D/CollisionShape2D.collision_layer = collision_channels
+		$InertiaFollower/RigidBody2D/CollisionShape2D.collision_mask = collision_channels
+
 # 風力設定
 @export var wind_decay_rate: float = 1.0 # 風力衰減速度
 var wind_speed: float = 0
@@ -30,17 +36,23 @@ func _ready():
 	if not cloud_scene:
 		push_warning("CloudManager: 沒有指定 cloud_scene，將動態創建雲朵")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# 更新每一朵雲的太陽位置
 	for cloud in clouds:
 		cloud.sun_position = sun_node.global_position
+
+
+func _physics_process(delta: float) -> void:
 		
 	# 生成計時器
 	spawn_timer += delta
 	if spawn_timer >= spawn_interval:
 		spawn_timer = 0.0
 		spawn_cloud()
-	
+		if len(clouds) > 20:
+			clouds[0].poof()
+			clouds.remove_at(0)
+
 	# 移動所有雲朵
 	_move_clouds_to_sun(delta)
 
@@ -100,22 +112,6 @@ func _move_clouds_to_sun(delta: float) -> void:
 		cloud.global_position.x += 10.0 * direction * move_speed * delta
 
 
-# 手動生成多朵雲
-func spawn_multiple_clouds(count: int) -> void:
-	for i in count:
-		spawn_cloud()
-
-# 清除所有雲朵
-func clear_all_clouds() -> void:
-	for cloud in clouds:
-		if is_instance_valid(cloud):
-			cloud.queue_free()
-	clouds.clear()
-
-# 設定生成間隔
-func set_spawn_interval(interval: float) -> void:
-	spawn_interval = interval
-	spawn_timer = 0.0
 
 # 從外部施加一陣風力
 func update_wind_speed(xspeed):
