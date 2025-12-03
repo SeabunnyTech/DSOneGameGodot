@@ -2,5 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dogx6jij1k2gd" path="res://levels/Login/login.gd" id="1_bnr01"]
 
-[node name="Login" type="Node2D"]
+[node name="Login" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_bnr01")

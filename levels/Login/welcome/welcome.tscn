@@ -1,50 +1,213 @@
-[gd_scene load_steps=7 format=3 uid="uid://lh1rudkmnc74"]
+[gd_scene load_steps=23 format=3 uid="uid://lh1rudkmnc74"]
 
 [ext_resource type="Script" uid="uid://bqavvge6v3lx3" path="res://levels/Login/welcome/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
-[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="2_0lg17"]
 [ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="2_f32jj"]
-[ext_resource type="Texture2D" uid="uid://6oh0gfhcmqhw" path="res://assets/images/drawings/解說圖1-1.PNG" id="3_vyuwr"]
+[ext_resource type="Texture2D" uid="uid://brc3nypvgfas5" path="res://levels/Login/welcome/開場畫面素材/ref.jpg" id="2_yqnds"]
+[ext_resource type="Texture2D" uid="uid://dxfxq2icxpt62" path="res://levels/Login/welcome/開場畫面素材/未來能源.png" id="3_xd4mk"]
+[ext_resource type="Script" uid="uid://41ex380et35s" path="res://levels/Login/welcome/logo_scalar.gd" id="4_rwie1"]
+[ext_resource type="Texture2D" uid="uid://du5kmmueu11hj" path="res://levels/Login/welcome/開場畫面素材/大挑戰.png" id="5_t4gc5"]
+[ext_resource type="Texture2D" uid="uid://s34vwqglc63i" path="res://levels/Login/welcome/開場畫面素材/STARTGAME.png" id="6_xd4mk"]
+[ext_resource type="Shader" uid="uid://crf0hog2suh6a" path="res://levels/Login/welcome/start_button.gdshader" id="7_atpv3"]
+[ext_resource type="Script" uid="uid://cgfedvae83q2e" path="res://levels/Login/welcome/start_button_texture.gd" id="7_rwie1"]
+[ext_resource type="AudioStream" uid="uid://bmsyc157m5bql" path="res://assets/audio/in_use/suntemple__magic-sfx-for-games.wav" id="9_8sp5i"]
+[ext_resource type="Script" uid="uid://bnfofvib0dq4j" path="res://levels/Login/welcome/electric_monster.gd" id="11_1qias"]
+[ext_resource type="Texture2D" uid="uid://dxfnvj8wxba6u" path="res://levels/Login/welcome/開場畫面素材/蓄電獸.png" id="11_1x4w6"]
+[ext_resource type="FontFile" uid="uid://de8mxpa7l15n2" path="res://assets/fonts/GenSenRounded2TW-B.otf" id="13_28duk"]
+[ext_resource type="Script" uid="uid://jlx3s1nby5rr" path="res://levels/Login/welcome/auto_size_label.gd" id="14_vuu6s"]
+[ext_resource type="Script" uid="uid://he7dvmuuoeb6" path="res://levels/Login/welcome/background_shape.gd" id="15_1qias"]
+[ext_resource type="Texture2D" uid="uid://cq2j8nuabg8n" path="res://levels/Login/welcome/開場畫面素材/logo.png" id="16_atpv3"]
 
-[sub_resource type="Theme" id="Theme_mr7yq"]
-default_font = ExtResource("1_wrufh")
-default_font_size = 80
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_55v2p"]
+shader = ExtResource("7_atpv3")
+shader_parameter/shine_color = Color(1, 1, 1, 0.4)
+shader_parameter/sweep_time = 2.5
+shader_parameter/shine_width = 0.6
+shader_parameter/shine_angle = -30.0
+shader_parameter/pause_duration = 2.0
+shader_parameter/button_aspect_ratio = 4.05
 
-[node name="Welcome" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rwie1"]
+size = Vector2(1120, 250)
+
+[sub_resource type="GDScript" id="GDScript_vuu6s"]
+script/source = "@tool
+extends Control
+
+# 1. 加入 set(value) 機制
+@export var color: Color = Color.DODGER_BLUE:
+	set(value):
+		color = value
+		queue_redraw() # 關鍵：一旦顏色改變，立刻通知系統重畫
+
+@export var resolution: int = 64:
+	set(value):
+		resolution = value
+		queue_redraw() # 關鍵：一旦解析度改變，立刻通知系統重畫
+
+func _draw():
+	# (這裡的邏輯保持不變)
+	var center = size / 2.0
+	var radius = size / 2.0 
+	
+	var points = PackedVector2Array()
+	
+	for i in range(resolution + 1):
+		var angle_deg = i * (360.0 / resolution)
+		var angle_rad = deg_to_rad(angle_deg)
+		
+		var x = cos(angle_rad) * radius.x
+		var y = sin(angle_rad) * radius.y
+		
+		points.append(Vector2(x, y) + center)
+	
+	draw_colored_polygon(points, color)
+
+func _ready():
+	# 2. 確保載入時立刻畫一次 (雖然 _draw 會自動呼叫，但這行保險)
+	queue_redraw() 
+	resized.connect(queue_redraw)
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jno8g"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1qias"]
+font = ExtResource("13_28duk")
+font_size = 60
+font_color = Color(0, 0, 0, 1)
+
+[node name="Welcome" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_n171j")
-disabled = false
 tutorial_music = ExtResource("2_f32jj")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-offset_right = 3840.0
-offset_bottom = 2160.0
+[node name="LayoutRefTexture" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_yqnds")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer"]
-layout_mode = 2
-theme = SubResource("Theme_mr7yq")
-bbcode_enabled = true
-text = "h"
+[node name="UpperTitle" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.255
+anchor_top = 0.05
+anchor_right = 0.745
+anchor_bottom = 0.268
+grow_horizontal = 2
+texture = ExtResource("3_xd4mk")
+expand_mode = 3
+script = ExtResource("4_rwie1")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
-theme_override_constants/separation = 30
+[node name="LowerTitle" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.26
+anchor_top = 0.245
+anchor_right = 0.74
+anchor_bottom = 0.465
+grow_horizontal = 2
+texture = ExtResource("5_t4gc5")
+expand_mode = 1
+script = ExtResource("4_rwie1")
 
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-texture = ExtResource("3_vyuwr")
-expand_mode = 5
+[node name="StartButtonTexture" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_55v2p")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.354
+anchor_top = 0.5
+anchor_right = 0.646
+anchor_bottom = 0.615
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_xd4mk")
+expand_mode = 3
+script = ExtResource("7_rwie1")
 
-[node name="WelcomeTitle" type="Label" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_0lg17")
+[node name="Area2D" type="Area2D" parent="StartButtonTexture"]
+visible = false
+position = Vector2(-1359.36, -1080)
+collision_layer = 16
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StartButtonTexture/Area2D"]
+position = Vector2(1920, 1205)
+shape = SubResource("RectangleShape2D_rwie1")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_8sp5i")
+
+[node name="MonsterShade" type="Control" parent="."]
+layout_mode = 1
+anchor_left = 0.456
+anchor_top = 0.895
+anchor_right = 0.544
+anchor_bottom = 0.935
+grow_horizontal = 2
+grow_vertical = 0
+script = SubResource("GDScript_vuu6s")
+color = Color(0.47, 0.47, 0.47, 1)
+
+[node name="ElectricMonster" type="TextureRect" parent="."]
+material = SubResource("ShaderMaterial_jno8g")
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.439
+anchor_top = 0.755
+anchor_right = 0.561
+anchor_bottom = 0.917
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("11_1x4w6")
+expand_mode = 3
+script = ExtResource("11_1qias")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.323
+anchor_top = 0.654
+anchor_right = 0.677
+anchor_bottom = 0.68
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 110
-text = "歡迎來到電幻 1 號所的水力發電大挑戰!"
+theme_override_fonts/font = ExtResource("1_wrufh")
+text = "拿起控制盤，對準 START GAME 開啟遊戲"
+label_settings = SubResource("LabelSettings_1qias")
 horizontal_alignment = 1
+script = ExtResource("14_vuu6s")
 
-[node name="GuideTextLabel" type="Label" parent="CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_0lg17")
-theme_override_colors/font_color = Color(0.103744, 0.103744, 0.103744, 1)
-text = "現在就站到地面的標記點上，舉起控制盤，開始接受挑戰吧!"
-horizontal_alignment = 1
+[node name="BackgroundShape" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_1qias")
+blue_top_width = 0.243
+blue_bottom_width = 0.0
+yellow_top_width = 0.01
+
+[node name="DSOneLogo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.824
+anchor_top = 0.051
+anchor_right = 0.975
+anchor_bottom = 0.154
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_atpv3")
+expand_mode = 1

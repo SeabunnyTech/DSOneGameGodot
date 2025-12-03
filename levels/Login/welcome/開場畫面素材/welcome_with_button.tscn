@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://dqap7cyhx3gdq"]
+
+[node name="WelcomeWithButton" type="Node2D"]

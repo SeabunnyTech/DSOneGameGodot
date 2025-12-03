@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 
 # 使用一個 dict 避免需要新增變數名稱
