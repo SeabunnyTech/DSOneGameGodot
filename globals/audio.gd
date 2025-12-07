@@ -12,7 +12,7 @@ var is_muted: bool = false
 
 
 func _ready():
-	fade_tween = create_tween()
+	# fade_tween = create_tween()
 	stream_paused = false
 
 
