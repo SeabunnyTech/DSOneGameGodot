@@ -126,4 +126,17 @@ func add_wind_speed(x_speed: float) -> void:
 
 	# 2. (可選) 你也可以在這裡直接觸發一次性的效果，例如一陣強風的音效
 
+## 啟用或禁用環境中的所有碰撞
+func set_collision_enabled(enabled: bool) -> void:
+	# 將請求傳遞給 CloudManager
+	if has_node("CloudManager"):
+		$CloudManager.set_collision_enabled(enabled)
+
+	# 遍歷所有子節點，查找太陽能板並禁用它們的碰撞
+	var solar_panel_script = load("res://reusable/solarpanel/solar_panel_2d_simple.gd")
+	for child in get_children():
+		if child.get_script() == solar_panel_script:
+			if child.has_method("set_collision_enabled"):
+				child.set_collision_enabled(enabled)
+
 #endregion

@@ -46,3 +46,6 @@ func emit_a_bolt():
 
 func set_collision_mask(collision_mask):
 	$Area2D.collision_mask = collision_mask
+
+func set_collision_enabled(enabled: bool):
+	$Area2D/CollisionPolygon2D.disabled = not enabled

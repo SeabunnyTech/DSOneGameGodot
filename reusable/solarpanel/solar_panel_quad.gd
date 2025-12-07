@@ -208,3 +208,8 @@ func _process(delta):
 func _on_quad_changed():
 	generate_sides()	
 	create_solar_panel(main_panel)
+
+func set_collision_enabled(enabled: bool):
+	for child in get_children():
+		if child is SolarCell:
+			child.set_collision_enabled(enabled)

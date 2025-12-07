@@ -64,3 +64,18 @@ func _process(_delta):
 	if not Engine.is_editor_hint():
 		# Code to execute in game.
 		pass
+
+func set_collision_enabled(enabled: bool):
+	# Find all BoxQuad children and delegate the call
+	# We need a recursive function to find all descendants
+	_set_collision_for_descendants(self, enabled)
+
+func _set_collision_for_descendants(node, enabled: bool):
+	for child in node.get_children():
+		if child is BoxQuad:
+			if child.has_method("set_collision_enabled"):
+				child.set_collision_enabled(enabled)
+		
+		# Recurse into children
+		if child.get_child_count() > 0:
+			_set_collision_for_descendants(child, enabled)

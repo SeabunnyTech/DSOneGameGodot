@@ -116,3 +116,8 @@ func _move_clouds_to_sun(delta: float) -> void:
 # 從外部施加一陣風力
 func update_wind_speed(xspeed):
 	wind_speed = xspeed
+
+func set_collision_enabled(enabled: bool):
+	for cloud in clouds:
+		if is_instance_valid(cloud) and cloud.has_method("set_collision_enabled"):
+			cloud.set_collision_enabled(enabled)
