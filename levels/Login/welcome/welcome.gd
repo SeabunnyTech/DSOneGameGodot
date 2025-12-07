@@ -3,9 +3,9 @@ extends Control
 
 signal leave_for_level(new_scene_name)
 
-@export var disabled = true
-
 @export var tutorial_music: AudioStream
+
+@onready var collision2d = $StartButtonTexture/Area2D/CollisionShape2D
 
 func enter_scene():
 	# 進場的前提是畫面已經是一片白底
@@ -17,7 +17,7 @@ func enter_scene():
 	tween.tween_interval(0.3)
 	tween.tween_property(self, 'modulate:a', 1, 1)
 	tween.finished.connect(func():
-		disabled = false
+		collision2d.disabled = false
 	)
 	$UpperTitle.play_pop_in_animation(.8)
 	$LowerTitle.play_pop_in_animation(1.2)
@@ -68,5 +68,5 @@ func reset():
 	$LowerTitle.scale = Vector2.ZERO
 	visible = false
 	self.modulate.a = 0
-	disabled = true
+	collision2d.disabled = true
 	is_leaving = false
