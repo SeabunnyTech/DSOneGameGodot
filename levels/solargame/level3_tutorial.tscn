@@ -1,10 +1,72 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwlyhrnk82phm"]
+[gd_scene load_steps=11 format=3 uid="uid://cwlyhrnk82phm"]
 
 [ext_resource type="Script" uid="uid://b51bth2rtiw3w" path="res://levels/solargame/level3_tutorial.gd" id="1_qp6fi"]
+[ext_resource type="AudioStream" uid="uid://3ehg8w45646y" path="res://assets/audio/archive/game music_Riverside Ride.mp3" id="2_r8tk6"]
 [ext_resource type="PackedScene" uid="uid://b1jnlmv86nel5" path="res://levels/solargame/solarfarm_env.tscn" id="2_x3uav"]
+[ext_resource type="PackedScene" uid="uid://cgbjofr2fxpho" path="res://reusable/tutorials/CircularMask/circular_mask.tscn" id="3_c4h2m"]
+[ext_resource type="AudioStream" uid="uid://b4bknyxtdmo8k" path="res://assets/audio/archive/login music candidate1_Pleasant Creek Loop.wav" id="3_lymas"]
+[ext_resource type="PackedScene" uid="uid://dxst3sfse37ap" path="res://reusable/tutorials/skip_button/skip_button.tscn" id="4_vpomu"]
+[ext_resource type="Theme" uid="uid://q80etp6d7a8u" path="res://assets/themes/LoginTextGuide.tres" id="5_r8tk6"]
+[ext_resource type="Script" uid="uid://cjvyje5xm3isy" path="res://reusable/player_waiter_ui/1p_player_waiter.gd" id="6_lymas"]
+[ext_resource type="PackedScene" uid="uid://d0nj48pnk17oh" path="res://reusable/hud/TimeBoard.tscn" id="7_81ibc"]
+[ext_resource type="Texture2D" uid="uid://2viewnwku18p" path="res://assets/images/drawings/解說圖_旋轉_人.png" id="8_ua4ep"]
 
 [node name="Level31pTutorial" type="Node2D"]
 script = ExtResource("1_qp6fi")
+game_music = ExtResource("2_r8tk6")
+tutorial_music = ExtResource("3_lymas")
 
 [node name="SolarfarmEnv" parent="." instance=ExtResource("2_x3uav")]
-sunlight_progress = 0.12673333333333334
+sunlight_progress = 0.7997
+
+[node name="1p_player_waiter" type="Node" parent="."]
+script = ExtResource("6_lymas")
+wait_lost_player_duration = 30
+
+[node name="CircularMask" parent="." instance=ExtResource("3_c4h2m")]
+center = Vector2(1920, 1080)
+radius = 0.0
+
+[node name="SkipButton" parent="." instance=ExtResource("4_vpomu")]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(3500, 1900)
+
+[node name="Title" type="Label" parent="."]
+modulate = Color(0, 0, 0, 0)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 1800.0
+offset_top = 920.0
+offset_right = 3720.0
+offset_bottom = 1085.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("5_r8tk6")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 110
+text = "歡迎來到蓄電大挑戰!"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Title"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 207.0
+offset_right = 1926.0
+offset_bottom = 372.0
+theme = ExtResource("5_r8tk6")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "今天我們將化身一顆水滴
+來驅動渦輪發電啦!"
+horizontal_alignment = 1
+
+[node name="TimeBoard" parent="." instance=ExtResource("7_81ibc")]
+offset_right = 3840.0
+offset_bottom = 400.0
+
+[node name="action_guide_img" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(3100, 1400)
+texture = ExtResource("8_ua4ep")

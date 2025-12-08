@@ -14,8 +14,8 @@ var spawn_areas: Dictionary = {
 
 func _ready() -> void:
 	get_tree().root.connect("ready", _on_scene_changed)
-	SignalBus.electrons_scoring.connect(_on_electrons_scoring)
-	SignalBus.electrons_area_scored.connect(_on_electrons_area_scored)
+	#SignalBus.electrons_scoring.connect(_on_electrons_scoring)
+	#SignalBus.electrons_area_scored.connect(_on_electrons_area_scored)
 
 func register_spawn_area(player_id: int, spawn_id: int) -> void:
 	if not spawn_areas.has(player_id):

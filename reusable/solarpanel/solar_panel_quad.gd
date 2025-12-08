@@ -1,6 +1,9 @@
 @tool
 extends BoxQuad
 
+
+signal hit_by_sunlight
+
 @onready var main_panel: Polygon2D = $"."
 
 @export var grid_size = Vector2(4, 3)
@@ -155,6 +158,8 @@ func create_solar_cell_in_quad(
 
 
 	# 設定顏色為藍色
+	if not solar_cell.hit_by_sunlight.is_connected(hit_by_sunlight.emit):
+		solar_cell.hit_by_sunlight.connect(hit_by_sunlight.emit)
 	solar_cell.original_color = panel_color
 	solar_cell.light_mask = solar_cell_light_mask
 
@@ -197,7 +202,7 @@ func _process(delta):
 	if Engine.is_editor_hint():
 		#return
 		editor_angle += 0.01
-		var sim_sun_angle = 90.0 + 60*cos(editor_angle)
+		#var sim_sun_angle = 90.0 + 60*cos(editor_angle)
 		#set_sun_angle(sim_sun_angle)
 
 	if not Engine.is_editor_hint():

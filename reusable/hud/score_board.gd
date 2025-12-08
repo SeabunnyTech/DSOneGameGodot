@@ -1,6 +1,10 @@
+@tool
 extends Control
 
 @onready var crown = $PanelContainer/HBoxContainer/crown
+
+
+@export var texture_override : Texture2D = null
 
 var score = 0:
 	set(value):
@@ -12,6 +16,12 @@ func reset():
 	score = 0
 	crown.modulate.a = 0
 	crown.scale = Vector2(1,1)
+
+
+func _ready() -> void:
+	if texture_override:
+		$PanelContainer/HBoxContainer/TextureRect.texture = texture_override
+
 
 
 var crown_tween
@@ -35,3 +45,12 @@ func fade(out=true):
 
 func add_score():
 	score += 1
+
+
+var score_board_tween
+func show_score_board():
+	if score_board_tween:
+		score_board_tween.kill()
+
+	score_board_tween = create_tween()
+	score_board_tween.tween_property(self, 'modulate:a', 1, 1)

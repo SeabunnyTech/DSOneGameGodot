@@ -1,11 +1,15 @@
 @tool
 extends Node2D
 
+signal hit_by_sunlight
+
+
 @export var show_debug_background : bool = false:
 	set(value):
 		show_debug_background = value
 		$"Node2D/太陽能板".visible = value
 @export var sun_angle = 90.0: set = set_sun_angle
+
 
 
 func set_sun_angle(new_angle):
@@ -47,15 +51,24 @@ func set_sun_angle(new_angle):
 	#var polygon = $"底座頂面/底座頂面_陰影".polygon
 	#polygon[2].x = clamp(, ref_polygon[2])
 
+@onready var solar_quads = [
+	$Node2D/BoxQuad/SolarPanelQuad,
+	$Node2D/BoxQuad2/SolarPanelQuad,
+	$BoxQuad2/SolarPanelQuad,
+	$BoxQuad3/SolarPanelQuad,
+	$BoxQuad4/SolarPanelQuad,
+	$BoxQuad5/SolarPanelQuad
+]
+
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		pass
-		#create_solar_panel(1,1)
-
 
 	if not Engine.is_editor_hint():
 		# Code to execute in game.
-		pass
+		for sq in solar_quads:
+			sq.hit_by_sunlight.connect(hit_by_sunlight.emit)
 
 func _process(_delta):
 	if Engine.is_editor_hint():

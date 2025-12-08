@@ -25,54 +25,54 @@ class_name CloudManager
 
 # 風力設定
 @export var wind_decay_rate: float = 1.0 # 風力衰減速度
-var wind_speed: float = 0
+var wind_speed: float = 0.0
 
 
 var clouds: Array[Cloud2D] = []
 var spawn_timer: float = 0.0
 
+# State variables
+var is_processing: bool = false
+var is_spawning: bool = false
+
+
 func _ready():
 	# 如果沒有指定場景，嘗試動態創建
 	if not cloud_scene:
 		push_warning("CloudManager: 沒有指定 cloud_scene，將動態創建雲朵")
+	reset()
+
 
 func _process(_delta: float) -> void:
+	if not is_processing:
+		return
+		
 	# 更新每一朵雲的太陽位置
 	for cloud in clouds:
 		cloud.sun_position = sun_node.global_position
 
 
 func _physics_process(delta: float) -> void:
-		
-	# 生成計時器
-	spawn_timer += delta
-	if spawn_timer >= spawn_interval:
-		spawn_timer = 0.0
-		spawn_cloud()
-		if len(clouds) > 20:
-			clouds[0].poof()
-			clouds.remove_at(0)
+	if not is_processing:
+		return
 
-	# 移動所有雲朵
+	# Spawning logic
+	if is_spawning:
+		spawn_timer += delta
+		if spawn_timer >= spawn_interval:
+			spawn_timer = 0.0
+			spawn_cloud()
+			if len(clouds) > 20:
+				# Use clear_all_clouds for animated removal if needed,
+				# but for now, just remove the oldest one.
+				clouds[0].poof()
+				clouds.remove_at(0)
+
+	# Movement logic
 	_move_clouds_to_sun(delta)
 
-	# 套用風力並使其隨時間衰減
-	if abs(wind_speed) > 0.1:
-		var screen_width = get_viewport_rect().size.x
-		
-		for cloud in clouds:
-			var poof_distance = randf_range(300, 600)
-			# 計算雲在畫面中的相對位置 (0.0 - 1.0)
-			#var cloud_screen_pos_x = cloud.get_global_transform_with_canvas().origin.x
-
-			#if  sign(cloud_screen_pos_x - screen_center_x) == sign(wind_speed):
-			#cloud.position.x += wind_speed * delta
-			if cloud.position.x < poof_distance or cloud.position.x > screen_width-poof_distance:
-				cloud.poof()
-				clouds.erase(cloud)
-
-		
-		#wind_speed = lerp(wind_speed, 0, wind_decay_rate * delta)
+	# Wind logic
+	_apply_wind(delta)
 
 
 func spawn_cloud(pos=null):
@@ -80,8 +80,6 @@ func spawn_cloud(pos=null):
 
 	cloud = cloud_scene.instantiate()
 	
-	# 隨機生成位置（在生成區域內）
-
 	if not pos:
 		pos = Vector2(
 			randf_range(0, size.x),
@@ -89,11 +87,8 @@ func spawn_cloud(pos=null):
 		)
 
 	cloud.position = pos
-
-	# 設定太陽方向
 	cloud.sun_position = sun_node.position
 	
-	# 加入場景和陣列
 	add_child(cloud)
 	clouds.append(cloud)
 	
@@ -105,13 +100,53 @@ func _move_clouds_to_sun(delta: float) -> void:
 		if not is_instance_valid(cloud):
 			continue
 		
-		# 計算往太陽的方向
 		var direction = (sun_node.global_position - cloud.global_position).normalized().x
-		
-		# 移動雲朵
 		cloud.global_position.x += 10.0 * direction * move_speed * delta
 
 
+func _apply_wind(_delta: float) -> void:
+	if abs(wind_speed) < 0.1:
+		return
+
+	var screen_width = get_viewport_rect().size.x
+	
+	# Create a copy of the array to iterate over, as we may modify the original
+	for cloud in clouds.duplicate():
+		if not is_instance_valid(cloud): continue
+
+		var poof_distance = randf_range(300, 600)
+		if cloud.position.x < poof_distance or cloud.position.x > screen_width - poof_distance:
+			cloud.poof()
+			clouds.erase(cloud)
+
+
+# --- Public API ---
+
+func start():
+	is_processing = true
+	is_spawning = true
+
+func stop():
+	is_processing = false
+	is_spawning = false
+
+func stop_generate():
+	is_spawning = false
+
+func clear_all_clouds():
+	for cloud in clouds:
+		if is_instance_valid(cloud):
+			cloud.poof()
+	clouds.clear()
+
+func reset():
+	stop()
+	for cloud in clouds:
+		if is_instance_valid(cloud):
+			cloud.queue_free()
+	clouds.clear()
+	spawn_timer = 0.0
+	wind_speed = 0.0
 
 # 從外部施加一陣風力
 func update_wind_speed(xspeed):

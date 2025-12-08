@@ -2,7 +2,7 @@
 extends Polygon2D
 
 class_name SolarCell
-
+signal hit_by_sunlight
 
 @export var original_color: Color
 
@@ -23,7 +23,11 @@ func _process(_delta : float):
 
 
 
-func on_hit_by_sunlight(sunlight_particle: RigidBody2D):
+func on_hit_by_sunlight(sunlight_particle):
+	# 不是光子的話不要收
+	if not sunlight_particle.has_method("on_cloud_hit"):
+		return
+
 	# 瞬間變黃
 	sunlight_particle.queue_free()
 	color = Color.YELLOW
@@ -31,6 +35,7 @@ func on_hit_by_sunlight(sunlight_particle: RigidBody2D):
 	# 創建 Tween 來漸變回原色
 	var tween = create_tween()
 	tween.tween_property(self, "color", original_color, 0.1)
+	hit_by_sunlight.emit()
 	emit_a_bolt()
 
 

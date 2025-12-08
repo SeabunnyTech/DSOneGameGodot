@@ -33,7 +33,7 @@ GlobalAudioPlayer="*res://globals/audio.gd"
 window/size/viewport_width=3840
 window/size/viewport_height=2160
 window/size/mode=3
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 
@@ -68,4 +68,5 @@ toggle_player2={
 
 [rendering]
 
+viewport/hdr_2d=true
 environment/defaults/default_clear_color=Color(1, 1, 1, 1)

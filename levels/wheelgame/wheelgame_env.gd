@@ -122,17 +122,13 @@ func set_collision_enabled(enabled: bool):
 	$Player1UI/ElectronEmitter.set_collision_enabled(enabled)
 
 @onready var score_board = $ScoreBoard
+func show_score_board():return score_board.show_score_board()
+
 var score:
 	get:
 		return score_board.score
 
-var score_board_tween
-func show_score_board():
-	if score_board_tween:
-		score_board_tween.kill()
 
-	score_board_tween = create_tween()
-	score_board_tween.tween_property(score_board, 'modulate:a', 1, 1)
 
 
 

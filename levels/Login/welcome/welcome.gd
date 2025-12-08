@@ -12,6 +12,10 @@ func enter_scene():
 	# 這個畫面將從一片 white_curtain 進入
 	visible = true
 
+	# 把玩家的游標設成水滴
+	for player in PlayerManager.current_players:
+		player.set_player_appearance(false)
+
 	# 淡出白色前景
 	var tween = create_tween()
 	tween.tween_interval(0.3)

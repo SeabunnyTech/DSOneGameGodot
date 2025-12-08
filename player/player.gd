@@ -162,7 +162,13 @@ func _process(_delta: float) -> void:
 
 @onready var anticyclone_h_label = $AnticycloneH
 
-func set_visual_mode(is_anticyclone: bool, duration: float = 0.5):
+
+func set_player_appearance(is_anticyclone: bool, params={}):
+
+	var duration: float = 0.5
+	if 'duration' in params:
+		duration = params['duration']
+
 	metaball_node.switch_visual(is_anticyclone, duration)
 	
 	var label_tween = get_tree().create_tween()
@@ -173,11 +179,24 @@ func set_visual_mode(is_anticyclone: bool, duration: float = 0.5):
 	if tween:
 		tween.kill()
 
+	var anticyclone_color = anticyclone_h_label.get_theme_color("font_color")
+	if 'color' in params:
+		anticyclone_color = params['color']
+
 	if is_anticyclone:
 		# When switching to anticyclone, tween modulate to the label's theme color
-		var anticyclone_color = anticyclone_h_label.get_theme_color("font_color")
 		tween = create_tween()
-		tween.tween_property(self, 'modulate', anticyclone_color, duration)
+
+		# 等高線的顏色
+		tween.parallel().tween_property(self, 'modulate', anticyclone_color, duration)
+
+		# H 的顏色
+		tween.tween_method(func(val):
+			anticyclone_h_label.add_theme_color_override("font_color", val),
+			anticyclone_h_label.get_theme_color("font_color"),
+			anticyclone_color,
+			duration)
+
 	else:
 		# When switching back, restore the color based on the current state
 		heads_to_state(state, false)

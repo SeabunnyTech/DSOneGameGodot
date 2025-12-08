@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b1jnlmv86nel5"]
+[gd_scene load_steps=17 format=3 uid="uid://b1jnlmv86nel5"]
 
 [ext_resource type="Texture2D" uid="uid://b7meicxi1qel1" path="res://levels/solargame/9-21示意畫面/完整/無樹的山.png" id="1_5myhm"]
 [ext_resource type="Script" uid="uid://dpellax7jagl8" path="res://levels/solargame/solarfarm_env.gd" id="1_euum8"]
@@ -6,13 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://bg75icofb00mv" path="res://reusable/solarpanel/solar_panel_2d_simple.tscn" id="5_stwxm"]
 [ext_resource type="PackedScene" uid="uid://cymtsc4kj707h" path="res://reusable/sunball_2d/sunball_2d.tscn" id="5_wud70"]
 [ext_resource type="PackedScene" uid="uid://c01tin3spq14n" path="res://levels/solargame/cloud_manager.tscn" id="6_stwxm"]
-
-[sub_resource type="Gradient" id="Gradient_p23xs"]
-colors = PackedColorArray(0.96862745, 0.9529412, 0.34509805, 1, 1, 0.9254902, 0.5372549, 1)
+[ext_resource type="PackedScene" uid="uid://cjoqhv8508c7k" path="res://reusable/hud/ScoreBoard.tscn" id="7_nvbgn"]
+[ext_resource type="Texture2D" uid="uid://b5tw4teumbvpj" path="res://assets/images/bolt.png" id="8_huyxn"]
 
 [sub_resource type="Gradient" id="Gradient_nvbgn"]
 offsets = PackedFloat32Array(0.0421941, 0.162055, 0.641079, 1)
-colors = PackedColorArray(0.119738, 0.217251, 0.309546, 1, 0.414913, 0.612115, 0.789944, 1, 0.1183, 0.51415, 0.91, 1, 0, 0.477185, 0.884798, 1)
+colors = PackedColorArray(0.101960786, 0.2, 0.31764707, 1, 0.3137255, 0.627451, 0.74509805, 1, 0.13333334, 0.5176471, 0.90588236, 1, 0, 0.5372549, 0.90588236, 1)
+
+[sub_resource type="Gradient" id="Gradient_p23xs"]
+offsets = PackedFloat32Array(0.0421941, 0.162055, 0.641079, 1)
+colors = PackedColorArray(0.101960786, 0.2, 0.31764707, 1, 0.3137255, 0.627451, 0.74509805, 1, 0.13333334, 0.5176471, 0.90588236, 1, 0, 0.5372549, 0.90588236, 1)
 
 [sub_resource type="Gradient" id="Gradient_wud70"]
 colors = PackedColorArray(0, 0, 0, 0, 0.8117647, 1, 1, 0.25490198)
@@ -41,14 +44,20 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
 
-[node name="SolarfarmEnv" type="Node2D"]
+[node name="SolarfarmEnv" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_euum8")
-sun_color_over_time = SubResource("Gradient_p23xs")
-sky_color_over_time = SubResource("Gradient_nvbgn")
-sunlight_progress = 0.9524666666666667
+sun_color_over_time = SubResource("Gradient_nvbgn")
+sky_color_over_time = SubResource("Gradient_p23xs")
 
 [node name="sky_background" type="ColorRect" parent="."]
 light_mask = 16
+layout_mode = 0
 offset_right = 3840.0
 offset_bottom = 2160.0
 color = Color(0.24994443, 0.39143187, 0.52145725, 1)
@@ -84,6 +93,7 @@ texture = ExtResource("3_wud70")
 [node name="sun_orbit_center" type="Node2D" parent="."]
 position = Vector2(1920, 6000)
 rotation = -0.473822
+scale = Vector2(0.99999994, 0.99999994)
 
 [node name="sun" type="Node2D" parent="sun_orbit_center"]
 position = Vector2(0, -5800)
@@ -133,9 +143,14 @@ metadata/_edit_lock_ = true
 light_mask = 2
 
 [node name="CloudManager" parent="." node_paths=PackedStringArray("sun_node") instance=ExtResource("6_stwxm")]
+layout_mode = 0
 offset_left = -28.0
 offset_top = 882.0
 offset_right = 3835.0
 offset_bottom = 1309.0
 color = Color(1, 0.67, 0.67, 0)
 sun_node = NodePath("../sun_orbit_center/sun")
+
+[node name="ScoreBoard" parent="." instance=ExtResource("7_nvbgn")]
+layout_mode = 1
+texture_override = ExtResource("8_huyxn")

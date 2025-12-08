@@ -1,5 +1,5 @@
 @tool
-extends Node2D
+extends Control
 class_name SolarfarmEnv
 
 # 設計給上層遊戲場景 (solargame.tscn) 呼叫的 API
@@ -7,9 +7,7 @@ class_name SolarfarmEnv
 ## 當陽光打到太陽能板上時發出
 signal on_light_hit_solar_panel
 
-
-
-#region 節點參考
+signal all_electron_collected
 
 
 # 天空背景，可能是 ColorRect 或一個著色器
@@ -21,34 +19,34 @@ signal on_light_hit_solar_panel
 # 山上樹木的容器，方便統一處理風吹動畫
 @onready var trees_container: Node2D = $trees_container
 
-#endregion
+
+var electron_collected : int = 0
+
+func _ready():
+	$SolarPanel2d.hit_by_sunlight.connect(func(): electron_collected+=1)
 
 
 
-
-#region 內部狀態變數
 
 # 當前的風力向量，會影響雲的移動和樹的搖擺
 var _wind_speed: float = 0
 var wind_decay_factor = 50.0
 
-#endregion
 func _physics_process(delta: float) -> void:
 	if not Engine.is_editor_hint():
 		_wind_speed = _wind_speed * (wind_decay_factor ** -delta)
 		$CloudManager.update_wind_speed(_wind_speed)
 
+@export var sun_progress_speed: float = 1/30.0
+var sun_should_go: bool = false
+var sun_should_emit_light: bool = false
+
 func _process(_delta: float) -> void:
-	# 每幀更新的邏輯
-	# 1. 根據 _current_wind_vector 移動雲
-	#    - 遍歷 clouds_container 中的所有雲
-	#    - 更新它們的位置：cloud.global_position += _current_wind_vector * delta
-	#    - 如果雲飄出畫面，可以將其移除或重新放置
-	# 2. 根據 _current_wind_vector 更新樹的動畫
-	#    - 遍歷 trees_container 中的所有樹
-	#    - 可以透過設定 shader 的 uniform 參數或播放 AnimationPlayer 來實現搖擺效果
-	sunlight_progress = (Time.get_ticks_msec() % 30000) / 30000.0
-	if not Engine.is_editor_hint():
+
+	if sun_should_go:
+		sunlight_progress += _delta * sun_progress_speed
+	
+	if sun_should_emit_light:
 		emit_light_from_sun()
 
 
@@ -74,7 +72,7 @@ func _process(_delta: float) -> void:
 		var sky_light_progress = 1.0 - 2.0 * abs(sunlight_progress - 0.5)
 		$sky_background.color = sky_color_over_time.sample(sky_light_progress)
 		# 微調太陽顏色
-		$sun_orbit_center/sun/Sunball2d.tint_color = sun_color_over_time.sample(sky_light_progress)
+		#$sun_orbit_center/sun/Sunball2d.tint_color = sun_color_over_time.sample(sky_light_progress)
 		#$sun_orbit_center/sun/EnvLight2D.color = sun_color_over_time.sample(sky_light_progress)
 
 
@@ -99,44 +97,86 @@ func emit_light_from_sun():
 		#await get_tree().create_timer(0.05).timeout  # 每個粒子間隔 0.05 秒
 
 
-# --- 雲朵控制 ---
 
-## 在場景中產生指定數量的雲
-## @param count: int - 要產生的雲數量
-## @param type: String - (可選) 雲的類型，用於產生不同外觀或行為的雲
-func spawn_clouds(count: int, type: String = "default") -> void:
-	# 在這裡填寫實作：
-	# 1. 預載入雲的場景 (e.g., preload("res://path/to/cloud.tscn"))
-	# 2. 迴圈 count 次，實例化雲場景
-	# 3. 為每朵雲設定隨機的初始位置、大小、透明度和速度
-	# 4. 將實例化的雲節點加到 clouds_container 中
-	#    clouds_container.add_child(new_cloud)
-	pass
-
-
-
-# --- 風力控制 ---
-
-## 設定當前的風力
-## 將游標速度轉換成風力
-func add_wind_speed(x_speed: float) -> void:
-	# 在這裡填寫實作：
-	# 1. 更新內部的風力變數，_process 函數會使用它來移動雲和樹
-	_wind_speed += x_speed * 0.3
-
-	# 2. (可選) 你也可以在這裡直接觸發一次性的效果，例如一陣強風的音效
 
 ## 啟用或禁用環境中的所有碰撞
 func set_collision_enabled(enabled: bool) -> void:
-	# 將請求傳遞給 CloudManager
-	if has_node("CloudManager"):
-		$CloudManager.set_collision_enabled(enabled)
+	$CloudManager.set_collision_enabled(enabled)
+	$SolarPanel2d.set_collision_enabled(enabled)
 
-	# 遍歷所有子節點，查找太陽能板並禁用它們的碰撞
-	var solar_panel_script = load("res://reusable/solarpanel/solar_panel_2d_simple.gd")
-	for child in get_children():
-		if child.get_script() == solar_panel_script:
-			if child.has_method("set_collision_enabled"):
-				child.set_collision_enabled(enabled)
 
-#endregion
+func reset():
+	# Reset wind
+	_wind_speed = 0.0
+
+	# Reset sun and orbit position
+	sun_should_go = false
+	sun_should_emit_light = false
+	self.sunlight_progress = 0.0
+
+	# Reset the CloudManager
+	$CloudManager.reset()
+
+	# 計分板
+	score_board.reset()
+	score_board.modulate.a = 0
+	score_board.position = Vector2(0, 0)
+
+
+
+
+func start_game_play():
+	# 太陽開始移動
+	sun_should_go = true
+	sun_should_emit_light = true
+
+	# 雲開生成
+	$CloudManager.start()
+
+
+func stop_game_play():
+	# 太陽停止
+	sun_should_go = false
+	sun_should_emit_light = false
+
+	# 雲集體原地消失
+	$CloudManager.stop_generate()
+	$CloudManager.clear_all_clouds()
+
+
+############ (Almost) Copied from wheelgame_env
+
+
+
+@onready var entire_env = $"."
+var camera_tween
+
+func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
+	if camera_tween:
+		camera_tween.kill()
+
+	var screen_center = size / 2.0
+	var new_position = screen_center - target_center * target_scale
+	camera_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	camera_tween.tween_property(entire_env, 'scale', Vector2(target_scale, target_scale), duration)
+	camera_tween.parallel().tween_property(entire_env, 'position', new_position, duration)
+
+	if callback:
+		camera_tween.finished.connect(callback)
+
+
+
+
+@onready var score_board = $ScoreBoard
+var score:
+	get:
+		return score_board.score
+
+func show_score_board(): return score_board.show_score_board()
+
+
+
+
+func collect_electrons():
+	score_board.score = electron_collected
+	all_electron_collected.emit()

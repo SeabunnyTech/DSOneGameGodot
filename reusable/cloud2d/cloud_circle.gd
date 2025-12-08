@@ -46,7 +46,7 @@ func _ready():
 	
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$ColorRect.position.y = mean_y + radius* 0.02 * sin(2*PI*(float_phase + Time.get_ticks_msec() / 4000.0))
 
 
