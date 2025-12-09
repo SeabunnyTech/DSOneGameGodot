@@ -146,6 +146,9 @@ func _congrats_and_return():
 		tween.kill()
 	tween = create_tween()
 	tween.tween_interval(wait_duration)
+	tween.tween_callback(func():
+		$"victory sfx".play()
+	)
 	_show_text('congrats', end_duration, 1)
 	_show_text('thanks')
 
@@ -154,6 +157,7 @@ func _congrats_and_return():
 	game_stop_tween = create_tween()
 	game_stop_tween.tween_interval(wait_duration)
 	game_stop_tween.tween_property(circular_mask, 'alpha', 1, 1)
+
 	game_stop_tween.tween_interval(end_duration)
 	game_stop_tween.tween_interval(thanks_duration)
 	game_stop_tween.tween_callback(leave_scene_for_restart)

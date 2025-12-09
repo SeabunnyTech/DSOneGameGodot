@@ -137,6 +137,9 @@ func _congrats_and_return():
 		tween.kill()
 	tween = create_tween()
 	tween.tween_interval(wait_duration)
+	tween.tween_callback(func():
+		$"victory sfx".play()
+	)
 	_show_text('congrats', end_duration, 1)
 	_show_text('thanks')
 
