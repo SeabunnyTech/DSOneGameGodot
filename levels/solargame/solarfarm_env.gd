@@ -6,9 +6,9 @@ class_name SolarfarmEnv
 
 ## 當陽光打到太陽能板上時發出
 signal on_light_hit_solar_panel
-
 signal all_electron_collected
 
+@onready var clouds_cleared = $CloudManager.clouds_cleared
 
 # 天空背景，可能是 ColorRect 或一個著色器
 @onready var sky_background = $sky_background
@@ -122,6 +122,10 @@ func reset():
 	score_board.modulate.a = 0
 	score_board.position = Vector2(0, 0)
 
+
+func spawn_clouds():
+	$CloudManager.start()
+	get_tree().create_timer(3).timeout.connect($CloudManager.stop_generate)
 
 
 

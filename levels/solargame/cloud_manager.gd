@@ -1,6 +1,8 @@
 extends ColorRect
 class_name CloudManager
 
+signal clouds_cleared
+
 @export var sun_node: Node2D
 
 
@@ -17,11 +19,8 @@ class_name CloudManager
 @export var cloud_scene: PackedScene = preload("res://reusable/cloud2d/cloud2d.tscn")
 
 
-@export_flags_2d_physics var collision_channels = 14:
-	set(value):
-		collision_channels = value
-		$InertiaFollower/RigidBody2D/CollisionShape2D.collision_layer = collision_channels
-		$InertiaFollower/RigidBody2D/CollisionShape2D.collision_mask = collision_channels
+
+@export_flags_2d_physics var collision_channels = 14
 
 # 風力設定
 @export var wind_decay_rate: float = 1.0 # 風力衰減速度
@@ -88,7 +87,7 @@ func spawn_cloud(pos=null):
 
 	cloud.position = pos
 	cloud.sun_position = sun_node.position
-	
+	cloud.collision_channels = collision_channels
 	add_child(cloud)
 	clouds.append(cloud)
 	
@@ -105,21 +104,23 @@ func _move_clouds_to_sun(delta: float) -> void:
 
 
 func _apply_wind(_delta: float) -> void:
-	if abs(wind_speed) < 0.1:
-		return
-
 	var screen_width = get_viewport_rect().size.x
 	
 	# Create a copy of the array to iterate over, as we may modify the original
-	for cloud in clouds.duplicate():
-		if not is_instance_valid(cloud): continue
-
+	var saved_clouds: Array[Cloud2D] = []
+	for cloud in clouds:
 		var poof_distance = randf_range(300, 600)
 		if cloud.position.x < poof_distance or cloud.position.x > screen_width - poof_distance:
 			cloud.poof()
-			clouds.erase(cloud)
+			
+		else:
+			saved_clouds.append(cloud)
 
+	# 檢查是否要觸發 clouds clear
+	if saved_clouds.is_empty() and not clouds.is_empty():
+		clouds_cleared.emit()
 
+	clouds = saved_clouds
 # --- Public API ---
 
 func start():

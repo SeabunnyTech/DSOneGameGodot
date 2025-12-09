@@ -84,27 +84,69 @@ func _begin_tutorial():
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 
 	# 接著冒出跳過按鈕
-	tween.tween_interval(0.8)
+	tween.tween_interval(1.2)
 	tween.tween_callback(skip_button.showup)
 
 	# 開場說明消失往下接續
+	tween.tween_interval(1.8)
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	tween.tween_interval(0.8)
+
+	# 首先歡迎我們的第一位主角 每天東起西落的太陽公公
+	tween.tween_callback(func():_update_guide_text('sun'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+
+	# 歡迎太陽公公以後 太陽馬上移到天空
+	tween.tween_property(solarfarm_env, 'sunlight_progress', 0.3, 2)\
+			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_interval(1.)
+
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+	tween.tween_interval(.5)
+	# 接著來歡迎我們的第二位主角: 太陽能板陣列!
+	tween.tween_callback(func():_update_guide_text('panel'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	# 將天空圓移到太陽能板上
+	tween.tween_callback(func():
+		circular_mask.tween_center_radius(Vector2(1450, 2000), 0.0, 0))
+	tween.tween_interval(0.5)
+	tween.tween_callback(func():
+		circular_mask.tween_center_radius(Vector2(1450, 2000), 1200.0, 1.5))
+
+	tween.tween_interval(2.)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 
+	# 當太陽公公在天空中發光發熱的時候，就是太陽能板快樂發電的時候
+	tween.tween_interval(1)
+	tween.tween_callback(func():_update_guide_text('emit'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_interval(1.)
+	tween.tween_callback(func():
+		circular_mask.tween_center_radius(Vector2(3000, 2000), 2500.0, 3))
+	tween.tween_interval(2)
+	tween.tween_callback(func(): solarfarm_env.sun_should_emit_light = true)
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+	tween.tween_interval(3)
+
+	# 歡樂的時光總是過得很快
+	tween.tween_callback(func():_update_guide_text('cloud'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_interval(2)
+	tween.tween_callback(func(): solarfarm_env.spawn_clouds())
+	tween.tween_interval(2)
+	tween.tween_property(guide_message, 'modulate:a', 0, 1)
+
+	# 現在就揮動你手上的高氣壓, 把白雲吹走吧!
+	tween.tween_callback(func():_update_guide_text('pushit'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 
 	tween.play()
 
-	return
-
-	_show_text('case', 3)
-
-	tween.tween_callback(func():
-		#solarfarm_env.camera_to(Vector2(2200, 1000), 0.8)
-		circular_mask.tween_center_radius(Vector2(1350, 1080), 1000.0, 1.5)
-	)
-
-
-
+	# 等待雲層都被推走的信號
+	tween.tween_interval(2)
+	await solarfarm_env.clouds_cleared
+	solarfarm_env.sun_should_emit_light = false
+	_continue_tutorial()
 
 
 
@@ -118,7 +160,8 @@ func _continue_tutorial():
 
 	tween = create_tween()
 	tween.tween_interval(0.5)
-	
+	tween.tween_callback(func():
+		circular_mask.tween_center_radius(Vector2(1920, 1080), 0, 2))
 	tween.tween_interval(0.2)
 	tween.tween_property(action_guide_img, 'modulate:a', 0, 1)
 	tween.tween_property(guide_message, 'modulate:a', 0, 0.5)
@@ -210,11 +253,11 @@ func _ready() -> void:
 func _update_guide_text(new_text_state):
 	var titles = {
 		'begin' : '歡迎來到陽光保衛戰!',
-		'case' : '這是一座太陽能電廠!',
-		'show' : '但它其實很不一樣喔!',
-		'clean': '灰塵會降低發電效率!',
-		'wind': '利用風力清除灰塵!',
-		'pushit': '現在就來試試吧!!',
+		'sun' : '現在先來歡迎我們今天的第一主角',
+		'panel' : '接著歡迎我們的第二大主角',
+		'emit': '當太陽公公在天空中發光發熱的時候',
+		'cloud': '然而歡樂的時光總是過得很快!',
+		'pushit': '現在就來舉起你手上的控盤操控高氣壓!!',
 		'cleaned': '非常好!',
 		'ready': '既然你已經學會趕走烏雲!',
 		'final': '接下來我們就進入實戰',
@@ -225,12 +268,12 @@ func _update_guide_text(new_text_state):
 
 	var guides = {
 		'begin' : '今天我們將化身為一團高氣壓\n守護太陽能案場的天空',
-		'case' : '它看起來就像是一座普通的太陽能電廠對吧!',
-		'show' : '在這裡，你需要維護太陽能板的清潔!',
-		'clean': '每當太陽能板變髒，發電效率就會降低喔!',
-		'wind': '舉起你手上的控盤，畫圓來產生風力\n將太陽能板上的灰塵清除吧!',
-		'pushit' : '舉起你手上的控盤\n畫圓來清除太陽能板上的灰塵吧!',
-		'cleaned': '太陽能板已恢復潔淨\n發電效率提升了!',
+		'sun' : '每天東起西落的~~太陽公公~~',
+		'panel' : '閃閃發亮的太陽能板陣列!',
+		'emit': '就是我們的太陽能板快樂發電的時光!',
+		'cloud': '當雲層現身，擋住陽光時，太陽能板就接不到光啦!',
+		'pushit' : '把白雲都推走吧!',
+		'cleaned': '',
 		'ready': '',
 		'final': '看看你能讓太陽能板接到多少光子吧!', # Assuming solarfarm_env has a time_limit
 		'start': '',
@@ -240,12 +283,12 @@ func _update_guide_text(new_text_state):
 
 	var guide_text_positions = {
 		'begin' : Vector2(960, 920),
-		'case' : Vector2(1800, 920),
-		'show' : Vector2(1800, 920),
-		'clean': Vector2(1800, 920),
-		'wind': Vector2(2100, 450),
-		'pushit': Vector2(2100, 450),
-		'cleaned': Vector2(2150, 800),
+		'sun' : Vector2(960, 920),
+		'panel' : Vector2(960, 920),
+		'emit': Vector2(200, 300),
+		'cloud': Vector2(200, 300),
+		'pushit': Vector2(200, 300),
+		'cleaned': Vector2(960, 920),
 		'ready': Vector2(960, 920),
 		'final': Vector2(960, 920),
 		'start': Vector2(960, 920),
