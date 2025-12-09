@@ -22,6 +22,11 @@ var is_poofing: bool = false
 var velocity: Vector2 = Vector2.ZERO # For repulsion movement
 var _cloud_generated_width: float = 0.0
 
+var collision_channels:
+	set(value):
+		collision_channels = value
+		$CloudCircleContainer.collision_mask = collision_channels
+
 # CloudCircle 的引用
 var cloud_circle_scene = preload("res://reusable/cloud2d/cloud_circle.tscn")
 

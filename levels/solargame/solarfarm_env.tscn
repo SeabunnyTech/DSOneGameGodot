@@ -150,6 +150,7 @@ offset_right = 3835.0
 offset_bottom = 1309.0
 color = Color(1, 0.67, 0.67, 0)
 sun_node = NodePath("../sun_orbit_center/sun")
+collision_channels = 896
 
 [node name="ScoreBoard" parent="." instance=ExtResource("7_nvbgn")]
 layout_mode = 1

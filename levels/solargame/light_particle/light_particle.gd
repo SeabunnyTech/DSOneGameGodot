@@ -15,7 +15,7 @@ func _ready():
 	timer.start()
 
 	# 隨機分配要打到哪一層
-	collision_layer = 1 << randi_range(1, 3)
+	collision_layer = 128 << randi_range(0, 2)
 	#collision_mask = collision_layer
 
 

@@ -146,7 +146,7 @@ func create_solar_cell_in_quad(
 		solar_cell = SolarCellScene.instantiate()
 		solar_cell.name = cell_name
 		# 第幾列的 cell 就偵測對應的 mask
-		solar_cell.set_collision_mask(2 << row)
+		solar_cell.set_collision_mask(128 << row)
 		quad.add_child(solar_cell)
 
 	set_polygon_from_global(solar_cell, corners)
