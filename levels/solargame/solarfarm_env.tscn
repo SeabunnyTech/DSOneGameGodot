@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://b1jnlmv86nel5"]
 
-[ext_resource type="Texture2D" uid="uid://b7meicxi1qel1" path="res://levels/solargame/9-21示意畫面/完整/無樹的山.png" id="1_5myhm"]
 [ext_resource type="Script" uid="uid://dpellax7jagl8" path="res://levels/solargame/solarfarm_env.gd" id="1_euum8"]
+[ext_resource type="Texture2D" uid="uid://d3at5reor1ckg" path="res://levels/solargame/9-21示意畫面/完整/山全.png" id="2_huyxn"]
 [ext_resource type="Texture2D" uid="uid://o6u76w1crvir" path="res://levels/solargame/9-21示意畫面/完整/儲能貨櫃 全.png" id="3_wud70"]
 [ext_resource type="PackedScene" uid="uid://bg75icofb00mv" path="res://reusable/solarpanel/solar_panel_2d_simple.tscn" id="5_stwxm"]
 [ext_resource type="PackedScene" uid="uid://cymtsc4kj707h" path="res://reusable/sunball_2d/sunball_2d.tscn" id="5_wud70"]
@@ -57,9 +57,12 @@ sky_color_over_time = SubResource("Gradient_p23xs")
 
 [node name="sky_background" type="ColorRect" parent="."]
 light_mask = 16
-layout_mode = 0
-offset_right = 3840.0
-offset_bottom = 2160.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.24994443, 0.39143187, 0.52145725, 1)
 metadata/_edit_lock_ = true
 
@@ -74,10 +77,16 @@ grow_vertical = 2
 texture = SubResource("GradientTexture2D_stwxm")
 metadata/_edit_lock_ = true
 
-[node name="無樹的山" type="Sprite2D" parent="."]
+[node name="無樹的山" type="TextureRect" parent="."]
 light_mask = 2
-position = Vector2(1920, 1767.5)
-texture = ExtResource("1_5myhm")
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_huyxn")
 metadata/_edit_lock_ = true
 
 [node name="儲能貨櫃全" type="Sprite2D" parent="."]
@@ -151,8 +160,8 @@ offset_bottom = 1309.0
 color = Color(1, 0.67, 0.67, 0)
 sun_node = NodePath("../sun_orbit_center/sun/Sunball2d")
 collision_channels = 896
-wind_decay_rate = null
 
 [node name="ScoreBoard" parent="." instance=ExtResource("7_nvbgn")]
 layout_mode = 1
 texture_override = ExtResource("8_huyxn")
+metadata/_edit_lock_ = true

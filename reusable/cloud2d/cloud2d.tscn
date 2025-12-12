@@ -1,17 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://dyv6wc04keatr"]
+[gd_scene load_steps=4 format=3 uid="uid://dyv6wc04keatr"]
 
 [ext_resource type="Script" uid="uid://bay4rhqh5qiek" path="res://reusable/cloud2d/cloud_2d.gd" id="1_usqfc"]
 [ext_resource type="AudioStream" uid="uid://cu62hs65ortuh" path="res://reusable/cloud2d/sfx/ui-pop-up-8-197893.mp3" id="2_wp7w1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wp7w1"]
+radius = 1000.0
 
 [node name="Cloud2d" type="Node2D"]
 light_mask = 0
 script = ExtResource("1_usqfc")
 base_cloud_width = 500.0
+repulsion_radius = 1000.0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("2_wp7w1")
 
 [node name="CloudCircleContainer" type="Area2D" parent="."]
-position = Vector2(-254.66335, 0)
+position = Vector2(-298.96722, 0)
 collision_layer = 14
 collision_mask = 14
+
+[node name="RepulsionArea2" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RepulsionArea2"]
+shape = SubResource("CircleShape2D_wp7w1")

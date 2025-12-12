@@ -139,6 +139,8 @@ func _congrats_and_return():
 	tween.tween_interval(wait_duration)
 	tween.tween_callback(func():
 		$"victory sfx".play()
+		for p in PlayerManager.current_players:
+			p.set_player_appearance(true, {'color':Color.BLACK})
 	)
 	_show_text('congrats', end_duration, 1)
 	_show_text('thanks')

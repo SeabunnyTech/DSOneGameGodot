@@ -79,9 +79,10 @@ func spawn_cloud(pos=null):
 
 	cloud = cloud_scene.instantiate()
 	
+	var x_inset = 300
 	if not pos:
 		pos = Vector2(
-			randf_range(0, size.x),
+			randf_range(x_inset, size.x-x_inset),
 			randf_range(0, size.y)
 		)
 
@@ -103,14 +104,20 @@ func _move_clouds_to_sun(delta: float) -> void:
 		cloud.global_position.x += 10.0 * direction * move_speed * delta
 
 
+var cloud_responsive: bool = true
+func set_responsive_to_anticyclone(responsive:bool):
+	cloud_responsive = responsive
+
 func _apply_wind(_delta: float) -> void:
 	var screen_width = get_viewport_rect().size.x
 	
 	# Create a copy of the array to iterate over, as we may modify the original
 	var saved_clouds: Array[Cloud2D] = []
 	for cloud in clouds:
+		cloud.set_responsive_to_anticyclone(cloud_responsive)
 		var poof_distance = randf_range(300, 600)
-		if cloud.position.x < poof_distance or cloud.position.x > screen_width - poof_distance:
+		if cloud.position.x + cloud.cloud_width < poof_distance\
+			or cloud.position.x > screen_width - poof_distance:
 			cloud.poof()
 			
 		else:
@@ -118,6 +125,7 @@ func _apply_wind(_delta: float) -> void:
 
 	# 檢查是否要觸發 clouds clear
 	if saved_clouds.is_empty() and not clouds.is_empty():
+		print("clouds_cleared")
 		clouds_cleared.emit()
 
 	clouds = saved_clouds

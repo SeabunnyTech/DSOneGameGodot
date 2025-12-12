@@ -30,7 +30,7 @@ level_name = "level2_tutorial"
 position = Vector2(3020, 1000)
 scale = Vector2(0.8, 0.8)
 image = ExtResource("5_f84sh")
-title = "陽光保衛戰"
+title = "追光集集樂"
 level_name = "level3_tutorial"
 
 [node name="Label" type="Label" parent="."]

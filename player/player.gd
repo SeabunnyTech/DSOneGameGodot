@@ -31,9 +31,6 @@ var hue
 		hue = {0: 0.50, 1:0.45}[index]	# 預設的一些 hue
 
 
-#var anticyclone_color: Color = Color.BLACK:
-#	set(value):
-#		$AnticycloneH.
 
 # 狀態轉換相關的變數與函數
 
@@ -42,8 +39,8 @@ var state: State = State.LOST
 var heading_state
 var tween
 
-func heads_to_state(new_state, immediate=false):
-	if heading_state == new_state:
+func heads_to_state(new_state, immediate=false, force=false):
+	if heading_state == new_state and not force:
 		return
 	heading_state = new_state
 
@@ -68,6 +65,8 @@ func _start_color_transition(_new_state, immediate):
 	# 調整顏色
 	var sva = sva_table[heading_state]
 	var target_color = Color.from_hsv(hue, sva[0], sva[1], sva[2])
+	if _new_state == State.ACTIVE and in_anticyclone_mode:
+		target_color = anticyclone_color
 	if immediate:
 		modulate = target_color
 		state = heading_state
@@ -112,6 +111,7 @@ func reset_attractor():
 	attractor_position = null
 
 
+
 # 為了處理輸入位置跳躍而寫的邏輯, 導致 player 要用 set_target_position 設定位置
 @export var smoothing_speed: float = 30.0
 var target_position: Vector2 = Vector2(0, -1000)
@@ -129,13 +129,6 @@ func set_target_position(new_position: Vector2):
 
 func _physics_process(delta: float):
 	position = position.lerp(target_position, smoothing_speed * delta)
-	# var to_position = target_position
-	# var current_position = position
-	# var direction = (to_position - current_position)
-	# velocity = direction * smoothing_speed
-
-	# # 碰撞判定用，Godot 內建函數
-	# move_and_slide()
 
 
 
@@ -162,6 +155,8 @@ func _process(_delta: float) -> void:
 
 @onready var anticyclone_h_label = $AnticycloneH
 
+var in_anticyclone_mode = false
+var anticyclone_color = Color.BLACK
 
 func set_player_appearance(is_anticyclone: bool, params={}):
 
@@ -170,7 +165,8 @@ func set_player_appearance(is_anticyclone: bool, params={}):
 		duration = params['duration']
 
 	metaball_node.switch_visual(is_anticyclone, duration)
-	
+	in_anticyclone_mode = is_anticyclone
+
 	var label_tween = get_tree().create_tween()
 	var target_alpha = 1.0 if is_anticyclone else 0.0
 	label_tween.tween_property(anticyclone_h_label, "modulate:a", target_alpha, duration)
@@ -179,7 +175,6 @@ func set_player_appearance(is_anticyclone: bool, params={}):
 	if tween:
 		tween.kill()
 
-	var anticyclone_color = anticyclone_h_label.get_theme_color("font_color")
 	if 'color' in params:
 		anticyclone_color = params['color']
 
@@ -199,7 +194,7 @@ func set_player_appearance(is_anticyclone: bool, params={}):
 
 	else:
 		# When switching back, restore the color based on the current state
-		heads_to_state(state, false)
+		heads_to_state(state, false, true)
 
 
 func set_radii(new_radius: Array[float]):

@@ -8,7 +8,8 @@ class_name SolarfarmEnv
 signal on_light_hit_solar_panel
 signal all_electron_collected
 
-@onready var clouds_cleared = $CloudManager.clouds_cleared
+@onready var cloud_manager : CloudManager = $CloudManager
+@onready var clouds_cleared = cloud_manager.clouds_cleared
 
 # 天空背景，可能是 ColorRect 或一個著色器
 @onready var sky_background = $sky_background
@@ -26,6 +27,8 @@ func _ready():
 	$SolarPanel2d.hit_by_sunlight.connect(func(): electron_collected+=1)
 
 
+func set_responsive_to_anticyclone(responsive:bool):
+	$CloudManager.set_responsive_to_anticyclone(responsive)
 
 
 # 當前的風力向量，會影響雲的移動和樹的搖擺

@@ -15,7 +15,7 @@ class_name Cloud2D
 # 玩家互動參數
 @export var push_speed: float = 30000.0
 @export var dissipation_velocity_threshold: float = 800.0
-@export var repulsion_radius: float = 1000.0
+@export var repulsion_radius: float = 600.0
 @export var drag: float = 1.0 # How quickly the cloud slows down
 
 var is_poofing: bool = false
@@ -37,6 +37,13 @@ class CircleData:
 
 var cloud_data_array: Array[CircleData] = []
 
+
+@onready var repulsion_area = $RepulsionArea2
+
+func set_responsive_to_anticyclone(responsive:bool):
+	repulsion_area.monitoring = responsive
+
+
 func _ready():
 	generate_cloud_data()
 	_update_collision_shape()
@@ -44,17 +51,8 @@ func _ready():
 	$CloudCircleContainer.body_entered.connect(on_hit_by_sunlight)
 
 	# --- Repulsion Logic Setup ---
-	var repulsion_area = Area2D.new()
-	repulsion_area.name = "RepulsionArea"
-	# Player is on physics layer 2
-	repulsion_area.collision_mask = 2
-	
-	var collision_shape = CollisionShape2D.new()
-	var shape = CircleShape2D.new()
-	shape.radius = repulsion_radius
-	collision_shape.shape = shape
-	repulsion_area.add_child(collision_shape)
-	add_child(repulsion_area)
+	var collision_circle = $RepulsionArea2/CollisionShape2D.shape
+	collision_circle.radius = repulsion_radius
 
 	repulsion_area.body_entered.connect(_on_repulsion_area_body_entered)
 	repulsion_area.body_exited.connect(_on_repulsion_area_body_exited)

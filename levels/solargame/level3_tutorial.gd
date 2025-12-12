@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 signal leave_for_level(new_scene_name)
 
@@ -48,12 +48,13 @@ func reset():
 
 
 func enter_scene():
-	var players = PlayerManager.current_players
-	for p in players:
+	for p in PlayerManager.current_players:
 		p.set_player_appearance(true, {'color':Color.BLACK}) # Now uses the renamed function
+		
 
 	visible = true
 	solarfarm_env.set_collision_enabled(true) # Assuming solarfarm_env has this method
+	solarfarm_env.set_responsive_to_anticyclone(false)
 	_begin_tutorial()
 
 
@@ -113,17 +114,19 @@ func _begin_tutorial():
 	tween.tween_callback(func():
 		circular_mask.tween_center_radius(Vector2(1450, 2000), 1200.0, 1.5))
 
-	tween.tween_interval(2.)
+	tween.tween_interval(1.5)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 
 	# 當太陽公公在天空中發光發熱的時候，就是太陽能板快樂發電的時候
-	tween.tween_interval(1)
-	tween.tween_callback(func():_update_guide_text('emit'))
-	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+
 	tween.tween_interval(1.)
 	tween.tween_callback(func():
-		circular_mask.tween_center_radius(Vector2(3000, 2000), 2500.0, 3))
-	tween.tween_interval(2)
+		circular_mask.tween_center_radius(Vector2(1450, 2000), 5000.0, 3))
+	tween.tween_interval(1.)
+
+	tween.tween_callback(func():_update_guide_text('emit'))
+	tween.tween_property(guide_message, 'modulate:a', 1, 1)
+	tween.tween_interval(1.5)
 	tween.tween_callback(func(): solarfarm_env.sun_should_emit_light = true)
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	tween.tween_interval(3)
@@ -133,17 +136,28 @@ func _begin_tutorial():
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 	tween.tween_interval(2)
 	tween.tween_callback(func(): solarfarm_env.spawn_clouds())
-	tween.tween_interval(2)
+	
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 
 	# 現在就揮動你手上的高氣壓, 把白雲吹走吧!
 	tween.tween_callback(func():_update_guide_text('pushit'))
 	tween.tween_property(guide_message, 'modulate:a', 1, 1)
 
+	tween.tween_callback(func(): 
+		player_waiter.set_wait_for_player(true)
+		for p in PlayerManager.current_players:
+			p.set_player_appearance(true, {'color':Color.WHITE})
+	)
+
+	tween.tween_interval(1)
+	tween.tween_callback(func(): 
+		solarfarm_env.set_responsive_to_anticyclone(true)
+	)
+
 	tween.play()
 
 	# 等待雲層都被推走的信號
-	tween.tween_interval(2)
+	tween.tween_interval(5)
 	await solarfarm_env.clouds_cleared
 	solarfarm_env.sun_should_emit_light = false
 	_continue_tutorial()
@@ -161,14 +175,17 @@ func _continue_tutorial():
 	tween = create_tween()
 	tween.tween_interval(0.5)
 	tween.tween_callback(func():
-		circular_mask.tween_center_radius(Vector2(1920, 1080), 0, 2))
+		circular_mask.tween_center_radius(Vector2(1920, 1080), 0, 2)
+		for p in PlayerManager.current_players:
+			p.set_player_appearance(true, {'color':Color.BLACK})
+		solarfarm_env.set_responsive_to_anticyclone(false)
+	)
+
 	tween.tween_interval(0.2)
-	tween.tween_property(action_guide_img, 'modulate:a', 0, 1)
+	#tween.tween_property(action_guide_img, 'modulate:a', 0, 1)
 	tween.tween_property(guide_message, 'modulate:a', 0, 0.5)
 
-	tween.tween_interval(0.5)
-	_show_text('cleaned', 3)
-	tween.tween_interval(0.5)
+	_show_text('cleaned', 1.0)
 
 	tween.tween_callback(func():_proceed_to_game_start())
 
@@ -180,7 +197,7 @@ func _skip_tutorial(_player = null): # Add default null for _player argument
 	tween.tween_interval(0.5)
 	action_guide_img.visible = false
 	circular_mask.tween_radius(0.0, 1)
-	solarfarm_env.camera_to(Vector2(1920, 1080)) # Assuming solarfarm_env has this method
+	#solarfarm_env.camera_to(Vector2(1920, 1080)) # Assuming solarfarm_env has this method
 
 	tween.tween_property(guide_message, 'modulate:a', 0, 1)
 	# Assuming a method like set_solar_panels_clean or similar
@@ -199,7 +216,7 @@ func _proceed_to_game_start():
 
 	# 10. 將遊戲環境重置並隱藏相關UI
 	tween.tween_callback(func():
-		solarfarm_env.camera_to(Vector2(2200, 1080), 1.2)
+		#solarfarm_env.camera_to(Vector2(2200, 1080), 1.2)
 		# solarfarm_env.rotation_enabled = false # If applicable
 		circular_mask.tween_radius(0.0, 1)
 		GlobalAudioPlayer.fade_out()
@@ -214,6 +231,7 @@ func _proceed_to_game_start():
 
 	# 11. 接下來就進入挑戰吧! 看看你能在一分鐘內發出多少電力呢!
 	_show_text('final', 1.5)
+	tween.tween_property(solarfarm_env, 'sunlight_progress', 0., 1)
 
 	# 12. 準備開始!!
 	_show_text('start', 1)
@@ -252,7 +270,7 @@ func _ready() -> void:
 
 func _update_guide_text(new_text_state):
 	var titles = {
-		'begin' : '歡迎來到陽光保衛戰!',
+		'begin' : '歡迎來到追光集集樂!',
 		'sun' : '現在先來歡迎我們今天的第一主角',
 		'panel' : '接著歡迎我們的第二大主角',
 		'emit': '當太陽公公在天空中發光發熱的時候',
@@ -268,7 +286,7 @@ func _update_guide_text(new_text_state):
 
 	var guides = {
 		'begin' : '今天我們將化身為一團高氣壓\n守護太陽能案場的天空',
-		'sun' : '每天東起西落的~~太陽公公~~',
+		'sun' : '每天東升西落的~~太陽公公~~',
 		'panel' : '閃閃發亮的太陽能板陣列!',
 		'emit': '就是我們的太陽能板快樂發電的時光!',
 		'cloud': '當雲層現身，擋住陽光時，太陽能板就接不到光啦!',
@@ -284,7 +302,7 @@ func _update_guide_text(new_text_state):
 	var guide_text_positions = {
 		'begin' : Vector2(960, 920),
 		'sun' : Vector2(960, 920),
-		'panel' : Vector2(960, 920),
+		'panel' : Vector2(500, 400),
 		'emit': Vector2(200, 300),
 		'cloud': Vector2(200, 300),
 		'pushit': Vector2(200, 300),
