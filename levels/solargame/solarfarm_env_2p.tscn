@@ -1,0 +1,178 @@
+[gd_scene load_steps=17 format=3 uid="uid://durtylkh7y57a"]
+
+[ext_resource type="Script" uid="uid://bgroctmb4vcha" path="res://levels/solargame/solarfarm_env_2p.gd" id="1_qxglf"]
+[ext_resource type="Texture2D" uid="uid://d3at5reor1ckg" path="res://levels/solargame/9-21示意畫面/完整/山全.png" id="2_qxglf"]
+[ext_resource type="Texture2D" uid="uid://o6u76w1crvir" path="res://levels/solargame/9-21示意畫面/完整/儲能貨櫃 全.png" id="3_wh47t"]
+[ext_resource type="PackedScene" uid="uid://cymtsc4kj707h" path="res://reusable/sunball_2d/sunball_2d.tscn" id="4_8tvrq"]
+[ext_resource type="PackedScene" uid="uid://bg75icofb00mv" path="res://reusable/solarpanel/solar_panel_2d_simple.tscn" id="5_u2hu5"]
+[ext_resource type="PackedScene" uid="uid://c01tin3spq14n" path="res://levels/solargame/cloud_manager.tscn" id="6_m1f0o"]
+[ext_resource type="PackedScene" uid="uid://cjoqhv8508c7k" path="res://reusable/hud/ScoreBoard.tscn" id="7_v6i0c"]
+[ext_resource type="Texture2D" uid="uid://b5tw4teumbvpj" path="res://assets/images/bolt.png" id="8_rjs4l"]
+
+[sub_resource type="Gradient" id="Gradient_nvbgn"]
+offsets = PackedFloat32Array(0.0421941, 0.162055, 0.641079, 1)
+colors = PackedColorArray(0.101960786, 0.2, 0.31764707, 1, 0.3137255, 0.627451, 0.74509805, 1, 0.13333334, 0.5176471, 0.90588236, 1, 0, 0.5372549, 0.90588236, 1)
+
+[sub_resource type="Gradient" id="Gradient_p23xs"]
+offsets = PackedFloat32Array(0.0421941, 0.162055, 0.641079, 1)
+colors = PackedColorArray(0.101960786, 0.2, 0.31764707, 1, 0.3137255, 0.627451, 0.74509805, 1, 0.13333334, 0.5176471, 0.90588236, 1, 0, 0.5372549, 0.90588236, 1)
+
+[sub_resource type="Gradient" id="Gradient_wud70"]
+colors = PackedColorArray(0, 0, 0, 0, 0.8117647, 1, 1, 0.25490198)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_stwxm"]
+gradient = SubResource("Gradient_wud70")
+fill_from = Vector2(0.510684, 0.042735)
+fill_to = Vector2(0.512821, 0.692308)
+
+[sub_resource type="Gradient" id="Gradient_stwxm"]
+offsets = PackedFloat32Array(0, 0.282158, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.514523, 0.514523, 0.514523, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nvbgn"]
+gradient = SubResource("Gradient_stwxm")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_huyxn"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p23xs"]
+gradient = SubResource("Gradient_huyxn")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[node name="SolarfarmEnv_2p" type="Control"]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1920.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qxglf")
+sun_color_over_time = SubResource("Gradient_nvbgn")
+sky_color_over_time = SubResource("Gradient_p23xs")
+
+[node name="sky_background" type="ColorRect" parent="."]
+light_mask = 16
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.101960786, 0.2, 0.31764707, 1)
+metadata/_edit_lock_ = true
+
+[node name="lower_sky_gradient" type="TextureRect" parent="sky_background"]
+light_mask = 0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_stwxm")
+metadata/_edit_lock_ = true
+
+[node name="無樹的山" type="TextureRect" parent="."]
+light_mask = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_qxglf")
+metadata/_edit_lock_ = true
+
+[node name="儲能貨櫃全" type="Sprite2D" parent="."]
+light_mask = 2
+position = Vector2(1654, 1936)
+scale = Vector2(0.42453247, 0.45790753)
+texture = ExtResource("3_wh47t")
+
+[node name="clouds_container" type="Node2D" parent="."]
+
+[node name="trees_container" type="Node2D" parent="."]
+
+[node name="sun_orbit_center" type="Node2D" parent="."]
+position = Vector2(1920, 6000)
+rotation = 0.5235988
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="sun" type="Node2D" parent="sun_orbit_center"]
+position = Vector2(0, -5800)
+
+[node name="Sunball2d" parent="sun_orbit_center/sun" instance=ExtResource("4_8tvrq")]
+z_index = 10
+scale = Vector2(1.5, 1.5)
+tint_color = Color(0.97160995, 0.9503315, 0.36336577, 1)
+metadata/_edit_lock_ = true
+
+[node name="SkyLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
+modulate = Color(1, 0.595, 0.19, 1)
+light_mask = 16
+scale = Vector2(60, 60)
+color = Color(1, 0.922855, 0.655799, 1)
+range_item_cull_mask = 16
+texture = SubResource("GradientTexture2D_nvbgn")
+metadata/_edit_lock_ = true
+
+[node name="EnvLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
+light_mask = 16
+position = Vector2(-107.633, -50.5874)
+scale = Vector2(80, 80)
+color = Color(1, 0.873851, 0.652143, 1)
+energy = 0.2
+range_item_cull_mask = 2
+texture = SubResource("GradientTexture2D_nvbgn")
+metadata/_edit_lock_ = true
+
+[node name="PanelLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
+scale = Vector2(55, 55)
+energy = 3.0
+range_item_cull_mask = 4
+texture = SubResource("GradientTexture2D_p23xs")
+metadata/_edit_lock_ = true
+
+[node name="CloudLight2D" type="PointLight2D" parent="sun_orbit_center/sun"]
+light_mask = 32
+visibility_layer = 32
+position = Vector2(-107.633, -50.5874)
+scale = Vector2(80, 80)
+range_item_cull_mask = 32
+texture = SubResource("GradientTexture2D_nvbgn")
+metadata/_edit_lock_ = true
+
+[node name="SolarPanel2d" parent="." instance=ExtResource("5_u2hu5")]
+light_mask = 2
+position = Vector2(-131, 826)
+scale = Vector2(0.6, 0.6)
+
+[node name="CloudManager" parent="." node_paths=PackedStringArray("sun_node") instance=ExtResource("6_m1f0o")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -213.5
+offset_right = 960.0
+offset_bottom = 213.5
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.67, 0.67, 0)
+sun_node = NodePath("../sun_orbit_center/sun/Sunball2d")
+collision_channels = 896
+
+[node name="ScoreBoard" parent="." instance=ExtResource("7_v6i0c")]
+layout_mode = 1
+texture_override = ExtResource("8_rjs4l")
+metadata/_edit_lock_ = true
