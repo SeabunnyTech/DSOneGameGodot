@@ -2,6 +2,12 @@ extends RigidBody2D
 
 var is_dying = false
 
+@export var trail_color: Color = Color.YELLOW
+@export var trail_width: float = 5.0
+const MAX_TRAIL_LENGTH = 15
+var trail_points := []
+
+
 func _ready():
 	# 創建計時器
 	gravity_scale = 0.1
@@ -18,9 +24,30 @@ func _ready():
 	#collision_mask = collision_layer
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	$Sprite2D.rotate(5. * delta)
 
+	trail_points.push_front(global_position)
+	if trail_points.size() > MAX_TRAIL_LENGTH:
+		trail_points.pop_back()
+
+	queue_redraw()
+
+
+func _draw():
+	if trail_points.size() > 1:
+		var colors = PackedColorArray()
+		var num_points = trail_points.size()
+		for i in range(num_points):
+			var alpha = 1.0 - (float(i) / num_points)
+			colors.append(Color(trail_color, alpha))
+		
+		var local_points = PackedVector2Array()
+		for p in trail_points:
+			local_points.push_back(to_local(p))
+
+		draw_polyline_colors(local_points, colors, trail_width)
+		
 
 func _on_timer_timeout():
 	queue_free()
