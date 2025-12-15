@@ -172,7 +172,7 @@ func _update_guide_text(new_text_state):
 	}
 
 	var guides = {
-		'congrats' : '你們一起讓太陽能板接到了' + str(solarfarm_env_2p.score)  + str(solarfarm_env_2p2.score) + '個光子呢!',
+		'congrats' : '你們一起讓太陽能板接到了' + str(solarfarm_env_2p.score) + " + " + str(solarfarm_env_2p2.score) + '個光子呢!',
 		'thanks':'電幻 1 號所祝您有美好的一天!',
 	}
 

@@ -1,4 +1,3 @@
-@tool
 extends RigidBody2D
 
 var is_dying = false

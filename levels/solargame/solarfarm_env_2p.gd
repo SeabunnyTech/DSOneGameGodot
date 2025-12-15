@@ -25,7 +25,7 @@ var electron_collected : int = 0
 
 func _ready():
 	$SolarPanel2d.hit_by_sunlight.connect(func(): electron_collected+=1)
-
+	#$sun_orbit_center.position.x = -position.x / 2# + 960
 
 func set_responsive_to_anticyclone(responsive:bool):
 	$CloudManager.set_responsive_to_anticyclone(responsive)
@@ -56,7 +56,7 @@ func _process(_delta: float) -> void:
 #region 公開 API - 供外部呼叫
 
 # --- 太陽與天空控制 ---
-@export_group("Sky Colors")
+
 @export var sun_color_over_time : Gradient
 @export var sky_color_over_time : Gradient
 ## 設定太陽月亮的進度
@@ -69,7 +69,7 @@ func _process(_delta: float) -> void:
 		# 調整太陽位置
 		sunlight_progress = value
 		if not is_inside_tree(): return
-		$sun_orbit_center.rotation_degrees = lerp(30, -30, value)
+		$sun_orbit_center.rotation_degrees = lerp(12, -12, value)
 
 		# 調整天空顏色
 		var sky_light_progress = 1.0 - 2.0 * abs(sunlight_progress - 0.5)
@@ -84,13 +84,15 @@ var LightParticleScene = preload("res://levels/solargame/light_particle/light_pa
 # 發射單個粒子
 func emit_light_from_sun():
 	var particle = LightParticleScene.instantiate()
+	add_child(particle)
 	particle.global_position = $sun_orbit_center/sun.global_position
 	
 	var angle = randf_range(0, 2*PI)
 	var speed = 1200#randf_range(200, 400)
 	var initial_velocity = Vector2(cos(angle), sin(angle)) * speed
 	
-	get_parent().add_child(particle)
+	#get_parent().add_child(particle)
+
 	particle.linear_velocity = initial_velocity
 
 
