@@ -13,7 +13,8 @@ var level_res_paths = {
 	"level2_1p"	:	"res://levels/level2/level2_1p.tscn",
 	"level2_2p"	:	"res://levels/level2/level2_2p.tscn",
 	"level3_tutorial"	:	"res://levels/solargame/level3_tutorial.tscn",
-	"level3_1p"	:	"res://levels/solargame/level3_1p.tscn",}
+	"level3_1p"	:	"res://levels/solargame/level3_1p.tscn",
+	"level3_2p"	:	"res://levels/solargame/level3_2p.tscn",}
 
 var level_objs = {}
 
@@ -28,8 +29,10 @@ func _ready() -> void:
 	for level_name in level_res_paths:
 		level_objs[level_name] = load(level_res_paths[level_name])
 
-	enter_scene("welcome")
-
+	enter_scene("level3_2p")
+	#enter_scene("level3_tutorial")
+	#enter_scene("level1_tutorial")
+	#enter_scene("welcome")
 
 
 func enter_scene(scene_name):

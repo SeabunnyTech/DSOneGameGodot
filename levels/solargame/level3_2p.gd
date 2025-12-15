@@ -15,7 +15,8 @@ signal leave_for_level(new_level_name)
 @export var game_music: AudioStream
 
 @onready var guide_message = $Title
-@onready var solarfarm_env = $SolarfarmEnv
+@onready var solarfarm_env_2p = $SolarfarmEnv_2p
+@onready var solarfarm_env_2p2 = $SolarfarmEnv_2p2
 @onready var circular_mask = $CircularMask
 @onready var player_waiter = $"1p_player_waiter"
 
@@ -27,7 +28,8 @@ func reset():
 
 	# 隱藏關卡本身
 	visible = false
-	solarfarm_env.set_collision_enabled(false)
+	solarfarm_env_2p.set_collision_enabled(false)
+	solarfarm_env_2p2.set_collision_enabled(false)
 
 	# 介紹用的訊息與遮罩
 	guide_message.modulate.a = 0
@@ -35,7 +37,8 @@ func reset():
 	circular_mask.tween_center_radius(Vector2(1920, 1080), 0.0, 0.0)
 
 	# 遊戲本體及記分板
-	solarfarm_env.reset()
+	solarfarm_env_2p.reset()
+	solarfarm_env_2p2.reset()
 	time_board.reset()
 	time_board.modulate.a = 1
 
@@ -52,7 +55,8 @@ func enter_scene():
 		p.set_player_appearance(true, {'color':Color.WHITE})
 
 	visible = true
-	solarfarm_env.set_collision_enabled(true)
+	solarfarm_env_2p.set_collision_enabled(true)
+	solarfarm_env_2p2.set_collision_enabled(true)
 
 	if tween:
 		tween.kill()
@@ -70,7 +74,8 @@ func leave_scene_for_restart():
 
 
 func _game_start():
-	solarfarm_env.start_game_play()
+	solarfarm_env_2p.start_game_play()
+	solarfarm_env_2p2.start_game_play()
 
 	time_board.start()
 	$short_whistle.play()
@@ -101,7 +106,8 @@ func _ready() -> void:
 
 var game_stop_tween
 func _game_timeout():
-	solarfarm_env.stop_game_play()
+	solarfarm_env_2p.stop_game_play()
+	solarfarm_env_2p2.stop_game_play()
 	$long_whistle.play()
 
 	# 延遲後退相機畫面
@@ -109,20 +115,23 @@ func _game_timeout():
 		game_stop_tween.kill()
 	game_stop_tween = create_tween()
 
-	game_stop_tween.tween_callback(func():
-		solarfarm_env.camera_to(Vector2(1920,1080), 1.0, 2)
-	)
+	#game_stop_tween.tween_callback(func():
+		#solarfarm_env.camera_to(Vector2(1920,1080), 1.0, 2)
+	#)
 
 	game_stop_tween.tween_property(time_board, 'modulate:a', 0, 0.5)	
 	game_stop_tween.tween_interval(0.5)
 
-	solarfarm_env.show_score_board()
-	game_stop_tween.tween_callback(solarfarm_env.collect_electrons)
+	solarfarm_env_2p.show_score_board()
+	solarfarm_env_2p2.show_score_board()
+	game_stop_tween.tween_callback(solarfarm_env_2p.collect_electrons)
+	game_stop_tween.tween_callback(solarfarm_env_2p2.collect_electrons)
 
 	# 挑戰完成! 10 秒後
 
 	GlobalAudioPlayer.stop()
-	await solarfarm_env.all_electron_collected
+	await solarfarm_env_2p.all_electron_collected
+	await solarfarm_env_2p2.all_electron_collected
 	_congrats_and_return()
 
 
@@ -163,7 +172,7 @@ func _update_guide_text(new_text_state):
 	}
 
 	var guides = {
-		'congrats' : '你讓太陽能板接到了' + str(solarfarm_env.score) + '個光子呢!',
+		'congrats' : '你們一起讓太陽能板接到了' + str(solarfarm_env_2p.score)  + str(solarfarm_env_2p2.score) + '個光子呢!',
 		'thanks':'電幻 1 號所祝您有美好的一天!',
 	}
 

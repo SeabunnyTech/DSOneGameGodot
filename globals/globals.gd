@@ -1,7 +1,7 @@
 extends Node
 
 # To control players with mouse
-@export var mouse_mode: bool = false
+@export var mouse_mode: bool = true
 @export var debug_message: bool = false
 
 # 特設的變數, 用來記錄 logos 這個畫面登入的玩家數, 方便其它頁面參考這個數字做出反應
