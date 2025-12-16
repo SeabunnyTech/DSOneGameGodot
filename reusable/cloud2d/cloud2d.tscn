@@ -16,7 +16,7 @@ repulsion_radius = 1000.0
 stream = ExtResource("2_wp7w1")
 
 [node name="CloudCircleContainer" type="Area2D" parent="."]
-position = Vector2(-298.96722, 0)
+position = Vector2(-262.05353, 0)
 collision_layer = 14
 collision_mask = 14
 

@@ -7,6 +7,10 @@ var is_dying = false
 const MAX_TRAIL_LENGTH = 15
 var trail_points := []
 
+# 有兩個 solarfarm_env 時不想讓別的太陽光打到太陽能板
+var player_index = 0
+
+
 
 func _ready():
 	# 創建計時器

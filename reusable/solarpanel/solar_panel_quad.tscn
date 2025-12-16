@@ -11,4 +11,5 @@ gap_ratio = 0.1
 border_ratio = 0.05
 panel_color = Color(0.14968, 0.331336, 0.567683, 1)
 solar_cell_light_mask = 4
+player_index = null
 metadata/_custom_type_script = "uid://b4ump0vv2frj5"

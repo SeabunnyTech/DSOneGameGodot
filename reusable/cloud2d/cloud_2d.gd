@@ -1,4 +1,3 @@
-@tool
 extends Node2D
 class_name Cloud2D
 
@@ -13,12 +12,12 @@ class_name Cloud2D
 @export var spawn_overlap: float = 0.28
 
 # 玩家互動參數
-@export var push_speed: float = 30000.0
-@export var dissipation_velocity_threshold: float = 800.0
-@export var repulsion_radius: float = 600.0
+@export var push_speed: float = 2000.0
+@export var repulsion_radius: float = 10.0
 @export var drag: float = 1.0 # How quickly the cloud slows down
 
 var is_poofing: bool = false
+var should_poof = false
 var velocity: Vector2 = Vector2.ZERO # For repulsion movement
 var _cloud_generated_width: float = 0.0
 
@@ -50,37 +49,38 @@ func _ready():
 	$CloudCircleContainer.position.x = -_cloud_generated_width / 2
 	$CloudCircleContainer.body_entered.connect(on_hit_by_sunlight)
 
-	# --- Repulsion Logic Setup ---
-	var collision_circle = $RepulsionArea2/CollisionShape2D.shape
-	collision_circle.radius = repulsion_radius
 
-	repulsion_area.body_entered.connect(_on_repulsion_area_body_entered)
-	repulsion_area.body_exited.connect(_on_repulsion_area_body_exited)
-
+@export var distance_threshold = 200
 
 func _process(delta: float):
+	if is_poofing or should_poof:
+		return
+
 	# --- Player Interaction ---
-	if player_in_area and not is_poofing:
-		# Check player velocity for dissipation
-		if player_in_area.velocity.length() > dissipation_velocity_threshold:
-			poof()
+	var player_indexes = [player_index]
+	if player_index == -1:
+		player_indexes = [0, 1]
+
+	for idx in player_indexes:
+		var player = PlayerManager.current_players[idx]
+		if not player.visible:
+			continue
+
+		var distance_to_player = player.global_position - (global_position + Vector2(cloud_width/2., 0.))
+		if distance_to_player.length() < distance_threshold:
+			should_poof = true
 			return
 
-		var to_player = player_in_area.global_position - (global_position + Vector2(cloud_width/2., 0.))
-		var distance = to_player.length()
+		var dx_to_player = player.global_position.x - (global_position.x + cloud_width/2.)
 
 		# Calculate a force multiplier that increases sharply as the player gets closer
-		var normalized_distance = clamp(distance / repulsion_radius, 0.0, 1.0)
-		var force_multiplier = pow(1.0 - normalized_distance, 1)
+		var normalized_distance = clamp(dx_to_player / repulsion_radius, 0.0, 1.0)
+		var force_multiplier = pow(2, 1.0 - normalized_distance)
 
 		# Apply repulsion acceleration, scaled by the multiplier
-		var direction = -to_player.normalized() # Direction is away from the player
-		direction.y = 0.0 # Zero out vertical component
-		
-		if direction.length() > 0:
-			direction = direction.normalized() # Re-normalize after zeroing out y
-			var acceleration = direction * push_speed * force_multiplier
-			velocity += acceleration * delta
+		var direction = sign(-dx_to_player) # Direction is away from the player
+		var acceleration = direction * push_speed * force_multiplier
+		velocity.x += acceleration * delta
 	
 	# --- Physics Update ---
 	# Apply drag
@@ -90,14 +90,6 @@ func _process(delta: float):
 	global_position += velocity * delta
 
 
-var player_in_area: Player = null
-func _on_repulsion_area_body_entered(body):
-	if body is Player:
-		player_in_area = body
-
-func _on_repulsion_area_body_exited(body):
-	if body == player_in_area:
-		player_in_area = null
 
 
 func _update_collision_shape():
@@ -159,10 +151,16 @@ func _update_collision_shape():
 	polygon.polygon = vertices
 	$CloudCircleContainer.add_child(polygon)
 
-
+@export var player_index : int = 0
 func on_hit_by_sunlight(sunlight_particle):
-	if sunlight_particle.has_method("on_cloud_hit"):
-		sunlight_particle.on_cloud_hit()
+	if not sunlight_particle.has_method("on_cloud_hit"):
+		return
+
+	# 不同 player_index 不要收
+	if sunlight_particle.player_index != player_index:
+		return
+
+	sunlight_particle.on_cloud_hit()
 
 
 var sun_position: Vector2:

@@ -97,6 +97,17 @@ func create_solar_panel(quad : Polygon2D):
 			create_solar_cell_in_quad(quad, grid_size, r, c)
 
 
+@export var player_index:int = 0:
+	set(value):
+		player_index = value
+		if not is_node_ready():
+			return
+
+		# 讓上層節點 ready 時還能改變 player_index
+		for obj in main_panel.get_children():
+			if is_instance_of(obj, SolarCell):
+				obj.player_index = player_index
+
 
 func create_solar_cell_in_quad(
 		quad: Polygon2D,
@@ -145,6 +156,7 @@ func create_solar_cell_in_quad(
 	if not solar_cell:
 		solar_cell = SolarCellScene.instantiate()
 		solar_cell.name = cell_name
+		solar_cell.player_index = player_index
 		# 第幾列的 cell 就偵測對應的 mask
 		solar_cell.set_collision_mask(128 << row)
 		quad.add_child(solar_cell)

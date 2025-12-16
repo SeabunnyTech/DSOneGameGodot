@@ -60,6 +60,15 @@ func set_sun_angle(new_angle):
 	$BoxQuad5/SolarPanelQuad
 ]
 
+@export var player_index:int = 0:
+	set(value):
+		player_index = value
+		if not is_node_ready():
+			return
+
+		for sq in solar_quads:
+			sq.player_index = player_index
+
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
@@ -69,6 +78,7 @@ func _ready() -> void:
 		# Code to execute in game.
 		for sq in solar_quads:
 			sq.hit_by_sunlight.connect(hit_by_sunlight.emit)
+
 
 func _process(_delta):
 	if Engine.is_editor_hint():

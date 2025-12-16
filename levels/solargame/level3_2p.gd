@@ -122,8 +122,6 @@ func _game_timeout():
 	game_stop_tween.tween_property(time_board, 'modulate:a', 0, 0.5)	
 	game_stop_tween.tween_interval(0.5)
 
-	solarfarm_env_2p.show_score_board()
-	solarfarm_env_2p2.show_score_board()
 	game_stop_tween.tween_callback(solarfarm_env_2p.collect_electrons)
 	game_stop_tween.tween_callback(solarfarm_env_2p2.collect_electrons)
 

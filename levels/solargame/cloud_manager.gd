@@ -74,6 +74,7 @@ func _physics_process(delta: float) -> void:
 	# Wind logic
 	_apply_wind(delta)
 
+@export var player_index : int = 0
 
 func spawn_cloud(pos=null):
 	var cloud: Cloud2D
@@ -87,6 +88,7 @@ func spawn_cloud(pos=null):
 			randf_range(0, size.y)
 		)
 
+	cloud.player_index = player_index
 	cloud.position = pos
 	cloud.sun_position = sun_node.position
 	cloud.collision_channels = collision_channels
@@ -117,10 +119,9 @@ func _apply_wind(_delta: float) -> void:
 	for cloud in clouds:
 		cloud.set_responsive_to_anticyclone(cloud_responsive)
 		var poof_distance = randf_range(300, 600)
-		if cloud.position.x + cloud.cloud_width < poof_distance\
+		if cloud.should_poof or cloud.position.x + cloud.cloud_width < poof_distance\
 			or cloud.position.x > screen_width - poof_distance:
 			cloud.poof()
-			
 		else:
 			saved_clouds.append(cloud)
 

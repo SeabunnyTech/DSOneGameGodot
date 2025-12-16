@@ -5,7 +5,6 @@ class_name SolarfarmEnv
 # 設計給上層遊戲場景 (solargame.tscn) 呼叫的 API
 
 ## 當陽光打到太陽能板上時發出
-signal on_light_hit_solar_panel
 signal all_electron_collected
 
 @onready var cloud_manager : CloudManager = $CloudManager
@@ -21,10 +20,11 @@ signal all_electron_collected
 @onready var trees_container: Node2D = $trees_container
 
 
-var electron_collected : int = 0
 
 func _ready():
-	$SolarPanel2d.hit_by_sunlight.connect(func(): electron_collected+=1)
+	$SolarPanel2d.hit_by_sunlight.connect(func():
+		$ScoreBoard.add_score()
+	)
 
 
 func set_responsive_to_anticyclone(responsive:bool):
@@ -123,7 +123,7 @@ func reset():
 	# 計分板
 	score_board.reset()
 	score_board.modulate.a = 0
-	score_board.position = Vector2(0, 0)
+	score_board.position = Vector2(2930, 1470)
 
 
 func spawn_clouds():
@@ -137,6 +137,8 @@ func start_game_play():
 	sun_should_go = true
 	sun_should_emit_light = true
 
+	$ScoreBoard.show_score_board()
+
 	# 雲開生成
 	$CloudManager.start()
 
@@ -145,6 +147,9 @@ func stop_game_play():
 	# 太陽停止
 	sun_should_go = false
 	sun_should_emit_light = false
+
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property($ScoreBoard, 'position', Vector2(1720, 1040), 1.0)
 
 	# 雲集體原地消失
 	$CloudManager.stop_generate()
@@ -179,11 +184,8 @@ var score:
 	get:
 		return score_board.score
 
-func show_score_board(): return score_board.show_score_board()
-
-
 
 
 func collect_electrons():
-	score_board.score = electron_collected
+	#score_board.score = electron_collected
 	all_electron_collected.emit()

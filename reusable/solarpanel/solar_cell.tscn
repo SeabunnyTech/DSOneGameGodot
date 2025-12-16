@@ -4,10 +4,11 @@
 [ext_resource type="AudioStream" uid="uid://bf1btvda050jb" path="res://assets/audio/sfx/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="2_kmcee"]
 
 [node name="SolarCell" type="Polygon2D"]
-color = Color(0.188319, 0.48495, 0.529959, 1)
+color = Color(0.18831891, 0.48494962, 0.52995896, 1)
 polygon = PackedVector2Array(200, 233, 586, 243, 594, 535, 128, 467)
 script = ExtResource("1_wd1ic")
 original_color = Color(0.188319, 0.48495, 0.529959, 1)
+player_index = null
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 8

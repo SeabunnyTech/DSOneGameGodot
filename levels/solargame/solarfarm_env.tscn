@@ -63,7 +63,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.24994443, 0.39143187, 0.52145725, 1)
+color = Color(0.101960786, 0.2, 0.31764707, 1)
 metadata/_edit_lock_ = true
 
 [node name="lower_sky_gradient" type="TextureRect" parent="sky_background"]
@@ -101,7 +101,7 @@ texture = ExtResource("3_wud70")
 
 [node name="sun_orbit_center" type="Node2D" parent="."]
 position = Vector2(1920, 6000)
-rotation = -0.473822
+rotation = 0.5235988
 scale = Vector2(0.99999994, 0.99999994)
 
 [node name="sun" type="Node2D" parent="sun_orbit_center"]
@@ -160,8 +160,17 @@ offset_bottom = 1309.0
 color = Color(1, 0.67, 0.67, 0)
 sun_node = NodePath("../sun_orbit_center/sun/Sunball2d")
 collision_channels = 896
+metadata/_edit_lock_ = true
 
 [node name="ScoreBoard" parent="." instance=ExtResource("7_nvbgn")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 2930.0
+offset_top = 1470.0
+offset_right = 3338.0
+offset_bottom = 1596.0
+grow_horizontal = 1
+grow_vertical = 1
 texture_override = ExtResource("8_huyxn")
-metadata/_edit_lock_ = true
