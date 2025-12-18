@@ -158,7 +158,7 @@ func _begin_tutorial():
 
 	# 等待雲層都被推走的信號
 	tween.tween_interval(5)
-	await solarfarm_env.clouds_cleared
+	await solarfarm_env.a_lot_clouds_poofed
 	solarfarm_env.sun_should_emit_light = false
 	_continue_tutorial()
 

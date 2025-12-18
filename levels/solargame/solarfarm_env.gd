@@ -8,7 +8,7 @@ class_name SolarfarmEnv
 signal all_electron_collected
 
 @onready var cloud_manager : CloudManager = $CloudManager
-@onready var clouds_cleared = cloud_manager.clouds_cleared
+signal a_lot_clouds_poofed
 
 # 天空背景，可能是 ColorRect 或一個著色器
 @onready var sky_background = $sky_background
@@ -20,10 +20,16 @@ signal all_electron_collected
 @onready var trees_container: Node2D = $trees_container
 
 
-
+var poofed_cloud_count = 0
 func _ready():
 	$SolarPanel2d.hit_by_sunlight.connect(func():
 		$ScoreBoard.add_score()
+	)
+	
+	$CloudManager.cloud_poofed.connect(func():
+		poofed_cloud_count += 1
+		if poofed_cloud_count > 8:
+			a_lot_clouds_poofed.emit()
 	)
 
 
@@ -183,6 +189,8 @@ func camera_to(target_center, target_scale=1.0, duration=1, callback=null):
 var score:
 	get:
 		return score_board.score
+
+func show_score_board(): return score_board.show_score_board()
 
 
 

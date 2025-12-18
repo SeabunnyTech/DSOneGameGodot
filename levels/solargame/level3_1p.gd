@@ -131,7 +131,7 @@ func _congrats_and_return():
 
 	var end_duration = 2
 	var thanks_duration = 4
-	var wait_duration = 2
+	var wait_duration = 3
 
 	if tween:
 		tween.kill()

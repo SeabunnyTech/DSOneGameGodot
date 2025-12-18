@@ -8,7 +8,6 @@ class_name SolarfarmEnv_2p
 signal all_electron_collected
 
 @onready var cloud_manager : CloudManager = $CloudManager
-@onready var clouds_cleared = cloud_manager.clouds_cleared
 
 # 天空背景，可能是 ColorRect 或一個著色器
 @onready var sky_background = $sky_background

@@ -2,7 +2,7 @@
 extends ColorRect
 class_name CloudManager
 
-signal clouds_cleared
+signal cloud_poofed
 
 @export var sun_node: Node2D
 
@@ -122,13 +122,10 @@ func _apply_wind(_delta: float) -> void:
 		if cloud.should_poof or cloud.position.x + cloud.cloud_width < poof_distance\
 			or cloud.position.x > screen_width - poof_distance:
 			cloud.poof()
+			cloud_poofed.emit()
 		else:
 			saved_clouds.append(cloud)
 
-	# 檢查是否要觸發 clouds clear
-	if saved_clouds.is_empty() and not clouds.is_empty():
-		print("clouds_cleared")
-		clouds_cleared.emit()
 
 	clouds = saved_clouds
 # --- Public API ---
