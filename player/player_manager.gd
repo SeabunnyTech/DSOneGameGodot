@@ -53,60 +53,83 @@ func num_active_players():
 	return num
 
 
+func convert_to_positions(center_mass_array) -> Array[Vector2]:
+	var center_positions : Array[Vector2] = []
+	for center_mass in center_mass_array:
+		var xres = Globals.camera_resolution[0]
+		var yres = Globals.camera_resolution[1]
+		var move_scale = Globals.player_move_scale
+		var relative_position = Vector2(
+			((center_mass[0] / xres) - 0.5) * move_scale + 0.5,
+			((center_mass[1] / yres) - 0.5) * move_scale + 0.5,
+		)
+
+		if Globals.flip_camera_x:
+			relative_position[0] = 1.0 - relative_position[0]
+
+		if Globals.flip_camera_y:
+			relative_position[1] = 1.0 - relative_position[1]
+
+		var scaled_position = relative_position * viewport_size
+		center_positions.append(scaled_position)
+
+	return center_positions
+
+
 # TODO: 同時考量偵測 camera 視角變化時，需要對應到 viewport 和 player 位置
 func handle_center_mass(payload: Variant):
+	var center_positions = []
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
+		# 取得 center mass
 		var center_masses = payload["center_mass"]
 
-		# Sort center masses by x-coordinate
-		center_masses.sort_custom(func(a, b): return a[0] < b[0])
+		# 只留下前兩個座標
+		center_masses = center_masses.slice(0, 2)
 
-		# Save sorted center masses into player_position array
-		player_position = []
-		for cm in center_masses:
-			player_position.append(Vector2(cm[0], cm[1]))
-			# Limit the number of players to 2
-			if player_position.size() == 2:
-				break
+		# 轉換成 player 座標
+		center_positions = convert_to_positions(center_masses)
 
-		# Reset buffer counters and update last seen time for visible players
-		for i in range(player_position.size()):
+		# 用 x 座標排序: 左邊是 player1 右邊是 player2
+		center_positions.sort_custom(func(a, b): return a[0] < b[0])
+
+		# 更新屎山代碼中的變數 player_position 來幫助狀態轉換
+		# 先前的程式碼會看這個變數裡有幾項來決定要不要把 player fade 或者 activate
+		player_position = center_positions.duplicate()
+
+		# 設定有在 center_positions 清單內的 player 位置 (玩家數量可能是 0~2)
+		var multiplayer_x_offset = [0, 0]
+		if player2.visible:
+			var dx = Globals.dual_player_x_offset
+			multiplayer_x_offset = [dx, -dx]
+
+		for i in range(center_positions.size()):
+			var player = current_players[i]
+			var new_target_position = center_positions[i]
+			new_target_position[0] +=  multiplayer_x_offset[i] * viewport_size[0]
+			if player.state in [PState.FADED, PState.LOST]:
+				player.position = new_target_position
+			player.set_target_position(new_target_position)
+
+		# 根據 center_positions 更新 player_buffer_counters (間接更新狀態) 
+		for i in range(center_positions.size()):
 			player_buffer_counters[i] = 0
 	else:
 		player_position = []
 
-	# Increment buffer counters for missing players
+	# player 不在的話增加 player_buffer_counters
 	for i in range(current_players.size()):
-		if i >= player_position.size():
+		if i >= center_positions.size():
 			player_buffer_counters[i] += 1
 
-func update_player_positions():
+
+func update_player_states():
 	var num_players = player_position.size()
 
 	for i in range(current_players.size()):
 		var player = current_players[i]
 
 		if i < num_players:
-			var center_mass = Vector2(player_position[i][0], player_position[i][1])
-
-			var scaled_position = Vector2(
-				#(center_mass.x / 512.0) * viewport_size.x,
-				#(center_mass.y / 424.0) * viewport_size.y
-				clamp((((center_mass.x / 512.0) - 0.5) * 2  +0.5) * viewport_size.x,0, viewport_size.x),
-				clamp((((center_mass.y / 424.0) - 0.5) * 2 + 0.5)* viewport_size.y,0,viewport_size.y)
-			
-			)
-
-			var reversed_position_y = viewport_size.y - scaled_position.y
-
-			var new_target_position = Vector2(scaled_position.x, reversed_position_y)
-
-			player.set_target_position(new_target_position)
-
 			# If the player has just reappeared, update its position immediately
-			if player.state in [PState.FADED, PState.LOST]:
-				player.position = new_target_position
-
 			# Show the player
 			player.heads_to_state(PState.ACTIVE)
 			player_buffer_counters[i] = 0
@@ -224,4 +247,4 @@ func _process(_delta):
 	else:
 		# Normal mode: Use SocketIO
 		socket_client.emit_event(ENV.event_datahub_contours, "", handle_center_mass)
-		update_player_positions()
+		update_player_states()
