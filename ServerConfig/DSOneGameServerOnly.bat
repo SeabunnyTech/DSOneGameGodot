@@ -1,1 +1,0 @@
-C:\Users\seabunny\Desktop\UEServerTemplate\env.bat && python C:\Users\seabunny\Desktop\UEServerTemplate\sioserver\main.py --root C:\Users\seabunny\Desktop\DSOneDemo --config DSOneGameServerOnly.bun & pause
