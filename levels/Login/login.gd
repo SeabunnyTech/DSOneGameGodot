@@ -29,10 +29,11 @@ func _ready() -> void:
 	for level_name in level_res_paths:
 		level_objs[level_name] = load(level_res_paths[level_name])
 
-	enter_scene("level3_2p")
+	#enter_scene("level3_1p")
+	#enter_scene("level3_2p")
 	#enter_scene("level3_tutorial")
 	#enter_scene("level1_tutorial")
-	#enter_scene("welcome")
+	enter_scene("welcome")
 
 
 func enter_scene(scene_name):
