@@ -12,8 +12,8 @@ class_name Cloud2D
 @export var spawn_overlap: float = 0.28
 
 # 玩家互動參數
-@export var push_speed: float = 2000.0
-@export var repulsion_radius: float = 10.0
+@export var push_speed: float = 20000.0
+@export var normalize_radius: float = 600.0
 @export var drag: float = 1.0 # How quickly the cloud slows down
 
 var is_poofing: bool = false
@@ -66,21 +66,22 @@ func _process(delta: float):
 		if not player.visible:
 			continue
 
-		var distance_to_player = player.global_position - (global_position + Vector2(cloud_width/2., 0.))
+		var distance_to_player = player.global_position - (global_position)
 		if distance_to_player.length() < distance_threshold:
 			should_poof = true
 			return
 
-		var dx_to_player = player.global_position.x - (global_position.x + cloud_width/2.)
+		var dx_to_player = player.global_position.x - (global_position.x)
+		var normalized_distance = dx_to_player / normalize_radius
+		if abs(dx_to_player) < normalize_radius:
 
-		# Calculate a force multiplier that increases sharply as the player gets closer
-		var normalized_distance = clamp(dx_to_player / repulsion_radius, 0.0, 1.0)
-		var force_multiplier = pow(2, 1.0 - normalized_distance)
+			# Calculate a force multiplier that increases sharply as the player gets closer
+			var force_multiplier = abs(pow(normalized_distance, -2))
 
-		# Apply repulsion acceleration, scaled by the multiplier
-		var direction = sign(-dx_to_player) # Direction is away from the player
-		var acceleration = direction * push_speed * force_multiplier
-		velocity.x += acceleration * delta
+			# Apply repulsion acceleration, scaled by the multiplier
+			var direction = sign(-dx_to_player) # Direction is away from the player
+			var acceleration = clamp(direction * push_speed * force_multiplier, -push_speed, push_speed)
+			velocity.x += acceleration * delta
 	
 	# --- Physics Update ---
 	# Apply drag
@@ -240,8 +241,8 @@ func poof():
 			direction = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized()
 
 		var move_to_pos = circle.position + direction * 50
-		tween.tween_property(circle, "position", move_to_pos, 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween.tween_property(circle, "scale", Vector2.ZERO, 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+		tween.tween_property(circle, "position", move_to_pos, 0.2).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+		tween.tween_property(circle, "scale", Vector2.ZERO, 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 
 	await tween.finished
 	queue_free()
