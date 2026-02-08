@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://lh1rudkmnc74"]
+[gd_scene load_steps=24 format=3 uid="uid://lh1rudkmnc74"]
 
 [ext_resource type="Script" uid="uid://bqavvge6v3lx3" path="res://levels/Login/welcome/welcome.gd" id="1_n171j"]
 [ext_resource type="FontFile" uid="uid://cwxuws7xjvwlr" path="res://assets/fonts/jf-openhuninn-2.1.ttf" id="1_wrufh"]
@@ -75,6 +75,12 @@ func _ready():
 font = ExtResource("13_28duk")
 font_size = 60
 font_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_credit"]
+line_spacing = 10.0
+font = ExtResource("13_28duk")
+font_size = 50
+font_color = Color(0.5609549, 0.5609549, 0.5609549, 1)
 
 [node name="Welcome" type="Control"]
 layout_mode = 3
@@ -211,3 +217,19 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("16_atpv3")
 expand_mode = 1
+
+[node name="CreditLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8049896
+anchor_top = 0.9226852
+anchor_right = 0.96302086
+anchor_bottom = 0.9946852
+offset_left = 73.84009
+grow_horizontal = 2
+grow_vertical = 2
+text = "presented by 兔豚科技"
+label_settings = SubResource("LabelSettings_credit")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
