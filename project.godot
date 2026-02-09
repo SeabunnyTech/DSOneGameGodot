@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 ENV="*res://globals/env.gd"
 Globals="*res://globals/globals.gd"
 SignalBus="*res://globals/signal_bus.gd"
+CrashLogger="*res://globals/crash_logger.gd"
 DebugMessage="*res://globals/debug_message.gd"
 TimerManager="*res://globals/timer_manager.gd"
 GameState="*res://globals/game_state.gd"
@@ -65,6 +66,12 @@ toggle_player2={
 2d_physics/layer_5="Portal"
 2d_physics/layer_6="Power Plant Checkpoint"
 2d_physics/layer_7="Avatar"
+
+[debug]
+
+file_logging/enable_file_logging=true
+file_logging/log_path="user://logs/game.log"
+file_logging/max_log_files=10
 
 [rendering]
 

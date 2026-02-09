@@ -56,6 +56,11 @@ func num_active_players():
 func convert_to_positions(center_mass_array) -> Array[Vector2]:
 	var center_positions : Array[Vector2] = []
 	for center_mass in center_mass_array:
+		# 防護：檢查 center_mass 是否為有效的陣列且至少有 2 個元素
+		if not (center_mass is Array) or center_mass.size() < 2:
+			CrashLogger.log_network_error("Invalid center_mass element format", center_mass)
+			continue
+
 		var xres = Globals.camera_resolution[0]
 		var yres = Globals.camera_resolution[1]
 		var move_scale = Globals.player_move_scale
@@ -79,12 +84,24 @@ func convert_to_positions(center_mass_array) -> Array[Vector2]:
 # TODO: 同時考量偵測 camera 視角變化時，需要對應到 viewport 和 player 位置
 func handle_center_mass(payload: Variant):
 	var center_positions = []
-	if payload.size() > 1 and payload["center_mass"].size() > 0:
-		# 取得 center mass
-		var center_masses = payload["center_mass"]
 
+	# 防護：檢查 payload 格式是否正確
+	if not (payload is Dictionary):
+		CrashLogger.log_network_error("Invalid payload type", payload)
+		return
+
+	if not payload.has("center_mass"):
+		# Server 可能在某些狀態下不回傳 center_mass，這是正常的
+		return
+
+	var center_mass_data = payload["center_mass"]
+	if not (center_mass_data is Array):
+		CrashLogger.log_network_error("Invalid center_mass type", payload)
+		return
+
+	if center_mass_data.size() > 0:
 		# 只留下前兩個座標
-		center_masses = center_masses.slice(0, 2)
+		var center_masses = center_mass_data.slice(0, 2)
 
 		# 轉換成 player 座標
 		center_positions = convert_to_positions(center_masses)
