@@ -147,10 +147,16 @@ func _engineio_decode_packet(packet: String):
 	match packetType:
 		EngineIOPacketType.open:
 			var json = JSON.new()
-			json.parse(packetPayload)
+			var parse_result = json.parse(packetPayload)
+			if parse_result != OK:
+				push_error("Failed to parse Engine.IO open packet: %s" % packetPayload.substr(0, 200))
+				return
+			if not (json.data is Dictionary) or not json.data.has("sid"):
+				push_error("Invalid Engine.IO open packet format: %s" % packetPayload.substr(0, 200))
+				return
 			_sid = json.data["sid"]
-			_pingTimeout = int(json.data["pingTimeout"])
-			_pingInterval = int(json.data["pingInterval"])
+			_pingTimeout = int(json.data.get("pingTimeout", 20000))
+			_pingInterval = int(json.data.get("pingInterval", 25000))
 			on_engine_connected.emit(_sid)
 
 		EngineIOPacketType.ping:
@@ -168,6 +174,9 @@ func _engineio_send_packet(type: EngineIOPacketType, payload: String=""):
 
 
 func _socketio_parse_packet(payload: String):
+	if payload.is_empty():
+		push_warning("Received empty Socket.IO packet")
+		return
 	var packetType = int(payload.substr(0, 1))
 	payload = payload.substr(1)
 
