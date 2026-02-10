@@ -40,6 +40,9 @@ var player_colors = {
 	}
 }
 
+# Contour debug data (full payload for CameraDebug to read)
+var latest_contour_data: Dictionary = {}
+
 # Dev mode variables
 var active_dev_player: Node = null
 var dev_mode_active: bool = false
@@ -78,6 +81,10 @@ func convert_to_positions(center_mass_array) -> Array[Vector2]:
 
 # TODO: 同時考量偵測 camera 視角變化時，需要對應到 viewport 和 player 位置
 func handle_center_mass(payload: Variant):
+	if payload is Dictionary:
+		latest_contour_data = payload
+	elif payload is Array and payload.size() > 0 and payload[0] is Dictionary:
+		latest_contour_data = payload[0]
 	var center_positions = []
 	if payload.size() > 1 and payload["center_mass"].size() > 0:
 		# 取得 center mass
@@ -246,5 +253,6 @@ func _process(_delta):
 	
 	else:
 		# Normal mode: Use SocketIO
-		socket_client.emit_event(ENV.event_datahub_contours, "", handle_center_mass)
+		if socket_client.is_socketio_connected:
+			socket_client.emit_event(ENV.event_datahub_contours, "", handle_center_mass)
 		update_player_states()

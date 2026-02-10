@@ -8,3 +8,4 @@ extends Node
 var socketio_url: String = "http://10.10.10.1:8080/socket.io"
 
 var event_datahub_contours: String = "datahub.contours"
+var event_datahub_cam: String = "datahub.cam"
